@@ -45,5 +45,6 @@
     pkgs.runCommand "programs.sqlite" {} ''
       tar xf ${channelTarball} --wildcards "nixos*/programs.sqlite" -O > $out
     '';
+    console.earlySetup = true;
 }
 

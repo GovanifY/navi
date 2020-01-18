@@ -1,8 +1,8 @@
 # TODO: currently non compliant to XDG in default config are: 
 # * mozilla (in progress upstream hopefully)
 # * nix old folders, yuuuuup, i should make a PR
-# * steam: games are dumb so we need to setup $HOME anyways
-# * dbus: games are dumb so we need to setup $HOME anyways
+# * steam: done BUT need to start through startsteam, might want to modify that
+# * dbus: ~/.dbus in root and ~/.esd_auth in $HOME even after unloading esound
 
 { config, pkgs, ... }: {
 

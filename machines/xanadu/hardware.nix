@@ -5,7 +5,7 @@
 
   boot.initrd.availableKernelModules = [ "ahci" "nvme" ];
   boot.initrd.kernelModules = [ "dm-snapshot" ];
-  boot.kernelModules = [ "kvm-intel" "i915" ];
+  boot.kernelModules = [ "i915" "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
@@ -18,8 +18,7 @@
   ];
 
   nix.maxJobs = lib.mkDefault 4;
-  #powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
-  powerManagement.cpuFreqGovernor = lib.mkDefault "performance";
+  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   # High-DPI console
   console.font = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
 
@@ -42,6 +41,6 @@
 
 
   # i915 is a bitch
-  boot.kernelParams = [ "i915.enable_rc6=0" ];
+  boot.kernelParams = [ "i915.enable_psr=0" ];
 
 }

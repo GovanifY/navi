@@ -6,22 +6,23 @@
 
 
   environment.systemPackages = with pkgs; [
-#    steam 
-    #(
-      #pkgs.writeTextFile {
-        #name = "startsteam";
-        #destination = "/bin/startsteam";
-        #executable = true;
-        #text = ''
-          ##! ${pkgs.bash}/bin/bash
+    steam 
+    (
+      pkgs.writeTextFile {
+        name = "startsteam";
+        destination = "/bin/startsteam";
+        executable = true;
+        text = ''
+          #! ${pkgs.bash}/bin/bash
 
-          ## XDG compliance
-          #HOME=$XDG_DATA_HOME/steam
-          ## then start the launcher 
-          #exec steam
-        #'';
-      #}
-      #)
+          # XDG compliance
+          mkdir -p $XDG_DATA_HOME/steam-home
+          HOME=$XDG_DATA_HOME/steam
+          # then start the launcher 
+          exec steam
+        '';
+      }
+      )
       retroarch
     ];
   }

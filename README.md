@@ -11,3 +11,4 @@ Currently the machines populated by this configuration are:
 Features in need of development are:
 * security hardening through sandboxing 
 * set up eirin to have regular and automated backups
+* reroute all internet traffic through tor

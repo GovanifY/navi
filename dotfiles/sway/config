@@ -29,8 +29,6 @@ output * bg ~/Pictures/D3I8elHUwAAQZjD.jpg fill
 output eDP-1 scale 2.0
 
 # all you need to have a good day
-# typically not needed EXCEPT on a firejail setup
-exec swaymsg "workspace 1; exec pulseaudio --start"
 exec swaymsg "workspace 1; exec firefox"
 exec swaymsg "workspace 2; exec termite -e tmux"
 

@@ -23,7 +23,7 @@
 
   security.allowUserNamespaces = true;
 
-  # scudo segfaults firefox currently
-  environment.memoryAllocator.provider = "graphene-hardened";
+  # any hardened allocator doesn't even let me boot
+  #environment.memoryAllocator.provider = "graphene-hardened";
 }
 
