@@ -2,6 +2,7 @@
 # * mozilla (in progress upstream hopefully)
 # * nix old folders, yuuuuup, i should make a PR
 # * steam: games are dumb so we need to setup $HOME anyways
+# * dbus: games are dumb so we need to setup $HOME anyways
 
 { config, pkgs, ... }: {
 
@@ -17,6 +18,8 @@
     WEECHAT_HOME = "$XDG_CONFIG_HOME/weechat";
     GNUPGHOME = "$XDG_DATA_HOME/gnupg";
     GRADLE_USER_HOME = "$XDG_DATA_HOME/gradle";
+    GEM_HOME = "$XDG_DATA_HOME/gem";
+    GEM_SPEC_CACHE = "$XDG_CACHE_HOME/gem";
   };
 
   # ssh devs don't want to make ssh XDG compliant? well let's roll our own
