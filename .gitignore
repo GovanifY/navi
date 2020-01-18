@@ -1,3 +1,4 @@
 secrets/*
 dotfiles/msmtp/*
 dotfiles/mbsync/*
+configuration.nix
