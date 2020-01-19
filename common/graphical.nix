@@ -15,6 +15,32 @@
     ];
   };
 
+  # firefox security notes:
+  #
+  # firefox should sync to your own server whatever you care(it's E2EE,
+  # personally i use it to keep a consistant set of tabs between devices)
+  # and to make tracking a whole lot harder you should:
+  # 1. route all your traffic through tor, hides you from your local ISP/state
+  # 2. use those extensions to mitigate website-side tracking as much as
+  # possible:
+  #
+  # * cookie autodelete with autodelete enabled
+  # * decentraleyes (not necessary but neat)
+  # * NoScript with a whitelist setup of javascript enabled websites
+  # * Privacy Badger |
+  #                  |--> not necessary with noScript but sane defaults
+  # * uBlock origin  | 
+  # * user agent switcher with random switch enabled
+  #
+  # this way the only identifiable information websites should be able to gather
+  # is the one you give to them by, ie, logging in, as the only identifiable and
+  # non randomized string left is your accept_html, which gives out your
+  # language basically, everything else is randomized assuming noScript is
+  # enabled and tor runs, so your tracking ID should change.
+  #
+  # also simple tab groups and stylus are nice cosmetic additions
+
+
   fonts.fonts = with pkgs; [
     hack-font
   ];

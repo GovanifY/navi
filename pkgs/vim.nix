@@ -1,5 +1,6 @@
-{ config, pkgs, lib, ... }: {
-  home-manager.users.govanify = {
+{ config, pkgs, ... }:
+let 
+  vimConf = {
     programs.neovim = {
       enable = true;
       withPython3 = true;
@@ -95,4 +96,9 @@
 
     };
   };
+in
+  {
+  home-manager.users.govanify = vimConf; 
+  home-manager.users.root = vimConf; 
+
 }
