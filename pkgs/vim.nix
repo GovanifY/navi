@@ -6,17 +6,12 @@ let
       withPython3 = true;
       viAlias = true;
       vimAlias = true;
-      plugins = [ pkgs.vimPlugins.tagbar pkgs.vimPlugins.gruvbox
-      pkgs.vimPlugins.nerdtree pkgs.vimPlugins.fugitive
-      pkgs.vimPlugins.airline pkgs.vimPlugins.ctrlp
-      pkgs.vimPlugins.multiple-cursors pkgs.vimPlugins.surround
-      pkgs.vimPlugins.nerdcommenter pkgs.vimPlugins.easymotion
-      pkgs.vimPlugins.vim-obsession #pkgs.vimPlugins.vim-prosession
-      pkgs.vimPlugins.syntastic pkgs.vimPlugins.ultisnips
-      pkgs.vimPlugins.vim-snippets pkgs.vimPlugins.deoplete-nvim
-      pkgs.vimPlugins.deoplete-rust pkgs.vimPlugins.deoplete-clang
-      pkgs.vimPlugins.deoplete-jedi pkgs.vimPlugins.vim-nix
-      pkgs.vimPlugins.rust-vim ];
+      plugins = with pkgs.vimPlugins; [ tagbar gruvbox nerdtree fugitive
+                                        airline ctrlp multiple-cursors surround
+                                        nerdcommenter easymotion vim-obsession #vim-prosession
+                                        syntastic ultisnips vim-snippets deoplete-nvim
+                                        deoplete-rust deoplete-clang deoplete-jedi vim-nix
+                                        rust-vim ];
       extraConfig = ''
         " This should be enabled by default
         set number
