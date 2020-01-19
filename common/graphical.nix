@@ -10,7 +10,7 @@
       swayidle
       xwayland # for legacy apps
       kanshi # autorandr
-      wofi grim wl-clipboard firefox
+      wofi grim wl-clipboard firefox-wayland
       mpv imv slurp 
     ];
   };
