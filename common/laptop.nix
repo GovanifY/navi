@@ -7,12 +7,12 @@
   hardware.enableAllFirmware = true;
   services.upower.enable = true;
 
-    environment.variables = {
-      MESA_LOADER_DRIVER_OVERRIDE = "iris";
-    };
-    hardware.opengl.package = (pkgs.mesa.override {
-      galliumDrivers = [ "nouveau" "virgl" "swrast" "iris" ];
-    }).drivers;
+#    environment.variables = {
+      #MESA_LOADER_DRIVER_OVERRIDE = "iris";
+    #};
+    #hardware.opengl.package = (pkgs.mesa.override {
+      #galliumDrivers = [ "nouveau" "virgl" "swrast" "iris" ];
+    #}).drivers;
   nixpkgs.config.packageOverrides = pkgs: {
     vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
   };
