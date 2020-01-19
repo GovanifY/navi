@@ -1,5 +1,6 @@
 { config, pkgs, lib, ... }: {
 
+  imports = [ ./../pkgs/termite.nix ];
   services.mingetty.autologinUser = "govanify";
 
   programs.sway = {
@@ -9,7 +10,7 @@
       swayidle
       xwayland # for legacy apps
       kanshi # autorandr
-      wofi grim wl-clipboard termite firefox
+      wofi grim wl-clipboard firefox
       mpv imv slurp 
     ];
   };
@@ -29,7 +30,6 @@
       # Put config files in /etc. Note that you also can put these in ~/.config, but then you can't manage them with NixOS anymore!
       "sway/config".source = ./../dotfiles/sway/config;
       "sway/status.sh".source = ./../dotfiles/sway/status.sh;
-      "xdg/termite/config".source = ./../dotfiles/termite/config;
     };
   };
   # soooo we have all of those nice systemd services below but NONE OF THEM
