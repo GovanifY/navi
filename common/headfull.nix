@@ -5,9 +5,19 @@
       ./mail.nix
     ];
 
+  # TODO: make weechat work out better
   environment.systemPackages = with pkgs; [
-    weechat cmus
+    weechat cmus     # dev
+    cargo python clang meson ninja 
+    asciinema #texlive 
+    #python38Packages.matrix-nio
   ];
+
+
+
+  home-manager.users.govanify = {
+    home.file.".config/weechat".source  = ./../dotfiles/weechat;
+  };
 
   networking.networkmanager.enable = true;
   # Enable CUPS to print documents.

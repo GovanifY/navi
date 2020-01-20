@@ -46,5 +46,6 @@
       tar xf ${channelTarball} --wildcards "nixos*/programs.sqlite" -O > $out
     '';
     console.earlySetup = true;
+    boot.loader.timeout = 1;
 }
 

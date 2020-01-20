@@ -1,4 +1,5 @@
 secrets/*
-dotfiles/msmtp/*
-dotfiles/mbsync/*
+dotfiles/mail/msmtp/*
+dotfiles/mail/mbsync/*
+dotfiles/weechat/*
 configuration.nix
