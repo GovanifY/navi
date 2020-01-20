@@ -7,11 +7,11 @@ let
       viAlias = true;
       vimAlias = true;
       plugins = with pkgs.vimPlugins; [ tagbar gruvbox nerdtree fugitive
-                                        airline ctrlp multiple-cursors surround
-                                        nerdcommenter easymotion vim-obsession #vim-prosession
-                                        syntastic ultisnips vim-snippets deoplete-nvim
-                                        deoplete-rust deoplete-clang deoplete-jedi vim-nix
-                                        rust-vim ];
+      airline ctrlp multiple-cursors surround
+      nerdcommenter easymotion vim-obsession #vim-prosession
+      syntastic ultisnips vim-snippets deoplete-nvim
+      deoplete-rust deoplete-clang deoplete-jedi vim-nix
+      rust-vim ];
       extraConfig = ''
         " This should be enabled by default
         set number
@@ -91,9 +91,12 @@ let
 
     };
   };
-in
-  {
-  home-manager.users.govanify = vimConf; 
-  home-manager.users.root = vimConf; 
+        in
+        {
+          home-manager.users.govanify = vimConf; 
+          home-manager.users.root = vimConf; 
 
-}
+          environment.variables = {
+            EDITOR = "vim";
+          };
+        }
