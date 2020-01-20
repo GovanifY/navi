@@ -2,6 +2,7 @@
 # * mozilla (in progress upstream hopefully)
 # * nix old folders, yuuuuup, i should make a PR
 # * dbus: ~/.dbus in root
+# python: ~/.python_history, apparmor?
 
 # TODO: dbus esd_auth gets removed each time you start a new shell, should be done
 # upon user login along with swaystart
