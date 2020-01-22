@@ -28,7 +28,13 @@
     GEM_SPEC_CACHE = "$XDG_CACHE_HOME/gem";
     # java still store fonts in .java so i use a per-app wrapper
     _JAVA_OPTIONS = "-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java";
+    WGETRC = "$XDG_CONFIG_HOME/wgetrc";
   };
+
+  home-manager.users.govanify = {
+    home.file.".config/wgetrc".source  = ./../dotfiles/xdg/wgetrc;
+  };
+
 
   # ssh devs don't want to make ssh XDG compliant? well let's roll our own
   # compliance!
