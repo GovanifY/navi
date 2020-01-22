@@ -10,6 +10,7 @@
         set -g @resurrect-processes ':all:'
         set -g @continuum-restore 'on'
         set -g @continuum-boot 'on'
+        set -sg escape-time 10
       '';
 
     };

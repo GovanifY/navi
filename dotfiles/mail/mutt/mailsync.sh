@@ -5,6 +5,9 @@ pgrep -u "${USER:=$LOGNAME}" >/dev/null || { echo "$USER not logged in; sync wil
 # Run only if not already running in other instance
 pgrep -x mbsync >/dev/null && { echo "mbsync is already running." ; exit ;}
 
+# check if the mailserver is online || if we have internet connection
+ping -q -c 1 govanify.com > /dev/null || { echo "No internet connection detected."; exit ;}
+
 # Check account for new mail. Notify if there is new content.
 syncandnotify() {
     acc="$(echo "$account" | sed "s/.*\///")"

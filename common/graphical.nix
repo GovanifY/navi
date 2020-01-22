@@ -12,6 +12,7 @@
       kanshi # autorandr
       wofi grim wl-clipboard firefox-wayland
       mpv imv slurp 
+      tor-browser-bundle-bin
     ];
   };
 

@@ -20,8 +20,9 @@
     ZDOTDIR = "$XDG_CONFIG_HOME/zsh";
     CARGO_HOME = "$XDG_DATA_HOME/cargo";
     WINEPREFIX = "$XDG_DATA_HOME/wineprefixes/default";
-    WEECHAT_HOME = "$XDG_CONFIG_HOME/weechat";
-    GNUPGHOME = "$XDG_DATA_HOME/gnupg";
+    # does not parse it correctly for some reason
+    WEECHAT_HOME = "~/.config/weechat";
+    GNUPGHOME = "~/.config/gnupg";
     GRADLE_USER_HOME = "$XDG_DATA_HOME/gradle";
     GEM_HOME = "$XDG_DATA_HOME/gem";
     GEM_SPEC_CACHE = "$XDG_CACHE_HOME/gem";

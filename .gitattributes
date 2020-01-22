@@ -1,0 +1,3 @@
+secrets/* filter=git-crypt diff=git-crypt
+dotfiles/mail/msmtp/* filter=git-crypt diff=git-crypt
+dotfiles/mail/mbsync/* filter=git-crypt diff=git-crypt

@@ -1,5 +1,17 @@
 { config, pkgs, ... }:
-{
+with pkgs;
+let
+  my-python-packages = python-packages: with python-packages; [
+    pandas
+    requests
+    pillow
+    matrix-nio
+    Logbook
+    # other python packages you want
+  ]; 
+  python-pkgs = python3.withPackages my-python-packages;
+in 
+  {
   imports =
     [
     ./security.nix
@@ -8,6 +20,7 @@
     ./xdg.nix
     ./sandboxing.nix
     (import "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/release-19.09.tar.gz}/nixos")
+    ./../secrets/deployment.nix
     ./../pkgs/vim.nix
     ./../pkgs/zsh.nix
     ./../pkgs/tmux.nix
@@ -16,7 +29,7 @@
 
   # basic set of tools & ssh
   environment.systemPackages = with pkgs; [
-    wget neovim tmux git rsync
+    wget neovim tmux git git-crypt pinentry-curses rsync imagemagick python-pkgs
   ];
 
   services.openssh = {
@@ -47,5 +60,7 @@
     '';
     console.earlySetup = true;
     boot.loader.timeout = 1;
+    networking.domain = "govanify.com";
+    programs.gnupg.agent.enable = true;
 }
 

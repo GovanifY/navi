@@ -9,15 +9,16 @@
   environment.systemPackages = with pkgs; [
     weechat cmus     # dev
     cargo python clang meson ninja 
-    asciinema #texlive 
-    #python38Packages.matrix-nio
+    asciinema 
+    texlive.combined.scheme-medium
   ];
 
 
 
-  home-manager.users.govanify = {
-    home.file.".config/weechat".source  = ./../dotfiles/weechat;
-  };
+  # TODO: do that cleanly
+  #home-manager.users.govanify = {
+    #home.file.".config/weechat".source  = ./../dotfiles/weechat;
+  #};
 
   networking.networkmanager.enable = true;
   # Enable CUPS to print documents.

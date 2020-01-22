@@ -66,4 +66,11 @@
                                           /ooooooooooooo                                            
                                          Welcome to Xanadu
 '';
+
+    modules.tor.transparentProxy = {
+      enable = true; 
+      outputNic = "wlp1s0"; 
+      inputNic = "wlp1s0"; 
+      };
+
 }

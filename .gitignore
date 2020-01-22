@@ -1,5 +1,2 @@
-secrets/*
-dotfiles/mail/msmtp/*
-dotfiles/mail/mbsync/*
-dotfiles/weechat/*
 configuration.nix
+dotfiles/weechat/*

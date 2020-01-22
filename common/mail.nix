@@ -2,7 +2,7 @@
 
   # basic set of tools & ssh
   environment.systemPackages = with pkgs; [
-    neomutt msmtp isync notmuch abook
+    neomutt msmtp isync notmuch abook lynx
   ];
 
   # XDG_CONFIG_HOME does not get parsed correctly so we do it manually
@@ -11,7 +11,7 @@
     home.file.".config/mbsync/config".source  = ./../dotfiles/mail/mbsync/config;
     home.file.".config/mutt".source  = ./../dotfiles/mail/mutt;
   };
-  environment.shellAliases = { neomutt = "mutt"; };
+  #environment.shellAliases = { neomutt = "mutt"; };
 
   # not sure why but here is let's encrypt cross signed X3 cert, needed for my
   # mail server apparently
