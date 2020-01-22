@@ -10,8 +10,11 @@ Currently the machines populated by this configuration are:
 
 Features in need of development are:
 * weechat-matrix and vim-prosession !!!
-* japanese keyboard support
 * switch to pass in dotfiles
+* fix ibus daemon
+
 * security hardening through sandboxing 
 * set up eirin to have regular and automated backups
+
 * make firefox sync to fujiwara and setup fujiwara
+* add a burner device to tmpfs

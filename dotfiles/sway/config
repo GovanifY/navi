@@ -30,6 +30,7 @@ output eDP-1 scale 2.0
 
 # all you need to have a good day
 exec swaymsg "workspace 1; exec firefox"
+exec swaymsg "workspace 1; exec ibus-daemon -dr"
 exec swaymsg "workspace 2; exec termite -e tmux"
 
 default_border pixel 1 
