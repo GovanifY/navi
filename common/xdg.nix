@@ -30,8 +30,9 @@
     GEM_SPEC_CACHE = "$XDG_CACHE_HOME/gem";
     # java still store fonts in .java so i use a per-app wrapper
     _JAVA_OPTIONS = "-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java";
-    WGETRC = "~/.config/wgetrc";
+    WGETRC = "$HOME/.config/wgetrc";
     PYTHONSTARTUP = "$HOME/.config/python/startup.py";
+    PASSWORD_STORE_DIR = "$HOME/.config/pass";
   };
 
   home-manager.users.govanify = {
@@ -54,6 +55,7 @@
   '';
 
   # TODO: after all that ssh STILL tries to create the ~/.ssh folder. We need to
-  # export HOME=/tmp or equivalent before running it but this wouldn't work
-  # either as we would expand the global ssh config first...
+  # execute the following command in override postdownload of ssh
+  # sed -i 's/\.ssh/\.config\/ssh/' *pathnames.h
+
 }

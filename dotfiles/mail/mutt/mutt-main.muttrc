@@ -11,6 +11,7 @@
 #
 #
 # TODO: add an automatic mailcount when reading mails or doing stuff
+set crypt_use_gpgme = yes
 
 #message-hook . "exec ~/.config/mutt/mail_count.sh"
 

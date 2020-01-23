@@ -29,7 +29,8 @@ in
 
   # basic set of tools & ssh
   environment.systemPackages = with pkgs; [
-    wget neovim tmux git git-crypt pinentry-curses rsync imagemagick python-pkgs
+    wget neovim tmux git git-crypt pinentry-curses 
+    rsync imagemagick python-pkgs pass
   ];
 
   services.openssh = {
