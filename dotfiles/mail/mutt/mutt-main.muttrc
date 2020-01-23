@@ -12,6 +12,18 @@
 #
 # TODO: add an automatic mailcount when reading mails or doing stuff
 set crypt_use_gpgme = yes
+set crypt_autosign=yes
+set crypt_verify_sig=yes
+set crypt_replysign=yes
+set crypt_replyencrypt=yes
+set crypt_replysignencrypted=yes
+#set crypt_autoencrypt = yes
+
+
+set pgp_default_key="52142D39A7CEF8FA872BCA7FDE62E1E2A6145556"
+set pgp_check_gpg_decrypt_status_fd
+set pgp_use_gpg_agent = yes
+set pgp_self_encrypt = yes
 
 #message-hook . "exec ~/.config/mutt/mail_count.sh"
 
