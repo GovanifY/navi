@@ -1,4 +1,5 @@
 {config, lib, ...}:
+# TODO: this only redirects IPv4, absolutely need to fix that!!!!!!!!!!
 with lib;
 let
   cfg = config.modules.tor.transparentProxy;

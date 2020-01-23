@@ -30,9 +30,10 @@ in
   # basic set of tools & ssh
   environment.systemPackages = with pkgs; [
     wget neovim tmux git git-crypt pinentry-curses 
-    rsync imagemagick python-pkgs pass
+    rsync imagemagick python-pkgs pass mosh
   ];
 
+  programs.mosh.enable = true;
   services.openssh = {
     enable = true;
     passwordAuthentication = false;
