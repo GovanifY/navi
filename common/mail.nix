@@ -6,6 +6,7 @@
   ];
 
   # XDG_CONFIG_HOME does not get parsed correctly so we do it manually
+  # you need to create the caching folder otherwise this fails
   home-manager.users.govanify = {
     home.file.".config/msmtp/config".source  = ./../dotfiles/mail/msmtp/config;
     home.file.".config/mbsync/config".source  = ./../dotfiles/mail/mbsync/config;

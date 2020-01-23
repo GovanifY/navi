@@ -14,7 +14,7 @@ Features in need of development are:
 * fix ibus daemon
 
 * security hardening through sandboxing 
-* set up eirin to have regular and automated backups
+* set up patchouli to have regular and automated backups
 
 * make firefox sync to fujiwara and setup fujiwara
 * add a burner device to tmpfs

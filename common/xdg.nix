@@ -2,7 +2,6 @@
 # * mozilla (in progress upstream hopefully)
 # * nix old folders, yuuuuup, i should make a PR
 # * dbus: ~/.dbus in root
-# python: ~/.python_history, apparmor?
 # https://github.com/google/mozc/issues/474
 # ^ mozc wise
 
@@ -32,12 +31,14 @@
     # java still store fonts in .java so i use a per-app wrapper
     _JAVA_OPTIONS = "-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java";
     WGETRC = "~/.config/wgetrc";
+    PYTHONSTARTUP = "$HOME/.config/python/startup.py";
   };
 
   home-manager.users.govanify = {
     home.file.".config/wgetrc".source  = ./../dotfiles/xdg/wgetrc;
     # not technically entirely xdg but it doesn't choose our pinentry otherwise
     home.file.".config/gnupg/gpg-agent.conf".source  = ./../dotfiles/xdg/gnupg/gpg-agent.conf;
+    home.file.".config/python/startup.py".source  = ./../dotfiles/xdg/python/startup.py;
   };
 
 
