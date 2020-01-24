@@ -1,9 +1,11 @@
 { config, pkgs, lib, ... }: {
+
   imports =
     [ 
       ./graphical.nix
       ./mail.nix
     ];
+
 
   # TODO: make weechat work out better
   environment.systemPackages = with pkgs; [
@@ -11,6 +13,7 @@
     cargo python clang meson ninja 
     asciinema 
     texlive.combined.scheme-medium
+    pass pinentry-curses 
   ];
 
 
@@ -32,6 +35,22 @@
 
   # uneeded in most cases and create an ~/.esd_auth file
   hardware.pulseaudio.extraConfig = "unload-module module-esound-protocol-unix";
+
+  # we do not use gpg agent as all gpg keys used are available _without_ a
+  # password, if someone is able to snoop into my user files they will sooner
+  # or later get the password anyways
+
+
+  # this adds 2 files on top of the gpg install handled by the system, but this
+  # is a single user system so nobody cares
+  home-manager.users.govanify = {
+    home.file.".config/gnupg/key.gpg".source  = ./../dotfiles/gnupg/key.gpg;
+    home.file.".config/gnupg/trust.txt".source  = ./../dotfiles/gnupg/trust.txt;
+  };
+
+
+
+
 }
 
 

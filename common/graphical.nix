@@ -63,7 +63,16 @@
   # ACTUALLY WORKS for a reason that is beyond me. I'm as confused as you are,
   # so let's just keep it this way shall we? worst case scenario i login into
   # another shell
+
+  # the gpg thing should be done in headfull but we need to do that before it
+  # execs sway because sway obviously never returns
   environment.interactiveShellInit = ''
+    if [ ! -f ~/.config/gnupg/trustdb.gpg ] && [[ $(tty) = /dev/tty1 ]]; then
+      find ~/.config/gnupg -type f -exec chmod 600 {} \;
+      find ~/.config/gnupg -type d -exec chmod 700 {} \;
+      gpg --import ~/.config/gnupg/key.gpg                                       
+      gpg --import-ownertrust ~/.config/gnupg/trust.txt 
+    fi
     if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
       exec sway
     fi
