@@ -30,7 +30,7 @@ in
   # basic set of tools & ssh
   environment.systemPackages = with pkgs; [
     wget neovim tmux git git-crypt pinentry-curses 
-    rsync imagemagick python-pkgs pass mosh
+    rsync imagemagick python-pkgs pass mosh gnupg
   ];
 
   programs.mosh.enable = true;
@@ -63,6 +63,10 @@ in
     console.earlySetup = true;
     boot.loader.timeout = 1;
     networking.domain = "govanify.com";
-    programs.gnupg.agent.enable = true;
+
+
+    # we do not use gpg agent as all gpg keys used are available _without_ a
+    # password, if someone is able to snoop into my user files they will sooner
+    # or later get the password anyways
 }
 

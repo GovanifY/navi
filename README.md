@@ -9,8 +9,10 @@ Currently the machines populated by this configuration are:
 
 
 Features in need of development are:
+* redirect IPv6 through tor
 * weechat-matrix and vim-prosession !!!
 * switch to pass in dotfiles
+* auto import my gpg secret key
 * fix ibus daemon
 
 * security hardening through sandboxing 

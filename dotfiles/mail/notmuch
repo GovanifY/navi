@@ -1,0 +1,14 @@
+[database]
+path=/home/govanify/.local/share/mail
+[user]
+name=Gauvain Roussel-Tarbouriech
+primary_email=gauvain@govanify.com
+[new]
+tags=unread;inbox;
+ignore=
+[search]
+exclude_tags=deleted;spam;
+[maildir]
+synchronize_flags=true
+[crypto]
+gpg_path=gpg

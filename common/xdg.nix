@@ -33,12 +33,11 @@
     WGETRC = "$HOME/.config/wgetrc";
     PYTHONSTARTUP = "$HOME/.config/python/startup.py";
     PASSWORD_STORE_DIR = "$HOME/.config/pass";
+    NOTMUCH_CONFIG = "$HOME/.config/notmuch";
   };
 
   home-manager.users.govanify = {
     home.file.".config/wgetrc".source  = ./../dotfiles/xdg/wgetrc;
-    # not technically entirely xdg but it doesn't choose our pinentry otherwise
-    home.file.".config/gnupg/gpg-agent.conf".source  = ./../dotfiles/xdg/gnupg/gpg-agent.conf;
     home.file.".config/python/startup.py".source  = ./../dotfiles/xdg/python/startup.py;
   };
 

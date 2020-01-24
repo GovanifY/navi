@@ -11,6 +11,7 @@
     home.file.".config/msmtp/config".source  = ./../dotfiles/mail/msmtp/config;
     home.file.".config/mbsync/config".source  = ./../dotfiles/mail/mbsync/config;
     home.file.".config/mutt".source  = ./../dotfiles/mail/mutt;
+    home.file.".config/notmuch".source  = ./../dotfiles/mail/notmuch;
   };
   #environment.shellAliases = { neomutt = "mutt"; };
 
