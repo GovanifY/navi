@@ -5,8 +5,8 @@ set from = "gauvain@govanify.com"
 set sendmail = "msmtp -a govanify"
 alias me Gauvain Roussel-Tarbouriech <gauvain@govanify.com>
 set folder = "/home/govanify/.local/share/mail/govanify"
-set header_cache = /home/govanify/.cache/mutt/govanify/headers
-set message_cachedir = /home/govanify/.cache/mutt/govanify/bodies
+set header_cache = /home/govanify/.cache/mutt/govanify-headers
+set message_cachedir = /home/govanify/.cache/mutt/govanify-bodies
 set mbox_type = Maildir
 
 bind index,pager gg noop

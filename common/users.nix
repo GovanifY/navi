@@ -13,6 +13,7 @@
    };
 
    home-manager.users.govanify = {
+    home.file.".config/ssh/authorized_keys".source  = ./../secrets/authorized_keys;
      programs.git = {
        enable = true;
        userName  = "gauvain@govanify.com";

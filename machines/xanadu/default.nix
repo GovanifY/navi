@@ -73,4 +73,8 @@
       inputNic = "wlp1s0"; 
       };
 
+
+  home-manager.users.govanify = {
+    home.file."Pictures/wallpaper.png".source  = ./wallpaper.png;
+  };
 }

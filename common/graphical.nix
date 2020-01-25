@@ -68,10 +68,13 @@
   # execs sway because sway obviously never returns
   environment.interactiveShellInit = ''
     if [ ! -f ~/.config/gnupg/trustdb.gpg ] && [[ $(tty) = /dev/tty1 ]]; then
+      # let's just put the entire first time setup here
       find ~/.config/gnupg -type f -exec chmod 600 {} \;
       find ~/.config/gnupg -type d -exec chmod 700 {} \;
       gpg --import ~/.config/gnupg/key.gpg                                       
       gpg --import-ownertrust ~/.config/gnupg/trust.txt 
+      mkdir -p ~/.local/share/mail/ &> /dev/null
+      mkdir -p ~/.cache/mutt/ &> /dev/null
     fi
     if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
       exec sway

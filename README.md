@@ -9,6 +9,14 @@ Currently the machines populated by this configuration are:
 
 
 Features in need of development are:
+mail:
+- make your replies appear in threads
+- make gpg less shobby(auto gather from sks, check why keyid does not work when encrypting
+
+xdg:
+- ssh, mozc, dbus override, nixpkgs PR
+
+
 * redirect IPv6 through tor
 * weechat-matrix and vim-prosession !!!
 * switch to pass in dotfiles

@@ -54,7 +54,7 @@
   '';
 
   # TODO: after all that ssh STILL tries to create the ~/.ssh folder. We need to
-  # execute the following command in override postdownload of ssh
+  # execute the following command in override postpatch of ssh
   # sed -i 's/\.ssh/\.config\/ssh/' *pathnames.h
 
 }
