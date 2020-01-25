@@ -33,9 +33,6 @@
   # firmwares + steam et al
   nixpkgs.config.allowUnfree = true;
 
-  # uneeded in most cases and create an ~/.esd_auth file
-  hardware.pulseaudio.extraConfig = "unload-module module-esound-protocol-unix";
-
   # we do not use gpg agent as all gpg keys used are available _without_ a
   # password, if someone is able to snoop into my user files they will sooner
   # or later get the password anyways
