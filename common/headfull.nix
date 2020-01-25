@@ -11,7 +11,7 @@
   environment.systemPackages = with pkgs; [
     weechat cmus     # dev
     cargo python clang meson ninja 
-    asciinema 
+    asciinema gnumake ranger file
     texlive.combined.scheme-medium
     pass pinentry-curses 
   ];

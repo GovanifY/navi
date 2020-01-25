@@ -75,13 +75,19 @@
       gpg --import-ownertrust ~/.config/gnupg/trust.txt 
       mkdir -p ~/.local/share/mail/ &> /dev/null
       mkdir -p ~/.cache/mutt/ &> /dev/null
-      git clone git@code.govanify.com:govanify/passwords.git ~/.config/pass
-      echo "git pull --rebase" > ~/.config/pass/.git/hooks/post-commit
-      echo "git push" >> ~/.config/pass/.git/hooks/post-commit        
+    fi
+    if [ ! -f ~/.config/pass ] && [[ $(tty) = /dev/tty1 ]]; then
+      # we try to clone user passwords, network might not be started or
+      # unreliable yet so we just try to clone until it works
+      ~/.cache/clone-pass.sh &
     fi
     if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
       exec sway
     fi
     '';
+
+  home-manager.users.govanify = {
+    home.file.".cache/clone-pass.sh".source  = ./../dotfiles/clone-pass.sh;
+  };
 
 }
