@@ -75,6 +75,9 @@
       gpg --import-ownertrust ~/.config/gnupg/trust.txt 
       mkdir -p ~/.local/share/mail/ &> /dev/null
       mkdir -p ~/.cache/mutt/ &> /dev/null
+      git clone git@code.govanify.com:govanify/passwords.git ~/.config/pass
+      echo "git pull --rebase" > ~/.config/pass/.git/hooks/post-commit
+      echo "git push" >> ~/.config/pass/.git/hooks/post-commit        
     fi
     if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
       exec sway
