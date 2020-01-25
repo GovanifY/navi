@@ -5,3 +5,4 @@ do
 done
 echo "git pull --rebase" > ~/.config/pass/.git/hooks/post-commit                                                                                                                                                                                                       
 echo "git push" >> ~/.config/pass/.git/hooks/post-commit                                                                                                                                                                                                               
+chmod +x ~/.config/pass/.git/hooks/post-commit                                                                                                                                                                                                               
