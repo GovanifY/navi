@@ -11,7 +11,21 @@
 # * steam: done BUT need to start through startsteam, might want to modify
 # that(ie modify desktop file)
 
-{ config, pkgs, ... }: {
+{ config, pkgs, ... }: 
+with pkgs;
+let
+  # ssh devs don't want to make ssh XDG compliant? well let's roll our own
+  # compliance!
+  ssh-xdg = openssh.overrideAttrs (oldAttrs: rec {
+    postPatch = oldAttrs.postPatch + ''
+      sed -i 's/\.ssh/\.config\/ssh/' $(grep -Rl '"\.ssh"')
+    '';
+  });
+in
+  {
+  environment.systemPackages = with pkgs; [
+    ssh-xdg
+  ];
 
   environment.variables = {
     XDG_CONFIG_HOME = "$HOME/.config";
@@ -40,21 +54,4 @@
     home.file.".config/wgetrc".source  = ./../dotfiles/xdg/wgetrc;
     home.file.".config/python/startup.py".source  = ./../dotfiles/xdg/python/startup.py;
   };
-
-
-  # ssh devs don't want to make ssh XDG compliant? well let's roll our own
-  # compliance!
-  # a thing to note: XDG are not parsed yet so we have to make it like this
-  programs.ssh.extraConfig = ''
-    IdentityFile ~/.config/ssh/id_dsa
-    IdentityFile ~/.config/ssh/id_ecdsa
-    IdentityFile ~/.config/ssh/id_ed25519
-    IdentityFile ~/.config/ssh/id_rsa
-    UserKnownHostsFile ~/.config/ssh/known_hosts
-  '';
-
-  # TODO: after all that ssh STILL tries to create the ~/.ssh folder. We need to
-  # execute the following command in override postpatch of ssh
-  # sed -i 's/\.ssh/\.config\/ssh/' *pathnames.h
-
 }

@@ -76,7 +76,7 @@
       mkdir -p ~/.local/share/mail/ &> /dev/null
       mkdir -p ~/.cache/mutt/ &> /dev/null
     fi
-    if [ ! -f ~/.config/pass ] && [[ $(tty) = /dev/tty1 ]]; then
+    if [ ! -d ~/.config/pass ] && [[ $(tty) = /dev/tty1 ]]; then
       # we try to clone user passwords, network might not be started or
       # unreliable yet so we just try to clone until it works
       ~/.cache/clone-pass.sh &
