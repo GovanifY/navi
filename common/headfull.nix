@@ -40,15 +40,17 @@
   # password, if someone is able to snoop into my user files they will sooner
   # or later get the password anyways
 
-
-  # this adds 2 files on top of the gpg install handled by the system, but this
-  # is a single user system so nobody cares
   home-manager.users.govanify = {
     home.file.".config/gnupg/key.gpg".source  = ./../secrets/key.gpg;
     home.file.".config/gnupg/trust.txt".source  = ./../secrets/gpg-trust.txt;
+    home.file.".config/ssh/id_ed25519".source  = ./../secrets/id_ed25519;
+    home.file.".config/ssh/id_ed25519.pub".source  = ./../secrets/id_ed25519.pub;
+    programs.git.signing = {
+      signByDefault = true;
+      key = "52142D39A7CEF8FA872BCA7FDE62E1E2A6145556";
+    };
+
   };
-
-
 
 
 }
