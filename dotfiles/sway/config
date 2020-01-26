@@ -34,6 +34,9 @@ exec swaymsg "workspace 1; exec ibus-daemon -dr"
 exec swaymsg "workspace 2; exec termite -e tmux"
 
 default_border pixel 1 
+
+
+bindsym $mod+i exec /etc/sway/locale.sh
 #
 #default_border none 
 #gaps outer 10

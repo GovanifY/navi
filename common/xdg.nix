@@ -1,43 +1,53 @@
 # TODO: currently non compliant to XDG in default config are: 
-# * mozilla (in progress upstream hopefully)
 # * nix old folders, yuuuuup, i should make a PR
 
-# TODO: dbus esd_auth gets removed each time you start a new shell, should be done
-# upon user login along with swaystart
-# * steam: done BUT need to start through startsteam, might want to modify
+# TODO: steam: done BUT need to start through startsteam, might want to modify
 # that(ie modify desktop file)
+# java: need to make a system wrapper like steam up above
 
 { config, pkgs, ... }: {
   # ssh devs don't want to make ssh XDG compliant? well let's roll our own
   # compliance!
-  nixpkgs.config.packageOverrides = pkgs: {
-    openssh = pkgs.openssh.overrideAttrs (oldAttrs: rec {
-      postPatch = oldAttrs.postPatch + ''
-          sed -i 's/\.ssh/\.config\/ssh/' $(grep -Rl '"\.ssh"')
-      '';
-    });
+  nixpkgs.config = {
+    packageOverrides = super: let self = super.pkgs; in {
+      openssh = super.openssh.overrideAttrs (oldAttrs: rec {
+        postPatch = oldAttrs.postPatch + ''
+          sed -i 's/"\.ssh"/"\.config\/ssh"/' $(grep -Rl '"\.ssh"')
+        '';
+      });
 
     # https://github.com/google/mozc/issues/474
     # hopefully temporary
-    ibus-mozc = pkgs.ibus-mozc.overrideAttrs (oldAttrs: rec {
-      postPatch = oldAttrs.postPatch + ''
-          sed -i 's/\.mozc/\.config\/mozc/' $(grep -Rl '"\.mozc"')
-      '';
-    });
+    #ibus-mozc = pkgs.ibus-mozc.overrideAttrs (oldAttrs: rec {
+      #postPatch = oldAttrs.postPatch + ''
+          #sed -i 's/\.mozc/\.config\/mozc/' $(grep -Rl '"\.mozc"')
+      #'';
+    #});
 
-    # rarely created on my setup, seems to be x11 related? either way here we go
-    dbus = pkgs.dbus.overrideAttrs (oldAttrs: rec {
-      postPatch = oldAttrs.postPatch + ''
-          sed -i 's/\.dbus/\.config\/dbus/' $(grep -Rl '"\.dbus"')
-      '';
-    });
+    ## rarely created on my setup, seems to be x11 related? either way here we go
+    #dbus = pkgs.dbus.overrideAttrs (oldAttrs: rec {
+      #postPatch = oldAttrs.postPatch + ''
+          #sed -i 's/\.dbus/\.config\/dbus/' $(grep -Rl '"\.dbus"')
+      #'';
+    #});
 
-    pulseaudio = pkgs.pulseaudio.overrideAttrs (oldAttrs: rec {
-      postPatch = oldAttrs.postPatch + ''
-          sed -i 's/\.esd_auth/\.config\/esd_auth/' $(grep -Rl '"\.esd_auth"')
-      '';
-    });
+    ## eh, it's just a forgotten pulseaudio module everyone forgot about. easier
+    ## to patch than to submit a PR.
+    #pulseaudio = pkgs.pulseaudio.overrideAttrs (oldAttrs: rec {
+      #postPatch = ''
+          #sed -i 's/\.esd_auth/\.config\/esd_auth/' $(grep -Rl '"\.esd_auth"')
+      #'';
+    #});
 
+    ## a PR is in development but knowing the entire thing has been in the work
+    ## since 15 years ago I'd assume it's going to take a _little_ bit longer
+    ## https://phabricator.services.mozilla.com/D6995
+    #firefox-wayland = pkgs.firefox-wayland.overrideAttrs (oldAttrs: rec {
+      #postPatch = ''
+          #sed -i 's/\.mozilla/\.local\/share\/mozilla/' $(grep -Rl '"\.mozilla"')
+      #'';
+    #});
+    };
   };
 
   environment.variables = {

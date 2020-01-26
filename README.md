@@ -13,8 +13,8 @@ TODo list sorted by priority:
 * workflow: weechat-matrix and vim-prosession
 * mail: make your replies appear in threads
 * mail: make gpg less shobby(auto gather from sks, check why keyid does not work when encrypting
-* locale: fix ibus daemon
+* locale: check that ibus is fixed plus maybe recenter? 
 * security: security hardening through sandboxing 
 * workflow: set up patchouli to have regular and automated backups
 * server: make firefox sync to fujiwara and setup fujiwara
-* xdg: nixpkgs PR, mozilla PR or source patch if too slow
+* xdg: nixpkgs PR, check if xdg patches actually work
