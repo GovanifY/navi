@@ -18,11 +18,11 @@
 
     # https://github.com/google/mozc/issues/474
     # hopefully temporary
-    #ibus-mozc = pkgs.ibus-mozc.overrideAttrs (oldAttrs: rec {
-      #postPatch = oldAttrs.postPatch + ''
-          #sed -i 's/\.mozc/\.config\/mozc/' $(grep -Rl '"\.mozc"')
-      #'';
-    #});
+    ibus-engines.mozc = super.ibus-engines.mozc.overrideAttrs (oldAttrs: rec {
+      postPatch = ''
+          sed -i 's/"\.mozc"/"\.config\/mozc"/' $(grep -Rl '"\.mozc"')
+      '';
+    });
 
     ## rarely created on my setup, seems to be x11 related? either way here we go
     #dbus = pkgs.dbus.overrideAttrs (oldAttrs: rec {
@@ -33,11 +33,11 @@
 
     ## eh, it's just a forgotten pulseaudio module everyone forgot about. easier
     ## to patch than to submit a PR.
-    #pulseaudio = pkgs.pulseaudio.overrideAttrs (oldAttrs: rec {
-      #postPatch = ''
-          #sed -i 's/\.esd_auth/\.config\/esd_auth/' $(grep -Rl '"\.esd_auth"')
-      #'';
-    #});
+    pulseaudio = super.pulseaudio.overrideAttrs (oldAttrs: rec {
+      postPatch = ''
+          sed -i 's/"\.esd_auth"/"\.config\/esd_auth"/' $(grep -Rl '"\.esd_auth"')
+      '';
+    });
 
     ## a PR is in development but knowing the entire thing has been in the work
     ## since 15 years ago I'd assume it's going to take a _little_ bit longer
@@ -71,6 +71,9 @@
     PYTHONSTARTUP = "$HOME/.config/python/startup.py";
     PASSWORD_STORE_DIR = "$HOME/.config/pass";
     NOTMUCH_CONFIG = "$HOME/.config/notmuch";
+    # i'm... not sure myself but this seems to be required for ssh to use the
+    # godforsaken correct xdg path
+    GIT_SSH = "ssh";
   };
 
   home-manager.users.govanify = {
