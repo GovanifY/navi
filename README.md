@@ -12,7 +12,6 @@ TODo list sorted by priority:
 * security: redirect IPv6 through tor
 * workflow: weechat-matrix and vim-prosession
 * mail: make your replies appear in threads
-* mail: make gpg less shobby(check why keyid does not work when encrypting)
 * locale: SOMEFUCKINGHOW ibus sometimes works and sometimes doesn't. wtf? 
 * security: security hardening through sandboxing 
 * workflow: set up patchouli to have regular and automated backups

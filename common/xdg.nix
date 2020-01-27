@@ -5,6 +5,9 @@
 # that(ie modify desktop file)
 # java: need to make a system wrapper like steam up above
 
+# need to verify: dbus, doesn't appear on my system and breaks nixos build
+# anyways
+# firefox: doesn't seem to work?
 { config, pkgs, ... }: {
   # ssh devs don't want to make ssh XDG compliant? well let's roll our own
   # compliance!
@@ -25,9 +28,10 @@
     });
 
     ## rarely created on my setup, seems to be x11 related? either way here we go
-    #dbus = pkgs.dbus.overrideAttrs (oldAttrs: rec {
+    # NOT haha, this breaks nixos build at some point, so let's forget this
+   # dbus = super.dbus.overrideAttrs (oldAttrs: rec {
       #postPatch = oldAttrs.postPatch + ''
-          #sed -i 's/\.dbus/\.config\/dbus/' $(grep -Rl '"\.dbus"')
+          #sed -i 's/"\.dbus"/"\.config\/dbus"/' $(grep -Rl '"\.dbus"')
       #'';
     #});
 
@@ -42,11 +46,11 @@
     ## a PR is in development but knowing the entire thing has been in the work
     ## since 15 years ago I'd assume it's going to take a _little_ bit longer
     ## https://phabricator.services.mozilla.com/D6995
-    #firefox-wayland = pkgs.firefox-wayland.overrideAttrs (oldAttrs: rec {
-      #postPatch = ''
-          #sed -i 's/\.mozilla/\.local\/share\/mozilla/' $(grep -Rl '"\.mozilla"')
-      #'';
-    #});
+    firefox-wayland = super.firefox-wayland.overrideAttrs (oldAttrs: rec {
+      postPatch = ''
+          sed -i 's/"\.mozilla"/"\.local\/share\/mozilla"/' $(grep -Rl '"\.mozilla"')
+      '';
+    });
     };
   };
 
