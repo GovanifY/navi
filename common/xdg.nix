@@ -82,5 +82,7 @@
   };
   programs.zsh.shellAliases = {
     gdb = "gdb -nh -x \"$XDG_CONFIG_HOME\"/gdb/init";
+    subversion = "svn --config-dir \"$XDG_CONFIG_HOME\"/subversion";
+    dosbox = "dosbox -conf \"$XDG_CONFIG_HOME\"/dosbox/dosbox.conf";
   };
 }
