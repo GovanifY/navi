@@ -1,5 +1,5 @@
 [database]
-path=/home/govanify/.local/share/mail
+path=/home/govanify/.local/share/mail/govanify
 [user]
 name=Gauvain Roussel-Tarbouriech
 primary_email=gauvain@govanify.com
