@@ -74,13 +74,11 @@ bind index \005 next-undeleted		# Mouse wheel
 bind pager \031 previous-line		# Mouse wheel
 bind pager \005 next-line		# Mouse wheel
 bind editor <Tab> complete-query
-bind index,pager x entire-thread
-macro index <F9> \
-"<enter-command>set my_old_pipe_decode=\$pipe_decode nopipe_decode nowait_key<enter>\
-<pipe-message>notmuch-mutt -r thread<enter>\
-<change-folder-readonly>`echo ${XDG_CACHE_HOME:-$HOME/.cache}/notmuch/mutt/results`<enter>\
-<enter-command>set pipe_decode=\$my_old_pipe_decode wait_key<enter>" \
-"notmuch: reconstruct thread"
+
+# makes a virtual inbox with my mails in it, good for threads
+set nm_query_type = threads
+set virtual_spoolfile = yes
+virtual-mailboxes "Inbox" "notmuch://?query=tag:inbox"
 
 macro index,pager S "<sync-mailbox><shell-escape>~/.config/mutt/mailsync.sh &> /dev/null &<enter>" "flush all changes and synchronize" 
 
