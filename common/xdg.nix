@@ -80,4 +80,7 @@
     home.file.".config/wgetrc".source  = ./../dotfiles/xdg/wgetrc;
     home.file.".config/python/startup.py".source  = ./../dotfiles/xdg/python/startup.py;
   };
+  programs.zsh.shellAliases = {
+    gdb = "gdb -nh -x \"$XDG_CONFIG_HOME\"/gdb/init";
+  };
 }

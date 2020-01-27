@@ -76,6 +76,9 @@
       gpg --import-ownertrust ~/.config/gnupg/trust.txt 
       mkdir -p ~/.local/share/mail/ &> /dev/null
       mkdir -p ~/.cache/mutt/ &> /dev/null
+      mkdir -p ~/.local/share/wineprefixes/ &> /dev/null
+      mkdir -p ~/.config/gdb &> /dev/null
+      touch ~/.config/gdb/init &> /dev/null
     fi
     if [ ! -d ~/.config/pass ] && [[ $(tty) = /dev/tty1 ]]; then
       # we try to clone user passwords, network might not be started or
