@@ -2,7 +2,7 @@
 
   # basic set of tools & ssh
   environment.systemPackages = with pkgs; [
-    neomutt msmtp isync notmuch abook lynx
+    neomutt msmtp isync notmuch abook lynx notmuch-mutt
   ];
 
   # XDG_CONFIG_HOME does not get parsed correctly so we do it manually
