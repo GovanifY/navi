@@ -40,6 +40,7 @@
   home-manager.users.govanify = {
     home.file.".config/gnupg/key.gpg".source  = ./../secrets/key.gpg;
     home.file.".config/gnupg/trust.txt".source  = ./../secrets/gpg-trust.txt;
+    home.file.".config/gnupg/gpg.conf".source  = ./../dotfiles/gpg/gpg.conf;
     home.file.".config/ssh/id_ed25519".source  = ./../secrets/id_ed25519;
     home.file.".config/ssh/id_ed25519.pub".source  = ./../secrets/id_ed25519.pub;
     programs.git.signing = {
