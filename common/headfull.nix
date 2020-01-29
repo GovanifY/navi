@@ -14,7 +14,7 @@
     cargo python clang meson ninja 
     asciinema gnumake ranger file
     texlive.combined.scheme-medium
-    pass pinentry-curses 
+    pass pinentry-curses R
   ];
 
 

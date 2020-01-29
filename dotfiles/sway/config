@@ -37,6 +37,8 @@ default_border pixel 1
 
 
 bindsym $mod+i exec /etc/sway/locale.sh
+
+seat seat0 xcursor_theme breeze 48
 #
 #default_border none 
 #gaps outer 10
