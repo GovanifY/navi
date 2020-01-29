@@ -4,12 +4,13 @@
     [ 
       ./graphical.nix
       ./mail.nix
+      ./../pkgs/weechat.nix
     ];
 
 
   # TODO: make weechat work out better
   environment.systemPackages = with pkgs; [
-    weechat cmus     # dev
+    cmus     # dev
     cargo python clang meson ninja 
     asciinema gnumake ranger file
     texlive.combined.scheme-medium

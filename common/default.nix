@@ -1,17 +1,4 @@
-{ config, pkgs, ... }:
-with pkgs;
-let
-  my-python-packages = python-packages: with python-packages; [
-    pandas
-    requests
-    pillow
-    matrix-nio
-    Logbook
-    # other python packages you want
-  ]; 
-  python-pkgs = python3.withPackages my-python-packages;
-in 
-  {
+{ config, pkgs, ... }: {
   imports =
     [
     ./security.nix
@@ -30,7 +17,7 @@ in
   # basic set of tools & ssh
   environment.systemPackages = with pkgs; [
     wget neovim tmux git git-crypt 
-    rsync imagemagick python-pkgs mosh gnupg
+    rsync imagemagick mosh gnupg
   ];
 
   programs.mosh.enable = true;

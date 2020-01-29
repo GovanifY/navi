@@ -51,6 +51,14 @@
           sed -i 's/"\.mozilla"/"\.local\/share\/mozilla"/' $(grep -Rl '"\.mozilla"')
       '';
     });
+
+    # would be nice to get this working
+    #freecad = super.freecad.overrideAttrs (oldAttrs: rec {
+    #  postPatch = ''
+    #      sed -i 's/"\.FreeCAD"/"\.config\/FreeCAD"/' $(grep -Rl '"\.FreeCAD"')
+    #  '';
+    #});
+
     };
   };
 

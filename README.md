@@ -15,3 +15,4 @@ TODo list sorted by priority:
 * workflow: set up patchouli to have regular and automated backups
 * server: make firefox sync to fujiwara and setup fujiwara
 * xdg: nixpkgs PR, check if xdg patches actually work
+* locale: sync mozc/ibus settings, saner defaults, fix top left autocomplete wayland bug
