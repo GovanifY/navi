@@ -8,7 +8,7 @@ let
       vimAlias = true;
       plugins = with pkgs.vimPlugins; [ tagbar gruvbox nerdtree fugitive
       airline ctrlp multiple-cursors surround
-      nerdcommenter easymotion vim-obsession #vim-prosession
+      nerdcommenter easymotion vim-obsession vim-prosession
       syntastic ultisnips vim-snippets deoplete-nvim
       deoplete-rust deoplete-clang deoplete-jedi vim-nix
       rust-vim ];

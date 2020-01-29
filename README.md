@@ -10,9 +10,10 @@ Currently the machines populated by this configuration are:
 
 TODo list sorted by priority:
 * security: redirect IPv6 through tor
-* workflow: weechat-matrix and vim-prosession
+* workflow: weechat-matrix setup
+* workflow: breeze-dark by default on qt5
 * security: security hardening through sandboxing 
 * workflow: set up patchouli to have regular and automated backups
 * server: make firefox sync to fujiwara and setup fujiwara
 * xdg: nixpkgs PR, check if xdg patches actually work
-* locale: sync mozc/ibus settings, saner defaults, fix top left autocomplete wayland bug
+* locale: sync mozc/ibus settings, saner defaults, make panel work in wayland

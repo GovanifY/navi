@@ -106,19 +106,21 @@
 
   environment.extraInit = ''
         # GTK3: add theme to search path for themes
-        export XDG_DATA_DIRS="${pkgs.breeze-gtk}/share:$XDG_DATA_DIRS"
+        export XDG_DATA_DIRS="${pkgs.breeze-gtk}/share:${pkgs.breeze-qt5}/share:$XDG_DATA_DIRS"
         # GTK3: add /etc/xdg/gtk-3.0 to search path for settings.ini
         export XDG_CONFIG_DIRS="/etc/xdg:$XDG_CONFIG_DIRS"
         # GTK2 theme + icon theme
         export GTK2_RC_FILES=${pkgs.writeText "iconrc" ''gtk-icon-theme-name="breeze"''}:$GTK2_RC_FILES
         # QT theme
-        export QT_STYLE_OVERRIDE=breeze
+        #export QT_STYLE_OVERRIDE=breeze
+        export QT_QPA_PLATFORM=wayland-egl
+        export GDK_BACKEND=wayland
         '';
 
   environment.etc."xdg/gtk-3.0/settings.ini" = {
     text = ''
       [Settings]
-      gtk-icon-theme-name=breeze
+      gtk-icon-theme-name=breeze-dark
       gtk-theme-name=Breeze-Dark
       gtk-application-prefer-dark-theme = true
     '';
@@ -127,8 +129,16 @@
 
   environment.etc."gtk-2.0/gtkrc" = {
     text = ''
-      gtk-icon-theme-name=breezewwweeew
+      gtk-icon-theme-name=breeze-dark
     '';
     mode = "444";
   };
+   # QT4/5 global theme
+   environment.etc."xdg/Trolltech.conf" = {
+     text = ''
+        [Qt]
+        style=Breeze-dark
+        '';
+     mode = "444";
+   };
 }
