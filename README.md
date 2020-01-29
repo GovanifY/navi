@@ -11,7 +11,7 @@ Currently the machines populated by this configuration are:
 TODo list sorted by priority:
 * security: redirect IPv6 through tor
 * workflow: weechat-matrix setup
-* workflow: breeze-dark by default on qt5
+* workflow: make cursor visible in sway 
 * security: security hardening through sandboxing 
 * workflow: set up patchouli to have regular and automated backups
 * server: make firefox sync to fujiwara and setup fujiwara

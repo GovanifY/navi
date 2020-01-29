@@ -56,24 +56,44 @@
     hack-font
   ];
 
+  # QT theme engine
+  programs.qt5ct.enable = true;
+
   environment.variables = {
-    MOZ_ENABLE_WAYLAND = "1";
+    # fix sway java bug
     _JAVA_AWT_WM_NONREPARENTING = "1";
+    # QT theme
+    QT_QPA_PLATFORMTHEME="qt5ct";
+    # force wayland
+    QT_QPA_PLATFORM="wayland-egl";
+    GDK_BACKEND="wayland";
+    MOZ_ENABLE_WAYLAND = "1";
   };
 
 
   environment = {
     etc = {
-      # Put config files in /etc. Note that you also can put these in ~/.config, but then you can't manage them with NixOS anymore!
-      "sway/config".source = ./../dotfiles/sway/config;
-      "sway/locale.sh".source = ./../dotfiles/sway/locale.sh;
-      "sway/status.sh".source = ./../dotfiles/sway/status.sh;
+      "sway/config".source = ./../dotfiles/graphical/sway/config;
+      "sway/locale.sh".source = ./../dotfiles/graphical/sway/locale.sh;
+      "sway/status.sh".source = ./../dotfiles/graphical/sway/status.sh;
+
+      # QT theme
+      "xdg/qt5ct/qt5ct.conf".source  = ./../dotfiles/graphical/qt5ct/qt5ct.conf;
+      "xdg/qt5ct/breeze-dark.conf".source  = ./../dotfiles/graphical/qt5ct/breeze-dark.conf;
+
+      # GTK theme
+      "xdg/gtk-3.0/settings.ini" = { text = ''
+        [Settings]
+        gtk-icon-theme-name=breeze-dark
+        gtk-theme-name=Breeze-Dark
+        gtk-application-prefer-dark-theme = true
+      ''; mode = "444"; };
+      
+      "gtk-2.0/gtkrc" = { text = ''
+        gtk-icon-theme-name=breeze-dark
+      ''; mode = "444"; };
     };
   };
-  # soooo we have all of those nice systemd services below but NONE OF THEM
-  # ACTUALLY WORKS for a reason that is beyond me. I'm as confused as you are,
-  # so let's just keep it this way shall we? worst case scenario i login into
-  # another shell
 
   # the gpg thing should be done in headfull but we need to do that before it
   # execs sway because sway obviously never returns
@@ -101,44 +121,8 @@
   '';
 
   home-manager.users.govanify = {
+    # initial pass setup
+    # should i make this global?
     home.file.".cache/clone-pass.sh".source  = ./../dotfiles/clone-pass.sh;
   };
-
-  environment.extraInit = ''
-        # GTK3: add theme to search path for themes
-        export XDG_DATA_DIRS="${pkgs.breeze-gtk}/share:${pkgs.breeze-qt5}/share:$XDG_DATA_DIRS"
-        # GTK3: add /etc/xdg/gtk-3.0 to search path for settings.ini
-        export XDG_CONFIG_DIRS="/etc/xdg:$XDG_CONFIG_DIRS"
-        # GTK2 theme + icon theme
-        export GTK2_RC_FILES=${pkgs.writeText "iconrc" ''gtk-icon-theme-name="breeze"''}:$GTK2_RC_FILES
-        # QT theme
-        #export QT_STYLE_OVERRIDE=breeze
-        export QT_QPA_PLATFORM=wayland-egl
-        export GDK_BACKEND=wayland
-        '';
-
-  environment.etc."xdg/gtk-3.0/settings.ini" = {
-    text = ''
-      [Settings]
-      gtk-icon-theme-name=breeze-dark
-      gtk-theme-name=Breeze-Dark
-      gtk-application-prefer-dark-theme = true
-    '';
-    mode = "444";
-  };
-
-  environment.etc."gtk-2.0/gtkrc" = {
-    text = ''
-      gtk-icon-theme-name=breeze-dark
-    '';
-    mode = "444";
-  };
-   # QT4/5 global theme
-   environment.etc."xdg/Trolltech.conf" = {
-     text = ''
-        [Qt]
-        style=Breeze-dark
-        '';
-     mode = "444";
-   };
 }
