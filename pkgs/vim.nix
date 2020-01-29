@@ -93,10 +93,10 @@ let
   };
         in
         {
-          home-manager.users.govanify = vimConf; 
-          home-manager.users.root = vimConf; 
+            home-manager.users.govanify = vimConf; 
+            home-manager.users.root = vimConf; 
 
-          environment.variables = {
-            EDITOR = "vim";
-          };
-        }
+            environment.variables = {
+              EDITOR = "vim";
+            };
+          }

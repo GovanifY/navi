@@ -1,11 +1,5 @@
 { config, pkgs, ... }:
 {
-    # Select internationalisation properties.
-  # i18n = {
-  #   consoleFont = "Lat2-Terminus16";
-  #   consoleKeyMap = "us";
-  #   defaultLocale = "en_US.UTF-8";
-  # };
 
   # Set your time zone.
   time.timeZone = "Europe/Paris";
@@ -46,6 +40,7 @@
     ];
   };
 
+  # don't forget to set your ibus settings for mozc otherwise no IME!
   i18n.inputMethod = {
     enabled = "ibus";
     ibus.engines = with pkgs.ibus-engines; [ mozc ];
@@ -56,5 +51,11 @@
     XMODIFIERS = "@im=ibus";
     QT_IM_MODULE = "ibus";
   };
+
+  # https://github.com/NixOS/nixpkgs/issues/72896
+  # ok....
+  environment.systemPackages = with pkgs; [
+    qt5.full
+  ];
 }
 

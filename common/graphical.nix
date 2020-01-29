@@ -13,6 +13,9 @@
       wofi grim wl-clipboard firefox-wayland
       mpv imv slurp 
       tor-browser-bundle-bin
+      # work + art
+      freecad blender kicad krita kdenlive ardour
+      #ghidra in the future when it is actually updated
     ];
   };
 
