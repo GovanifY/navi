@@ -58,6 +58,7 @@ in {
         VirtualAddrNetworkIPv4 ${cfg.virtualNetwork}
         VirtualAddrNetworkIPv6 ${cfg.virtualNetworkIPv6}
         AutomapHostsOnResolve 1
+        Sandbox 1
         TransPort ${transPort} IPv6Traffic PreferIPv6
         DNSPort ${dnsPort}
       '';

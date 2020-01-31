@@ -9,7 +9,7 @@ Currently the machines populated by this configuration are:
 
 
 TODo list sorted by priority:
-* security: redirect IPv6 through tor
+* security: redirect IPv6 through tor + profiles
 * workflow: weechat-matrix setup
 * workflow: make cursor visible in sway 
 * security: security hardening through sandboxing 

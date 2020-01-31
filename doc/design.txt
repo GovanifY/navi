@@ -1,0 +1,292 @@
+navi infrastructure design documents
+
+1. user facing machines, aka "headfull" devices:
+
+1.1 User Guide
+
+The user interface given is a simple wayland-based tiling manager containing 2
+windows, firefox and termite with its own tmux session. It is assumed most
+day-to-day tasks will be done inside those two windows, while additional windows
+can of course be created into additional screens, for graphical tools such as
+ghidra, FreeCAD, KiCAD, ardour, Krita, Blender and so on.
+
+The tmux session automatically opens back the last session that you worked on
+before system shutdown. A recommended setup is:
+
+[0: chat 1: system 2: music 3: work-chat 4: dev 5: sandboxed 6: research ]
+whereas:
+* chat is weechat 
+* system is htop+nmtui
+* music is cmus
+* work-chat is an ssh into a remote server
+* dev is a vim session on last opened project
+* sandboxed is a sandboxed shell instance for any untrusted code
+* research is context-dependant
+
+This can of course be modified to fit your environment. I found this setup to be
+the most useful when proceeding to researching theoretical sciences and writing
+papers.
+
+Some apps are sandboxed by default using the firejail sandbox application but
+not all of them. For example, zsh is not sandboxed by default. In the example up
+above, to start a sandboxed shell, you would have to explicitely type `firejail
+zsh`.
+When the program is sandboxed by default though, it proceeds on a whitelist
+basis(blacklisting any filesystem paths it doesn't need) and cuts off the
+network along with disabling as much attack surface as possible.
+
+All traffic that gets sent throughout a headfull device is also transparently
+proxied through tor to make your connection anonymous and harder to trace back.
+All headfull devices are also able to communicate through hidden services
+between one another, typically through the ssh protocol. 
+
+An IME is installed by default, ibus, which supports several languages and
+should be configured up to your needs.
+The setup tries to conform as much as possible to the XDG standard and avoid
+cluttering your home folders. It also backups securely your data in a location
+that cannot be identified easily.
+
+For downloading large files, ie getting from nyaa.si your favorite neon genesis
+evangelion torrent, you should prefer to use another machine not connected to
+the tor network to get a good download speed. Keep in mind that this will break
+your anonimity so you should use this warily! I personally like to use my own
+personal router as a middlebox and transfer files locally to my computers when
+needed.
+
+1.2 Security architecture of headfull devices
+
+The navi infrastructure aims to make small, secure, anonymous and fast headfull
+devices by default. There is a good chance that this document will be a good
+case of "my threat model is not your threat model" and as such you should read
+this carefully before deciding about your needs for your own infrastructure.
+
+The first point is to have small and relatively auditable softwares installed:
+by default the configuration for an headfull device currently runs the following
+programs:
+
+root:
+* dhcpcd
+* upowerd
+* sshd
+* NetworkManager & friends
+* systemd and friends 
+custom user:
+* tor
+* nscd
+* dbus-daemon
+* polkit            \ might be able to remove those two
+* rtkit             /
+standard user:
+* ibus
+* Xwayland
+* termite
+* sway
+* firefox
+* mail(isync+msmtp+neomutt+notmuch+abook+lynx)
+* music(cmus)
+* dev(vim/ssh etc)
+* weechat
+* pulseaudio
+
+
+The security of each of those components will be further discussed later on.
+CLI apps are usually preferred as they are easier to fuzz, usually snappier on
+lower end machines and integrate well with this setup overall.
+
+The security architecture is overall sandbox based using firejail. Firejail was
+preferred over bwrap as filesystem whitelisting et al is supported by default
+and it is easier to set it up overall. The attack surface of firejail is
+relatively constrained by dropping privileges most of the time and most
+attacks rely on the fact that firejail is an SUID program which could lead to an
+LPE _outside_ of the sandbox, which is not a threat model considered as headfull
+systems are mostly not multi-user.
+Firejail sandbox should be defined on a whitelist basis and to block everything
+by default, and unblock as an application needs it. The "standard" jail ran for
+programs with no profile cuts off internet, dbus and sensitive files which could
+lead to, say, code execution. This for sure is not a silver bullet but I believe
+it would be quite hard to exfiltrate any data without capability to transfer
+information over the wire.
+
+1.3 Anonymization threat model 
+
+All network connections sent through the wire are proxied through tor. This
+makes your system unable to use UDP, so this should be taken into account. 
+Tor anonymization is based on profiles based on the original setup, the
+currently defined profiles are:
+* mail
+* web
+* web(tor browser)
+* chat
+* remote
+* others
+
+Those profiles are defined on a per application basis to force traffic to be
+split evenly across different tasks to make traffic analysis more harduous in
+the case of a compromised exit node. 
+
+This setup has different goals:
+* make it impossible to log completely your connections through active and passive
+  monitoring by someone knowing your location, ie state actor: A state actor
+  could end up having some end nodes compromised and, for example, intercept
+  your mail and chat profiles, which would be highly trackable, but hopefully not all of them.
+
+* make it impossible for web servers to track you back: by default the
+  "personal" web setup disable javascript along with other medias capable of
+  tracking while also modifying the fingerprint every so often, to make global
+  tracking pretty much impossible
+
+* be able to contact other headfull devices deployed through navi while not
+  giving away their location: a standard way to reach back to them would be
+  DynDNS but, by using hidden services, it is impossible for an adversary
+  compromising exit nodes and your location to trace back the location of the
+  other device.
+
+* proxying through tor _everything_ won't make a pattern appear through your
+  actions. If someone can locally track you back by saying you were the only one
+  using tor, you could argue you've been using tor for everything since
+  forever, which is usually a pretty rock solid excuse, especially if the local
+  actor cannot prove you were using tor while the act happened.
+
+
+1.4 Per-application security
+
+All of the following assumptions assume that the sandbox does not allow to
+overwrite configuration files of any of those softwares, which could lead to
+persistent RCE and all. I repeat, all of this is useless unless your sandbox
+profiles are effectively tightened up!
+
+We will begin studying the per-application security implications by listing the
+user processes and daemons:
+
+* firefox is constantly fuzzed both publically and privately by state-level
+  threat actors and should be considered to be broken. Firefox is
+  sandboxed by default with firejail on top of the per-tab sandbox(which uses
+  the same technology) and disables JavasScript and trackable medias by default,
+  which makes it MUCH harder, if not impossible to get an RCE. This is even more
+  true on firefox since a good portion of the application is being ported to
+  Rust.
+  
+* cmus is sandboxed and shouldn't be a threat: worst case scenario someone can
+  see your music library. Highly unlikely to get a sandbox escape
+
+* termite is not sandboxed and is just a GUI terminal emulator. I would be
+  pretty damn surprise if you can take over this one.
+
+* sway is not sandboxed and does have some attack surface. It might ends up
+  being a prime target for sandbox escape for GUIs, which are delibarately
+  limited in my setup. sway{bar,idle,lock} should be pretty tight
+
+* vim does require some accesses but sensitive files are disabled by default on
+  top of disabling the network altogether. This should effectively make vim as
+  secure as it gets
+
+* ssh should be secure as long as its configuration is
+
+* weechat should have a pretty tightened up sandbox by default on top of being
+  continuously fuzzed by oss-fuzz, so the threat is minimal.
+
+* ibus is not sandboxed but is directly tied to your keyboard input. I very much
+  doubt it could be a security threat but I do not know enough ibus internal
+  architecture to have a definite word on that
+
+* The mail setup is composed of several main components. As long as the sandbox
+  profiles are tightened up the worst it could do is compromising your mails and
+  maybe gpg key which, while very unfortunate, is still a limited threat. On top
+  of this neomutt is constantly fuzzed and isync/msmtp seems to be fairly
+  small.
+
+* XWayland is, well, X. At least it's not running as root. It most likely is
+  vulnerable and as such access is disabled by default on the sandbox profiles.
+
+* pulseaudio is, well, pulseaudio. It is running unsandboxed but I would be
+  surprised if we could abuse it, with that said it might be possible.
+
+So, overall, the main entrypoint for code execution would be firefox and
+isync and the main sandbox escape tool in the userland realm seems to be sway,
+Xwayland and MAYBE pulseaudio. This seems reasonable to me, as isync does not
+have access to sway, Xwayland OR pulseaudio and firefox does not have access to
+Xwayland but is highly protected. 
+Currently the best chain for a userland sandbox escape is firefox->sway.
+
+Per-application security for the root user is basically:
+
+* systemd and co seems to have a wide range of attack surface but is also
+  continuously fuzzed by oss-fuzz, should be taken into account. To me the most
+  dangerous components are namely udevd and logind, which both seems to be
+  thoroughly audited and secure. systemd dbus API COULD be a threat but that is
+  unlikely
+
+* sshd is not sandboxed for obvious reasons but I would be very surprised if
+  someone was able to break into it.
+
+* dhcpcd are so small and so limited in their scope that I doubt it would be
+  likely to break into the system through them. With that said I'd classify
+  upower as a slightly higher risk than dhcpcd, and I believe both would need
+  some kind of root access to be exploited successfully
+
+* At this point attacking NetworkManager would result in attacking its API,
+  which I would hope is secure enough.
+
+So the shortest chain so far seems to be firefox->sway->systemd or
+firefox->sway->NetworkManager since no I
+cannot think of a successful sandbox escape from isync and without sandbox
+escape no DBus access is earned. 
+
+Finally per-application security for constrained user:
+
+* I would definitely be surprised if the dbus server itself ended up being a
+  threat. With that said, some APIs depending on dbus could be affected.
+
+* tor is sandboxed and running as a constrained user, so even in case of a
+  successful compromise the attacker should not be able to escalate. Very
+  unlikely attack vector.
+
+* polkitd has the potential to be an attack vector in a constrained environment,
+  as policies arealready complex enough, so that coupled with DBus gotta have a
+  couple of bugs. As it is in a restrained environment though I doubt it would
+  be of much use when developping a chain.
+
+* rtkit is very unlikely to be used as an attack factor because of how small its
+  scope is but it's using dbus so nothing is certain.
+
+* nscd is basically the same as rtkit, but without dbus. Attack is fairly
+  unlikely at this stage.
+
+
+Kernel security is hardened through the NixOS hardened profile, but that only
+helps so much compared to removing entire classes of bugs altogether.
+
+So, for a full remote root compromise, the shortest attack vectors seem to be
+firefox->sway->{systemd,NetworkManager,kernel} (or kernel directly if you're the
+luckiest bastard in the world). A full remote user compromise would then be
+firefox->sway as RCE is useless without a double sandbox escape in this
+scenario, a local powered on compromise would simply require plugging the correct device
+while the computer is on I'd assume(so kernel only) and a local remote one would
+most likely require a kernel exploit while a local powered off takeover would require 
+bootloader tampering, which can be hardened against[1], or rubberhose
+cryptography.
+
+As such strengthening the kernel should be of utmost importance while a standard
+remote exploit seems very unlikely with the current setup.
+It should be noted too that sway in this part is critical for any sandbox escape
+related to native GUIs and as such it might be worthwhile to filter wayland
+calls as much as possible.
+
+1.5 Conclusion
+
+This setup is only secure as long as you keep it secure, if you want to fuck it
+up you will be fuck it up. The most powerful attacks are definitely done locally
+too so try to keep your computers shutdown when not using them and have some
+sort of anti-tamper protections in place on top of a full disk encryption, if
+possible one not backdoored by a state agency.
+CLI applications are VERY constrainable and are ripped off of a huge attack
+surface by simply stripping them from dbus and wayland/X, making it much harder
+to escape the sandbox and do anything useful, so their advantage in such a setup
+is undeniable.
+
+Overall it's very much a proof-of-concept and a fun thought exercise but I think
+this ain't half bad.
+
+[1]: TODO make grub tamper proof
+NB: This is in an ideal world, some of those features are not yet in navi!
+
