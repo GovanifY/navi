@@ -59,7 +59,12 @@
     #  '';
     #});
 
-    # todo: add w3m
+    # this works but this also breaks nixos build
+    w3m = super.w3m.overrideAttrs (oldAttrs: rec {
+      postPatch = ''
+          sed -i 's/"~\/\.w3m"/"~\/\.config\/w3m"/' $(grep -Rl '"~\/\.w3m"')
+      '';
+    });
     };
   };
 
