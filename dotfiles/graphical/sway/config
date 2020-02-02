@@ -25,7 +25,7 @@ exec swayidle -w \
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg ~/Pictures/D3I8elHUwAAQZjD.jpg fill
+output * bg ~/Pictures/wallpaper.png fill
 output eDP-1 scale 2.0
 
 # all you need to have a good day
