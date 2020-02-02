@@ -55,7 +55,9 @@
     # clock
     services.timesyncd.enable = false;
     services.htpdate.enable = true;
-    services.htpdate.servers = [ "wikipedia.org" "google.com" "govanify.com" ];
+    services.htpdate.servers = [ "db.debian.org" "www.eff.org" "www.torproject.org" "cve.mitre.org"
+                                 "en.wikipedia.org" "google.com" "govanify.com" "lkml.org" "www.apache.org" 
+                                 "www.duckduckgo.com" "www.kernel.org" "www.mozilla.org" "www.xkcd.com"];
 
 }
 
