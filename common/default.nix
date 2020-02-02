@@ -51,6 +51,11 @@
     boot.loader.timeout = 1;
     networking.domain = "govanify.com";
 
+    # no UDP when through tor, so we use http date to synchronize the system
+    # clock
+    services.timesyncd.enable = false;
+    services.htpdate.enable = true;
+    services.htpdate.servers = [ "wikipedia.org" "google.com" "govanify.com" ];
 
 }
 
