@@ -9,6 +9,8 @@ in {
       <nixpkgs/nixos/modules/profiles/hardened.nix>
     ];
 
+  # Use the hardened kernel but keep IA32 emulation.
+  boot.kernelPackages = kernelPackages;
   boot.kernelPatches = [{
     name = "keep-ia32";
     patch = null;

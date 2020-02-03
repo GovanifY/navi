@@ -8,7 +8,9 @@
     extraPackages = with pkgs; [
       swaylock # lockscreen
       swayidle
-      xwayland # for legacy apps
+      # legacy apps
+      xwayland
+      wineWowPackages.full
       kanshi # autorandr
       # misc wayland utils
       wofi grim wl-clipboard slurp 
@@ -23,12 +25,14 @@
       # art
       blender krita kdenlive ardour
       # stem
-      freecad kicad wireshark
+      freecad kicad
       #ghidra in the future when it is actually updated
       # themes
       breeze-gtk breeze-qt5 breeze-icons
     ];
   };
+
+  programs.wireshark.enable = true;
 
   # firefox security notes:
   #
@@ -45,12 +49,12 @@
   # * Privacy Badger |
   #                  |--> not necessary with noScript but sane defaults
   # * uBlock origin  | 
-  # * user agent switcher with random switch enabled
+  # 3. Make sure to use those settings in about:config:
+  # * privacy.resistFingerprinting = true
   #
   # this way the only identifiable information websites should be able to gather
-  # is the one you give to them by, ie, logging in, as the only identifiable and
-  # non randomized string left is your accept_html, which gives out your
-  # language basically, everything else is randomized assuming noScript is
+  # is the one you give to them by, ie, logging in, as everything else  
+  # is non unique assuming noScript is
   # enabled and tor runs, so your tracking ID should change.
   #
   # also simple tab groups and stylus are nice cosmetic additions
