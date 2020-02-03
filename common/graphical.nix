@@ -15,11 +15,15 @@
       # multimedia
       mpv imv 
       # web browsers
+      # standard firefox is used for basically everything and is "impossible" to
+      # fingerprint with my configuration, but i do login on websites sometimes.
+      # As such tor is used as a clean cut identity that also make sure I didn't
+      # fuck up tracking when need happens.
       firefox-wayland tor-browser-bundle-bin
       # art
       blender krita kdenlive ardour
       # stem
-      freecad kicad 
+      freecad kicad wireshark
       #ghidra in the future when it is actually updated
       # themes
       breeze-gtk breeze-qt5 breeze-icons

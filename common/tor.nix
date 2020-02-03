@@ -29,7 +29,7 @@ in {
       };
       virtualNetworkIPv6 = mkOption {
         type = types.str;
-        default = "[FC00::]/7";
+        default = "FC00::/7";
         description = "Cidr that tor will use to map tor accessed hosts to in IPv6.";
       };
       exceptionNetworks = mkOption {
@@ -54,11 +54,11 @@ in {
       # makes ourselves reachable through ssh, keys and hostname in /var/lib/tor
       hiddenServices.ssh = {    map = [{port = 22;}];  };
       enable = true;
+      # enabling the sandbox breaks stuff, should be checked!
       extraConfig = ''
         VirtualAddrNetworkIPv4 ${cfg.virtualNetwork}
         VirtualAddrNetworkIPv6 ${cfg.virtualNetworkIPv6}
         AutomapHostsOnResolve 1
-        Sandbox 1
         TransPort ${transPort} IPv6Traffic PreferIPv6
         DNSPort ${dnsPort}
       '';
@@ -139,10 +139,6 @@ in {
 
 
 
-
-
-
-
       ### IPv6 ###
 
 
@@ -195,10 +191,10 @@ in {
       ip6tables -A OUTPUT -o ${cfg.outputNic} -m owner --uid-owner ${torUid} -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m state --state NEW -j ACCEPT
 
       #allow loopback output
-      ip6tables -A OUTPUT -d 127.0.0.1/32 -o lo -j ACCEPT
+      ip6tables -A OUTPUT -d ::1/128 -o lo -j ACCEPT
 
       #tor transproxy magic
-      ip6tables -A OUTPUT -d 127.0.0.1/32 -p tcp -m tcp --dport ${transPort} --tcp-flags FIN,SYN,RST,ACK SYN -j ACCEPT
+      ip6tables -A OUTPUT -d ::1/128 -p tcp -m tcp --dport ${transPort} --tcp-flags FIN,SYN,RST,ACK SYN -j ACCEPT
 
       #allow access to lan hosts in ${transExceptionsIPv6}
       for _except in ${transExceptionsIPv6}; do

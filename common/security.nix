@@ -19,6 +19,9 @@ in {
 
   security.allowUserNamespaces = true;
 
+
+  # it seems that linux nowadays won't allow you to disable the jit 
+  boot.kernel.sysctl."net.core.bpf_jit_enable" = true;
   # any hardened allocator doesn't even let me boot
   #environment.memoryAllocator.provider = "graphene-hardened";
   security.allowSimultaneousMultithreading = true;
