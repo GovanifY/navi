@@ -1,0 +1,94 @@
+As the web has grown, it has surpassed its original goal and design ideas, as
+such not only did new concepts plugged in to extend its features(JavaScript) but
+in the recent years it has also grown much more controlled and tracks people
+much more readily than it once did.
+
+While navi does protect the network node of the user, making their real location
+anonymous, it does not prevent an user from outing themselves by design: it is a
+wanted feature to, say, be able to login to twitter.
+With that said navi does enable some protections that makes tracking, by
+default, impossible and renders your traffic as uniform as the rest of the Tor
+network, as such it would be impossible to, say, if this website you visited
+belonged to you or to user X of your end node without having compromised the entry
+node too, which is a X*(10^-3) * Y*(3*(10^-3)) chance, as of 2020. If your
+adversary owns 500 different machines reparted in an equal fashion across guard
+and exit nodes then you are at a chance less than 18%. This is much higher than
+I hoped for but I can't really do anything about that, I'm already a tor relay
+operator. The hope of the Tor Project is that no adversary is truly global and
+while I understand their point of view it seems we are crucially undernumbered
+in my humble opinion.
+
+With that out of the way and the assumption that both guard and exit nodes
+aren't compromised, we will make two different assumptions: what if either:
+* your exit node is compromised along with a chunk of the TLS certificates
+  you're visiting
+* several websites you're visiting are working together to try to pinpoint who
+  you are by mean of fingerprinting
+
+In either case the enemy doesn't know your location but is able to get a
+database of connections made they want to track, either by singling them out
+from other connections in the end node(assumption 1) or linking them back to
+another public well known identity(assumption 2). It is to note that Assumption
+1 is much harder to get to work because it involves being able to passively
+fingerprint connections.
+
+
+If the enemy wants to know who you are, they need to trace back the connection between the
+website X and the connection they want to trace back, let's call it Y.
+To do so they employ a technique known as fingerprinting: instead of tying back
+your identity thanks to your network connection they will collerate your
+activity through multiple websites, by identifying uniquely your _device_ instead.
+While identifying yourself is indeed a wanted feature of navi it should in no
+way facilitate the work of an attacker to out an user who is not actively giving
+out information to a service.
+
+Fingerprinting can, loosely, be accomplished in two ways: Data-Sharing
+fingerprinting and Device Identity fingerprinting. In the first case, a website
+set shared data that gets read by another website while in the latter a website
+calculates a fingerprint of a specific user that is then matched by a
+fingerprint calculated indepandantly by the other website.
+To harden against that, navi's default firefox configuration incorporates two
+things: first party isolation, which isolates data by the URL of the website and
+fingerprinting spoofing, which makes your browser harder to fingerprint.
+
+As most fingerprinting data can be retrieved from JavaScript and that navi is
+aimed at technical users, the default config is much more hardened than TBB by
+disabling JavaScript globally, enabling it on a per need basis. Several
+anti-trackers/fingerprinters are also installed by default: uBlock, Privacy
+Badger, which is Heuristic based and firefox default one, while decentraleyes
+lowers tha amount of CDN-based requests made. HTTPS Everywhere makes the TLS
+encryption mandatory to avoid the assumption 1 listed earlier to happen easily
+and Cookie AutoDelete is used to avoid having websites that can track you after
+you stopped visiting their website.
+
+When disabling JavaScript, only a few datas are able to be used for
+fingerprinting, namely accept headers and the user agent, both are which are
+spoofed to very common ones and standard ones across the network, making your
+browser session theoretically indistinguishible from other users on the same
+exit node with JavaScript disabled. Some anti-fingerprinting techniques are done
+on the JavaScript side of things too but, as JavaScript inherently requires a
+ton of data such as your screen size and installed fonts to work correctly, it
+is fairly hard to keep a common fingerprint across all users, for that reason it
+isn't the focus of navi. navi's hope is that trackers on site that you'll login
+in will hopefully be blocked by the built-in anti finerprinting tools and that
+you won't enable JavaScript at any website you see, we can't help with you
+shooting yourselves in the foot. TBB DOES have a slightly better JavaScript
+fingerprint harm reduction although they are still very much actively
+fingerprintable; For example latest TBB on Android has a unique fingerprint
+according to panopticlick, and JavaScript is enabled by default.
+
+navi's approach compared to TBB is as such more tightened by default, and adds a
+bunch of preventive techniques to avoid active fingerprinting between multiple
+identities that TBB does not provide, albeit with a slightly better resistance
+to fingerprinting. It should also be noted that navi is a full desktop work 
+environment, and as such features like saving history by default are enabled.
+If you want a clean cut from your tor identity on top of keeping no data of your
+session then using TBB is encouraged.
+It was also decided to use latest Firefox compared to TBB as most useful tor
+patches are already inside firefox as about:config flags thanks to the Tor
+Uplift project and that I believe that it is more secure to run on the latest
+version of firefox compared to TBB ESR which, even if it does have security
+patches, takes longer to roll out and is also less of a moving target for
+offensive security researchers. This also allows us to roll our own sandbox
+config on top of the standard firefox and make it use wayland, on top of
+potentially enabling things such as the new WebRender.
