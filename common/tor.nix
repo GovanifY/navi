@@ -83,7 +83,7 @@ in {
       #don't nat the Tor process, the loopback, or the local network
       iptables -t nat -A OUTPUT -m owner --uid-owner ${torUid} -j RETURN
       iptables -t nat -A OUTPUT -o lo -j RETURN
-
+      #
       for _except in ${transExceptions + " " + ianaReserved}; do
         iptables -t nat -A OUTPUT -d $_except -j RETURN
       done

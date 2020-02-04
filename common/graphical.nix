@@ -25,7 +25,7 @@
       # art
       blender krita kdenlive ardour
       # stem
-      freecad kicad
+      freecad kicad wireshark
       #ghidra in the future when it is actually updated
       # themes
       breeze-gtk breeze-qt5 breeze-icons
@@ -49,8 +49,17 @@
   # * Privacy Badger |
   #                  |--> not necessary with noScript but sane defaults
   # * uBlock origin  | 
+  # * HTTPS Everywhere, just in case
   # 3. Make sure to use those settings in about:config:
   # * privacy.resistFingerprinting = true
+  # * privacy.firstparty.isolate = true
+  # * app.normandy.enabled = false 
+  # -------------------------------------------
+  #            ONION DNS RELATED
+  # -------------------------------------------
+  # * dom.securecontext.whitelist_onions = true
+  # * network.dns.blockDotOnion = false
+  # * network.http.referer.hideOnionSource = true
   #
   # this way the only identifiable information websites should be able to gather
   # is the one you give to them by, ie, logging in, as everything else  
@@ -58,6 +67,22 @@
   # enabled and tor runs, so your tracking ID should change.
   #
   # also simple tab groups and stylus are nice cosmetic additions
+  #
+  # this way when disabling javascript, done by default, you have as much
+  # privacy as Tor Browser while still keeping some possibly wanted features(ie
+  # WebGL) when enabling it, along with Firefox fingerprint blockers by default, 
+  # allowing for a good compromise. 
+  # Definitely not as secure as the Tor Browser for very specific cases(ie
+  # custom made fingerprint engine that works around firefox blocker and
+  # javascript enabled) but good enough for 99% of standard usage, just take
+  # care about javascript usage!
+  #
+  # Another thing to note but TBB is still able to be somewhat fingerprinted by
+  # checking for things such as the screen size, to a lesser degree than this
+  # though. For this specific example they round the screen size to the nearest
+  # 200x100, a feature called letterboxing, but this is definitely an unwanted
+  # feature for a day-to-day browser. The entire JavaScript engine leaks too
+  # much data and has never been thought out with security in mind and it shows.
 
 
   fonts.fonts = with pkgs; [
@@ -116,6 +141,7 @@
       mkdir -p ~/.cache/mutt/ &> /dev/null
       mkdir -p ~/.local/share/wineprefixes/ &> /dev/null
       mkdir -p ~/.config/gdb &> /dev/null
+      mkdir -p ~/.local/share/wineprefixes/default &> /dev/null 
       touch ~/.config/gdb/init &> /dev/null
     fi
     if [ ! -d ~/.config/pass ] && [[ $(tty) = /dev/tty1 ]]; then

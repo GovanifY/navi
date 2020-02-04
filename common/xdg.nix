@@ -76,7 +76,7 @@
     LESSHISTFILE = "-";
     ZDOTDIR = "$XDG_CONFIG_HOME/zsh";
     CARGO_HOME = "$XDG_DATA_HOME/cargo";
-    WINEPREFIX = "$XDG_DATA_HOME/wineprefixes/default";
+    WINEPREFIX = "$HOME/.local/share/wineprefixes/default";
     # does not parse it correctly for some reason
     WEECHAT_HOME = "~/.config/weechat";
     GNUPGHOME = "~/.config/gnupg";
