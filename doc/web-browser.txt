@@ -59,7 +59,10 @@ Badger, which is Heuristic based and firefox default one, while decentraleyes
 lowers tha amount of CDN-based requests made. HTTPS Everywhere makes the TLS
 encryption mandatory to avoid the assumption 1 listed earlier to happen easily
 and Forget Me Not is used to avoid having websites that can track you after
-you stopped visiting their website.
+you stopped visiting their website or when closing the browser, keeping as much
+of a clean slate as the standard TBB. Disabling JavaScript by default also makes
+the harder _much_ more resilient to remote exploitation, making it more secure
+by default.
 
 When disabling JavaScript, only a few datas are able to be used for
 fingerprinting, namely accept headers and the user agent, both are which are
