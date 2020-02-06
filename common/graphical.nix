@@ -9,7 +9,7 @@
       swaylock # lockscreen
       swayidle
       # legacy apps
-      xwayland
+      xwayland xorg.xrdb
       wineWowPackages.full
       kanshi # autorandr
       # misc wayland utils
@@ -43,7 +43,7 @@
   # 2. use those extensions to mitigate website-side tracking as much as
   # possible:
   #
-  # * cookie autodelete with autodelete enabled
+  # * Forget Me Not with autodelete enabled
   # * decentraleyes (not necessary but neat)
   # * NoScript with a whitelist setup of javascript enabled websites
   # * Privacy Badger |
@@ -103,6 +103,17 @@
     MOZ_ENABLE_WAYLAND = "1";
   };
 
+  environment.sessionVariables = {
+      XCURSOR_PATH = [
+        "${config.system.path}/share/icons"
+        "$HOME/.icons"
+        "$HOME/.nix-profile/share/icons/"
+      ];
+      GTK_DATA_PREFIX = [
+        "${config.system.path}"
+      ];
+  };
+
 
   environment = {
     etc = {
@@ -120,11 +131,16 @@
         gtk-icon-theme-name=breeze-dark
         gtk-theme-name=Breeze-Dark
         gtk-application-prefer-dark-theme = true
+        gtk-cursor-theme-name=Breeze
       ''; mode = "444"; };
       
       "gtk-2.0/gtkrc" = { text = ''
         gtk-icon-theme-name=breeze-dark
       ''; mode = "444"; };
+      "X11/Xresources" = { text = ''
+        Xcursor.size: 12 
+      ''; mode = "444"; };
+
     };
   };
 
@@ -150,6 +166,7 @@
       ~/.cache/clone-pass.sh &
     fi
     if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
+      xrdb -load /etc/X11/Xresources &> /dev/null
       exec sway
     fi
   '';

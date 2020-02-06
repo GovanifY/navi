@@ -10,11 +10,16 @@
 
   # TODO: make weechat work out better
   environment.systemPackages = with pkgs; [
-    cmus     # dev
-    cargo python clang meson ninja 
-    asciinema gnumake ranger file
+    # defaults
+    file 
+    # misc utilities
+    cmus asciinema ranger pass pinentry-curses
+    rtorrent
+    # stem
     texlive.combined.scheme-medium
-    pass pinentry-curses R
+    # dev
+    cargo python R clang meson ninja
+    gnumake
   ];
 
 

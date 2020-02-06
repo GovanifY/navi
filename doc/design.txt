@@ -46,13 +46,6 @@ The setup tries to conform as much as possible to the XDG standard and avoid
 cluttering your home folders. It also backups securely your data in a location
 that cannot be identified easily.
 
-For downloading large files, ie getting from nyaa.si your favorite neon genesis
-evangelion torrent, you should prefer to use another machine not connected to
-the tor network to get a good download speed. Keep in mind that this will break
-your anonimity so you should use this warily! I personally like to use my own
-personal router as a middlebox and transfer files locally to my computers when
-needed.
-
 1.2 Security architecture of headfull devices
 
 The navi infrastructure aims to make small, secure, anonymous and fast headfull

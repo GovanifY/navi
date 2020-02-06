@@ -58,7 +58,7 @@ anti-trackers/fingerprinters are also installed by default: uBlock, Privacy
 Badger, which is Heuristic based and firefox default one, while decentraleyes
 lowers tha amount of CDN-based requests made. HTTPS Everywhere makes the TLS
 encryption mandatory to avoid the assumption 1 listed earlier to happen easily
-and Cookie AutoDelete is used to avoid having websites that can track you after
+and Forget Me Not is used to avoid having websites that can track you after
 you stopped visiting their website.
 
 When disabling JavaScript, only a few datas are able to be used for
