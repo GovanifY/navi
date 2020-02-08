@@ -46,6 +46,13 @@ The setup tries to conform as much as possible to the XDG standard and avoid
 cluttering your home folders. It also backups securely your data in a location
 that cannot be identified easily.
 
+As runtime loading of kernel modules is disabled for security reasons you will
+need to reboot each time you plug a new piece of hardware into your computer, ie
+USB devices. This prevents a whole lot of USB attacks, say if someone were to
+get to your locked laptop and want to unlock it, and a lot of kernel attacks, by
+preventing custom kernel modules altogether without altering the kernel on the
+device, which could optionally detected.
+
 1.2 Security architecture of headfull devices
 
 The navi infrastructure aims to make small, secure, anonymous and fast headfull
