@@ -65,6 +65,15 @@
           #sed -i 's/"~\/\.w3m"/"~\/\.config\/w3m"/' $(grep -Rl '"~\/\.w3m"')
       #'';
     #});
+
+    # fuck this dev, contains config+cache hence data
+    # https://github.com/baldurk/renderdoc/pull/1741
+    renderdoc = super.renderdoc.overrideAttrs (oldAttrs: rec {
+      postPatch = ''
+          sed -i 's/"\.renderdoc"/"\.local\/share\/renderdoc"/' $(grep -Rl '"\.renderdoc"')
+      '';
+    });
+
     };
   };
 

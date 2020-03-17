@@ -5,6 +5,7 @@
   imports = [ ./hardware.nix
               ../../common/default.nix
               ../../common/tor.nix
+              ../../common/mac.nix
               ../../common/laptop.nix
               ../../common/gaming.nix
             ];
@@ -72,6 +73,11 @@
       outputNic = "wlp1s0"; 
       inputNic = "wlp1s0"; 
       };
+    services.macspoofer = {
+      enable = true; 
+      interface = "wlp1s0"; 
+      };
+
 
 
   home-manager.users.govanify = {

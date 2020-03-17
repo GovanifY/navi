@@ -4,7 +4,7 @@
       clock24 = true;
       keyMode = "vi";
       terminal = "tmux-256color";
-      extraTmuxConf = '' 
+      extraConfig = '' 
         set -ga terminal-overrides ",*256col*:Tc"
         set-window-option -g automatic-rename off
         set -g @resurrect-processes ':all:'

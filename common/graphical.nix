@@ -16,6 +16,8 @@
       wofi grim wl-clipboard slurp 
       # multimedia
       mpv imv 
+      # reading
+      calibre okular
       # web browsers
       # standard firefox is used for basically everything and is "impossible" to
       # fingerprint with my configuration, but i do login on websites sometimes.
@@ -25,7 +27,7 @@
       # art
       blender krita kdenlive ardour
       # stem
-      freecad kicad wireshark
+      freecad kicad wireshark android-studio
       #ghidra in the future when it is actually updated
       # themes
       breeze-gtk breeze-qt5 breeze-icons

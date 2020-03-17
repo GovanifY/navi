@@ -1,30 +1,18 @@
-# Default config for sway
-#
-# Copy this to ~/.config/sway/config and edit it to your liking.
-#
-# Read `man 5 sway` for a complete reference.
-
-### Variables
-#
-# Logo key. Use Mod1 for Alt.
 set $mod Mod4
-# Home row direction keys, like vim
 set $left h
 set $down j
 set $up k
 set $right l
 set $lock "swaylock -i ~/Pictures/wallpaper.png -l -F --indicator-radius 100 --indicator-thickness 7 --ring-color bb00cc --key-hl-color 880033"
 
-
+# auto lock
 exec swayidle -w \
          timeout 300 'swaylock -i ~/Pictures/wallpaper.png -l -F --indicator-radius 100 --indicator-thickness 7 --ring-color bb00cc --key-hl-color 880033' \
          timeout 600 'swaymsg "output * dpms off"' \
          resume 'swaymsg "output * dpms on"' \
          before-sleep 'swaylock -i ~/Pictures/wallpaper.png -l -F --indicator-radius 100 --indicator-thickness 7 --ring-color bb00cc --key-hl-color 880033' 
 
-### Output configuration
-#
-# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
+# screen
 output * bg ~/Pictures/wallpaper.png fill
 output eDP-1 scale 2.0
 
@@ -33,53 +21,19 @@ exec swaymsg "workspace 1; exec firefox"
 exec swaymsg "workspace 1; exec ibus-daemon -dr"
 exec swaymsg "workspace 2; exec termite -e tmux"
 
+# ui chrome
 default_border pixel 1 
+seat seat0 xcursor_theme breeze_cursors 48
 
-
+# IME
 bindsym $mod+i exec /etc/sway/locale.sh
 
-seat seat0 xcursor_theme breeze_cursors 48
-#
-#default_border none 
-#gaps outer 10
-#gaps inner 20
-#
-# Example configuration:
-#
-#   output HDMI-A-1 resolution 1920x1080 position 1920,0
-#
-# You can get the names of your outputs by running: swaymsg -t get_outputs
-
-### Idle configuration
-#
-# Example configuration:
-#
-# exec swayidle -w \
-#          timeout 300 'swaylock -f -c 000000' \
-#          timeout 600 'swaymsg "output * dpms off"' \
-#               resume 'swaymsg "output * dpms on"' \
-#          before-sleep 'swaylock -f -c 000000'
-#
-# This will lock your screen after 300 seconds of inactivity, then turn off
-# your displays after another 300 seconds, and turn your screens back on when
-# resumed. It will also lock your screen before your computer goes to sleep.
-
-### Input configuration
-#
-# Example configuration:
-#
-#   input "2:14:SynPS/2_Synaptics_TouchPad" {
-#       dwt enabled
-#       tap enabled
-#       natural_scroll enabled
-#       middle_emulation enabled
-#   }
-#
-  input "2:14:ETPS/2_Elantech_Touchpad" {
-      dwt enabled
-       tap enabled
-       middle_emulation enabled
-  }
+# inputs
+input "2:14:ETPS/2_Elantech_Touchpad" {
+    dwt enabled
+    tap enabled
+    middle_emulation enabled
+}
 #
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.

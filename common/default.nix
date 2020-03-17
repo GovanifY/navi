@@ -6,7 +6,7 @@
     ./locale.nix
     ./xdg.nix
     ./sandboxing.nix
-    (import "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/release-19.09.tar.gz}/nixos")
+    (import "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos")
     ./../secrets/deployment.nix
     ./../pkgs/vim.nix
     ./../pkgs/zsh.nix
@@ -17,7 +17,7 @@
   # basic set of tools & ssh
   environment.systemPackages = with pkgs; [
     wget neovim tmux git git-crypt 
-    rsync imagemagick mosh gnupg
+    rsync imagemagick mosh gnupg macchanger
   ];
 
   programs.mosh.enable = true;
@@ -58,6 +58,8 @@
     services.htpdate.servers = [ "db.debian.org" "www.eff.org" "www.torproject.org" "cve.mitre.org"
                                  "en.wikipedia.org" "google.com" "govanify.com" "lkml.org" "www.apache.org" 
                                  "www.duckduckgo.com" "www.kernel.org" "www.mozilla.org" "www.xkcd.com"];
+
+
 
 }
 
