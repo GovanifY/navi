@@ -123,17 +123,13 @@
       "sway/locale.sh".source = ./../dotfiles/graphical/sway/locale.sh;
       "sway/status.sh".source = ./../dotfiles/graphical/sway/status.sh;
 
-      # QT theme
-      "xdg/qt5ct/qt5ct.conf".source  = ./../dotfiles/graphical/qt5ct/qt5ct.conf;
-      "xdg/qt5ct/breeze-dark.conf".source  = ./../dotfiles/graphical/qt5ct/breeze-dark.conf;
-
       # GTK theme
       "xdg/gtk-3.0/settings.ini" = { text = ''
         [Settings]
         gtk-icon-theme-name=breeze-dark
         gtk-theme-name=Breeze-Dark
         gtk-application-prefer-dark-theme = true
-        gtk-cursor-theme-name=Breeze
+        gtk-cursor-theme-name=breeze_cursors
       ''; mode = "444"; };
       
       "gtk-2.0/gtkrc" = { text = ''
@@ -177,5 +173,10 @@
     # initial pass setup
     # should i make this global?
     home.file.".cache/clone-pass.sh".source  = ./../dotfiles/clone-pass.sh;
+
+   # QT theme
+   home.file.".config/qt5ct/qt5ct.conf".source  = ./../dotfiles/graphical/qt5ct/qt5ct.conf;
+   home.file.".config/qt5ct/colors/breeze-dark.conf".source  = ./../dotfiles/graphical/qt5ct/breeze-dark.conf;
+
   };
 }

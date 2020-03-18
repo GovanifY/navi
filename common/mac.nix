@@ -25,6 +25,8 @@ in {
   # standard (basically only you by this point).
   # The more people use tor, the better our security will be.
   config = lib.mkIf cfg.enable {
+
+  environment.systemPackages = with pkgs; [ macchanger ];
     systemd.services.macspoofer = {
       wantedBy = [ "multi-user.target" ];
       description = "Mac Spoofer service";

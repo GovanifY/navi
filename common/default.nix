@@ -17,9 +17,10 @@
   # basic set of tools & ssh
   environment.systemPackages = with pkgs; [
     wget neovim tmux git git-crypt 
-    rsync imagemagick mosh gnupg macchanger
+    rsync imagemagick mosh gnupg
   ];
 
+  # need to find a way to make it work through TCP thanks to tor
   programs.mosh.enable = true;
   services.openssh = {
     enable = true;
