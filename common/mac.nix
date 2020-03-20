@@ -34,6 +34,9 @@ in {
       before = [ "network-pre.target" ];
       bindsTo = [ "sys-subsystem-net-devices-${cfg.interface}.device" ];
       after = [ "sys-subsystem-net-devices-${cfg.interface}.device" ];
+      # we do NOT want out mac spoofer to fail. seems to happen if wireless
+      # cached connection on bootup
+      onFailure = [ "emergency.target" ];
 
       serviceConfig = {
         Type = "oneshot";
