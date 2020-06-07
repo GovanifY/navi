@@ -19,15 +19,11 @@
     texlive.combined.scheme-medium
     # dev
     cargo python R clang meson ninja
-    gnumake
+    gnumake 
+    lean elan
   ];
 
 
-
-  # TODO: do that cleanly
-  #home-manager.users.govanify = {
-    #home.file.".config/weechat".source  = ./../dotfiles/weechat;
-  #};
 
   networking.networkmanager.enable = true;
   # Enable CUPS to print documents.
@@ -53,6 +49,7 @@
       signByDefault = true;
       key = "52142D39A7CEF8FA872BCA7FDE62E1E2A6145556";
     };
+    home.file.".config/weechat".source  = ./../dotfiles/weechat;
 
   };
 

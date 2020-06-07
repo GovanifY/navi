@@ -17,20 +17,74 @@
       # multimedia
       mpv imv 
       # reading
-      calibre okular
+      calibre okular kcc
       # web browsers
       # standard firefox is used for basically everything and is "impossible" to
       # fingerprint with my configuration, but i do login on websites sometimes.
       # As such tor is used as a clean cut identity that also make sure I didn't
       # fuck up tracking when need happens.
       firefox-wayland tor-browser-bundle-bin
+      #firefox-bin
       # art
       blender krita kdenlive ardour
       # stem
-      freecad kicad wireshark android-studio
+      freecad kicad wireshark 
+
+      android-studio
+      (
+      pkgs.writeTextFile {
+        name = "startandroid";
+        destination = "/bin/startandroid";
+        executable = true;
+        text = ''
+          #! ${pkgs.bash}/bin/bash
+          # Java sucks
+          export QT_QPA_PLATFORM=xcb
+          export GDK_BACKEND=xcb
+          mkdir -p $XDG_DATA_HOME/android-home
+          export HOME=$XDG_DATA_HOME/android-home
+          # then start the launcher 
+          exec android-studio 
+        '';
+      }
+      )
       #ghidra in the future when it is actually updated
       # themes
       breeze-gtk breeze-qt5 breeze-icons
+      # ELECTRON BELOW
+      # you should try to run with GDK_BACKEND=x11
+      # this is good for lean
+      vscodium lean elan
+      (
+      pkgs.writeTextFile {
+        name = "vscodium-x11";
+        destination = "/bin/vscodium-x11";
+        executable = true;
+        text = ''
+          #! ${pkgs.bash}/bin/bash
+          # Electron sucks
+          GDK_BACKEND=x11
+          # then start the launcher 
+          exec codium
+        '';
+      }
+      )
+      # matrix
+      riot-desktop
+      (
+      pkgs.writeTextFile {
+        name = "riot-x11";
+        destination = "/bin/riot-x11";
+        executable = true;
+        text = ''
+          #! ${pkgs.bash}/bin/bash
+          # Electron sucks
+          GDK_BACKEND=x11
+          # then start the launcher 
+          exec riot-desktop
+        '';
+      }
+      )
     ];
   };
 
@@ -119,10 +173,6 @@
 
   environment = {
     etc = {
-      "sway/config".source = ./../dotfiles/graphical/sway/config;
-      "sway/locale.sh".source = ./../dotfiles/graphical/sway/locale.sh;
-      "sway/status.sh".source = ./../dotfiles/graphical/sway/status.sh;
-
       # GTK theme
       "xdg/gtk-3.0/settings.ini" = { text = ''
         [Settings]
@@ -163,7 +213,7 @@
       # unreliable yet so we just try to clone until it works
       ~/.cache/clone-pass.sh &
     fi
-    if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
+    if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]] && [[ $EUID -ne 0 ]]; then
       xrdb -load /etc/X11/Xresources &> /dev/null
       exec sway
     fi
@@ -172,11 +222,16 @@
   home-manager.users.govanify = {
     # initial pass setup
     # should i make this global?
-    home.file.".cache/clone-pass.sh".source  = ./../dotfiles/clone-pass.sh;
+    home.file.".cache/hello.sh".source  = ./../dotfiles/clone-pass.sh;
 
    # QT theme
    home.file.".config/qt5ct/qt5ct.conf".source  = ./../dotfiles/graphical/qt5ct/qt5ct.conf;
    home.file.".config/qt5ct/colors/breeze-dark.conf".source  = ./../dotfiles/graphical/qt5ct/breeze-dark.conf;
+
+   home.file.".config/sway/config".source = ./../dotfiles/graphical/sway/config;
+   home.file.".config/sway/locale.sh".source = ./../dotfiles/graphical/sway/locale.sh;
+   home.file.".config/sway/status.sh".source = ./../dotfiles/graphical/sway/status.sh;
+
 
   };
 }

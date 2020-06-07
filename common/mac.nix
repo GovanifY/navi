@@ -26,7 +26,7 @@ in {
   # The more people use tor, the better our security will be.
   config = lib.mkIf cfg.enable {
 
-  environment.systemPackages = with pkgs; [ macchanger ];
+  environment.systemPackages = with pkgs; [ macchanger nettools ];
     systemd.services.macspoofer = {
       wantedBy = [ "multi-user.target" ];
       description = "Mac Spoofer service";
@@ -36,7 +36,7 @@ in {
       after = [ "sys-subsystem-net-devices-${cfg.interface}.device" ];
       # we do NOT want out mac spoofer to fail. seems to happen if wireless
       # cached connection on bootup
-      onFailure = [ "emergency.target" ];
+      #onFailure = [ "emergency.target" ];
 
       serviceConfig = {
         Type = "oneshot";

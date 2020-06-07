@@ -3,22 +3,23 @@ set $left h
 set $down j
 set $up k
 set $right l
-set $lock "swaylock -i ~/Pictures/wallpaper.png -l -F --indicator-radius 100 --indicator-thickness 7 --ring-color bb00cc --key-hl-color 880033"
+set $lock "swaylock --indicator-radius 100 --indicator-thickness 7 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 -i ~/Pictures/wallpaper.png"
 
 # auto lock
 exec swayidle -w \
-         timeout 300 'swaylock -i ~/Pictures/wallpaper.png -l -F --indicator-radius 100 --indicator-thickness 7 --ring-color bb00cc --key-hl-color 880033' \
+         timeout 300 "swaylock --indicator-radius 100 --indicator-thickness 7 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 -i ~/Pictures/wallpaper.png" \
          timeout 600 'swaymsg "output * dpms off"' \
          resume 'swaymsg "output * dpms on"' \
-         before-sleep 'swaylock -i ~/Pictures/wallpaper.png -l -F --indicator-radius 100 --indicator-thickness 7 --ring-color bb00cc --key-hl-color 880033' 
+         before-sleep "swaylock --indicator-radius 100 --indicator-thickness 7 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 -i ~/Pictures/wallpaper.png"
 
 # screen
 output * bg ~/Pictures/wallpaper.png fill
 output eDP-1 scale 2.0
 
 # all you need to have a good day
-exec swaymsg "workspace 1; exec firefox"
 exec swaymsg "workspace 1; exec ibus-daemon -dr"
+exec swaymsg "workspace 1; exec firefox"
+exec swaymsg "workspace 3; exec riot-x11"
 exec swaymsg "workspace 2; exec termite -e tmux"
 
 # ui chrome
@@ -61,7 +62,7 @@ bindsym XF86AudioPrev exec playerctl previous
     bindsym $mod+z exec "wofi --show run" 
 
     bindsym $mod+c exec "grim /tmp/screenshot.png" 
-    bindsym $mod+d exec "grim -g $(slurp) /tmp/screenshot.png" 
+    bindsym $mod+d exec "grim -g "$(slurp)" /tmp/screenshot.png" 
 
     bindsym $mod+Ctrl+l exec $lock
 
@@ -205,7 +206,7 @@ bar {
 
     # When the status_command prints a new line to stdout, swaybar updates.
     # The default just shows the current date and time.
-    status_command while /etc/sway/status.sh; do sleep 1; done
+    status_command while ~/.config/sway/status.sh; do sleep 1; done
 
     colors {
         statusline #ffffff

@@ -43,9 +43,9 @@
       '';
     });
 
-    ## a PR is in development but knowing the entire thing has been in the work
-    ## since 15 years ago I'd assume it's going to take a _little_ bit longer
-    ## https://phabricator.services.mozilla.com/D6995
+    # a PR is in development but knowing the entire thing has been in the work
+    # since 15 years ago I'd assume it's going to take a _little_ bit longer
+    # https://phabricator.services.mozilla.com/D6995
     firefox-wayland = super.firefox-wayland.overrideAttrs (oldAttrs: rec {
       postPatch = ''
           sed -i 's/"\.mozilla"/"\.local\/share\/mozilla"/' $(grep -Rl '"\.mozilla"')
@@ -74,6 +74,13 @@
       '';
     });
 
+    vscodium = super.vscodium.overrideAttrs (oldAttrs: rec {
+      installPhase = oldAttrs.installPhase + ''
+        sed -i 's/"\.vscode-oss"/"\.config\/VSCodium\/oss"/' $(grep -Rl '"\.vscode-oss"' $out)
+      '';
+    });
+
+
     };
   };
 
@@ -101,6 +108,8 @@
     # i'm... not sure myself but this seems to be required for ssh to use the
     # godforsaken correct xdg path
     GIT_SSH = "ssh";
+    ANDROID_SDK_HOME = "$XDG_CONFIG_HOME/android";
+    ADB_VENDOR_KEY = "$XDG_CONFIG_HOME/android";
   };
 
   home-manager.users.govanify = {

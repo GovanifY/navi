@@ -8,6 +8,7 @@
               ../../common/mac.nix
               ../../common/laptop.nix
               ../../common/gaming.nix
+              ../../common/bluetooth.nix
             ];
   networking.hostName = "xanadu"; # Define your hostname.
   users.motd = ''
@@ -68,11 +69,11 @@
                                          Welcome to Xanadu
 '';
 
-    modules.tor.transparentProxy = {
-      enable = true; 
-      outputNic = "wlp1s0"; 
-      inputNic = "wlp1s0"; 
-      };
+    #modules.tor.transparentProxy = {
+    #  enable = true; 
+    #  outputNic = "wlp1s0"; 
+    #  inputNic = "wlp1s0"; 
+    #  };
     services.macspoofer = {
       enable = true; 
       interface = "wlp1s0"; 

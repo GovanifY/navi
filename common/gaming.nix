@@ -6,7 +6,7 @@
 
 
   environment.systemPackages = with pkgs; [
-    #steam 
+    steam 
     (
       pkgs.writeTextFile {
         name = "startsteam";
