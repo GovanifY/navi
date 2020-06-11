@@ -5,8 +5,12 @@
   imports = [ ./hardware.nix
               ../../common/default.nix
               ../../common/tor.nix
+              ../../common/mac.nix
               #../../common/laptop.nix
               ../../common/gaming.nix
+              ../../common/bluetooth.nix
+              ../../common/headfull.nix
+              ../../common/graphical.nix
             ];
   networking.hostName = "alastor"; 
   users.motd = ''
@@ -31,4 +35,13 @@
     "Smile, my dear! You know, you're 
      never fully dressed without one!"
 '';
+    #services.macspoofer = {
+    #  enable = true; 
+    #  interface = "wlp1s0"; 
+    #  };
+
+  home-manager.users.govanify = {
+    home.file."Pictures/wallpaper.png".source  = ./wallpaper.png;
+  };
+
 }

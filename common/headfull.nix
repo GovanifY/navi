@@ -49,7 +49,7 @@
       signByDefault = true;
       key = "52142D39A7CEF8FA872BCA7FDE62E1E2A6145556";
     };
-    home.file.".config/weechat".source  = ./../dotfiles/weechat;
+    #home.file.".config/weechat".source  = ./../dotfiles/weechat;
 
   };
 
