@@ -5,7 +5,7 @@
 
   boot.initrd.availableKernelModules = [ "ahci" "nvme" ];
   boot.initrd.kernelModules = [ "dm-snapshot" ];
-  boot.kernelModules = [ "i915" "kvm-intel" "vfat" ];
+  boot.kernelModules = [ "i915" "kvm-intel" "vfat" "ieee80211_crypt_tkip" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
