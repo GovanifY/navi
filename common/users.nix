@@ -6,15 +6,15 @@
 
   users.users.govanify = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "audio" "wireshark"]; 
+    extraGroups = [ "wheel" "networkmanager" "audio" "wireshark" "adbusers"]; 
    };
 
    home-manager.users.govanify = {
     home.file.".config/ssh/authorized_keys".source  = ./../secrets/authorized_keys;
      programs.git = {
        enable = true;
-       userName  = "gauvain@govanify.com";
-       userEmail = "Gauvain Roussel-Tarbouriech";
+       userEmail  = "gauvain@govanify.com";
+       userName = "Gauvain 'GovanifY' Roussel-Tarbouriech";
      };
    };
 

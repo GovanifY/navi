@@ -1,7 +1,10 @@
-{ config, pkgs, lib, ... }: {
-
+{ config, lib, pkgs, ... }: {
   imports = [ ./../pkgs/termite.nix ];
   services.mingetty.autologinUser = "govanify";
+
+  # firefox no segfaulty
+  xdg.portal.enable = false;
+
 
   programs.sway = {
     enable = true;
@@ -17,7 +20,8 @@
       # multimedia
       mpv imv 
       # reading
-      calibre okular kcc
+      #calibre 
+      okular kcc
       # web browsers
       # standard firefox is used for basically everything and is "impossible" to
       # fingerprint with my configuration, but i do login on websites sometimes.
@@ -30,7 +34,10 @@
       blender krita kdenlive ardour
       # stem
       freecad kicad wireshark 
+      # recording/streaming
+      obs-studio obs-wlrobs
 
+      jdk11 
       android-studio
       (
       pkgs.writeTextFile {

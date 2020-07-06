@@ -4,6 +4,7 @@
 { config, lib, pkgs, ... }:
 
 {
+
   imports =
     [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ];
@@ -15,11 +16,13 @@
     efiSupport = true;
     enableCryptodisk = true;
     extraInitrd = /boot/initrd.keys.gz;
-    extraConfig = "
-  terminal_input at_keyboard
-  keymap fr
-    ";
   };
+
+  # broken
+  #boot.initrd.secrets = {
+  #  "keyfile_lain.bin" = "/etc/secrets/initrd/keyfile_lain.bin";
+  #  "keyfile_matrix.bin" = "/etc/secrets/initrd/keyfile_matrix.bin";
+  #};
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = [ "dm-snapshot" ];
@@ -78,7 +81,12 @@
 
   console.keyMap = "fr";
 
-
   nix.maxJobs = lib.mkDefault 4;
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+  powerManagement.cpuFreqGovernor = lib.mkDefault "performance";
+
+  hardware.pulseaudio.extraConfig =  ''
+  load-module module-remap-source master=alsa_input.usb-Focusrite_Scarlett_2i2_USB-00.analog-stereo source_name=Mic-Mono master_channel_map=left channel_map=mono
+  set-default-source Mic-Mono
+  '';
 }
+

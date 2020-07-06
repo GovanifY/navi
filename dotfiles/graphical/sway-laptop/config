@@ -15,9 +15,6 @@ exec swayidle -w \
 # screen
 output * bg ~/Pictures/wallpaper.png fill
 output eDP-1 scale 2.0
-output DP-2 scale 2.0
-output DP-2 pos 1920 0 res 3840x2160
-output HDMI-A-2 pos 0 0 res 1920x1080 
 
 # all you need to have a good day
 exec swaymsg "workspace 1; exec ibus-daemon -dr"
@@ -38,11 +35,6 @@ input "2:14:ETPS/2_Elantech_Touchpad" {
     tap enabled
     middle_emulation enabled
 }
-
-input "5426:515:Razer_Razer_BlackWidow_Chroma" {
-    xkb_layout "fr"
-}
-
 #
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
@@ -120,49 +112,27 @@ bindsym XF86AudioPrev exec playerctl previous
 # Workspaces:
 #
     # Switch to workspace
-    #bindsym $mod+1 workspace 1
-    #bindsym $mod+2 workspace 2
-    #bindsym $mod+3 workspace 3
-    #bindsym $mod+4 workspace 4
-    #bindsym $mod+5 workspace 5
-    #bindsym $mod+6 workspace 6
-    #bindsym $mod+7 workspace 7
-    #bindsym $mod+8 workspace 8
-    #bindsym $mod+9 workspace 9
-    #bindsym $mod+0 workspace 10
-    ## Move focused container to workspace
-    #bindsym $mod+Shift+1 move container to workspace 1
-    #bindsym $mod+Shift+2 move container to workspace 2
-    #bindsym $mod+Shift+3 move container to workspace 3
-    #bindsym $mod+Shift+4 move container to workspace 4
-    #bindsym $mod+Shift+5 move container to workspace 5
-    #bindsym $mod+Shift+6 move container to workspace 6
-    #bindsym $mod+Shift+7 move container to workspace 7
-    #bindsym $mod+Shift+8 move container to workspace 8
-    #bindsym $mod+Shift+9 move container to workspace 9
-    #bindsym $mod+Shift+0 move container to workspace 10
-bindsym $mod+ampersand workspace 1
-bindsym $mod+eacute workspace 2
-bindsym $mod+quotedbl workspace 3
-bindsym $mod+apostrophe workspace 4
-bindsym $mod+parenleft workspace 5
-bindsym $mod+egrave workspace 6
-bindsym $mod+minus workspace 7
-bindsym $mod+underscore workspace 8
-bindsym $mod+ccedilla workspace 9
-bindsym $mod+agrave workspace 10
-
-bindsym $mod+Shift+ampersand move container to workspace 1
-bindsym $mod+Shift+eacute move container to workspace 2
-bindsym $mod+Shift+quotedbl move container to workspace 3
-bindsym $mod+Shift+apostrophe move container to workspace 4
-bindsym $mod+Shift+parenleft move container to workspace 5
-bindsym $mod+Shift+egrave move container to workspace 6
-bindsym $mod+Shift+minus move container to workspace 7
-bindsym $mod+Shift+underscore move container to workspace 8
-bindsym $mod+Shift+ccedilla move container to workspace 9
-bindsym $mod+Shift+agrave move container to workspace 10
-
+    bindsym $mod+1 workspace 1
+    bindsym $mod+2 workspace 2
+    bindsym $mod+3 workspace 3
+    bindsym $mod+4 workspace 4
+    bindsym $mod+5 workspace 5
+    bindsym $mod+6 workspace 6
+    bindsym $mod+7 workspace 7
+    bindsym $mod+8 workspace 8
+    bindsym $mod+9 workspace 9
+    bindsym $mod+0 workspace 10
+    # Move focused container to workspace
+    bindsym $mod+Shift+1 move container to workspace 1
+    bindsym $mod+Shift+2 move container to workspace 2
+    bindsym $mod+Shift+3 move container to workspace 3
+    bindsym $mod+Shift+4 move container to workspace 4
+    bindsym $mod+Shift+5 move container to workspace 5
+    bindsym $mod+Shift+6 move container to workspace 6
+    bindsym $mod+Shift+7 move container to workspace 7
+    bindsym $mod+Shift+8 move container to workspace 8
+    bindsym $mod+Shift+9 move container to workspace 9
+    bindsym $mod+Shift+0 move container to workspace 10
     # Note: workspaces can have any name you want, not just numbers.
     # We just use 1-10 as the default.
 #
@@ -197,11 +167,11 @@ bindsym $mod+Shift+agrave move container to workspace 10
     # You can send windows there and get them back later.
 
     # Move the currently focused window to the scratchpad
-    bindsym $mod+Shift+7 move scratchpad
+    bindsym $mod+Shift+minus move scratchpad
 
     # Show the next scratchpad window or hide the focused scratchpad window.
     # If there are multiple scratchpad windows, this command cycles through them.
-    bindsym $mod+7 scratchpad show
+    bindsym $mod+minus scratchpad show
 #
 # Resizing containers:
 #

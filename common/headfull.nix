@@ -35,6 +35,9 @@
   # firmwares + steam et al
   nixpkgs.config.allowUnfree = true;
 
+  # adb
+  programs.adb.enable = true;
+
   # we do not use gpg agent as all gpg keys used are available _without_ a
   # password, if someone is able to snoop into my user files they will sooner
   # or later get the password anyways

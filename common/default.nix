@@ -6,7 +6,8 @@
     ./locale.nix
     ./xdg.nix
     ./sandboxing.nix
-    (import "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/release-20.03.tar.gz}/nixos")
+    (import "${builtins.fetchTarball
+    https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos")
     ./../secrets/deployment.nix
     ./../pkgs/vim.nix
     ./../pkgs/zsh.nix
