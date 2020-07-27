@@ -33,7 +33,7 @@
       # art
       blender krita kdenlive ardour
       # stem
-      freecad kicad wireshark 
+      freecad kicad wireshark sourcetrail
       # recording/streaming
       obs-studio obs-wlrobs
 
@@ -78,18 +78,18 @@
       }
       )
       # matrix
-      riot-desktop
+      element-desktop
       (
       pkgs.writeTextFile {
-        name = "riot-x11";
-        destination = "/bin/riot-x11";
+        name = "element-x11";
+        destination = "/bin/element-x11";
         executable = true;
         text = ''
           #! ${pkgs.bash}/bin/bash
           # Electron sucks
           GDK_BACKEND=x11
           # then start the launcher 
-          exec riot-desktop
+          exec element-desktop
         '';
       }
       )
