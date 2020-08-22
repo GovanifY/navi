@@ -3,8 +3,10 @@
 {
 
   imports = [
-              ../../common/headfull.nix
-              ../../common/graphical.nix
+              ./headfull.nix
+              ./graphical.nix
+              ./gaming.nix
+              ./virtualization.nix
             ];
 
 }

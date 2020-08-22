@@ -23,7 +23,7 @@ in {
 
   
   # temporary to debug wifi
-  #security.lockKernelModules = false;
+  security.lockKernelModules = false;
 
   # it seems that linux nowadays won't allow you to disable the jit 
   boot.kernel.sysctl."net.core.bpf_jit_enable" = true;

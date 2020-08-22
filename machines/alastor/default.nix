@@ -6,11 +6,8 @@
               ../../common/default.nix
               ../../common/tor.nix
               ../../common/mac.nix
-              #../../common/laptop.nix
-              ../../common/gaming.nix
+              ../../common/desktop.nix
               ../../common/bluetooth.nix
-              ../../common/headfull.nix
-              ../../common/graphical.nix
             ];
   networking.hostName = "alastor"; 
   users.motd = ''
@@ -39,6 +36,7 @@
     #  enable = true; 
     #  interface = "wlp1s0"; 
     #  };
+  networking.bridges.br0.interfaces = [ "wlp1s0" ];
 
   home-manager.users.govanify = {
     home.file."Pictures/wallpaper.png".source  = ./wallpaper.png;
