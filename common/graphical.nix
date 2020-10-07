@@ -59,10 +59,12 @@
       #ghidra in the future when it is actually updated
       # themes
       breeze-gtk breeze-qt5 breeze-icons
+      # math stuff
+      coq
       # ELECTRON BELOW
       # you should try to run with GDK_BACKEND=x11
       # this is good for lean
-      vscodium lean elan
+      vscodium lean elan 
       (
       pkgs.writeTextFile {
         name = "vscodium-x11";
