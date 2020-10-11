@@ -5,7 +5,7 @@
   # firefox no segfaulty
   xdg.portal.enable = false;
 
-
+  boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
   programs.sway = {
     enable = true;
     extraPackages = with pkgs; [

@@ -20,13 +20,15 @@ in {
   }];
 
   security.allowUserNamespaces = true;
-
   
+  environment.memoryAllocator.provider = "libc";
+
   # temporary to debug wifi
   security.lockKernelModules = false;
 
   # it seems that linux nowadays won't allow you to disable the jit 
   boot.kernel.sysctl."net.core.bpf_jit_enable" = true;
+  boot.kernel.sysctl."kernel.unprivileged_userns_clone" = 1;
   # any hardened allocator doesn't even let me boot
   #environment.memoryAllocator.provider = "graphene-hardened";
   security.allowSimultaneousMultithreading = true;
