@@ -51,11 +51,5 @@
     XMODIFIERS = "@im=ibus";
     QT_IM_MODULE = "ibus";
   };
-
-  # https://github.com/NixOS/nixpkgs/issues/72896
-  # ok....
-  environment.systemPackages = with pkgs; [
-    qt5.full
-  ];
 }
 

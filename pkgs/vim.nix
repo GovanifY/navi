@@ -11,7 +11,7 @@ let
       nerdcommenter easymotion vim-obsession #vim-prosession
       syntastic ultisnips vim-snippets deoplete-nvim
       deoplete-rust deoplete-clang deoplete-jedi vim-nix
-      rust-vim meson ];
+      rust-vim meson Jenkinsfile-vim-syntax ];
       extraConfig = ''
         " This should be enabled by default
         set number

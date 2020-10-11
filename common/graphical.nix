@@ -31,11 +31,13 @@
       #tor-browser-bundle-bin
       #firefox-bin
       # art
-      blender krita kdenlive ardour
+      blender krita #kdenlive 
+      ardour
       # stem
-      freecad kicad wireshark sourcetrail
+      #freecad 
+      kicad wireshark sourcetrail pandoc
       # recording/streaming
-      obs-studio obs-wlrobs
+      obs-studio obs-wlrobs obs-v4l2sink
 
       jdk11 
       android-studio

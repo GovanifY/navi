@@ -6,7 +6,8 @@
 
   users.users.govanify = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "audio" "wireshark" "adbusers"]; 
+    extraGroups = [ "wheel" "networkmanager" "audio" "wireshark" "adbusers"
+    "docker"]; 
    };
 
    home-manager.users.govanify = {

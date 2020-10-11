@@ -15,14 +15,12 @@
     version = 2;
     efiSupport = true;
     enableCryptodisk = true;
-    extraInitrd = /boot/initrd.keys.gz;
   };
 
-  # broken
-  #boot.initrd.secrets = {
-  #  "keyfile_lain.bin" = "/etc/secrets/initrd/keyfile_lain.bin";
-  #  "keyfile_matrix.bin" = "/etc/secrets/initrd/keyfile_matrix.bin";
-  #};
+  boot.initrd.secrets = {
+    "/keyfile_lain.bin" = "/etc/secrets/initrd/keyfile_lain.bin";
+    "/keyfile_matrix.bin" = "/etc/secrets/initrd/keyfile_matrix.bin";
+  };
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = [ "dm-snapshot" ];
