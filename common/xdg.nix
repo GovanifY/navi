@@ -19,14 +19,6 @@
         '';
       });
 
-    # https://github.com/google/mozc/issues/474
-    # hopefully temporary
-    ibus-engines.mozc = super.ibus-engines.mozc.overrideAttrs (oldAttrs: rec {
-      postPatch = ''
-          sed -i 's/"\.mozc"/"\.config\/mozc"/' $(grep -Rl '"\.mozc"')
-      '';
-    });
-
     ## rarely created on my setup, seems to be x11 related? either way here we go
     # NOT haha, this breaks nixos build at some point, so let's forget this
    # dbus = super.dbus.overrideAttrs (oldAttrs: rec {
