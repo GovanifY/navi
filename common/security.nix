@@ -32,5 +32,6 @@ in {
   # any hardened allocator doesn't even let me boot
   #environment.memoryAllocator.provider = "graphene-hardened";
   security.allowSimultaneousMultithreading = true;
+  nix.useSandbox = true;
 }
 

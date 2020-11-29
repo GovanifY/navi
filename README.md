@@ -5,7 +5,6 @@ files handling my own internal infrastructure.
 
 Currently the machines populated by this configuration are:
 
+* alastor
 * xanadu
-
-
 

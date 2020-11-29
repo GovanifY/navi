@@ -23,5 +23,10 @@
      };
    };
 
+   # for nix builders
+   home-manager.users.root = {
+    home.file.".config/ssh/authorized_keys".source  = ./../secrets/authorized_keys;
+     };
+
  }
 

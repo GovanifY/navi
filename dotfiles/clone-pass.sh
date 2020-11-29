@@ -1,3 +1,4 @@
+#!/bin/sh
 while [ ! -d ~/.config/pass ]
 do
     git clone git@code.govanify.com:govanify/passwords.git ~/.config/pass

@@ -82,6 +82,7 @@
     XDG_DATA_HOME = "$HOME/.local/share";
     LESSKEY = "$XDG_CONFIG_HOME/less/lesskey";
     LESSHISTFILE = "-";
+    HISTFILE = "$HOME/.local/share/bash_history";
     ZDOTDIR = "$XDG_CONFIG_HOME/zsh";
     CARGO_HOME = "$XDG_DATA_HOME/cargo";
     WINEPREFIX = "$HOME/.local/share/wineprefixes/default";

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 engine=$(ibus engine)
 if [ "${engine}" == "mozc-jp" ] || [ "${engine}" == "xkb:jp::jpn" ]
 then

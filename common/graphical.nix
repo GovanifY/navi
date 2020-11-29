@@ -35,7 +35,8 @@
       ardour
       # stem
       #freecad 
-      kicad wireshark sourcetrail pandoc
+      kicad wireshark pandoc limesuite
+      # sourcetrail
       # recording/streaming
       obs-studio obs-wlrobs obs-v4l2sink
 

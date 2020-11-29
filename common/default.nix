@@ -10,7 +10,7 @@
     https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos")
     ./../secrets/deployment.nix
     ./../pkgs/vim.nix
-    ./../pkgs/zsh.nix
+    ./../pkgs/fish.nix
     ./../pkgs/tmux.nix
   ];
 
@@ -18,8 +18,10 @@
   # basic set of tools & ssh
   environment.systemPackages = with pkgs; [
     wget neovim tmux git git-crypt 
-    rsync imagemagick mosh gnupg
+    rsync imagemagick mosh gnupg manpages
   ];
+
+  documentation.dev.enable = true;
 
   # need to find a way to make it work through TCP thanks to tor
   programs.mosh.enable = true;
