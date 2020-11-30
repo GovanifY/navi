@@ -87,8 +87,8 @@
     CARGO_HOME = "$HOME/.local/share/cargo";
     WINEPREFIX = "$HOME/.local/share/wineprefixes/default";
     # does not parse it correctly for some reason
-    WEECHAT_HOME = "~/.config/weechat";
-    GNUPGHOME = "~/.config/gnupg";
+    WEECHAT_HOME = "$HOME/.config/weechat";
+    GNUPGHOME = "$HOME/.config/gnupg";
     GRADLE_USER_HOME = "$XDG_DATA_HOME/gradle";
     GEM_HOME = "$XDG_DATA_HOME/gem";
     GEM_SPEC_CACHE = "$XDG_CACHE_HOME/gem";
@@ -106,6 +106,8 @@
     CCACHE_CONFIGPATH = "$XDG_CONFIG_HOME/ccache.config";
     CCACHE_DIR = "$XDG_CACHE_HOME/ccache";
     NPM_CONFIG_USERCONFIG = "$XDG_CONFIG_HOME/npm/npmrc";
+    GDBHISTFILE = "$HOME/.local/share/gdb_history";
+    NUGET_PACKAGES = "$XDG_CACHE_HOME/NuGetPackages";
   };
 
   home-manager.users.govanify = {

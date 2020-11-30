@@ -1,8 +1,7 @@
 { config, pkgs, lib, ... }: {
-
   # basic set of tools & ssh
   environment.systemPackages = with pkgs; [
-    neomutt msmtp isync notmuch abook lynx notmuch-mutt
+    neomutt msmtp isync notmuch abook lynx notmuch-mutt procps
   ];
 
   # XDG_CONFIG_HOME does not get parsed correctly so we do it manually
@@ -51,7 +50,8 @@
 systemd.user.services.mailsync = {
   description = "Synchronizes the user mailbox";
   wantedBy = [ "default.target" ];
-  serviceConfig.ExecStart = "${pkgs.bash}/bin/bash %h/.config/mutt/mailsync.sh";
+  path = with pkgs; [ procps wget isync gawk pass ];
+  serviceConfig.ExecStart = "${pkgs.bash}/bin/sh %h/.config/mutt/mailsync.sh %h";
   startAt = [ "*:0/5" ];
 };
 
