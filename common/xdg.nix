@@ -103,13 +103,15 @@
     GIT_SSH = "ssh";
     ANDROID_SDK_HOME = "$XDG_CONFIG_HOME/android";
     ADB_VENDOR_KEY = "$XDG_CONFIG_HOME/android";
+    CCACHE_CONFIGPATH = "$XDG_CONFIG_HOME/ccache.config";
+    CCACHE_DIR = "$XDG_CACHE_HOME/ccache";
   };
 
   home-manager.users.govanify = {
     home.file.".config/wgetrc".source  = ./../dotfiles/xdg/wgetrc;
     home.file.".config/python/startup.py".source  = ./../dotfiles/xdg/python/startup.py;
   };
-  programs.zsh.shellAliases = {
+  programs.fish.shellAliases = {
     gdb = "gdb -nh -x \"$XDG_CONFIG_HOME\"/gdb/init";
     subversion = "svn --config-dir \"$XDG_CONFIG_HOME\"/subversion";
     dosbox = "dosbox -conf \"$XDG_CONFIG_HOME\"/dosbox/dosbox.conf";

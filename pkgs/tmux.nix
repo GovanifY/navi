@@ -12,7 +12,6 @@
         set -g @continuum-boot 'on'
         set -sg escape-time 10
         set -g default-shell "${pkgs.fish}/bin/fish"
-        set -g default-command "${pkgs.fish}/bin/fish"
       '';
 
     };

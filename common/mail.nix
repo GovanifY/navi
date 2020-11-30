@@ -51,7 +51,7 @@
 systemd.user.services.mailsync = {
   description = "Synchronizes the user mailbox";
   wantedBy = [ "default.target" ];
-  serviceConfig.ExecStart = "${pkgs.zsh}/bin/zsh %h/.config/mutt/mailsync.sh";
+  serviceConfig.ExecStart = "${pkgs.bash}/bin/bash %h/.config/mutt/mailsync.sh";
   startAt = [ "*:0/5" ];
 };
 

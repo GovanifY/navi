@@ -35,6 +35,11 @@ input "2:14:ETPS/2_Elantech_Touchpad" {
     tap enabled
     middle_emulation enabled
 }
+
+input "type:keyboard" { 
+    # avoids swaylock escape
+    xkb_options srvrkeys:none
+}
 #
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
