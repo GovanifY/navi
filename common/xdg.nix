@@ -84,7 +84,7 @@
     LESSHISTFILE = "-";
     HISTFILE = "$HOME/.local/share/bash_history";
     ZDOTDIR = "$XDG_CONFIG_HOME/zsh";
-    CARGO_HOME = "$XDG_DATA_HOME/cargo";
+    CARGO_HOME = "$HOME/.local/share/cargo";
     WINEPREFIX = "$HOME/.local/share/wineprefixes/default";
     # does not parse it correctly for some reason
     WEECHAT_HOME = "~/.config/weechat";
@@ -105,11 +105,13 @@
     ADB_VENDOR_KEY = "$XDG_CONFIG_HOME/android";
     CCACHE_CONFIGPATH = "$XDG_CONFIG_HOME/ccache.config";
     CCACHE_DIR = "$XDG_CACHE_HOME/ccache";
+    NPM_CONFIG_USERCONFIG = "$XDG_CONFIG_HOME/npm/npmrc";
   };
 
   home-manager.users.govanify = {
     home.file.".config/wgetrc".source  = ./../dotfiles/xdg/wgetrc;
     home.file.".config/python/startup.py".source  = ./../dotfiles/xdg/python/startup.py;
+    home.file.".config/npm/npmrc".source  = ./../dotfiles/xdg/npmrc;
   };
   programs.fish.shellAliases = {
     gdb = "gdb -nh -x \"$XDG_CONFIG_HOME\"/gdb/init";
