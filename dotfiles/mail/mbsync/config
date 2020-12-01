@@ -20,5 +20,6 @@ Create Both
 SyncState *
 MaxMessages 0
 ExpireUnread no
+Patterns *
 # End profile
 
