@@ -6,4 +6,3 @@ TODO list sorted by priority:
 * locale: sync mozc/ibus settings, saner defaults, make panel work in wayland
 * workflow: discrepancy for cursor between x11 and non x11 apps
 * mail: switch to dovecot to add sieve, mod config to remove folders
-* deployment: ipv6
