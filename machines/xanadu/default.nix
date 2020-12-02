@@ -4,7 +4,7 @@
 
   imports = [ ./hardware.nix
               ../../common/default.nix
-              ../../common/tor.nix
+              ../../component/tor.nix
               ../../common/mac.nix
               ../../common/laptop.nix
               ../../common/gaming.nix

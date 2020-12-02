@@ -19,7 +19,9 @@ bind index gg first-entry
 unmailboxes *
 
 set spoolfile = "+INBOX"
-set record = "+INBOX.Sent"
 set postponed = "+INBOX.Drafts"
 set trash = "+INBOX.Trash"
+# save sent mail in current folder
+folder-hook . 'set record=^'
+
 mailboxes `find "/home/govanify/.local/share/mail/govanify" -type d -name cur | sort | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | tr '\n' ' '`

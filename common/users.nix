@@ -10,8 +10,8 @@
     "docker"]; 
    };
 
+   users.users.govanify.openssh.authorizedKeys.keyFiles  = [ ./../secrets/ssh_keys/navi ];
    home-manager.users.govanify = {
-    home.file.".config/ssh/authorized_keys".source  = ./../secrets/authorized_keys;
      programs.git = {
        enable = true;
        userEmail  = "gauvain@govanify.com";
@@ -24,9 +24,6 @@
    };
 
    # for nix builders
-   home-manager.users.root = {
-    home.file.".config/ssh/authorized_keys".source  = ./../secrets/authorized_keys;
-     };
-
+   users.users.root.openssh.authorizedKeys.keyFiles  = [ ./../secrets/ssh_keys/navi ];
  }
 

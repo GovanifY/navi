@@ -17,6 +17,7 @@ Expunge Both
 Master :govanify-remote:
 Slave :govanify-local:
 Create Both
+Remove Both
 SyncState *
 MaxMessages 0
 ExpireUnread no
