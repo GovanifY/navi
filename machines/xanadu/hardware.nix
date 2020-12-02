@@ -17,6 +17,10 @@
     [ { device = "/dev/disk/by-uuid/89e0fa0a-1028-4558-9bff-e90061e3ac44"; }
   ];
 
+  boot.initrd.secrets = {
+    "/keyfile.bin" = "/etc/secrets/initrd/keyfile.bin";
+  };
+
   nix.maxJobs = lib.mkDefault 4;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   # High-DPI console
@@ -27,7 +31,6 @@
     version = 2;
     enableCryptodisk = true;
     device = "/dev/disk/by-id/nvme-INTEL_SSDPEKKW512G8_BTHH812200PR512D";
-    extraInitrd = /boot/initrd.keys.gz;
   };
   boot.initrd.luks.devices = {
     root=  {
