@@ -30,7 +30,7 @@ default_border pixel 1
 seat seat0 xcursor_theme breeze_cursors 48
 
 # IME
-bindsym $mod+i exec /etc/sway/locale.sh
+bindsym $mod+i exec ~/.config/sway/locale.sh
 
 # inputs
 input "2:14:ETPS/2_Elantech_Touchpad" {
