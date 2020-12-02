@@ -7,7 +7,6 @@
               ./graphical.nix
               ./gaming.nix
               ./virtualization.nix
-              ./build-node.nix
             ];
   home-manager.users.govanify = {
     home.file.".config/sway/config".source = ./../dotfiles/graphical/sway/config;
