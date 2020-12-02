@@ -240,11 +240,5 @@
    # QT theme
    home.file.".config/qt5ct/qt5ct.conf".source  = ./../dotfiles/graphical/qt5ct/qt5ct.conf;
    home.file.".config/qt5ct/colors/breeze-dark.conf".source  = ./../dotfiles/graphical/qt5ct/breeze-dark.conf;
-
-   home.file.".config/sway/config".source = ./../dotfiles/graphical/sway/config;
-   home.file.".config/sway/locale.sh".source = ./../dotfiles/graphical/sway/locale.sh;
-   home.file.".config/sway/status.sh".source = ./../dotfiles/graphical/sway/status.sh;
-
-
   };
 }
