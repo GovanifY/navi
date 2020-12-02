@@ -7,4 +7,8 @@
     home.file.".config/fish/config.fish".source = ./../dotfiles/fish/config.fish;
     home.file.".config/fish/functions/fish_prompt.fish".source = ./../dotfiles/fish/fish_prompt.fish;
   };
+  home-manager.users.root = {
+    home.file.".config/fish/config.fish".source = ./../dotfiles/fish/config.fish;
+    home.file.".config/fish/functions/fish_prompt.fish".source = ./../dotfiles/fish/fish_prompt.fish;
+  };
 }

@@ -22,8 +22,5 @@
        plugins = [ pkgs.obs-wlrobs pkgs.obs-v4l2sink ];
      };
    };
-
-   # for nix builders
-   users.users.root.openssh.authorizedKeys.keyFiles  = [ ./../secrets/ssh_keys/navi ];
  }
 
