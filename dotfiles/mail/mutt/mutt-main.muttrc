@@ -77,11 +77,6 @@ bind pager \031 previous-line		# Mouse wheel
 bind pager \005 next-line		# Mouse wheel
 bind editor <Tab> complete-query
 
-# makes a virtual inbox with my mails in it, good for threads
-set nm_query_type = threads
-set virtual_spoolfile = yes
-virtual-mailboxes "Inbox" "notmuch://?query=tag:inbox"
-
 macro index,pager S "<sync-mailbox><shell-escape>~/.config/mutt/mailsync.sh &> /dev/null &<enter>" "flush all changes and synchronize" 
 
 macro index,pager a "<enter-command>set my_pipe_decode=\$pipe_decode pipe_decode<return><pipe-message>abook --config "$XDG_CONFIG_HOME"/abook/abookrc --datafile "$XDG_CACHE_HOME"/abook/addressbook --add-email<return><enter-command>set pipe_decode=\$my_pipe_decode; unset my_pipe_decode<return>" "add the sender address to abook"

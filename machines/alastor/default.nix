@@ -36,7 +36,8 @@
     #  enable = true; 
     #  interface = "wlp1s0"; 
     #  };
-  #networking.bridges.br0.interfaces = [ "wlp3s0" ];
+  networking.bridges.br0.interfaces = [ "wlp3s0" ];
+  networking.dhcpcd.denyInterfaces = [ "virbr0" ];
 
   home-manager.users.govanify = {
     home.file."Pictures/wallpaper.png".source  = ./wallpaper.png;
