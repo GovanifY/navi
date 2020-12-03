@@ -10,7 +10,7 @@
     "docker"]; 
    };
 
-   users.users.govanify.openssh.authorizedKeys.keyFiles  = [ ./../secrets/ssh_keys/navi ];
+   users.users.govanify.openssh.authorizedKeys.keyFiles  = [ ./../secrets/ssh_keys/navi.pub ];
    home-manager.users.govanify = {
      programs.git = {
        enable = true;

@@ -53,8 +53,8 @@
       rev = "2020.06";
       sha256 = "1cmpz46x2z3lxlkj9i2z1bf55d9fdzhirlysgjlbxkdx72jg5gds";
     } + "/gef.py");
-    home.file.".config/ssh/id_ed25519".source  = ./../secrets/id_ed25519;
-    home.file.".config/ssh/id_ed25519.pub".source  = ./../secrets/id_ed25519.pub;
+    home.file.".config/ssh/id_ed25519".source  = ./../secrets/ssh_keys/navi;
+    home.file.".config/ssh/id_ed25519.pub".source  = ./../secrets/ssh_keys/navi.pub;
     programs.git.signing = {
       signByDefault = true;
       key = "52142D39A7CEF8FA872BCA7FDE62E1E2A6145556";
@@ -63,7 +63,12 @@
 
   };
 
-
+  environment.etc."distbuild_ssh" = {
+    text = builtins.readFile ./../secrets/ssh_keys/navi;
+    mode = "0400";
+    uid = 0;
+    gid = 0;
+  };
 }
 
 

@@ -39,7 +39,6 @@
         color7 = #a89984
         color15 = #ebdbb2
       '';
-
     };
   };
 }
