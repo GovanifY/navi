@@ -1,4 +1,4 @@
-{ ... }: {
+{ pkgs, ... }: {
 	nix.buildMachines = [ {
 	 hostName = "alastor";
 	 system = "x86_64-linux";
@@ -10,6 +10,7 @@
 
     users.users.distbuild = {
       isSystemUser = true;
+      shell = pkgs.bash;
       openssh.authorizedKeys.keyFiles = [ ./../secrets/ssh_keys/distbuild.pub ];
     };
     nix.trustedUsers = [ "distbuild" ];
