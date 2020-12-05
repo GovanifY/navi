@@ -186,15 +186,6 @@
 
   environment = {
     etc = {
-      # GTK theme
-      "xdg/gtk-3.0/settings.ini" = { text = ''
-        [Settings]
-        gtk-icon-theme-name=breeze-dark
-        gtk-theme-name=Breeze-Dark
-        gtk-application-prefer-dark-theme = true
-        gtk-cursor-theme-name=breeze_cursors
-      ''; mode = "444"; };
-      
       "gtk-2.0/gtkrc" = { text = ''
         gtk-icon-theme-name=breeze-dark
       ''; mode = "444"; };
@@ -203,6 +194,7 @@
       ''; mode = "444"; };
     };
   };
+
   environment.variables = {
     GTK_THEME = "Breeze-Dark";
   };
@@ -242,5 +234,15 @@
    # QT theme
    home.file.".config/qt5ct/qt5ct.conf".source  = ./../dotfiles/graphical/qt5ct/qt5ct.conf;
    home.file.".config/qt5ct/colors/breeze-dark.conf".source  = ./../dotfiles/graphical/qt5ct/breeze-dark.conf;
+
+   # GTK theme
+   home.file.".config/gtk-3.0/settings.ini".text  = ''
+        [Settings]
+        gtk-icon-theme-name=breeze-dark
+        gtk-theme-name=Breeze-Dark
+        gtk-application-prefer-dark-theme = true
+        gtk-cursor-theme-name=breeze_cursors
+      ''; 
+
   };
 }
