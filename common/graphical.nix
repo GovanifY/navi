@@ -201,8 +201,10 @@
       "X11/Xresources" = { text = ''
         Xcursor.size: 12 
       ''; mode = "444"; };
-
     };
+  };
+  environment.variables = {
+    GTK_THEME = "Breeze-Dark";
   };
 
   # the gpg thing should be done in headfull but we need to do that before it
