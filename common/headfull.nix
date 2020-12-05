@@ -64,7 +64,7 @@
   };
 
   environment.etc."distbuild_ssh" = {
-    text = builtins.readFile ./../secrets/ssh_keys/navi;
+    text = builtins.readFile ./../secrets/ssh_keys/distbuild;
     mode = "0400";
     uid = 0;
     gid = 0;
