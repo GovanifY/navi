@@ -18,7 +18,7 @@
 
   # basic set of tools & ssh
   environment.systemPackages = with pkgs; [
-    wget neovim tmux git git-crypt 
+    wget neovim tmux git git-crypt screen htop
     rsync imagemagick mosh gnupg manpages
   ];
 
@@ -54,7 +54,6 @@
     '';
     console.earlySetup = true;
     boot.loader.timeout = 1;
-    networking.domain = "govanify.com";
 
     # no UDP when through tor, so we use http date to synchronize the system
     # clock

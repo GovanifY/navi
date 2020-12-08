@@ -27,7 +27,7 @@ exec swaymsg "workspace 2; exec termite -e tmux"
 
 # ui chrome
 default_border pixel 1 
-seat seat0 xcursor_theme breeze_cursors 48
+seat seat0 xcursor_theme breeze_cursors 24
 
 # IME
 bindsym $mod+i exec ~/.config/sway/locale.sh

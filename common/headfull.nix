@@ -19,7 +19,7 @@
     texlive.combined.scheme-medium
     # dev
     cargo python R clang meson ninja
-    gnumake 
+    gnumake ghc cabal-install
     lean elan
   ];
 

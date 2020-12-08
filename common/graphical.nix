@@ -170,13 +170,16 @@
     QT_QPA_PLATFORM="wayland-egl";
     GDK_BACKEND="wayland";
     MOZ_ENABLE_WAYLAND = "1";
+    GTK_THEME = "Breeze-Dark";
   };
+
 
   environment.sessionVariables = {
       XCURSOR_PATH = [
         "${config.system.path}/share/icons"
-        "$HOME/.icons"
         "$HOME/.nix-profile/share/icons/"
+        "$HOME/.local/share/icons/"
+        "${pkgs.breeze-qt5}/share/icons/"
       ];
       GTK_DATA_PREFIX = [
         "${config.system.path}"
@@ -193,10 +196,6 @@
         Xcursor.size: 12 
       ''; mode = "444"; };
     };
-  };
-
-  environment.variables = {
-    GTK_THEME = "Breeze-Dark";
   };
 
   # the gpg thing should be done in headfull but we need to do that before it
@@ -235,7 +234,9 @@
    home.file.".config/qt5ct/qt5ct.conf".source  = ./../dotfiles/graphical/qt5ct/qt5ct.conf;
    home.file.".config/qt5ct/colors/breeze-dark.conf".source  = ./../dotfiles/graphical/qt5ct/breeze-dark.conf;
 
+
    # GTK theme
+   home.file.".local/share/icons/default".source = "${pkgs.breeze-qt5}/share/icons/breeze_cursors";
    home.file.".config/gtk-3.0/settings.ini".text  = ''
         [Settings]
         gtk-icon-theme-name=breeze-dark
@@ -243,6 +244,5 @@
         gtk-application-prefer-dark-theme = true
         gtk-cursor-theme-name=breeze_cursors
       ''; 
-
   };
 }
