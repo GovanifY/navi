@@ -1,11 +1,13 @@
 { config, pkgs, ... }:
 let 
+  # contains some patches for syntastic and Tagbar support since upstream is
+  # abandonned
   workspace = pkgs.vimPlugins.vim-obsession.overrideAttrs (oldAttrs: rec {
         src = pkgs.fetchFromGitHub {
-            owner = "xolox";
+            owner = "GovanifY";
             repo = "vim-session";
-            rev = "9e9a6088f0554f6940c19889d0b2a8f39d13f2bb";
-            sha256 = "0r6k3fh0qpg95a02hkks3z4lsjailkd5ddlnn83w7f51jj793v3b";
+            rev = "5dcab0c4d0a5b8a6ddec87ff9723effa474ad181";
+            sha256 = "1ffyxg104bz7d81rq5jhqmca4yzl9148950jgmqswglq3d1j2gvf";
           };
          version = "2020-12-16";
          pname = "vim-session";
@@ -25,15 +27,15 @@ in
           easymotion ctrlp multiple-cursors surround
           # dev
           tagbar fugitive nerdtree nerdcommenter
-          # dev: syntax
+          # dev - syntax
           syntastic ultisnips vim-snippets deoplete-nvim
           # dev - language specific
           rust-vim meson Jenkinsfile-vim-syntax Coqtail
           deoplete-rust deoplete-clang deoplete-jedi vim-nix
           # sessions
-          vim-misc #workspace TODO: one day fix this
+          vim-misc workspace
           # spell check
-          vim-grammarous vim-DetectSpellLang vim-operator-user unite vimproc
+          vim-grammarous #vim-DetectSpellLang vim-operator-user unite vimproc
         ];
         extraConfig = ''
           " This should be enabled by default
@@ -103,12 +105,13 @@ in
           set t_Co=256
           set termguicolors
 
+          " auto create sessions per folder and restore them
           let g:session_autoload = 'yes'
           let g:session_autosave = 'yes'
-          " This should be per folder
-          let g:session_autosave_to = 'default'
-          let g:session_verbose_messages = 0
+          let g:session_autosave_periodic = 1
           let g:session_directory = '~/.local/share/nvim/sessions'
+          let g:session_default_name = getcwd()
+          let g:session_default_overwrite = 1
 
           " This is only necessary if you use "set termguicolors".
           let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
@@ -124,8 +127,7 @@ in
           autocmd BufRead /tmp/neomutt-* setlocal spell
           autocmd FileType gitcommit setlocal spell
           autocmd FileType markdown setlocal spell
-          let g:guesslang_langs = [ 'en_US', 'fr_FR' 'ja_JP' ]
-          let g:grammarous#languagetool_cmd = 'languagetool'
+          let g:guesslang_langs = [ 'en_US', 'fr_FR', 'ja_JP' ]
           " TODO: incremental grammar checks in vim when spelllang is enabled would be neat in the future
         '';
 

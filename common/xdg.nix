@@ -92,8 +92,8 @@
     GRADLE_USER_HOME = "$XDG_DATA_HOME/gradle";
     GEM_HOME = "$XDG_DATA_HOME/gem";
     GEM_SPEC_CACHE = "$XDG_CACHE_HOME/gem";
-    # java still store fonts in .java so i use a per-app wrapper
-    _JAVA_OPTIONS = "-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java";
+    # TODO: merge https://github.com/openjdk/jdk/pull/1494
+    #_JAVA_OPTIONS = "-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java";
     WGETRC = "$HOME/.config/wgetrc";
     PYTHONSTARTUP = "$HOME/.config/python/startup.py";
     PASSWORD_STORE_DIR = "$HOME/.config/pass";

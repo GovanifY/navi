@@ -22,7 +22,7 @@
     gnumake ghc cabal-install
     lean elan
     # automatic spell checking
-    aspell languagetool
+    aspell
   ];
 
 
