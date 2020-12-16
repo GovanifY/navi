@@ -116,6 +116,8 @@ in
           autocmd FileType gitcommit setlocal spell
           autocmd FileType markdown setlocal spell
           let g:guesslang_langs = [ 'en_US', 'fr_FR' 'ja_JP' ]
+          let g:grammarous#languagetool_cmd = 'languagetool'
+          " TODO: incremental grammar checks in vim when spelllang is enabled would be neat in the future
         '';
 
 
