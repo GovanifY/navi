@@ -6,8 +6,8 @@ let
         src = pkgs.fetchFromGitHub {
             owner = "GovanifY";
             repo = "vim-session";
-            rev = "5dcab0c4d0a5b8a6ddec87ff9723effa474ad181";
-            sha256 = "1ffyxg104bz7d81rq5jhqmca4yzl9148950jgmqswglq3d1j2gvf";
+            rev = "13b906f18ad0fa88f0be038237a71aa34b3335da";
+            sha256 = "1hf8gzh42iq46z6b471w6bl44nhwa9h8s02pmg1w482bvhc621w4";
           };
          version = "2020-12-16";
          pname = "vim-session";
@@ -26,7 +26,7 @@ in
           # productivity
           easymotion ctrlp vim-visual-multi surround
           # dev
-          tagbar fugitive nerdtree nerdcommenter
+          tagbar fugitive nerdtree nerdcommenter nvim-gdb
           # dev - syntax
           syntastic ultisnips vim-snippets deoplete-nvim
           # dev - language specific
