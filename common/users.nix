@@ -16,6 +16,7 @@
        enable = true;
        userEmail  = "gauvain@govanify.com";
        userName = "Gauvain 'GovanifY' Roussel-Tarbouriech";
+       ignores = [ "compile_commands.json" ];
      };
      programs.obs-studio = {
        enable = true;
