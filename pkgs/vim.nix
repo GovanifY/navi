@@ -18,14 +18,23 @@ in
         withPython3 = true;
         viAlias = true;
         vimAlias = true;
-        plugins = with pkgs.vimPlugins; [ tagbar gruvbox nerdtree fugitive
-        airline ctrlp multiple-cursors surround
-        nerdcommenter easymotion vim-misc #workspace TODO: one day fix this
-        syntastic ultisnips vim-snippets deoplete-nvim
-        deoplete-rust deoplete-clang deoplete-jedi vim-nix
-        rust-vim meson Jenkinsfile-vim-syntax Coqtail vim-grammarous
-        vim-DetectSpellLang
-      ];
+        plugins = with pkgs.vimPlugins; [ 
+          # aethetics
+          gruvbox airline
+          # productivity
+          easymotion ctrlp multiple-cursors surround
+          # dev
+          tagbar fugitive nerdtree nerdcommenter
+          # dev: syntax
+          syntastic ultisnips vim-snippets deoplete-nvim
+          # dev - language specific
+          rust-vim meson Jenkinsfile-vim-syntax Coqtail
+          deoplete-rust deoplete-clang deoplete-jedi vim-nix
+          # sessions
+          vim-misc #workspace TODO: one day fix this
+          # spell check
+          vim-grammarous vim-DetectSpellLang vim-operator-user unite vimproc
+        ];
         extraConfig = ''
           " This should be enabled by default
           set number
