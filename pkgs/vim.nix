@@ -8,7 +8,7 @@ let
       vimAlias = true;
       plugins = with pkgs.vimPlugins; [ tagbar gruvbox nerdtree fugitive
       airline ctrlp multiple-cursors surround
-      nerdcommenter easymotion vim-obsession #vim-prosession
+      nerdcommenter easymotion vim-obsession vim-prosession
       syntastic ultisnips vim-snippets deoplete-nvim
       deoplete-rust deoplete-clang deoplete-jedi vim-nix
       rust-vim meson Jenkinsfile-vim-syntax Coqtail ];
@@ -73,7 +73,7 @@ let
 
         " If you want :UltiSnipsEdit to split your window.
         let g:UltiSnipsEditSplit="vertical"
-        let g:prosession_dir="$XDG_DATA_HOME/nvim/session/"
+        let g:prosession_dir="~/.local/share/nvim/session/"
         set t_Co=256
         set termguicolors
 
