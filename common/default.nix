@@ -19,7 +19,7 @@
   # basic set of tools & ssh
   environment.systemPackages = with pkgs; [
     wget neovim tmux git git-crypt screen htop
-    rsync imagemagick mosh gnupg manpages
+    rsync imagemagick mosh gnupg manpages aspell
   ];
 
   documentation.dev.enable = true;

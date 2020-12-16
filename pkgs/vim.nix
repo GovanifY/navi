@@ -23,7 +23,8 @@ in
         nerdcommenter easymotion vim-misc #workspace TODO: one day fix this
         syntastic ultisnips vim-snippets deoplete-nvim
         deoplete-rust deoplete-clang deoplete-jedi vim-nix
-        rust-vim meson Jenkinsfile-vim-syntax Coqtail 
+        rust-vim meson Jenkinsfile-vim-syntax Coqtail vim-grammarous
+        vim-DetectSpellLang
       ];
         extraConfig = ''
           " This should be enabled by default
@@ -110,8 +111,11 @@ in
           set background=dark
           colorscheme gruvbox
 
-          " automatic spell check when using neomutt
+          " automatic spell check
           autocmd BufRead /tmp/neomutt-* setlocal spell
+          autocmd FileType gitcommit setlocal spell
+          autocmd FileType markdown setlocal spell
+          let g:guesslang_langs = [ 'en_US', 'fr_FR' 'ja_JP' ]
         '';
 
 
