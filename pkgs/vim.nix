@@ -24,7 +24,7 @@ in
           # aethetics
           gruvbox airline
           # productivity
-          easymotion ctrlp multiple-cursors surround
+          easymotion ctrlp vim-visual-multi surround
           # dev
           tagbar fugitive nerdtree nerdcommenter
           # dev - syntax
