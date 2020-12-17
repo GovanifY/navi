@@ -1,0 +1,123 @@
+navi tools are not necessarily the most user friendly if you don't know what
+they do, but are fairly optimized towards productivity.
+This document intends to give a digestible list of the most useful features that
+navi has to offer.
+
+
+The text editor: Neovim
+=======================
+
+    navi's Neovim is highly modified compared to a base vim installation, and as
+    such some of its most useful features warrant an explanation. For more help you
+    can always type :help in the program.
+
+    This text editor is not only used as a programming text editor, but also as a
+    standard one, notably to write emails or research papers.
+
+    This document will not discuss vim's most standard features, for those of
+    you who are interested in those you are encouraged to try out vimtutor.
+
+    Spell checking
+    ~~~~~~~~~~~~~~
+        Spell checking is automatically enabled on emails and markdown files, otherwise
+        you can enable it by using the command :set spell. The language is
+        guessed automatically upon a pre-selected list of languages. You should
+        modify those to your liking.
+
+        :GrammarousCheck
+        ----------------
+        Launches a grammatical check on your current buffer. As this is fairly slow you
+        should only run it after having written most of your file, until some
+        incremental implementation is implemented.
+    ~~~~~~~~~~~~~~
+
+    Sessions/Projects
+    ~~~~~~~~~~~~~~~~~
+        navi's Neovim has the concept of sessions/projects builtin. Whereas, in a
+        standard IDE, you'd save a project file and open it back navi's Neovim
+        automatically caches a project if you do not open it with any argument in a
+        folder.
+
+        This project will restore all of your opened buffers, menus and whatnot, so you
+        can resume your work where you last left it by simply opening back vim
+        in the same folder the next time, no strings attached.
+    ~~~~~~~~~~~~~~~~~
+
+    Syntax checking
+    ~~~~~~~~~~~~~~~
+        navi's Neovim  has an automatic and incremental syntax checker built in, which
+        allows you to quickly realize your mistakes before hitting the big ol' compile.
+        All of it is automatic and you should not have to tweak anything
+    ~~~~~~~~~~~~~~~
+
+    File browsing
+    ~~~~~~~~~~~~~
+        navi's Neovim has quite a few helping features to get you started and
+        quickly find what you want, no matter it be in a big programming project
+        or the extensive novel you've worked on.
+
+        :NERDTree - file drawer
+        -----------------------
+        A simple file drawer, useful for spatial representation of a project files.
+
+        :Tagbar - Tagbar
+        ----------------
+        Shows a bar on the right side of the screen with the current's files tags
+        (eg elements, macros, functions, etc).
+        Whereas a minimap allows you for spatial representation inside a single file, a
+        Tagbar allows you to have a logical representation of one's file logic. They
+        pretty much serve the same purpose, find yourself back in a file, but in
+        different fashions.
+
+
+        Ctrl+P / :Files
+        ---------------
+        Quick fuzzy search of files, allows you to quickly find the file you're looking
+        for by typing a part of its name.
+
+
+        :Ag
+        ---
+        A quick grep-like fuzzy finder to allow you to search for symbols quickly.
+
+        Ctrl+N
+        ------
+        Gets you multiple cursors on the next instance on the same word, allows for
+        quick reformatting of variables etc.
+    ~~~~~~~~~~~~~
+
+
+    Programming utilities
+    ~~~~~~~~~~~~~~~~~~~~~
+        navi's Neovim has been designed with large programming codebases in
+        mind. Here are some features that might be of interest.
+
+        "\c "
+        -----
+        Toggles comments on or off in the selected block.
+
+
+        :Gblame
+        -------
+        Interactive git blame for the current buffer, probably the preferred comment of
+        every programmer who wants to vent.
+
+
+        :Commits
+        --------
+        Interactive git commits browser, with a tree like visualization of commits.
+        While :Glog does something similar it is _extremely_ recommended not to use it
+        as this command is not only much faster but allows you to peak in commits
+        quickly, fuzzy search them, and have a tree-like representation of them
+        graphically.
+
+        \dd / :GdbStart
+        ---------------
+        Starts an interactive gdb session, with everything you'd expect from a modern
+        IDE.
+    ~~~~~~~~~~~~~~~~~~~~~
+
+
+The mail editor (and setup) Neomutt -> TODO
+The shell (fish) -> TODO
+The terminal multiplexer (tmux) -> TODO

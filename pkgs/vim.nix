@@ -1,5 +1,5 @@
 { config, pkgs, ... }:
-let 
+let
   # contains some patches for syntastic and Tagbar support since upstream is
   # abandonned
   workspace = pkgs.vimPlugins.vim-obsession.overrideAttrs (oldAttrs: rec {
@@ -15,16 +15,17 @@ let
 in
   let
     vimConf = {
+      # TODO: document snips, surround and syntastic workarounds
       programs.neovim = {
         enable = true;
         withPython3 = true;
         viAlias = true;
         vimAlias = true;
-        plugins = with pkgs.vimPlugins; [ 
+        plugins = with pkgs.vimPlugins; [
           # aethetics
           gruvbox airline
           # productivity
-          easymotion ctrlp vim-visual-multi surround
+          fzf-vim vim-visual-multi surround
           # dev
           tagbar fugitive nerdtree nerdcommenter nvim-gdb
           # dev - syntax
@@ -129,6 +130,9 @@ in
           autocmd FileType markdown setlocal spell
           let g:guesslang_langs = [ 'en_US', 'fr_FR', 'ja_JP' ]
           " TODO: incremental grammar checks in vim when spelllang is enabled would be neat in the future
+
+          " fzf using ctrl+p
+          nmap <C-P> :Files<CR>
         '';
 
 
@@ -136,8 +140,8 @@ in
     };
     in
     {
-        home-manager.users.govanify = vimConf; 
-        home-manager.users.root = vimConf; 
+        home-manager.users.govanify = vimConf;
+        home-manager.users.root = vimConf;
 
         environment.variables = {
           EDITOR = "vim";

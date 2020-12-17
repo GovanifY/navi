@@ -21,8 +21,6 @@
     cargo python R clang meson ninja
     gnumake ghc cabal-install gdb
     lean elan
-    # automatic spell checking
-    aspell
   ];
 
 
