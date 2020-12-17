@@ -29,7 +29,7 @@ in
           # dev
           tagbar fugitive nerdtree nerdcommenter nvim-gdb
           # dev - syntax
-          syntastic ultisnips vim-snippets deoplete-nvim
+          syntastic ultisnips vim-snippets deoplete-nvim vim-clang-format
           # dev - language specific
           rust-vim meson Jenkinsfile-vim-syntax Coqtail
           deoplete-rust deoplete-clang deoplete-jedi vim-nix
@@ -133,6 +133,10 @@ in
 
           " fzf using ctrl+p
           nmap <C-P> :Files<CR>
+
+          " automatic clang-format pickup
+          let g:clang_format#detect_style_file = 1
+          let g:clang_format#auto_format=1
         '';
 
 
@@ -140,10 +144,10 @@ in
     };
     in
     {
-        home-manager.users.govanify = vimConf;
-        home-manager.users.root = vimConf;
+      home-manager.users.govanify = vimConf;
+      home-manager.users.root = vimConf;
 
-        environment.variables = {
-          EDITOR = "vim";
-        };
-      }
+      environment.variables = {
+        EDITOR = "vim";
+      };
+    }
