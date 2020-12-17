@@ -29,14 +29,15 @@ in
           # dev
           tagbar fugitive nerdtree nerdcommenter nvim-gdb
           # dev - syntax
-          syntastic ultisnips vim-snippets deoplete-nvim vim-clang-format
+          syntastic ultisnips vim-snippets deoplete-nvim 
+          neoinclude vim-clang-format
           # dev - language specific
           rust-vim meson Jenkinsfile-vim-syntax Coqtail vim-fish
           deoplete-rust deoplete-clang deoplete-jedi vim-nix
           # sessions
           vim-misc workspace
           # spell check
-          vim-grammarous #vim-DetectSpellLang vim-operator-user unite vimproc
+          vim-grammarous #vim-DetectSpellLang
         ];
         extraConfig = ''
           " This should be enabled by default
@@ -167,6 +168,7 @@ in
           let g:deoplete#enable_at_startup = 1
           let g:deoplete#sources#clang#libclang_path = '${pkgs.llvmPackages.libclang}/lib/libclang.so'
           let g:deoplete#sources#clang#clang_header = '${pkgs.llvmPackages.libclang.out}/include/'
+          set completeopt-=preview
 
           " TODO: wait for https://github.com/deoplete-plugins/deoplete-clang/issues/95
           "let g:deoplete#sources#clang#clang_complete_database = 'build'
