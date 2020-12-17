@@ -25,7 +25,7 @@ in
           # aethetics
           gruvbox airline
           # productivity
-          fzf-vim vim-visual-multi surround
+          fzf-vim vim-visual-multi surround goyo
           # dev
           tagbar fugitive nerdtree nerdcommenter nvim-gdb
           # dev - syntax

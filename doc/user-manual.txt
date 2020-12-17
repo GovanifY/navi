@@ -50,7 +50,7 @@ The text editor: Neovim
         All of it is automatic and you should not have to tweak anything
     ~~~~~~~~~~~~~~~
 
-    File browsing
+    File browsing & Productivity
     ~~~~~~~~~~~~~
         navi's Neovim has quite a few helping features to get you started and
         quickly find what you want, no matter it be in a big programming project
@@ -84,6 +84,11 @@ The text editor: Neovim
         ------
         Gets you multiple cursors on the next instance on the same word, allows for
         quick reformatting of variables etc.
+
+        :Goyo
+        -----
+        This launches a distraction-free vim, suitable to work for long period
+        of times on writing focused tasks.
     ~~~~~~~~~~~~~
 
 
