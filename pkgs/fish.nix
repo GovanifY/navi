@@ -1,7 +1,11 @@
 { config, pkgs, lib, ... }: {
   users.defaultUserShell = pkgs.fish; 
-  programs.fish = {
+   programs.fish = {
+    promptInit = ''
+      any-nix-shell fish --info-right | source
+    '';
     enable = true;
+    shellAliases.nbuild = "nix-build /nix/var/nix/profiles/per-user/root/channels/nixos/ --run fish --run-env -A";
   };
   home-manager.users.govanify = {
     home.file.".config/fish/config.fish".source = ./../dotfiles/fish/config.fish;

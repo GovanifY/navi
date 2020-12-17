@@ -61,6 +61,12 @@ function fish_prompt
     set -l blue (set_color -o blue)
     set -l normal (set_color normal)
 
+    set -l nix_shell_info (
+      if test -n "$IN_NIX_SHELL"
+        echo -n " $green(nix-shell)"
+      end
+    )
+
     set -l arrow_color "$green"
     if test $__last_command_exit_status != 0
         set arrow_color "$red"
@@ -84,5 +90,5 @@ function fish_prompt
         end
     end
 
-    echo -n -s $arrow ' '$cwd $repo_info $normal ' '
+    echo -n -s $arrow ' '$cwd $repo_info $normal $nix_shell_info ' '
 end

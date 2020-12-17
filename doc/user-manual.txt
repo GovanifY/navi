@@ -125,4 +125,15 @@ The text editor: Neovim
 
 The mail editor (and setup) Neomutt -> TODO
 The shell (fish) -> TODO
+========================
+
+    Getting a build environment
+    ---------------------------
+    Sometimes, in your life, you might want to compile a program that's already
+    packaged in nix. You probably don't want to have to install all the
+    dependencies, figure out what's missing, etc. In such a case you're in luck! You
+    can simply run "nbuild <package>" where <package> is your package name, eg
+    "nbuild pcsx2" and it will drop you into a shell environment that has all the
+    required setup to build your software!
+
 The terminal multiplexer (tmux) -> TODO

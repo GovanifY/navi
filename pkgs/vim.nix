@@ -31,7 +31,7 @@ in
           # dev - syntax
           syntastic ultisnips vim-snippets deoplete-nvim vim-clang-format
           # dev - language specific
-          rust-vim meson Jenkinsfile-vim-syntax Coqtail
+          rust-vim meson Jenkinsfile-vim-syntax Coqtail vim-fish
           deoplete-rust deoplete-clang deoplete-jedi vim-nix
           # sessions
           vim-misc workspace
@@ -131,8 +131,8 @@ in
           let g:guesslang_langs = [ 'en_US', 'fr_FR', 'ja_JP' ]
           " TODO: incremental grammar checks in vim when spelllang is enabled would be neat in the future
 
-          " fzf using ctrl+p
-          nmap <C-P> :Files<CR>
+          " fzf using ctrl+p, also avoiding focus on nerdtree
+          nnoremap <silent> <expr> <C-P> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : ''').":FZF\<cr>"
 
           " automatic clang-format pickup
           let g:clang_format#detect_style_file = 1
