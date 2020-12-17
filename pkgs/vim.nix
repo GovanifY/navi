@@ -85,6 +85,7 @@ in
           " Hack supports this so let's use it
           let g:airline_powerline_fonts = 1
 
+          " TODO: check pcsx2 compile db, syntastic seems to not like it
           " make syntastic actually useful
           let g:syntastic_always_populate_loc_list = 1
           let g:syntastic_auto_loc_list = 1
@@ -161,6 +162,14 @@ in
           " automatic clang-format pickup
           let g:clang_format#detect_style_file = 1
           let g:clang_format#auto_format=1
+
+          " auto-complete
+          let g:deoplete#enable_at_startup = 1
+          let g:deoplete#sources#clang#libclang_path = '${pkgs.llvmPackages.libclang}/lib/libclang.so'
+          let g:deoplete#sources#clang#clang_header = '${pkgs.llvmPackages.libclang.out}/include/'
+
+          " TODO: wait for https://github.com/deoplete-plugins/deoplete-clang/issues/95
+          "let g:deoplete#sources#clang#clang_complete_database = 'build'
         '';
 
 
@@ -170,7 +179,9 @@ in
     {
       home-manager.users.govanify = vimConf;
       home-manager.users.root = vimConf;
-
+      environment.systemPackages = with pkgs; [
+        llvmPackages.libclang
+      ];
       environment.variables = {
         EDITOR = "vim";
       };
