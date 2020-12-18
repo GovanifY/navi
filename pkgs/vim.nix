@@ -15,25 +15,24 @@ let
 in
   let
     vimConf = {
-      # TODO: document snips, surround and syntastic workarounds
+      # TODO: document coc workarounds
       programs.neovim = {
         enable = true;
         withPython3 = true;
         viAlias = true;
         vimAlias = true;
         plugins = with pkgs.vimPlugins; [
-          # aethetics
+          # aesthetics
           gruvbox airline
           # productivity
-          fzf-vim vim-visual-multi surround goyo
+          fzf-vim vim-visual-multi goyo
           # dev
           tagbar fugitive nerdtree nerdcommenter nvim-gdb
           # dev - syntax
-          syntastic ultisnips vim-snippets deoplete-nvim 
-          neoinclude vim-clang-format
+          coc-snippets vim-snippets coc-nvim vim-clang-format
           # dev - language specific
           rust-vim meson Jenkinsfile-vim-syntax Coqtail vim-fish
-          deoplete-rust deoplete-clang deoplete-jedi vim-nix
+          vim-nix coc-python
           # sessions
           vim-misc workspace
           # spell check
@@ -120,14 +119,6 @@ in
               " Build dir is same as for c, so use that func.
               autocmd Filetype cpp :call Syntastic_c_build_dir_set()
 
-
-          " ultisnips keybinds
-          let g:UltiSnipsExpandTrigger="<tab>"
-          let g:UltiSnipsJumpForwardTrigger="<c-x>"
-          let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-
-          " If you want :UltiSnipsEdit to split your window.
-          let g:UltiSnipsEditSplit="vertical"
           set sessionoptions+=blank
           set t_Co=256
           set termguicolors
@@ -164,14 +155,68 @@ in
           let g:clang_format#detect_style_file = 1
           let g:clang_format#auto_format=1
 
-          " auto-complete
-          let g:deoplete#enable_at_startup = 1
-          let g:deoplete#sources#clang#libclang_path = '${pkgs.llvmPackages.libclang}/lib/libclang.so'
-          let g:deoplete#sources#clang#clang_header = '${pkgs.llvmPackages.libclang.out}/include/'
-          set completeopt-=preview
 
-          " TODO: wait for https://github.com/deoplete-plugins/deoplete-clang/issues/95
-          "let g:deoplete#sources#clang#clang_complete_database = 'build'
+          " auto completion config
+          set hidden
+          set nobackup
+          set nowritebackup
+          set updatetime=300
+          set shortmess+=c
+          inoremap <silent><expr> <TAB>
+                \ pumvisible() ? coc#_select_confirm() :
+                \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump','''])\<CR>" :
+                \ <SID>check_back_space() ? "\<TAB>" :
+                \ coc#refresh()
+
+          function! s:check_back_space() abort
+            let col = col('.') - 1
+            return !col || getline('.')[col - 1]  =~# '\s'
+          endfunction
+
+          let g:coc_snippet_next = '<tab>'
+          function! s:check_back_space() abort
+            let col = col('.') - 1
+            return !col || getline('.')[col - 1]  =~# '\s'
+          endfunction
+          inoremap <silent><expr> <c-space> coc#refresh()
+
+          " Make <CR> auto-select the first completion item and notify coc.nvim to
+          " format on enter, <cr> could be remapped by other vim plugin
+          inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                                        \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+          set statusline^=%{coc#status()}%{get(b:,'coc_current_function',''')}
+
+          let g:coc_user_config = {
+          \'languageserver': {
+          \     'bash': {
+          \       "command": "${pkgs.nodePackages.bash-language-server}/bin/bash-language-server",
+          \       "args": ["start"],
+          \       "filetypes": ["sh"],
+          \       "rootPatterns": [".vim/", ".git/", ".hg/"],
+          \       "ignoredRootPaths": ["~"],
+          \     },
+          \     "nix": {
+          \        "command": "${pkgs.rnix-lsp}/bin/rnix-lsp",
+          \        "filetypes": ["nix"]
+          \     },
+          \     "clangd": {
+          \        "command": "${pkgs.llvmPackages.libclang.out}/bin/clangd",
+          \        "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".git/"],
+          \        "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp", "h"]
+          \     },
+          \     "rust": {
+          \       "command": "${pkgs.rust-analyzer}/bin/rust-analyzer",
+          \       "filetypes": ["rust", "rs"],
+          \       "rootPatterns": ["Cargo.toml"]
+          \     },
+          \     "haskell": {
+          \       "command": "${pkgs.haskellPackages.haskell-language-server.out}/bin/haskell-language-server-wrapper",
+          \       "args": ["--lsp"],
+          \       "rootPatterns": ["*.cabal", "stack.yaml", "cabal.project", "package.yaml", "hie.yaml"],
+          \       "filetypes": ["haskell", "lhaskell", "hs"]
+          \     }
+          \  }
+          \}
         '';
 
 
@@ -181,9 +226,6 @@ in
     {
       home-manager.users.govanify = vimConf;
       home-manager.users.root = vimConf;
-      environment.systemPackages = with pkgs; [
-        llvmPackages.libclang
-      ];
       environment.variables = {
         EDITOR = "vim";
       };
