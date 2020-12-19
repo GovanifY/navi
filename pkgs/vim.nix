@@ -85,40 +85,6 @@ in
           " Hack supports this so let's use it
           let g:airline_powerline_fonts = 1
 
-          " TODO: check pcsx2 compile db, syntastic seems to not like it
-          " make syntastic actually useful
-          let g:syntastic_always_populate_loc_list = 1
-          let g:syntastic_auto_loc_list = 1
-          let g:syntastic_check_on_open = 0
-          let g:syntastic_check_on_w = 1
-          let g:syntastic_check_on_wq = 0
-          " clang_check can use a compile db which greps all includes
-          let g:syntastic_c_checkers = ['clang_tidy']
-              let g:syntastic_c_clang_tidy_post_args = '''
-              autocmd Filetype c :call Syntastic_c_build_dir_set()
-              
-              func! Syntastic_c_build_dir_set()
-                let g:syntastic_c_clang_tidy_args = 'build'
-                while !isdirectory(expand('%:h') . '/' . g:syntastic_c_clang_tidy_args)
-                  let g:syntastic_c_clang_tidy_args = '../' . g:syntastic_c_clang_tidy_args
-                  " Give up after after 10 dirs up (5 + 3 * 10).
-                  if strlen(g:syntastic_c_clang_tidy_args) > 35
-                    let g:syntastic_c_clang_tidy_args = 'BUILD_DIR_NOT_FOUND'
-                    break
-                  endif
-                endwhile
-                let g:syntastic_c_clang_tidy_args =
-                \ '-p='''' . expand('%:h') . '/' . g:syntastic_c_clang_tidy_args . ''''''
-                let g:syntastic_cpp_clang_tidy_args = g:syntastic_c_clang_tidy_args
-              endfunc
-          let g:syntastic_cpp_checkers = ['clang_check']
-          let g:syntastic_cpp_clang_check_post_args = ""
-
-          let g:syntastic_cpp_checkers = ['clang_tidy']
-              let g:syntastic_cpp_clang_tidy_post_args = '''
-              " Build dir is same as for c, so use that func.
-              autocmd Filetype cpp :call Syntastic_c_build_dir_set()
-
           set sessionoptions+=blank
           set t_Co=256
           set termguicolors
@@ -187,6 +153,7 @@ in
           set statusline^=%{coc#status()}%{get(b:,'coc_current_function',''')}
 
           let g:coc_user_config = {
+          \'preferences' : { "useQuickfixForLocations": 'true' },
           \'languageserver': {
           \     'bash': {
           \       "command": "${pkgs.nodePackages.bash-language-server}/bin/bash-language-server",
@@ -218,8 +185,6 @@ in
           \  }
           \}
         '';
-
-
       };
     };
     in
