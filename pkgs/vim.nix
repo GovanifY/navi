@@ -89,6 +89,9 @@ in
           set t_Co=256
           set termguicolors
 
+          " allow vim to read shift-jis files
+          set fileencodings=ucs-bom,utf-8,sjis,default
+
           " auto create sessions per folder and restore them
           let g:session_autoload = 'yes'
           let g:session_autosave = 'yes'
