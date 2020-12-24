@@ -8,6 +8,14 @@
   # TODO: use local clock time instead of geoclue
   location.provider = "geoclue2";
 
+  # TODO: currently doesn't hide stage1, to fix?
+  boot.plymouth.enable = true;
+  boot.plymouth.logo = 
+    pkgs.fetchurl {
+      url = "https://govanify.com/img/star.png";
+      sha256 = "19ij7sn6xax9i7df97i3jmv0nrsl9cvr9p6j9vnq4r4n5n81zq8i";
+    };
+
   # firefox no segfaulty
   xdg.portal.enable = false;
 
