@@ -197,4 +197,7 @@ in
       environment.variables = {
         EDITOR = "vim";
       };
+      environment.systemPackages = with pkgs; [
+        nodejs
+      ];
     }
