@@ -71,5 +71,7 @@
         });
       };
     };
+
+  boot.kernelParams = [ "vt.global_cursor_default=0" "intel_iommu=on" "quiet" ];
 }
 

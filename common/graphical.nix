@@ -259,4 +259,12 @@
         gtk-cursor-theme-name=breeze_cursors
       ''; 
   };
+
+
+  security.wrappers = { plymouth-quit.source = 
+        (pkgs.writeScriptBin "plymouth-quit" ''
+         #!${pkgs.bash}/bin/bash -p
+         ${pkgs.systemd}/bin/systemctl start plymouth-quit.service
+      '').outPath + "/bin/plymouth-quit"; 
+    };
 }

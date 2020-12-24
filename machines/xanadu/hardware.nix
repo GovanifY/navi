@@ -43,7 +43,4 @@
   networking.interfaces.wlp1s0.useDHCP = true;
 
 
-  # i915 is a bitch
-#  boot.kernelParams = [ "i915.enable_psr=0" ];
-
 }

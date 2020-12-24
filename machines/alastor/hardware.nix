@@ -25,7 +25,6 @@
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = [ "dm-snapshot" ];
   boot.kernelModules = [ "kvm-intel" "ieee80211_crypt_tkip" "vfio_pci" ];
-  boot.kernelParams = [ "intel_iommu=on" ];
   boot.extraModulePackages = [ ];
 
   boot.initrd.luks.devices = 
