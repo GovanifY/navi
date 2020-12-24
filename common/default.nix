@@ -63,8 +63,5 @@
                                  "en.wikipedia.org" "google.com" "govanify.com" "lkml.org" "www.apache.org" 
                                  "www.duckduckgo.com" "www.kernel.org" "www.mozilla.org" "www.xkcd.com"];
 
-
-    virtualisation.docker.enable = true;
-
 }
 
