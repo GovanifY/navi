@@ -1,6 +1,12 @@
 { config, lib, pkgs, ... }: {
   imports = [ ./../pkgs/termite.nix ];
   services.mingetty.autologinUser = "govanify";
+  services.redshift = {
+    enable = true;
+    package = pkgs.redshift-wlr;
+  };
+  # TODO: use local clock time instead of geoclue
+  location.provider = "geoclue2";
 
   # firefox no segfaulty
   xdg.portal.enable = false;
@@ -16,7 +22,7 @@
       wineWowPackages.full
       kanshi # autorandr
       # misc wayland utils
-      wofi grim wl-clipboard slurp 
+      wofi grim wl-clipboard slurp brightnessctl
       # multimedia
       mpv imv 
       # reading
