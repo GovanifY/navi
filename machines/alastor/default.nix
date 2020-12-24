@@ -5,7 +5,6 @@
   imports = [ ./hardware.nix
               ../../common/default.nix
               ../../component/tor.nix
-              ../../common/mac.nix
               ../../common/desktop.nix
               ../../common/bluetooth.nix
             ];
