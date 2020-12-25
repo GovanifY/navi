@@ -212,6 +212,26 @@
     };
   };
 
+  systemd.user.services.swaywm = {
+    description = "Sway - Wayland window manager";
+    documentation = [ "man:sway(5)" ];
+    bindsTo = [ "graphical-session.target" ];
+    wants = [ "graphical-session-pre.target" ];
+    after = [ "graphical-session-pre.target" ];
+    # We explicitly unset PATH here, as we want it to be set by
+    # systemctl --user import-environment in startsway
+    environment.PATH = lib.mkForce null;
+    serviceConfig = {
+      Type = "simple";
+      ExecStart = ''
+        ${pkgs.sway}/bin/sway
+      '';
+      Restart = "on-failure";
+      RestartSec = 1;
+      TimeoutStopSec = 10;
+    };
+  };
+
   # the gpg thing should be done in headfull but we need to do that before it
   # execs sway because sway obviously never returns
   environment.interactiveShellInit = ''
@@ -233,9 +253,15 @@
       # unreliable yet so we just try to clone until it works
       ~/.cache/clone-pass.sh &
     fi
-    if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]] && [[ $EUID -ne 0 ]]; then
-      xrdb -load /etc/X11/Xresources &> /dev/null
-      exec sway
+    '';
+
+  environment.shellInit = ''
+    if [[ -z $DISPLAY ]] && [[ $EUID -ne 0 ]]; then
+      if ! systemctl is-active --quiet swaywm; then
+        xrdb -load /etc/X11/Xresources &> /dev/null
+        systemctl --user import-environment
+        systemctl --user start swaywm
+      fi
     fi
   '';
 
@@ -268,5 +294,8 @@
       '').outPath + "/bin/plymouth-quit"; 
     };
   systemd.services.systemd-ask-password-plymouth.enable = lib.mkForce false;
-  systemd.services.plymouth-quit.wantedBy = [ "" ];
+  # XXX: for some reason shellInit isn't called by plymouth which never starts
+  # the user target, hmmm 
+  #systemd.services.plymouth-quit-wait.enable = lib.mkForce false;
+  #systemd.services.plymouth-quit.wantedBy = lib.mkForce [  ];
 }
