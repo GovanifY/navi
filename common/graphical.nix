@@ -5,8 +5,6 @@
     enable = true;
     package = pkgs.redshift-wlr;
   };
-  # TODO: use local clock time instead of geoclue
-  location.provider = "geoclue2";
 
   # TODO: currently doesn't hide stage1, to fix?
   boot.plymouth.enable = true;

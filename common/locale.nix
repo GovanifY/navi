@@ -1,8 +1,11 @@
 { config, pkgs, ... }:
 {
 
-  # Set your time zone.
+  # Set your time zone. changeme when you're in another country
+  # XXX: make this device specific?
   time.timeZone = "Europe/Paris";
+  location.latitude = 48.864716;
+  location.longitude = 2.349014;
 
   
   # Enable fonts to use on your system.  You should make sure to add at least
