@@ -267,4 +267,6 @@
          ${pkgs.systemd}/bin/systemctl start plymouth-quit.service
       '').outPath + "/bin/plymouth-quit"; 
     };
+  systemd.services.systemd-ask-password-plymouth.enable = lib.mkForce false;
+  systemd.services.plymouth-quit.wantedBy = [ "" ];
 }

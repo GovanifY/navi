@@ -248,3 +248,5 @@ bar {
 }
 
 include /etc/sway/config.d/*
+
+exec plymouth-quit
