@@ -6,7 +6,8 @@
 
   users.users.govanify = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "audio" "wireshark" "adbusers" ]; 
+    extraGroups = [ "wheel" "networkmanager" "audio" "wireshark" "adbusers"
+                    "libvirt" ]; 
    };
 
    users.users.govanify.openssh.authorizedKeys.keyFiles  = [ ./../secrets/ssh_keys/navi.pub ];

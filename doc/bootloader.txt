@@ -1,0 +1,108 @@
+navi's bootloader is part of the infrastructure security design, it is thus
+encouraged to get motherboards with replacable bootloaders.
+The bootloader is GRUB based, with stage 1 requiring a password to boot into
+stage 2 without any recovery options. navi's grub definition will be used for
+any multiboot definition.
+
+we should (not doneyet):
+
+* enforce check_signatures on kern
+* rename menu entries
+* disable menu timeout entirely, only enable on trigger
+
+
+Some thoughts on tamper proofing:
+
+A tamper evident boot cannot, at the time being, properly be implemented.
+
+There are two main ways that are currently used to implement such a thing:
+
+* Intel Boot Guard et al., where keys are fused in the CPU to verify the
+  bootloader at runtime.
+
+* Purism et al. external TOTP/USB key method, which ensures the bootloader
+  integrity at runtime through the TPM chip.
+
+
+None of those methods work, here is why:
+
+* For Intel Boot Guard or any fused keys in the CPU you could simply replace the
+  CPU by one of your choosing or, if that's too demanding, get another laptop
+  and simply replace the storage device.
+
+* For TPM based external protection you need to replace both the laptop and the
+  external device.
+
+
+As you can see, this only moves the goalpost. If you have physical access you
+can reflash the bootloader, and an adversary with enough wits can bypass Intel
+Boot Guard by replacing the CPU and/or the motherboard/entire laptop if it takes
+too much time, making a prepared attack take as much time(connect to the SOIC vs
+replace storage in a laptop from another). It is also noteworthy that you can
+still boot with Intel Boot Guard unverified, albeit with a 30minutes timeout.
+This is more than enough to a skilled adversary to copy the decryption keys in
+memory, wait for network and send them off to the network, whereas the attacker
+with a local copy of your disk can now access your content.
+
+External verification now is not only annoying but also fundamentally broken. If
+you have physical access to the computer, maybe dumping the secrets of the TPM
+is too hard for you, but having access to the external device clearly isn't. If
+you are enough of a airhead to let your laptop unattended somewhere I assume you
+also are to let your keys on your desk when you're drinking a coffee.
+
+
+Some heuristics can be used to analyze a lower stage bootloader but, as we have
+seen with the Nintendo Switch[1], this can be easily broken through
+virtualization, MMIO or a combination of both. This can always be used as
+heuristics if the check is designed through security by obscurity but only as
+an indication and not a fundamental proof your bootloader hasn't been tampered
+with.
+
+
+
+
+So what's the best plan of action there? The optimal path would be to have the SOIC
+flash signed and encrypted with a key that is write only and fused in the
+CPU(a TPM has to transmit its keys at some point which makes it trivial to MITM
+key material transfer). The next stage can then derive the unlocking keys from its own
+secrets and the user supplied password. As long as the stage 1 bootloader
+binary stays encrypted and stage 0 secrets hidden the adversary cannot guess its secrets and trivially
+replace your laptop, they will have to break into your CPU secrets first
+which is already much harder to pull off. The easiest exploitation path for a
+CPU I'm aware of would require glitch attacks and flash rewriting:
+We want the CPU to boot into unsigned code, thus we need to make it pass the sig
+check. 
+To do so we can use an EMFI-like type of device to do it without any
+soldering. Once this is done we need the CPU to boot into some code we designed,
+and thus need to overwrite the SOIC flash contents. Assuming the CPU always
+decrypts stage 1 we need at least 2 glitch targets in a row: one to nop out the
+encryption routine, the other to nop out signature checks.
+This requires a lot of preliminary work but can eventually be pulled off. This
+is why CPUs should have strong anti-glitching proprieties. Such a design
+would require strong protections against such attacks along with protections
+against correlation power attacks, timing attacks and equivalent for the
+cryptography side of things.
+
+Unfortunately no such widely available CPU/TPM combination exists to my
+knowledge, so we are in a bit of a pickle.
+
+
+The next best plan of action is to have a physical intrusion system. An additional
+portable one if you move a lot should also be considered at your places of
+residences.
+
+Thus navi's security approach to bootloader will only be up to physical access
+to the device as I cannot in my right mind design and commercialize modern CPUs. 
+
+
+
+tl;dr: Intel Boot Guard, Purism, Heads etc all kind of sucks. Heads doesn't even
+check the GRUB binary signature and adds some attack surface by having a full
+blown kernel in the lot, which is even worse than where you've started at.
+Get yourself some sensors.
+
+
+
+
+
+[1]: https://arxiv.org/abs/1905.07643

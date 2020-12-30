@@ -27,10 +27,10 @@ This can of course be modified to fit your environment. I found this setup to be
 the most useful when proceeding to researching theoretical sciences and writing
 papers.
 
-Some apps are sandboxed by default using apparmor profiles but
+Some apps are sandboxed by default using the firejail sandbox application but
 not all of them. For example, zsh is not sandboxed by default. In the example up
-above, to start a sandboxed shell, you would have to explicitely type
-`sandboxed_sh` (or whatever this ends up being named).
+above, to start a sandboxed shell, you would have to explicitely type `firejail
+zsh`.
 When the program is sandboxed by default though, it proceeds on a whitelist
 basis(blacklisting any filesystem paths it doesn't need) and cuts off the
 network along with disabling as much attack surface as possible.
@@ -93,8 +93,14 @@ The security of each of those components will be further discussed later on.
 CLI apps are usually preferred as they are easier to fuzz, usually snappier on
 lower end machines and integrate well with this setup overall.
 
-The security architecture is overall sandbox based using AppArmor. 
-AppArmor sandbox should be defined on a whitelist basis and to block everything
+The security architecture is overall sandbox based using firejail. Firejail was
+preferred over bwrap as filesystem whitelisting et al is supported by default
+and it is easier to set it up overall. The attack surface of firejail is
+relatively constrained by dropping privileges most of the time and most
+attacks rely on the fact that firejail is an SUID program which could lead to an
+LPE _outside_ of the sandbox, which is not a threat model considered as headfull
+systems are mostly not multi-user.
+Firejail sandbox should be defined on a whitelist basis and to block everything
 by default, and unblock as an application needs it. The "standard" jail ran for
 programs with no profile cuts off internet, dbus and sensitive files which could
 lead to, say, code execution. This for sure is not a silver bullet but I believe
@@ -154,7 +160,7 @@ user processes and daemons:
 
 * firefox is constantly fuzzed both publically and privately by state-level
   threat actors and should be considered to be broken. Firefox is
-  sandboxed by default with apparmor on top of the per-tab sandbox(which uses
+  sandboxed by default with firejail on top of the per-tab sandbox(which uses
   the same technology) and disables JavasScript and trackable medias by default,
   which makes it MUCH harder, if not impossible to get an RCE. This is even more
   true on firefox since a good portion of the application is being ported to

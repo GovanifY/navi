@@ -1,0 +1,36 @@
+As you might have noticed, libvirt is running as root on navi's systems and no
+effort is made whatsoever to segment virtualization on such a system.
+
+This is due to something that some security professionals might argue with but
+is my take for navi's security's approach:
+
+VIRTUALIZATION IS FUNDAMENTALLY UNSAFE.
+
+virtualization, without an interpreter at least, requires executing instructions
+of your choosing or close equivalents in your target architecture. This is
+either done by a JIT or AOT compiler, as can be seen on video game console
+emulators and cross-architecture emulators a la Rosetta, or directly running
+bare metal on your CPU with a privilege level.
+
+While the JIT/AOT approach is somewhat safer, the KVM approach used for any
+modern VM software is fundamentally unsafe as it requires near bare metal rights
+to the CPU and if there's anything modern security research has told us it is
+not to trust out-of-order modern CPU security design.
+
+Tools such as sandsifter have commonly found undocumented and downright insecure
+edge cases whereas spectre and meltdown have shown huge gaps between security
+levels of your CPU.
+It is also worthy to note that it is pretty much impossible for me to secure
+your guest device, for obvious reasons, leading to a much bigger attack surface
+than necessary.
+
+Obviously, this is not the only thing that raises eyebrows. VM that needs
+internet connectivity will have to use the host network interface, which raises
+even more the attack surface and GPU acceleration needs either a full access to
+a baremetal device or a shared access to one, eg through SR-IOV.
+All of this introduces layers upon layers of complexity that I simply cannot
+manage, nor can anyone, with insecure original setups with almost full control
+over baremetal functionalities.
+
+
+TODO: difference between sandboxed and virtualized software execution env

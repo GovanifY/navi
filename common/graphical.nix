@@ -52,7 +52,7 @@
       # recording/streaming
       obs-studio obs-wlrobs obs-v4l2sink
 
-      jdk11 
+      jdk
       android-studio
       (
       pkgs.writeTextFile {
