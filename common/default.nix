@@ -72,7 +72,8 @@
       };
     };
 
-  boot.kernelParams = [ "vt.global_cursor_default=0" "intel_iommu=on" "quiet" ];
+  boot.kernelParams = [ "vt.global_cursor_default=0" "intel_iommu=on" "quiet"
+                        "i915.enable_guc=0" "i915.enable_gvt=1" ]; # i915 iGVT-g
   # XXX: enforce signatures on cryptomount
   #boot.loader.grub.extraGrubInstallArgs = [ "--pubkey=grub.pub" "--modules=verifiers gcry_sha256 gcry_sha512 gcry_dsa gcry_rsa" ];
   boot.loader.grub.extraGrubInstallArgs = [ "--modules=verifiers gcry_sha256 gcry_sha512 gcry_dsa gcry_rsa" ];

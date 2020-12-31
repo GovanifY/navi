@@ -6,7 +6,7 @@
 {
 
   imports =
-    [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
+    [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix> 
     ];
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
   boot.loader.grub = {
@@ -24,7 +24,9 @@
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = [ "dm-snapshot" ];
-  boot.kernelModules = [ "kvm-intel" "ieee80211_crypt_tkip" "vfio_pci" ];
+  # virtualization and iGVT-g
+  boot.kernelModules = [ "kvm-intel" "ieee80211_crypt_tkip" "vfio_pci" "kvmgt"
+                         "vfio-iommu-type1" "vfio-mdev"];
   boot.extraModulePackages = [ ];
 
   boot.initrd.luks.devices = 

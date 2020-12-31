@@ -37,6 +37,11 @@
     #  };
   networking.bridges.br0.interfaces = [ "wlp3s0" ];
   networking.dhcpcd.denyInterfaces = [ "virbr0" ];
+  modules.igvt-libvirt = {
+    enable = true;
+    gvt_type = "i915-GVTg_V5_1";
+    gvt_pci = "0000:00:02.0";
+  };
 
   home-manager.users.govanify = {
     home.file."Pictures/wallpaper.png".source  = ./wallpaper.png;
