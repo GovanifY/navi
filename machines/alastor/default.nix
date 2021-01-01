@@ -35,13 +35,13 @@
     #  enable = true; 
     #  interface = "wlp1s0"; 
     #  };
-  networking.bridges.br0.interfaces = [ "wlp3s0" ];
-  networking.dhcpcd.denyInterfaces = [ "virbr0" ];
-  modules.igvt-libvirt = {
+   modules.my.virtualization = {
     enable = true;
-    gvt_type = "i915-GVTg_V5_1";
-    gvt_pci = "0000:00:02.0";
+    pci_devices = "8086:1912";
+    bridge_devices = [ "wlp3s0" ];
   };
+  # otherwise stalls on boot for some reason
+  systemd.services.sys-subsystem-net-devices-enp0s20f0u2.enable = lib.mkForce false;
 
   home-manager.users.govanify = {
     home.file."Pictures/wallpaper.png".source  = ./wallpaper.png;

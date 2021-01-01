@@ -34,3 +34,16 @@ over baremetal functionalities.
 
 
 TODO: difference between sandboxed and virtualized software execution env
+
+
+You can use the script below to generate blabla
+
+#!/bin/sh
+UUID=$(uuidgen)
+cat << EOF 
+<hostdev mode='subsystem' type='mdev' managed='no' model='vfio-pci' display='on'>
+  <source>
+    <address uuid='$UUID'/>
+  </source>
+</hostdev>
+EOF

@@ -23,10 +23,13 @@
   };
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" ];
-  boot.initrd.kernelModules = [ "dm-snapshot" ];
   # virtualization and iGVT-g
   boot.kernelModules = [ "kvm-intel" "ieee80211_crypt_tkip" "vfio_pci" "kvmgt"
                          "vfio-iommu-type1" "vfio-mdev"];
+  # isolate iGPU for libvirtd
+  boot.initrd.kernelModules = [ "vfio_virqfd" "vfio_pci" "vfio_iommu_type1"
+                                "vfio" "dm-snapshot" ];
+  boot.kernelParams = [ "vfio-pci.ids=8086:1912" ];
   boot.extraModulePackages = [ ];
 
   boot.initrd.luks.devices = 
