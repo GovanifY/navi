@@ -1,12 +1,30 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
   let
     # grub should be a coreboot payload when possible and patched: disable
     # grub-rescue, only cryptomount the given drive in argument and navi names.
     # we should then override install-grub to change nixos to navi and enable
     # smooth transition to sway with plymouth
+    # /!\: IF YOU WANT TO DEBUG GRUB DISABLE THE RESCUE_RUN PATCH UNLESS YOU WANT
+    # TO HAVE AN UNBOOTABLE SYSTEM
     grubPatch = ''
       sed -i 's/"Welcome to GRUB/"Welcome to navi/' $(grep -Rl '"Welcome to GRUB')
+      sed -i 's/grub_rescue_run ();/grub_exit ();/' $(grep -Rl 'grub_rescue_run ();')
       '';
+
+    # a bit more verbose than I'd like since I don't think we can override a let.
+    install-grub-pl = {
+      src = ((pkgs.fetchurl {
+            url = "https://raw.githubusercontent.com/NixOS/nixpkgs/a7a0d79ef3fd0bf86847612597f4b62ce6ec5a18/nixos/modules/system/boot/loader/grub/install-grub.pl";
+            sha256 = "19ij7sn6xax9i7df97i3jmv0nrsl9cvr9p6j9vnq4r4n5n81zq8i";
+    }).overrideAttrs (oldAttrs: rec {
+      # we should also add stage 2 signing here
+      postPatch = ''
+        sed -i 's/"NixOS/"navi/' $(grep -Rl '"NixOS')
+      '';
+    }));
+      utillinux = pkgs.util-linux;
+      btrfsprogs = pkgs.btrfs-progs;
+    };
   in
   {
     imports =
@@ -77,5 +95,13 @@
   # XXX: enforce signatures on cryptomount
   #boot.loader.grub.extraGrubInstallArgs = [ "--pubkey=grub.pub" "--modules=verifiers gcry_sha256 gcry_sha512 gcry_dsa gcry_rsa" ];
   boot.loader.grub.extraGrubInstallArgs = [ "--modules=verifiers gcry_sha256 gcry_sha512 gcry_dsa gcry_rsa" ];
+  boot.loader.grub.configurationName = "navi";
+
+  system.build.installBootLoader = config.system.build.installBootLoader.overrideAttrs (oldAttrs: rec {
+    # we replace the og perl file by our patched version
+    postPatch = ''
+      sed -i 's/.*\/bin\/perl .*\.pl/${pkgs.perl}/bin/perl ${install-grub-pl}'  $(grep -Rl '.*\/bin\/perl .*\.pl')
+    '';
+  });
 }
 

@@ -1,4 +1,13 @@
-{ config, lib, pkgs, ... }: {
+{ config, lib, pkgs, ... }:
+let
+  breeze-navi = pkgs.breeze-plymouth.override {
+    logoFile = config.boot.plymouth.logo;
+    logoName = "navi";
+    osName = "navi";
+    osVersion = "";
+  };
+in
+{
   imports = [ ./../pkgs/termite.nix ];
   services.mingetty.autologinUser = "govanify";
   services.redshift = {
@@ -13,6 +22,7 @@
       url = "https://govanify.com/img/star.png";
       sha256 = "19ij7sn6xax9i7df97i3jmv0nrsl9cvr9p6j9vnq4r4n5n81zq8i";
     };
+  boot.plymouth.themePackages = [ breeze-navi ];
 
   # firefox no segfaulty
   xdg.portal.enable = false;
