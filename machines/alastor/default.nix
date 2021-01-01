@@ -31,17 +31,11 @@
     "Smile, my dear! You know, you're 
      never fully dressed without one!"
 '';
-    #services.macspoofer = {
-    #  enable = true; 
-    #  interface = "wlp1s0"; 
-    #  };
    modules.my.virtualization = {
     enable = true;
     pci_devices = "8086:1912";
     bridge_devices = [ "wlp3s0" ];
   };
-  # otherwise stalls on boot for some reason
-  systemd.services.sys-subsystem-net-devices-enp0s20f0u2.enable = lib.mkForce false;
 
   home-manager.users.govanify = {
     home.file."Pictures/wallpaper.png".source  = ./wallpaper.png;

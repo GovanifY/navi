@@ -24,12 +24,8 @@
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" ];
   # virtualization and iGVT-g
-  boot.kernelModules = [ "kvm-intel" "ieee80211_crypt_tkip" "vfio_pci" "kvmgt"
-                         "vfio-iommu-type1" "vfio-mdev"];
-  # isolate iGPU for libvirtd
-  boot.initrd.kernelModules = [ "vfio_virqfd" "vfio_pci" "vfio_iommu_type1"
-                                "vfio" "dm-snapshot" ];
-  boot.kernelParams = [ "vfio-pci.ids=8086:1912" ];
+  boot.kernelModules = [ "ieee80211_crypt_tkip" ];
+  boot.initrd.kernelModules = [ "dm-snapshot" ];
   boot.extraModulePackages = [ ];
 
   boot.initrd.luks.devices = 
@@ -78,7 +74,6 @@
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
-  networking.interfaces.enp0s20f0u2.useDHCP = true;
   networking.interfaces.enp0s31f6.useDHCP = true;
   networking.interfaces.wlp3s0.useDHCP = true;
 

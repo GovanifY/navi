@@ -38,12 +38,12 @@ in {
   config = mkIf cfg.enable {
 
     virtualisation.libvirtd.enable = true;
+
     # isolate iGPU for libvirtd
-    boot = mkIf (cfg.pci_devices != "") {
-      initrd.kernelModules = [ "vfio_virqfd" "vfio_pci" "vfio_iommu_type1"
-                               "vfio" ];
-      kernelParams = [ "vfio-pci.ids=${cfg.pci_devices}" ];
-    };
+    boot.initrd.kernelModules = mkIf (cfg.pci_devices != "") [ "vfio_virqfd"
+    "vfio_pci" "vfio_iommu_type1" "vfio" ];
+    boot.kernelParams = mkIf (cfg.pci_devices != "") [ "vfio-pci.ids=${cfg.pci_devices}" ];
+    boot.kernelModules = [ "kvm-intel" "vfio_pci" "kvmgt" "vfio-iommu-type1" "vfio-mdev"];
 
     networking = mkIf (cfg.bridge_devices != []) {
       bridges.br0.interfaces = cfg.bridge_devices;
