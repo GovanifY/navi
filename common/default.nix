@@ -53,7 +53,6 @@ in
     environment.systemPackages = with pkgs; [
       wget neovim fzf tmux git git-crypt screen htop
       rsync imagemagick mosh gnupg manpages ag bat any-nix-shell
-      (lib.debug.traceSeqN 5 install-grub-pl null)
     ];
 
     documentation.dev.enable = true;
@@ -103,12 +102,19 @@ in
   boot.loader.grub.extraGrubInstallArgs = [ "--modules=verifiers gcry_sha256 gcry_sha512 gcry_dsa gcry_rsa" ];
   boot.loader.grub.configurationName = "navi";
 
-  #nixpkgs.system.build.installBootLoader = config.system.build.installBootLoader.overrideAttrs (oldAttrs: rec {
-    ## we replace the og perl file by our patched version
-    #postPatch = ''
-      #sed -i 's/.*\/bin\/perl .*\.pl/${pkgs.perl}/bin/perl ${install-grub-pl}'  $(grep -Rl '.*\/bin\/perl .*\.pl')
-    #'';
-  #});
-
+  #nixpkgs.system.build.installBootLoader = "";
+  nixpkgs.overlays = [
+    (self: super: {
+      pkgs.config.system.build.installBootLoader = super.config.system.build.installBootLoader.overrideAttrs (oldAttrs: {
+        # this absolute monstrosity is written within builtins and basically
+        # splits a string before and after .*pl and puts it back together but
+        # with a custom perl script
+        text = (builtins.elemAt (builtins.elemAt (builtins.split
+        "(^.*/bin/perl)|( .*\\.pl) " oldAttrs.text) 1) 0) + " ${install-grub-pl} "
+        + builtins.elemAt (builtins.split "(^.*/bin/perl)|( .*\\.pl) "
+        oldAttrs.text) 4;
+     });
+    })];
+   
 }
 
