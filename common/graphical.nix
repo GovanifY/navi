@@ -3,7 +3,7 @@ let
   breeze-navi = pkgs.breeze-plymouth.override {
     logoFile = config.boot.plymouth.logo;
     logoName = "navi";
-    osName = "navi";
+    osName = "";
     osVersion = "";
   };
 in

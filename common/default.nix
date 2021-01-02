@@ -17,6 +17,7 @@ in
   # TO HAVE AN UNBOOTABLE SYSTEM
   grubPatch = ''
     sed -i 's/"Welcome to GRUB/"Welcome to navi/' $(grep -Rl '"Welcome to GRUB')
+    sed -i 's/GNU GRUB  version %s/navi bootloader/' $(grep -Rl 'GNU GRUB  version %s')
     sed -i 's/grub_rescue_run ();/grub_exit ();/' $(grep -Rl 'grub_rescue_run ();')
   '';
 
@@ -107,9 +108,15 @@ in
     set timeout=1
     set timeout_style='hidden'
   '';
+  # no need for another display change + half a second background image flicker
+  boot.loader.grub.splashImage = null;
+
   #nixpkgs.system.build.installBootLoader = "";
-  #nixpkgs.overlays = [
-    #(self: super: {
+  nixpkgs.overlays = [
+    (self: super: {
+      grub2 = super.grub2.overrideAttrs (oldAttrs: rec {
+        postPatch = grubPatch;
+      });
       #system = super.system // {
         #build = super.system.build // {
         #installBootLoader = super.system.build.installBootLoader.overrideAttrs (oldAttrs: {
@@ -126,7 +133,6 @@ in
      #});
    #};
  #};
-    #})];
-   
+    })];
 }
 
