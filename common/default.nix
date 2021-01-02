@@ -52,8 +52,9 @@
     "en.wikipedia.org" "google.com" "govanify.com" "lkml.org" "www.apache.org" 
     "www.duckduckgo.com" "www.kernel.org" "www.mozilla.org" "www.xkcd.com"];
 
-    boot.kernelParams = [ "vt.global_cursor_default=0" "intel_iommu=on" "quiet"
-    "i915.enable_guc=0" "i915.enable_gvt=1" ]; # i915 iGVT-g
+    boot.consoleLogLevel = 0;
+    boot.kernelParams = [ "vt.global_cursor_default=0" "intel_iommu=on"
+    "quiet" "i915.enable_guc=0" "i915.enable_gvt=1" ]; # i915 iGVT-g
 
     modules.navi.bootloader = {
       enable = true;
