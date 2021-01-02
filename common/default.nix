@@ -57,8 +57,6 @@
 
     modules.navi.bootloader = {
       enable = true;
-      # until sigcheck is in
-      no_mercy = false;
     };
   }
 

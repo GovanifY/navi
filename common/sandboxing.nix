@@ -1,5 +1,10 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 {
-# TODO: AppArmor profiles
+  programs.firejail = {
+    enable = true;
+    wrappedBinaries = {
+      mpv = "${lib.getBin pkgs.mpv}/bin/mpv";
+    };
+  };
 }
 

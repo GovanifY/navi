@@ -284,10 +284,10 @@ in
 
 
    # GTK theme
-   home.file.".local/share/icons/default".source = "${pkgs.breeze-qt5}/share/icons/breeze_cursors";
+   #home.file.".local/share/icons/default".source = "${pkgs.breeze-qt5}/share/icons/breeze_cursors";
+   #gtk-icon-theme-name=breeze-dark
    home.file.".config/gtk-3.0/settings.ini".text  = ''
         [Settings]
-        gtk-icon-theme-name=breeze-dark
         gtk-theme-name=Breeze-Dark
         gtk-application-prefer-dark-theme = true
         gtk-cursor-theme-name=breeze_cursors

@@ -63,8 +63,6 @@
     [ { device = "/dev/disk/by-uuid/b8be1d58-dd39-454a-9754-2f23df66cd38"; }
     ];
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
   # networking.hostName = "nixos"; # Define your hostname.
