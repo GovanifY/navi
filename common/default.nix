@@ -55,6 +55,10 @@
     boot.kernelParams = [ "vt.global_cursor_default=0" "intel_iommu=on" "quiet"
     "i915.enable_guc=0" "i915.enable_gvt=1" ]; # i915 iGVT-g
 
-    modules.navi.bootloader.enable = true;
+    modules.navi.bootloader = {
+      enable = true;
+      # until sigcheck is in
+      no_mercy = false;
+    };
   }
 
