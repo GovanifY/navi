@@ -1,11 +1,10 @@
 { config, lib, pkgs, ... }:
 with lib;
 let
-  cfg = config.modules.my.virtualization;
+  cfg = config.modules.navi.virtualization;
 in {
-
   options = {
-    modules.my.virtualization = {
+    modules.navi.virtualization = {
       enable = mkEnableOption "Various virtualization options";
       pci_devices = mkOption {
         type = types.str;
