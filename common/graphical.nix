@@ -276,11 +276,11 @@ in
   home-manager.users.govanify = {
     # initial pass setup
     # should i make this global?
-    home.file.".cache/clone-pass.sh".source  = ./../dotfiles/clone-pass.sh;
+    home.file.".cache/clone-pass.sh".source  = ./../assets/clone-pass.sh;
 
    # QT theme
-   home.file.".config/qt5ct/qt5ct.conf".source  = ./../dotfiles/graphical/qt5ct/qt5ct.conf;
-   home.file.".config/qt5ct/colors/breeze-dark.conf".source  = ./../dotfiles/graphical/qt5ct/breeze-dark.conf;
+   home.file.".config/qt5ct/qt5ct.conf".source  = ./../assets/graphical/qt5ct/qt5ct.conf;
+   home.file.".config/qt5ct/colors/breeze-dark.conf".source  = ./../assets/graphical/qt5ct/breeze-dark.conf;
 
 
    # GTK theme

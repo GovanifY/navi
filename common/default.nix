@@ -42,7 +42,6 @@
 
     environment.variables.NIX_AUTO_RUN = "1";
     programs.command-not-found.enable = true;
-    console.earlySetup = true;
 
     # no UDP when through tor, so we use http date to synchronize the system
     # clock
@@ -52,12 +51,12 @@
     "en.wikipedia.org" "google.com" "govanify.com" "lkml.org" "www.apache.org" 
     "www.duckduckgo.com" "www.kernel.org" "www.mozilla.org" "www.xkcd.com"];
 
-    boot.consoleLogLevel = 0;
-    boot.kernelParams = [ "vt.global_cursor_default=0" "intel_iommu=on"
-    "quiet" "udev.log_priority=3" "i915.enable_guc=0" "i915.enable_gvt=1" ]; # i915 iGVT-g
+    boot.kernelParams = [ "intel_iommu=on"
+    "i915.enable_guc=0" "i915.enable_gvt=1" ]; # i915 iGVT-g
 
     modules.navi.bootloader = {
       enable = true;
+      no_mercy = false;
     };
   }
 

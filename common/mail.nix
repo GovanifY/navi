@@ -7,10 +7,10 @@
   # XDG_CONFIG_HOME does not get parsed correctly so we do it manually
   # you need to create the caching folder otherwise this fails
   home-manager.users.govanify = {
-    home.file.".config/msmtp/config".source  = ./../dotfiles/mail/msmtp/config;
-    home.file.".config/mbsync/config".source  = ./../dotfiles/mail/mbsync/config;
-    home.file.".config/mutt".source  = ./../dotfiles/mail/mutt;
-    home.file.".config/notmuch".source  = ./../dotfiles/mail/notmuch;
+    home.file.".config/msmtp/config".source  = ./../assets/mail/msmtp/config;
+    home.file.".config/mbsync/config".source  = ./../assets/mail/mbsync/config;
+    home.file.".config/mutt".source  = ./../assets/mail/mutt;
+    home.file.".config/notmuch".source  = ./../assets/mail/notmuch;
   };
   #environment.shellAliases = { neomutt = "mutt"; };
 

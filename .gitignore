@@ -1,2 +1,2 @@
 configuration.nix
-dotfiles/weechat/*
+assets/weechat/*

@@ -46,7 +46,7 @@
   home-manager.users.govanify = {
     home.file.".config/gnupg/key.gpg".source  = ./../secrets/key.gpg;
     home.file.".config/gnupg/trust.txt".source  = ./../secrets/gpg-trust.txt;
-    home.file.".config/gnupg/gpg.conf".source  = ./../dotfiles/gpg/gpg.conf;
+    home.file.".config/gnupg/gpg.conf".source  = ./../assets/gpg/gpg.conf;
     home.file.".config/gdb/init".text  = "source ~/.config/gdb/gdbinit-gef.py";
     home.file.".config/gdb/gdbinit-gef.py".text  = builtins.readFile (pkgs.fetchFromGitHub {
       owner = "hugsy";
@@ -60,7 +60,7 @@
       signByDefault = true;
       key = "52142D39A7CEF8FA872BCA7FDE62E1E2A6145556";
     };
-    #home.file.".config/weechat".source  = ./../dotfiles/weechat;
+    #home.file.".config/weechat".source  = ./../assets/weechat;
 
   };
 

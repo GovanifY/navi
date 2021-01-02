@@ -16,8 +16,10 @@ let
   secrets_path = ./. + "/../secrets/bootloader/${config.networking.hostName}/pub.gpg";
 in
 {
-  disabledModules = [ "system/boot/loader/grub/grub.nix" ];
-  imports = [ ./../overlays/grub/grub.nix ];
+  disabledModules = [ "system/boot/loader/grub/grub.nix"
+                      "system/boot/stage-1.nix" ];
+  imports = [ ./../overlays/grub/grub.nix 
+              ./../overlays/stage-1/stage-1.nix ];
 
   options.modules.navi.bootloader = {
     enable = mkEnableOption "Enable navi's bootloader";
@@ -32,6 +34,10 @@ in
     };
   };
   config = mkIf cfg.enable {
+    # verbosity
+    console.earlySetup = true;
+    boot.consoleLogLevel = 0;
+    boot.kernelParams = [ "vt.global_cursor_default=0" "quiet" "udev.log_priority=3" ];
     # required so we can write the .sig
     boot.loader.grub.copyKernels = true;
 
@@ -40,19 +46,22 @@ in
     "--modules=verifiers gcry_sha256 gcry_sha512 gcry_dsa gcry_rsa" ];
     boot.loader.grub.configurationName = "navi";
 
-  # we wait one second for esc keyboard mashing, otherwise we boot normally
-  boot.loader.grub.extraConfig = ''
-    set timeout=1
-    set timeout_style='hidden'
-  '';
-  # no need for another display change + half a second background image flicker
-  boot.loader.grub.splashImage = null;
+    # we wait one second for esc keyboard mashing, otherwise we boot normally
+    # unset background_color if you want to see the boot framebuffer by default
+    boot.loader.grub.extraConfig = ''
+      set timeout=1
+      set timeout_style='hidden'
+    '';
 
-  nixpkgs.overlays = [
-    (self: super: {
-      grub2 = super.grub2.overrideAttrs (oldAttrs: rec {
-        postPatch = grubPatch;
-      });
-    })];
-  };
+    # this shows the UEFI framebuffer if it isn't cleaned, get a UEFI that likes
+    # you or configure grub to clear that
+    boot.loader.grub.splashImage = null;
+
+    nixpkgs.overlays = [
+      (self: super: {
+        grub2 = super.grub2.overrideAttrs (oldAttrs: rec {
+          postPatch = grubPatch;
+        });
+      })];
+    };
 }

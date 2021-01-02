@@ -111,9 +111,9 @@
   };
 
   home-manager.users.govanify = {
-    home.file.".config/wgetrc".source  = ./../dotfiles/xdg/wgetrc;
-    home.file.".config/python/startup.py".source  = ./../dotfiles/xdg/python/startup.py;
-    home.file.".config/npm/npmrc".source  = ./../dotfiles/xdg/npmrc;
+    home.file.".config/wgetrc".source  = ./../assets/xdg/wgetrc;
+    home.file.".config/python/startup.py".source  = ./../assets/xdg/python/startup.py;
+    home.file.".config/npm/npmrc".source  = ./../assets/xdg/npmrc;
   };
   programs.fish.shellAliases = {
     gdb = "gdb -nh -x \"$XDG_CONFIG_HOME\"/gdb/init";

@@ -27,9 +27,9 @@
   };
 
   home-manager.users.govanify = {
-    home.file.".config/sway/config".source = ./../dotfiles/graphical/sway-laptop/config;
-    home.file.".config/sway/locale.sh".source = ./../dotfiles/graphical/sway-laptop/locale.sh;
-    home.file.".config/sway/status.sh".source = ./../dotfiles/graphical/sway-laptop/status.sh;
+    home.file.".config/sway/config".source = ./../assets/graphical/sway-laptop/config;
+    home.file.".config/sway/locale.sh".source = ./../assets/graphical/sway-laptop/locale.sh;
+    home.file.".config/sway/status.sh".source = ./../assets/graphical/sway-laptop/status.sh;
   };
 
   nix.distributedBuilds = true;

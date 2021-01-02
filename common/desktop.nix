@@ -9,9 +9,9 @@
               ./../component/virtualization.nix
             ];
   home-manager.users.govanify = {
-    home.file.".config/sway/config".source = ./../dotfiles/graphical/sway/config;
-    home.file.".config/sway/locale.sh".source = ./../dotfiles/graphical/sway/locale.sh;
-    home.file.".config/sway/status.sh".source = ./../dotfiles/graphical/sway/status.sh;
+    home.file.".config/sway/config".source = ./../assets/graphical/sway/config;
+    home.file.".config/sway/locale.sh".source = ./../assets/graphical/sway/locale.sh;
+    home.file.".config/sway/status.sh".source = ./../assets/graphical/sway/status.sh;
   };
 
 }
