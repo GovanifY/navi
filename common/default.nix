@@ -102,19 +102,31 @@ in
   boot.loader.grub.extraGrubInstallArgs = [ "--modules=verifiers gcry_sha256 gcry_sha512 gcry_dsa gcry_rsa" ];
   boot.loader.grub.configurationName = "navi";
 
+  # we wait one second for esc keyboard mashing, otherwise we boot normally
+  boot.loader.grub.extraConfig = ''
+    set timeout=1
+    set timeout_style='hidden'
+  '';
   #nixpkgs.system.build.installBootLoader = "";
-  nixpkgs.overlays = [
-    (self: super: {
-      pkgs.config.system.build.installBootLoader = super.config.system.build.installBootLoader.overrideAttrs (oldAttrs: {
-        # this absolute monstrosity is written within builtins and basically
-        # splits a string before and after .*pl and puts it back together but
-        # with a custom perl script
-        text = (builtins.elemAt (builtins.elemAt (builtins.split
-        "(^.*/bin/perl)|( .*\\.pl) " oldAttrs.text) 1) 0) + " ${install-grub-pl} "
-        + builtins.elemAt (builtins.split "(^.*/bin/perl)|( .*\\.pl) "
-        oldAttrs.text) 4;
-     });
-    })];
+  #nixpkgs.overlays = [
+    #(self: super: {
+      #system = super.system // {
+        #build = super.system.build // {
+        #installBootLoader = super.system.build.installBootLoader.overrideAttrs (oldAttrs: {
+        ## this absolute monstrosity is written within builtins and basically
+        ## splits a string before and after .*pl and puts it back together but
+        ## with a custom perl script
+        ## basically, in a pseudo language that makes sense:
+        ## split = split_text(text, ".*/bin/perl")
+        ## text = split[1][0] + " ${install-grub-pl} " + split[4]
+        #text = (builtins.elemAt (builtins.elemAt (builtins.split
+        #"(^.*/bin/perl)|( .*\\.pl) " oldAttrs.text) 1) 0) + " ${install-grub-pl} "
+        #+ builtins.elemAt (builtins.split "(^.*/bin/perl)|( .*\\.pl) "
+        #oldAttrs.text) 4;
+     #});
+   #};
+ #};
+    #})];
    
 }
 

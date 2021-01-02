@@ -30,8 +30,13 @@ in {
       };
       gvt_type = mkOption {
         type = types.str;
-        default = "";
+        default = "i915-GVTg_V5_4";
         description = "Display type of the virtual GPU.";
+      };
+      gvt_uuid = mkOption {
+        type = types.listOf types.str;
+        default = [ "dbed0bd6-4ca7-11eb-a388-8bc211181753" ];
+        description = "UUID given to the virtual GPU.";
       };
     };
   };
@@ -51,27 +56,36 @@ in {
     };
 
     # iGVT hooks
-    systemd.services.libvirtd.preStart = mkIf cfg.gvt ''
-      mkdir -p /var/lib/libvirt/hooks
-      chmod 755 /var/lib/libvirt/hooks
+    virtualisation.kvmgt = mkIf cfg.gvt { 
+      enable = true;
+      vgpus = {
+        ${cfg.gvt_type} = {
+          uuid = cfg.gvt_uuid;
+        };
+      };
+    };
+    # comment out on demand iGVT-d for now
+    #systemd.services.libvirtd.preStart = mkIf cfg.gvt ''
+      #mkdir -p /var/lib/libvirt/hooks
+      #chmod 755 /var/lib/libvirt/hooks
 
-      # setup hook file on service startup 
-      cp -f ${(pkgs.writeShellScriptBin "igvt_hook" ''
-      GVT_PCI="${cfg.gvt_pci}"
-      GVT_GUID="$(${pkgs.libxml2}/bin/xmllint --xpath 'string(/domain/devices/hostdev[@type="mdev"]/source/address/@uuid)' -)"
-      MDEV_TYPE="${cfg.gvt_type}"
-      if [ $# -ge 3 ]; then
-          if [ ! -z "$GVT_GUID" ] && [ $2 = "prepare" ] && [ $3 = "begin" ]; then
-              echo "$GVT_GUID" > "/sys/bus/pci/devices/$GVT_PCI/mdev_supported_types/$MDEV_TYPE/create"
-          elif [ ! -z "$GVT_GUID" ] && [ $2 = "release" ] && [ $3 = "end" ]; then
-              echo 1 > /sys/bus/pci/devices/$GVT_PCI/$GVT_GUID/remove
-          fi
-      fi
-      '').outPath}/bin/igvt_hook /var/lib/libvirt/hooks/qemu
+      ## setup hook file on service startup 
+      #cp -f ${(pkgs.writeShellScriptBin "igvt_hook" ''
+      #GVT_PCI="${cfg.gvt_pci}"
+      #GVT_GUID="$(${pkgs.libxml2}/bin/xmllint --xpath 'string(/domain/devices/hostdev[@type="mdev"]/source/address/@uuid)' -)"
+      #MDEV_TYPE="${cfg.gvt_type}"
+      #if [ $# -ge 3 ]; then
+          #if [ ! -z "$GVT_GUID" ] && [ $2 = "prepare" ] && [ $3 = "begin" ]; then
+              #echo "$GVT_GUID" > "/sys/bus/pci/devices/$GVT_PCI/mdev_supported_types/$MDEV_TYPE/create"
+          #elif [ ! -z "$GVT_GUID" ] && [ $2 = "release" ] && [ $3 = "end" ]; then
+              #echo 1 > /sys/bus/pci/devices/$GVT_PCI/$GVT_GUID/remove
+          #fi
+      #fi
+      #'').outPath}/bin/igvt_hook /var/lib/libvirt/hooks/qemu
 
-      # Make them executable
-      chmod +x /var/lib/libvirt/hooks/qemu
-    '';
+      ## Make them executable
+      #chmod +x /var/lib/libvirt/hooks/qemu
+    #'';
   };
 }
 
