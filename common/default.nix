@@ -18,6 +18,8 @@ in
   grubPatch = ''
     sed -i 's/"Welcome to GRUB/"Welcome to navi/' $(grep -Rl '"Welcome to GRUB')
     sed -i 's/GNU GRUB  version %s/navi bootloader/' $(grep -Rl 'GNU GRUB  version %s')
+    sed -i 's/grub>/navi>/' $(grep -Rl 'grub>')
+    sed -i 's/GRUB menu\."/menu\."/' $(grep -Rl 'GRUB menu\."')
     sed -i 's/grub_rescue_run ();/grub_exit ();/' $(grep -Rl 'grub_rescue_run ();')
   '';
 
