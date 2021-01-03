@@ -52,7 +52,7 @@
 
 systemd.user.services.mailsync = {
   description = "Synchronizes the user mailbox";
-  wantedBy = [ "default.target" ];
+  wantedBy = [ "graphical-session.target" ];
   path = with pkgs; [ procps wget isync gawk pass ];
   serviceConfig.ExecStart = "${pkgs.bash}/bin/sh %h/.config/mutt/mailsync.sh %h";
   startAt = [ "*:0/5" ];
