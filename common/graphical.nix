@@ -240,29 +240,6 @@ in
     };
   };
 
-  # the gpg thing should be done in headfull but we need to do that before it
-  # execs sway because sway obviously never returns
-  environment.interactiveShellInit = ''
-    if [ ! -f ~/.config/gnupg/trustdb.gpg ] && [[ $(tty) = /dev/tty1 ]] && [[ "$(whoami)" == "govanify" ]]; then
-      # let's just put the entire first time setup here
-      find ~/.config/gnupg -type f -exec chmod 600 {} \;
-      find ~/.config/gnupg -type d -exec chmod 700 {} \;
-      gpg --import ~/.config/gnupg/key.gpg                                       
-      gpg --import-ownertrust ~/.config/gnupg/trust.txt 
-      mkdir -p ~/.local/share/mail/ &> /dev/null
-      mkdir -p ~/.cache/mutt/ &> /dev/null
-      mkdir -p ~/.local/share/wineprefixes/ &> /dev/null
-      mkdir -p ~/.config/gdb &> /dev/null
-      mkdir -p ~/.local/share/wineprefixes/default &> /dev/null 
-      touch ~/.config/gdb/init &> /dev/null
-    fi
-    if [ ! -d ~/.config/pass ] && [[ $(tty) = /dev/tty1 ]]; then
-      # we try to clone user passwords, network might not be started or
-      # unreliable yet so we just try to clone until it works
-      ~/.cache/clone-pass.sh &
-    fi
-    '';
-
   environment.shellInit = ''
     if [[ -z $DISPLAY ]] && [[ "$(whoami)" == "govanify" ]]; then
       if ! systemctl is-active --quiet swaywm; then
@@ -274,10 +251,6 @@ in
   '';
 
   home-manager.users.govanify = {
-    # initial pass setup
-    # should i make this global?
-    home.file.".cache/clone-pass.sh".source  = ./../assets/clone-pass.sh;
-
    # QT theme
    home.file.".config/qt5ct/qt5ct.conf".source  = ./../assets/graphical/qt5ct/qt5ct.conf;
    home.file.".config/qt5ct/colors/breeze-dark.conf".source  = ./../assets/graphical/qt5ct/breeze-dark.conf;

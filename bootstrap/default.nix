@@ -7,5 +7,6 @@ pkgs.mkShell {
     gnupg
     findutils
     coreutils
+    git
   ];
 }
