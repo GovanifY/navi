@@ -1,3 +1,5 @@
+# for a fully silent boot on coreboot you might want to call curs_set(0); before
+# initializing our bootloader!
 { config, pkgs, lib, ... }:
 with lib;
 let
