@@ -56,7 +56,6 @@
 
     modules.navi.bootloader = {
       enable = true;
-      no_mercy = false;
     };
   }
 
