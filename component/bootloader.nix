@@ -13,7 +13,6 @@ let
     ${optionalString cfg.no_mercy
     "sed -i 's/grub_rescue_run ();/grub_exit ();/' $(grep -Rl 'grub_rescue_run ();')"}
   '';
-  secrets_path = ./. + "/../secrets/bootloader/${config.networking.hostName}/pub.gpg";
 in
 {
   disabledModules = [ "system/boot/loader/grub/grub.nix"
@@ -44,7 +43,7 @@ in
     boot.loader.grub.copyKernels = true;
 
     boot.loader.grub.extraGrubInstallArgs = [
-    "--pubkey=${pkgs.copyPathToStore secrets_path}"
+    "--pubkey=${pkgs.copyPathToStore /var/lib/bootloader/pub.gpg}"
     "--modules=verifiers gcry_sha256 gcry_sha512 gcry_dsa gcry_rsa" ];
     boot.loader.grub.configurationName = "navi";
 
@@ -54,6 +53,10 @@ in
       set timeout=1
       set timeout_style='hidden'
     '';
+
+    # if our users can load some signed config it'd be neat if they couldn't
+    # also modify it
+    boot.loader.grub.users.govanify.hashedPasswordFile = "/var/lib/bootloader/pass_hash";
 
     # this shows the UEFI framebuffer if it isn't cleaned, get a UEFI that likes
     # you or configure grub to clear that

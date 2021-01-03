@@ -34,8 +34,6 @@ let
     else null;
 
 
-  secrets_path = ./. + "/../../secrets/bootloader/${config.networking.hostName}/priv.gpg";
-
   f = x: if x == null then "" else "" + x;
 
   grubConfig = args:
@@ -725,7 +723,7 @@ in
         old_gpg_home=$GNUPGHOME
         export GNUPGHOME="$(pwd)/gpgtmp"
 
-        ${pkgs.gnupg}/bin/gpg --import ${pkgs.copyPathToStore secrets_path} > /dev/null 2>&1
+        ${pkgs.gnupg}/bin/gpg --import ${/var/lib/bootloader/priv.gpg} > /dev/null 2>&1
         ${pkgs.findutils}/bin/find /boot -not -path "/boot/efi/*" -type f -exec ${pkgs.gnupg}/bin/gpg --detach-sign "{}" \; > /dev/null 2>&1
 
         rm -rf $GNUPGHOME
