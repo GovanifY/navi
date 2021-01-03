@@ -264,7 +264,7 @@ in
     '';
 
   environment.shellInit = ''
-    if [[ -z $DISPLAY ]] && [[ $EUID -ne 0 ]]; then
+    if [[ -z $DISPLAY ]] && [[ "$(whoami)" == "govanify" ]]; then
       if ! systemctl is-active --quiet swaywm; then
         xrdb -load /etc/X11/Xresources &> /dev/null
         systemctl --user import-environment
