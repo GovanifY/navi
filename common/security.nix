@@ -19,19 +19,25 @@ in {
     '';
   }];
 
-  security.allowUserNamespaces = true;
   
+  # scudo currently breaks things, so let's keep it disabled
   environment.memoryAllocator.provider = "libc";
 
-  # temporary to debug wifi
+  # UX is horrendous for headfull devices otherwise, might want to work on that
+  # a bit more later.
   security.lockKernelModules = false;
 
   # it seems that linux nowadays won't allow you to disable the jit 
   boot.kernel.sysctl."net.core.bpf_jit_enable" = true;
   boot.kernel.sysctl."kernel.unprivileged_userns_clone" = 1;
-  # any hardened allocator doesn't even let me boot
-  #environment.memoryAllocator.provider = "graphene-hardened";
+
+  # architectural bugs will be present nevertheless
   security.allowSimultaneousMultithreading = true;
+
+  security.allowUserNamespaces = true;
   nix.useSandbox = true;
+
+  # ssh attacks & co are flooding my logs
+  services.fail2ban.enable = true;
 }
 
