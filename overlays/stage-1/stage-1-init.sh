@@ -2,7 +2,7 @@
 
 targetRoot=/mnt-root
 console=tty1
-verbose=${verbose:-0}
+verbose="@verbose@"
 
 extraUtils="@extraUtils@"
 export LD_LIBRARY_PATH=@extraUtils@/lib
@@ -64,7 +64,7 @@ trap 'fail' 0
 
 
 # Print a greeting.
-if [ $verbose -eq 1 ]; then
+if [ ! -z "$verbose" ]; then
     echo
     echo "[1;32m<<< NixOS Stage 1 >>>[0m"
     echo
@@ -213,7 +213,7 @@ ln -s @modulesClosure@/lib/modules /lib/modules
 ln -s @modulesClosure@/lib/firmware /lib/firmware
 echo @extraUtils@/bin/modprobe > /proc/sys/kernel/modprobe
 for i in @kernelModules@; do
-    if [ $verbose -eq 1 ]; then
+    if [ ! -z "$verbose" ]; then
         echo "loading module $(basename $i)..."
     fi
     modprobe $i
@@ -222,7 +222,7 @@ done
 
 # Create device nodes in /dev.
 @preDeviceCommands@
-if [ $verbose -eq 1 ]; then
+if [ ! -z "$verbose" ]; then
     echo "running udev..."
 fi
 ln -sfn /proc/self/fd /dev/fd
@@ -242,7 +242,7 @@ udevadm settle
 # XXX: Use case usb->lvm will still fail, usb->luks->lvm is covered
 @preLVMCommands@
 
-if [ $verbose -eq 1 ]; then
+if [ ! -z "$verbose" ]; then
     echo "starting device mapper and LVM..."
 fi
 lvm vgchange -ay
@@ -387,7 +387,7 @@ mountFS() {
         done
     fi
 
-    if [ $verbose -eq 1 ]; then
+    if [ ! -z "$verbose" ]; then
         echo "mounting $device on $mountPoint..."
     fi
 
