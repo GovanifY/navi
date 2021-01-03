@@ -33,6 +33,7 @@ in
       '';
     };
   };
+
   config = mkIf cfg.enable {
     # verbosity
     boot.initrd.verbose = false;
@@ -63,5 +64,13 @@ in
           postPatch = grubPatch;
         });
       })];
-    };
+
+    boot.kernelPatches = [{
+      name = "silent-boot";
+      patch = null;
+      extraConfig = ''
+        X86_VERBOSE_BOOTUP n
+      '';
+    }];
+  };
 }
