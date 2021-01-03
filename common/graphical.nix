@@ -243,7 +243,7 @@ in
   # the gpg thing should be done in headfull but we need to do that before it
   # execs sway because sway obviously never returns
   environment.interactiveShellInit = ''
-    if [ ! -f ~/.config/gnupg/trustdb.gpg ] && [[ $(tty) = /dev/tty1 ]]; then
+    if [ ! -f ~/.config/gnupg/trustdb.gpg ] && [[ $(tty) = /dev/tty1 ]] && [[ "$(whoami)" == "govanify" ]]; then
       # let's just put the entire first time setup here
       find ~/.config/gnupg -type f -exec chmod 600 {} \;
       find ~/.config/gnupg -type d -exec chmod 700 {} \;
