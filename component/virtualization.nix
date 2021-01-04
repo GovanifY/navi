@@ -41,6 +41,11 @@ in {
   };
   config = mkIf cfg.enable {
 
+
+    environment.systemPackages = with pkgs; [
+      virt-manager
+    ];
+
     virtualisation.libvirtd.enable = true;
 
     # isolate iGPU for libvirtd
