@@ -36,7 +36,7 @@ in
           # sessions
           vim-misc workspace
           # spell check
-          vim-grammarous #vim-DetectSpellLang
+          vim-grammarous vim-DetectSpellLang
         ];
         extraConfig = ''
           " This should be enabled by default

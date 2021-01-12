@@ -9,7 +9,7 @@ let
 in
 {
   imports = [ ./../pkgs/termite.nix ];
-  services.mingetty.autologinUser = "govanify";
+  services.getty.autologinUser = "govanify";
   services.redshift = {
     enable = true;
     package = pkgs.redshift-wlr;
@@ -42,8 +42,7 @@ in
       # multimedia
       mpv imv 
       # reading
-      #calibre 
-      okular kcc
+      calibre okular kcc
       # web browsers
       # standard firefox is used for basically everything and is "impossible" to
       # fingerprint with my configuration, but i do login on websites sometimes.
@@ -51,9 +50,8 @@ in
       # fuck up tracking when need happens.
       firefox-wayland 
       #tor-browser-bundle-bin
-      #firefox-bin
       # art
-      blender krita #kdenlive 
+      blender krita kdenlive 
       ardour
       # stem
       #freecad 
@@ -61,7 +59,6 @@ in
       # sourcetrail
       # recording/streaming
       obs-studio obs-wlrobs obs-v4l2sink
-
       jdk
       android-studio
       (
@@ -85,25 +82,9 @@ in
       # themes
       breeze-gtk breeze-qt5 breeze-icons
       # math stuff
-      coq
+      coq lean elan 
       # ELECTRON BELOW
       # you should try to run with GDK_BACKEND=x11
-      # this is good for lean
-      vscodium lean elan 
-      (
-      pkgs.writeTextFile {
-        name = "vscodium-x11";
-        destination = "/bin/vscodium-x11";
-        executable = true;
-        text = ''
-          #! ${pkgs.bash}/bin/bash
-          # Electron sucks
-          GDK_BACKEND=x11
-          # then start the launcher 
-          exec codium
-        '';
-      }
-      )
       # matrix
       element-desktop
       (
