@@ -27,16 +27,15 @@ in
           # productivity
           fzf-vim vim-visual-multi goyo
           # dev
-          tagbar fugitive nerdtree nerdcommenter nvim-gdb
+          tagbar fugitive nerdtree nerdcommenter
           # dev - syntax
           coc-snippets vim-snippets coc-nvim vim-clang-format
           # dev - language specific
-          rust-vim meson Jenkinsfile-vim-syntax Coqtail vim-fish
-          vim-nix coc-python
+          rust-vim meson Coqtail vim-fish vim-nix coc-python
           # sessions
           vim-misc workspace
           # spell check
-          vim-grammarous vim-DetectSpellLang
+          vim-grammarous #vim-DetectSpellLang
         ];
         extraConfig = ''
           " This should be enabled by default

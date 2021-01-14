@@ -17,7 +17,10 @@
        userEmail  = "gauvain@govanify.com";
        userName = "Gauvain 'GovanifY' Roussel-Tarbouriech";
        ignores = [ "compile_commands.json" ];
-       extraConfig.pull.rebase = true;
+       extraConfig = {
+         pull.rebase = true;
+         sendemail.smtpserver = "${pkgs.msmtp}/bin/msmtp";
+       };
      };
      programs.obs-studio = {
        enable = true;

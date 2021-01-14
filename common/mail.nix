@@ -59,4 +59,13 @@ systemd.user.services.mailsync = {
   startAt = [ "*:0/5" ];
 };
 
+
+# https://github.com/NixOS/nixpkgs/issues/109092
+nixpkgs.overlays = [
+  (self: super: {
+    notmuch = super.notmuch.overrideAttrs (oldAttrs: rec {
+      makeFlags = [ "V=1" "TEST_CFLAGS=-O2"];
+    });
+  })];
+
 }

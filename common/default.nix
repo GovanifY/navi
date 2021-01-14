@@ -19,7 +19,7 @@
 
     # basic set of tools & ssh
     environment.systemPackages = with pkgs; [
-      wget neovim fzf tmux git git-crypt screen htop
+      wget neovim fzf tmux git screen htop
       rsync imagemagick mosh gnupg manpages ag bat any-nix-shell
     ];
 
@@ -57,5 +57,11 @@
     modules.navi.bootloader = {
       enable = true;
     };
+
+    nixpkgs.overlays = [
+      (self: super: {
+        git = super.gitAndTools.gitFull;
+      })
+    ];
   }
 

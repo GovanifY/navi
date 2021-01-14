@@ -3,14 +3,14 @@ set $left h
 set $down j
 set $up k
 set $right l
-set $lock "swaylock --indicator-radius 100 --indicator-thickness 7 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 -i ~/Pictures/wallpaper.png"
+set $lock "swaylock --daemonize --indicator-radius 100 --indicator-thickness 7 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 -i ~/Pictures/wallpaper.png"
 
 # auto lock
 exec swayidle -w \
-         timeout 300 "swaylock --indicator-radius 100 --indicator-thickness 7 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 -i ~/Pictures/wallpaper.png" \
+         timeout 300 "swaylock --daemonize --indicator-radius 100 --indicator-thickness 7 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 -i ~/Pictures/wallpaper.png" \
          timeout 600 'swaymsg "output * dpms off"' \
          resume 'swaymsg "output * dpms on"' \
-         before-sleep "swaylock --indicator-radius 100 --indicator-thickness 7 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 -i ~/Pictures/wallpaper.png"
+         before-sleep "swaylock --daemonize --indicator-radius 100 --indicator-thickness 7 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 -i ~/Pictures/wallpaper.png"
 
 # screen
 output * bg ~/Pictures/wallpaper.png fill
