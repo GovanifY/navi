@@ -295,19 +295,6 @@ in
     127.0.0.1 location.services.mozilla.com
     '';
 
-  # in case there are some phone home connections added during updates
-  nixpkgs.overlays = [
-    (self: super: {
-      firefox-unwrapped = super.firefox-unwrapped.overrideAttrs (oldAttrs: rec {
-        postPatch = oldAttrs.postPatch + ''
-            sed -i 's/mozilla\.com/nope\.notagtld/' $(grep -Rl 'mozilla\.com')
-            sed -i 's/mozilla\.net/nope\.notagtld/' $(grep -Rl 'mozilla\.net')
-          '';
-      });
-    })];
-
-
-
   fonts.fonts = with pkgs; [
     hack-font
   ];
