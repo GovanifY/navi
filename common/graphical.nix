@@ -6,6 +6,111 @@ let
     osName = "";
     osVersion = "";
   };
+
+  sane-firefox = pkgs.wrapFirefox pkgs.firefox-unwrapped {
+    #nixExtensions = with pkgs.nur.repos.rycee.firefox-addons; [
+          #https-everywhere privacy-badger ublock-origin
+          #decentraleyes stylus 
+          ##forget-me-not noscript sponsorblock
+        #];
+    extraPolicies = {
+      CaptivePortal = false;
+      DisableFirefoxStudies = true;
+      DisablePocket = true;
+      DisableTelemetry = true;
+      DisableFirefoxAccounts = true;
+      EncryptedMediaExtensions.Enable = false;
+      SearchSuggestEnabled = false;
+      OfferToSaveLogins = false;
+      NetworkPrediction = false;
+      OverridePostUpdatePage = "";
+      FirefoxHome = {
+        Search = false;
+        Pocket = false;
+        Snippets = false;
+        Highlights = false;
+        TopSites = true;
+      };
+       UserMessaging = {
+         ExtensionRecommendations = false;
+         SkipOnboarding = true;
+       };
+       SupportMenu = {
+         Title = "navi's browser";
+         URL = "https://govanify.com";
+       };
+       SearchBar = "unified";
+       PictureInPicture.Enabled = false;
+       PasswordManagerEnabled = false;
+       NoDefaultBookmarks = false;
+       DontCheckDefaultBrowser = true;
+       DisableSetDesktopBackground = true;
+       # probably handled by nix extensions but oh well
+       DisableSystemAddonUpdate = true;
+       ExtensionUpdate = false;
+       SearchEngines.Default = "DuckDuckGo";
+       #ExtensionUpdate?
+    };
+    extraPrefs = '' 
+     // make tracking much harder
+     lockPref("privacy.resistFingerprinting", true);
+     lockPref("privacy.firstparty.isolate", true);
+
+     // allow connecting to onion websites
+     lockPref("dom.securecontext.whitelist_onions", true);
+     lockPref("network.dns.blockDotOnion", false);
+     lockPref("network.http.referer.hideOnionSource", true);
+
+     // force webrender since firefox think having hw accel is an unwanted
+     // feature
+     lockPref("gfx.webrender.compositor.force-enabled", true);
+     lockPref("gfx.webrender.compositor", true);
+     lockPref("gfx.webrender.all", true);
+
+     // no i do not want you to police me on what i can and cannot do
+     // mozilla
+     lockPref("extensions.blocklist.enabled", false);
+     lockPref("browser.safebrowsing.downloads.remote.enabled", false);
+     lockPref("browser.safebrowsing.malware.enabled", false); 
+     lockPref("browser.safebrowsing.phishing.enabled", false);
+
+     // disable automatic connections
+     lockPref("network.prefetch-next", false);
+     lockPref("network.dns.disablePrefetch", false);
+     lockPref("network.http.speculative-parallel-limit", 0);
+
+     // disable mozilla ads & tracking
+     lockPref("browser.aboutHomeSnippets.updateUrl", false);
+     lockPref("browser.startup.homepage_override.mstone", "ignore");
+     lockPref("extensions.getAddons.cache.enabled", false);
+     lockPref("messaging-system.rsexperimentloader.enabled", false);
+     lockPref("network.connectivity-service.enabled", false);
+     lockPref("browser.search.geoip.url", "");
+     lockPref("geo.enabled", false);
+     lockPref("browser.discovery.enabled", false);
+     lockPref("browser.urlbar.speculativeConnect.enabled", false);
+
+
+     // disable unwanted features
+     lockPref("media.peerconnection.enabled", false);
+
+     // OCSP does more harm than good); TLS certificate removal is pretty
+     // much useless, nobody will keep onlin a website that has been
+     // compromised. It's only helpful if a CA has been compromised but by
+     // then everyone will have flashing warnings so they'll probably have
+     // it updated before it even begins to become an issue.
+     lockPref("security.OCSP.enabled", 0);
+     //"privacy.trackingprotection.enabled", false);
+
+     // themeing
+     lockPref("devtools.theme", "dark");
+     lockPref("extensions.activeThemeID", "firefox-compact-dark@mozilla.org");
+    '';
+    # TODO: per extension settings, disable drmSupport
+
+    forceWayland = true;
+  };
+
 in
 {
   imports = [ ./../pkgs/termite.nix ];
@@ -48,7 +153,7 @@ in
       # fingerprint with my configuration, but i do login on websites sometimes.
       # As such tor is used as a clean cut identity that also make sure I didn't
       # fuck up tracking when need happens.
-      firefox-wayland 
+      sane-firefox
       #tor-browser-bundle-bin
       # art
       blender krita kdenlive 
@@ -157,74 +262,8 @@ in
   # 200x100, a feature called letterboxing, but this is definitely an unwanted
   # feature for a day-to-day browser. The entire JavaScript engine leaks too
   # much data and has never been thought out with security in mind and it shows.
-   home-manager.users.govanify = {
-     programs.firefox = {
-       enable = true;
-       package = pkgs.firefox-wayland;
-       profiles.main = {
-         id = 0;
-         settings = {
-           # disable telemetry; make tracking much harder
-           "privacy.resistFingerprinting" = true;
-           "privacy.firstparty.isolate" = true;
-           "app.normandy.enabled" = false;
-
-           # allow connecting to onion websites
-           "dom.securecontext.whitelist_onions" = true;
-           "network.dns.blockDotOnion" = false;
-           "network.http.referer.hideOnionSource" = true;
-
-           # force webrender since firefox think having hw accel is an unwanted
-           # feature
-           "gfx.webrender.compositor.force-enabled" = true;
-           "gfx.webrender.compositor" = true;
-           "gfx.webrender.all" = true;
-
-           # no i do not want you to police me on what i can and cannot do
-           # mozilla
-           "extensions.blocklist.enabled" = false;
-           "browser.safebrowsing.downloads.remote.enabled" = false;
-
-           # disable automatic connections
-           "network.prefetch-next" = false;
-           "network.dns.disablePrefetch" = false;
-           "network.http.speculative-parallel-limit" = 0;
-
-           # disable mozilla ads & tracking
-           "browser.aboutHomeSnippets.updateUrl" = false;
-           "browser.startup.homepage_override.mstone" = "ignore";
-           "extensions.getAddons.cache.enabled" = false;
-           "messaging-system.rsexperimentloader.enabled" = false;
-           "network.captive-portal-service.enabled" = false;
-           "network.connectivity-service.enabled" = false;
-           "browser.search.geoip.url" = "";
-           "identity.fxaccounts.enabled" = false;
-
-
-           # disable unwanted features
-           "media.peerconnection.enabled" = false;
-           "media.eme.enabled" = false;
-           "media.gmp-gmpopenh264.enabled" = false;
-
-           # OCSP does more harm than good; TLS certificate removal is pretty
-           # much useless, nobody will keep onlin a website that has been
-           # compromised. It's only helpful if a CA has been compromised but by
-           # then everyone will have flashing warnings so they'll probably have
-           # it updated before it even begins to become an issue.
-           "security.OCSP.enabled" = 0;
-           #"privacy.trackingprotection.enabled" = false;
-          };
-          # TODO: per extension settings
-       };
-        extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-          https-everywhere privacy-badger ublock-origin
-          decentraleyes stylus 
-          #forget-me-not noscript sponsorblock
-        ];
-     };
-   };
-   # blame them, not me
-   networking.extraHosts = "127.0.0.1	firefox.settings.services.mozilla.com";
+  # blame them, not me
+  networking.extraHosts = "127.0.0.1	firefox.settings.services.mozilla.com";
 
 
   fonts.fonts = with pkgs; [

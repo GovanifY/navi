@@ -35,15 +35,6 @@
       '';
     });
 
-    # a PR is in development but knowing the entire thing has been in the work
-    # since 15 years ago I'd assume it's going to take a _little_ bit longer
-    # https://phabricator.services.mozilla.com/D6995
-    firefox-wayland = super.firefox-wayland.overrideAttrs (oldAttrs: rec {
-      postPatch = ''
-          sed -i 's/"\.mozilla"/"\.local\/share\/mozilla"/' $(grep -Rl '"\.mozilla"')
-      '';
-    });
-
     # would be nice to get this working
     #freecad = super.freecad.overrideAttrs (oldAttrs: rec {
     #  postPatch = ''
