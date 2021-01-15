@@ -117,7 +117,10 @@ let
        # probably handled by nix extensions but oh well
        DisableSystemAddonUpdate = true;
        ExtensionUpdate = false;
-       EnableTrackingProtection.Value = false;
+       EnableTrackingProtection = {
+         Value = false;
+         Locked = true;
+       };
        DisableFeedbackCommands = true;
        SearchEngines.Default = "DuckDuckGo";
        BlockAboutAddons = true;
