@@ -20,7 +20,10 @@
        ignores = [ "compile_commands.json" ];
        extraConfig = {
          pull.rebase = true;
-         sendemail.smtpserver = "${pkgs.msmtp}/bin/msmtp";
+         sendemail = {
+           smtpserver = "${pkgs.msmtp}/bin/msmtp";
+           smtpserveroption = [ "-a" "govanify"];
+         };
        };
      };
      programs.obs-studio = {
