@@ -14,6 +14,7 @@
    home-manager.users.govanify = {
      programs.git = {
        enable = true;
+       package = pkgs.gitAndTools.gitFull;
        userEmail  = "gauvain@govanify.com";
        userName = "Gauvain 'GovanifY' Roussel-Tarbouriech";
        ignores = [ "compile_commands.json" ];

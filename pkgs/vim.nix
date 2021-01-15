@@ -25,7 +25,7 @@ in
           # aesthetics
           gruvbox airline
           # productivity
-          fzf-vim vim-visual-multi goyo
+          fzf-vim vim-visual-multi
           # dev
           tagbar fugitive nerdtree nerdcommenter
           # dev - syntax

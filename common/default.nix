@@ -19,7 +19,7 @@
 
     # basic set of tools & ssh
     environment.systemPackages = with pkgs; [
-      wget neovim fzf tmux git screen htop
+      wget neovim fzf tmux gitAndTools.gitFull screen htop
       rsync imagemagick mosh gnupg manpages ag bat any-nix-shell
     ];
 
@@ -58,10 +58,5 @@
       enable = true;
     };
 
-    nixpkgs.overlays = [
-      (self: super: {
-        git = super.gitAndTools.gitFull;
-      })
-    ];
   }
 

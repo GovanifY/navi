@@ -84,11 +84,6 @@ The text editor: Neovim
         ------
         Gets you multiple cursors on the next instance on the same word, allows for
         quick reformatting of variables etc.
-
-        :Goyo
-        -----
-        This launches a distraction-free vim, suitable to work for long period
-        of times on writing focused tasks.
     ~~~~~~~~~~~~~
 
 
@@ -115,11 +110,6 @@ The text editor: Neovim
         as this command is not only much faster but allows you to peak in commits
         quickly, fuzzy search them, and have a tree-like representation of them
         graphically.
-
-        \dd / :GdbStart
-        ---------------
-        Starts an interactive gdb session, with everything you'd expect from a modern
-        IDE.
     ~~~~~~~~~~~~~~~~~~~~~
 
 
