@@ -120,6 +120,7 @@ let
        EnableTrackingProtection.Value = false;
        DisableFeedbackCommands = true;
        SearchEngines.Default = "DuckDuckGo";
+       BlockAboutAddons = true;
     };
     extraPrefs = '' 
      // make tracking much harder
