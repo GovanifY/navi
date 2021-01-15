@@ -108,8 +108,10 @@ in
 
   # firefox security notes:
   #
-  # firefox should sync to your own server whatever you care(it's E2EE,
-  # personally i use it to keep a consistant set of tabs between devices)
+  # firefox should sync to your own server if you absolutely need the feature (it's E2EE,
+  # so in the big scheme of things when you use tor you don't really care but it
+  # gives out potential ip used by your tor node and activity time, so probably
+  # best to keep it off mozilla).
   # and to make tracking a whole lot harder you should:
   # 1. route all your traffic through tor, hides you from your local ISP/state
   # 2. use those extensions to mitigate website-side tracking as much as
@@ -155,6 +157,74 @@ in
   # 200x100, a feature called letterboxing, but this is definitely an unwanted
   # feature for a day-to-day browser. The entire JavaScript engine leaks too
   # much data and has never been thought out with security in mind and it shows.
+   home-manager.users.govanify = {
+     programs.firefox = {
+       enable = true;
+       package = pkgs.firefox-wayland;
+       profiles.main = {
+         id = 0;
+         settings = {
+           # disable telemetry; make tracking much harder
+           "privacy.resistFingerprinting" = true;
+           "privacy.firstparty.isolate" = true;
+           "app.normandy.enabled" = false;
+
+           # allow connecting to onion websites
+           "dom.securecontext.whitelist_onions" = true;
+           "network.dns.blockDotOnion" = false;
+           "network.http.referer.hideOnionSource" = true;
+
+           # force webrender since firefox think having hw accel is an unwanted
+           # feature
+           "gfx.webrender.compositor.force-enabled" = true;
+           "gfx.webrender.compositor" = true;
+           "gfx.webrender.all" = true;
+
+           # no i do not want you to police me on what i can and cannot do
+           # mozilla
+           "extensions.blocklist.enabled" = false;
+           "browser.safebrowsing.downloads.remote.enabled" = false;
+
+           # disable automatic connections
+           "network.prefetch-next" = false;
+           "network.dns.disablePrefetch" = false;
+           "network.http.speculative-parallel-limit" = 0;
+
+           # disable mozilla ads & tracking
+           "browser.aboutHomeSnippets.updateUrl" = false;
+           "browser.startup.homepage_override.mstone" = "ignore";
+           "extensions.getAddons.cache.enabled" = false;
+           "messaging-system.rsexperimentloader.enabled" = false;
+           "network.captive-portal-service.enabled" = false;
+           "network.connectivity-service.enabled" = false;
+           "browser.search.geoip.url" = "";
+           "identity.fxaccounts.enabled" = false;
+
+
+           # disable unwanted features
+           "media.peerconnection.enabled" = false;
+           "media.eme.enabled" = false;
+           "media.gmp-gmpopenh264.enabled" = false;
+
+           # OCSP does more harm than good; TLS certificate removal is pretty
+           # much useless, nobody will keep onlin a website that has been
+           # compromised. It's only helpful if a CA has been compromised but by
+           # then everyone will have flashing warnings so they'll probably have
+           # it updated before it even begins to become an issue.
+           "security.OCSP.enabled" = 0;
+           #"privacy.trackingprotection.enabled" = false;
+          };
+          # TODO: per extension settings
+       };
+        extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+          https-everywhere privacy-badger ublock-origin
+          decentraleyes stylus 
+          #forget-me-not noscript sponsorblock
+        ];
+     };
+   };
+   # blame them, not me
+   networking.extraHosts = "127.0.0.1	firefox.settings.services.mozilla.com";
 
 
   fonts.fonts = with pkgs; [
