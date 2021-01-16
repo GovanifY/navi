@@ -3,8 +3,8 @@
 with lib;
 let
   cfg = config.modules.tor.transparentProxy;
-  transPort = "9040";
-  dnsPort = "5353";
+  transPort = 9040;
+  dnsPort = 5353;
   torUid = toString config.ids.uids.tor;
   ianaReserved = "0.0.0.0/8 100.64.0.0/10 169.254.0.0/16 192.0.0.0/24 192.0.2.0/24 192.88.99.0/24 198.18.0.0/15 198.51.100.0/24 203.0.113.0/24 224.0.0.0/3";
   ianaReservedIPv6 = "::/0 ::/128 ::1/128 ::ffff:0:0/96 ::ffff:0:0:0/96 64:ff9b::/96 100::/64 2001::/32 2001:20::/28 2001:db8::/32 2002::/16 fc00::/7 fe80::/10 ff00::/8";
@@ -52,16 +52,17 @@ in {
   config = mkIf cfg.enable {
     services.tor = {
       # makes ourselves reachable through ssh, keys and hostname in /var/lib/tor
-      hiddenServices.ssh = {    map = [{port = 22;}];  };
+      relay.onionServices.ssh = {    map = [{port = 22;}];  };
       enable = true;
       # enabling the sandbox breaks stuff, should be checked!
-      extraConfig = ''
-        VirtualAddrNetworkIPv4 ${cfg.virtualNetwork}
-        VirtualAddrNetworkIPv6 ${cfg.virtualNetworkIPv6}
-        AutomapHostsOnResolve 1
-        TransPort ${transPort} IPv6Traffic PreferIPv6
-        DNSPort ${dnsPort}
-      '';
+      settings = {
+        VirtualAddrNetworkIPv4="${cfg.virtualNetwork}";
+        VirtualAddrNetworkIPv6="${cfg.virtualNetworkIPv6}";
+        AutomapHostsOnResolve=true;
+        #TransPort=[ transPort ["IPv6Traffic" "PreferIPv6"]];
+        TransPort=transPort;
+        DNSPort=dnsPort;
+      };
     };
     networking.nameservers = ["127.0.0.1"];
     networking.firewall.enable = true;
@@ -75,10 +76,10 @@ in {
 
       ### set iptables *nat
       #nat .onion addresses
-      iptables -t nat -A OUTPUT -d ${cfg.virtualNetwork} -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j REDIRECT --to-ports ${transPort}
+      iptables -t nat -A OUTPUT -d ${cfg.virtualNetwork} -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j REDIRECT --to-ports ${toString transPort}
 
       #nat dns requests to Tor
-      iptables -t nat -A OUTPUT -d 127.0.0.1/32 -p udp -m udp --dport 53 -j REDIRECT --to-ports ${dnsPort}
+      iptables -t nat -A OUTPUT -d 127.0.0.1/32 -p udp -m udp --dport 53 -j REDIRECT --to-ports ${toString dnsPort}
 
       #don't nat the Tor process, the loopback, or the local network
       iptables -t nat -A OUTPUT -m owner --uid-owner ${torUid} -j RETURN
@@ -89,7 +90,7 @@ in {
       done
 
       #redirect whatever fell thru to Tor's TransPort
-      iptables -t nat -A OUTPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j REDIRECT --to-ports ${transPort}
+      iptables -t nat -A OUTPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j REDIRECT --to-ports ${toString transPort}
 
       iptables -A INPUT -m state --state ESTABLISHED -j ACCEPT
       iptables -A INPUT -i lo -j ACCEPT
@@ -120,7 +121,7 @@ in {
       iptables -A OUTPUT -d 127.0.0.1/32 -o lo -j ACCEPT
 
       #tor transproxy magic
-      iptables -A OUTPUT -d 127.0.0.1/32 -p tcp -m tcp --dport ${transPort} --tcp-flags FIN,SYN,RST,ACK SYN -j ACCEPT
+      iptables -A OUTPUT -d 127.0.0.1/32 -p tcp -m tcp --dport ${toString transPort} --tcp-flags FIN,SYN,RST,ACK SYN -j ACCEPT
 
       #allow access to lan hosts in ${transExceptions}
       for _except in ${transExceptions}; do
@@ -149,10 +150,10 @@ in {
 
       ### set iptables *nat
       #nat .onion addresses
-      ip6tables -t nat -A OUTPUT -d ${cfg.virtualNetworkIPv6} -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j REDIRECT --to-ports ${transPort}
+      ip6tables -t nat -A OUTPUT -d ${cfg.virtualNetworkIPv6} -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j REDIRECT --to-ports ${toString transPort}
 
       #nat dns requests to Tor
-      ip6tables -t nat -A OUTPUT -d ::1/128 -p udp -m udp --dport 53 -j REDIRECT --to-ports ${dnsPort}
+      ip6tables -t nat -A OUTPUT -d ::1/128 -p udp -m udp --dport 53 -j REDIRECT --to-ports ${toString dnsPort}
 
       #don't nat the Tor process, the loopback, or the local network
       ip6tables -t nat -A OUTPUT -m owner --uid-owner ${torUid} -j RETURN
@@ -163,7 +164,7 @@ in {
       done
 
       #redirect whatever fell thru to Tor's TransPort
-      ip6tables -t nat -A OUTPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j REDIRECT --to-ports ${transPort}
+      ip6tables -t nat -A OUTPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j REDIRECT --to-ports ${toString transPort}
 
       ip6tables -A INPUT -m state --state ESTABLISHED -j ACCEPT
       ip6tables -A INPUT -i lo -j ACCEPT
@@ -194,7 +195,7 @@ in {
       ip6tables -A OUTPUT -d ::1/128 -o lo -j ACCEPT
 
       #tor transproxy magic
-      ip6tables -A OUTPUT -d ::1/128 -p tcp -m tcp --dport ${transPort} --tcp-flags FIN,SYN,RST,ACK SYN -j ACCEPT
+      ip6tables -A OUTPUT -d ::1/128 -p tcp -m tcp --dport ${toString transPort} --tcp-flags FIN,SYN,RST,ACK SYN -j ACCEPT
 
       #allow access to lan hosts in ${transExceptionsIPv6}
       for _except in ${transExceptionsIPv6}; do

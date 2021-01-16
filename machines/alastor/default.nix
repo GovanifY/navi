@@ -41,4 +41,11 @@
     home.file."Pictures/wallpaper.png".source  = ./wallpaper.png;
   };
 
+
+  #modules.tor.transparentProxy = {
+    #enable = true; 
+    #outputNic = "wlp3s0"; 
+    #inputNic = "wlp3s0"; 
+    #};
+
 }
