@@ -1,9 +1,9 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  cfg = config.modules.navi.bootloader;
+  cfg = config.modules.navi.headfull.mail;
 
-  mailsync = writeShellScript "mailsync.sh" ''
+  mailsync = pkgs.writeShellScript "mailsync.sh" ''
     if [ ! -z "$1" ]; then
         # we have to be nice to systemd apparently
         # https://github.com/systemd/systemd/issues/2123
@@ -105,12 +105,14 @@ let
   # 1. iterate over the attrset, generate primary and switch-to-account to list
   # 2. iterate through the list, replace @@number@@ by a counter
   # 3. convert the list to string!
-  accounts_source = concatStringsSep "\n" (imap1 (i: text: replaceStrings ["@@number@@"] ["${i}"] text)  (mapAttrsToList (name: account: 
+  accounts_source = concatStringsSep "\n" (imap1 (i: text: replaceStrings ["@@number@@"] ["${toString i}"] text)  (mapAttrsToList (name: account: 
     optionalString account.primary "source ~/.config/mutt/accounts/${name}.muttrc" + ''
     macro index,pager i@@number@@ '<sync-mailbox><enter-command>source ~/.config/mutt/accounts/${name}.muttrc<enter><change-folder>!<enter>;<check-stats>' "switch to ${name}"
   '') cfg.accounts));
 
-  accounts_config = mapAttrsToList (name: account: ''
+  accounts_config = mapAttrs' (name: account: nameValuePair
+  (".config/mutt/accounts/" + name + ".muttrc") ( {
+    text=''
     set realname = "${account.name}"
     set from = "${account.email}"
     set sendmail = "msmtp -a ${name}"
@@ -118,7 +120,7 @@ let
     set folder = "/home/govanify/.local/share/mail/${name}"
     set header_cache = /home/govanify/.cache/mutt/${name}-headers
     set message_cachedir = /home/govanify/.cache/mutt/${name}-bodies
-    set signature="${(writeTextFile { name=name+"-signature"; text=account.signature; })}"
+    set signature="${(pkgs.writeTextFile { name=name+"-signature"; text=account.signature; })}"
     unmailboxes *
     mailboxes `find "/home/govanify/.local/share/mail/${name}" -type d -name cur | sort | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | tr '\n' ' '`
   '' + optionalString (account.pgp_key != "" ''
@@ -133,17 +135,20 @@ let
     set pgp_check_gpg_decrypt_status_fd
     set pgp_self_encrypt = yes
     set crypt_protected_headers_write = yes
-'')) cfg.accounts;
+  '');})) cfg.accounts;
 
 
-  mailcap = writeTextFile "mailcap" ''
-    text/plain; $EDITOR %s ;
-    text/html; lynx -assume_charset=%{charset} -display_charset=utf-8 -dump %s; nametemplate=%s.html; copiousoutput;
-    image/*; imv %s ; copiousoutput
-    video/*; setsid mpv --quiet %s &; copiousoutput
-    application/pdf; firefox %s ;
-    application/pgp-encrypted; gpg -d '%s'; copiousoutput;
-  '';
+  mailcap = pkgs.writeTextFile {
+    name = "mailcap";
+    text = ''
+      text/plain; $EDITOR %s ;
+      text/html; lynx -assume_charset=%{charset} -display_charset=utf-8 -dump %s; nametemplate=%s.html; copiousoutput;
+      image/*; imv %s ; copiousoutput
+      video/*; setsid mpv --quiet %s &; copiousoutput
+      application/pdf; firefox %s ;
+      application/pgp-encrypted; gpg -d '%s'; copiousoutput;
+    '';
+  };
 
   mutt_config = ''
     set mailcap_path = ${mailcap}
@@ -336,43 +341,51 @@ let
 # End profile
 in
 {
-  options.modules.navi.mail = {
+  options.modules.navi.headfull.mail = {
     enable = mkEnableOption "Enable navi's headfull mail sync service";
-    accounts = with types; attrsOf (submodule {
-      options = {
-        email = mkOption {
+    accounts = mkOption {
+      type = types.attrsOf (types.submodule {
+        options = {
+          email = mkOption {
+              type = types.str;
+              description = ''
+                The email of the account
+              '';
+          };
+          name = mkOption {
             type = types.str;
             description = ''
-              The email of the account
+              The display name associated with the account
             '';
+          };
+          pgp_key = mkOption {
+            type = types.str;
+            default = "";
+            description = ''
+              The PGP key associated with the account, if any
+            '';
+          };
+          host = mkOption {
+            type = types.str;
+            description = ''
+              The website hosting the mail server 
+            '';
+          };
+          signature = mkOption {
+            type = types.str;
+            description = ''
+              The signature appended at the end of your emails
+            '';
+          };
+          primary = mkOption {
+            type = types.bool;
+            description = ''
+              Whether this is your primary email account
+            '';
+          };
         };
-        name = mkOption {
-          type = types.str;
-          description = ''
-            The display name associated with the account
-          '';
-        };
-        pgp_key = mkOption {
-          type = types.str;
-          #default = "";
-          description = ''
-            The PGP key associated with the account, if any
-          '';
-        };
-        host = mkOption {
-          type = types.str;
-          description = ''
-            The website hosting the mail server 
-          '';
-        };
-        primary = mkOption {
-          type = types.bool;
-          description = ''
-            Whether this is your primary email account
-          '';
-        };
-      };
-    });
+      });
+    };
     unread_notif = mkOption {
       type = types.listOf types.str;
       description = ''
@@ -396,10 +409,7 @@ in
       home.file.".config/mbsync/config".text  = isync_config;
       home.file.".config/mutt/muttrc".text  = mutt_config;
       #home.file.".config/notmuch".source  = ./../assets/mail/notmuch;
-      #home.file = map (account: {
-      #  ".config/mutt/account/${account.username}.muttrc".text = }) cfg.usernames;
-
-    };
+    } // accounts_config;
 
     # not sure why but here is let's encrypt cross signed X3 cert, needed for my
     # mail server apparently

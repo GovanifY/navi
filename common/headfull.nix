@@ -79,6 +79,10 @@
         name = "Gauvain Roussel-Tarbouriech"; 
         pgp_key = "52142D39A7CEF8FA872BCA7FDE62E1E2A6145556";
         host = "govanify.com";
+        signature = ''
+          Respectfully,
+          Gauvain Roussel-Tarbouriech
+        '';
         primary = true;
     };
     unread_notif = [ "govanify/INBOX" ];
