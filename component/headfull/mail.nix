@@ -3,7 +3,7 @@ with lib;
 let
   cfg = config.modules.navi.headfull.mail;
 
-  mailsync = pkgs.writeShellScript "mailsync.sh" ''
+  mailsync = pkgs.writeShellScript "mailsync.sh" (''
     if [ ! -z "$1" ]; then
         # we have to be nice to systemd apparently
         # https://github.com/systemd/systemd/issues/2123
@@ -16,7 +16,7 @@ let
         export GNUPGHOME=$HOME/.config/gnupg
     fi
     # Run only if user logged in (prevent cron errors)
-    pgrep -u "\${USER:=$LOGNAME}" >/dev/null || { echo "$USER not logged in; sync will not run."; exit ;}
+    pgrep -u "$USER" >/dev/null || { echo "$USER not logged in; sync will not run."; exit ;}
     # Run only if not already running in other instance
     pgrep -x mbsync >/dev/null && { echo "mbsync is already running." ; exit ;}
 
@@ -45,7 +45,7 @@ let
 
     wait
 
-    #notmuch new 2>/dev/null
+    #notmuch new 2>/dev/null 
 
     if test -f "/tmp/mailfail"; then
         echo "error" > ~/.local/share/mail/unread && exit 1 
@@ -53,10 +53,7 @@ let
     add=0
   '' + concatStringsSep "\n" (map (notif: 
     "add=$(($add+`find $XDG_DATA_HOME/mail/${notif} -type f | grep -vE ',[^,]*S[^,]*$' | xargs basename -a | grep -v \"^\\.\" | wc -l`))")  
-    cfg.unread_notif) + 
-  ''
-    echo $add > $XDG_DATA_HOME/mail/unread
-  '';
+    cfg.unread_notif) + "\necho $add > $XDG_DATA_HOME/mail/unread");
 
   isync_config = concatStringsSep "\n" (mapAttrsToList (name: account: ''
     IMAPStore ${name}-remote
@@ -106,13 +103,13 @@ let
   # 2. iterate through the list, replace @@number@@ by a counter
   # 3. convert the list to string!
   accounts_source = concatStringsSep "\n" (imap1 (i: text: replaceStrings ["@@number@@"] ["${toString i}"] text)  (mapAttrsToList (name: account: 
-    optionalString account.primary "source ~/.config/mutt/accounts/${name}.muttrc" + ''
+    optionalString account.primary "source ~/.config/mutt/accounts/${name}.muttrc\n" + ''
     macro index,pager i@@number@@ '<sync-mailbox><enter-command>source ~/.config/mutt/accounts/${name}.muttrc<enter><change-folder>!<enter>;<check-stats>' "switch to ${name}"
   '') cfg.accounts));
 
+  #(".config/mutt/accounts/" + name + ".muttrc") ( {
   accounts_config = mapAttrs' (name: account: nameValuePair
-  (".config/mutt/accounts/" + name + ".muttrc") ( {
-    text=''
+    (".config/mutt/accounts/" + name + ".muttrc") ( { text=''
     set realname = "${account.name}"
     set from = "${account.email}"
     set sendmail = "msmtp -a ${name}"
@@ -121,9 +118,15 @@ let
     set header_cache = /home/govanify/.cache/mutt/${name}-headers
     set message_cachedir = /home/govanify/.cache/mutt/${name}-bodies
     set signature="${(pkgs.writeTextFile { name=name+"-signature"; text=account.signature; })}"
+    # general folder mappings for email adresses
+    set mbox_type = Maildir
     unmailboxes *
+    set spoolfile = "+INBOX"
+    set postponed = "+INBOX.Drafts"
+    set trash = "+INBOX.Trash"
+    folder-hook . 'set record=^'
     mailboxes `find "/home/govanify/.local/share/mail/${name}" -type d -name cur | sort | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | tr '\n' ' '`
-  '' + optionalString (account.pgp_key != "" ''
+  '' + optionalString (account.pgp_key != "") ''
     set crypt_use_gpgme = yes
     set crypt_autosign=yes
     set crypt_verify_sig=yes
@@ -135,7 +138,8 @@ let
     set pgp_check_gpg_decrypt_status_fd
     set pgp_self_encrypt = yes
     set crypt_protected_headers_write = yes
-  '');})) cfg.accounts;
+  '';})) cfg.accounts;
+
 
 
   mailcap = pkgs.writeTextFile {
@@ -211,7 +215,7 @@ let
     bind pager \005 next-line		# Mouse wheel
     bind editor <Tab> complete-query
 
-    macro index,pager S "<sync-mailbox><shell-escape>${mailsync}/bin/mailsync.sh &> /dev/null &<enter>" "flush all changes and synchronize" 
+    macro index,pager S "<sync-mailbox><shell-escape>${mailsync} &> /dev/null &<enter>" "flush all changes and synchronize" 
 
     macro index \Cr "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" "mark all messages as read"
     macro index A "<limit>all\n" "show all messages (undo limit)"
@@ -229,15 +233,6 @@ let
     bind index,pager \Cp sidebar-prev-new
     bind index,pager \Cn sidebar-next-new
     bind index,pager B sidebar-toggle-visible
-
-    # general folder mappings for email adresses
-    set mbox_type = Maildir
-    set spoolfile = "+INBOX"
-    set postponed = "+INBOX.Drafts"
-    set trash = "+INBOX.Trash"
-    folder-hook . 'set record=^'
-
-
 
     # Default index colors:
     color index yellow default '.*'
@@ -404,10 +399,10 @@ in
 
     # XDG_CONFIG_HOME does not get parsed correctly so we do it manually
     # you need to create the caching folder otherwise this fails
-    home-manager.users.govanify = {
-      home.file.".config/msmtp/config".text  = msmtp_config;
-      home.file.".config/mbsync/config".text  = isync_config;
-      home.file.".config/mutt/muttrc".text  = mutt_config;
+    home-manager.users.govanify.home.file = {
+      ".config/msmtp/config".text  = msmtp_config;
+      ".config/mbsync/config".text  = isync_config;
+      ".config/mutt/muttrc".text  = mutt_config;
       #home.file.".config/notmuch".source  = ./../assets/mail/notmuch;
     } // accounts_config;
 
@@ -451,7 +446,7 @@ in
       description = "Synchronization of the user mailbox";
       wantedBy = [ "default.target" ];
       path = with pkgs; [ procps wget isync gawk pass ];
-      serviceConfig.ExecStart = "${pkgs.bash}/bin/sh ${mailsync}/bin/mailsync.sh %h";
+      serviceConfig.ExecStart = "${pkgs.bash}/bin/sh ${mailsync} %h";
       startAt = [ "*:0/5" ];
     };
   };
