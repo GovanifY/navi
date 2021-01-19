@@ -5,7 +5,7 @@ navi infrastructure design documents
 1.1 User Guide
 
 The user interface given is a simple wayland-based tiling manager containing 2
-windows, firefox and termite with its own tmux session. It is assumed most
+windows, firefox and kitty with its own tmux session. It is assumed most
 day-to-day tasks will be done inside those two windows, while additional windows
 can of course be created into additional screens, for graphical tools such as
 ghidra, FreeCAD, KiCAD, ardour, Krita, Blender and so on.
@@ -79,7 +79,7 @@ custom user:
 standard user:
 * ibus
 * Xwayland
-* termite
+* kitty
 * sway
 * firefox
 * mail(isync+msmtp+neomutt+notmuch+abook+lynx)
@@ -169,8 +169,8 @@ user processes and daemons:
 * cmus is sandboxed and shouldn't be a threat: worst case scenario someone can
   see your music library. Highly unlikely to get a sandbox escape
 
-* termite is not sandboxed and is just a GUI terminal emulator. I would be
-  pretty damn surprise if you can take over this one.
+* kitty is not sandboxed and is just a GUI terminal emulator. I would be
+  pretty damn surprised if you can take over this one.
 
 * sway is not sandboxed and does have some attack surface. It might ends up
   being a prime target for sandbox escape for GUIs, which are delibarately

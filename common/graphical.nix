@@ -189,7 +189,7 @@ let
 
 in
 {
-  imports = [ ./../pkgs/termite.nix ];
+  imports = [ ./../component/headfull/graphical/vte.nix ];
   services.getty.autologinUser = "govanify";
   services.redshift = {
     enable = true;
@@ -397,6 +397,7 @@ in
       '').outPath + "/bin/plymouth-quit"; 
     };
   systemd.services.systemd-ask-password-plymouth.enable = lib.mkForce false;
+  modules.navi.headfull.graphical.vte.enable = true;
   # XXX: for some reason shellInit isn't called by plymouth which never starts
   # the user target, hmmm 
   #systemd.services.plymouth-quit-wait.enable = lib.mkForce false;
