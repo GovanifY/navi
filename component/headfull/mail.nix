@@ -15,8 +15,6 @@ let
         export PASSWORD_STORE_DIR=$HOME/.config/pass
         export GNUPGHOME=$HOME/.config/gnupg
     fi
-    # Run only if user logged in (prevent cron errors)
-    pgrep -u "$USER" >/dev/null || { echo "$USER not logged in; sync will not run."; exit ;}
     # Run only if not already running in other instance
     pgrep -x mbsync >/dev/null && { echo "mbsync is already running." ; exit ;}
 
@@ -30,11 +28,7 @@ let
     }
 
     # Sync accounts passed as argument or all.
-    if [ "$#" -eq "0" ]; then
-        accounts="$(awk '/^Channel/ {print $2}' "$XDG_CONFIG_HOME/mbsync/config")"
-    else
-        accounts=$*
-    fi
+    accounts="$(awk '/^Channel/ {print $2}' "$XDG_CONFIG_HOME/mbsync/config")"
 
     rm /tmp/mailfail 2>/dev/null
     # Parallelize multiple accounts
