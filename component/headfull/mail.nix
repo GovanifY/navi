@@ -2,43 +2,8 @@
 with lib;
 let
   cfg = config.modules.navi.bootloader;
-  accounts_source=imap1 (i: account: ''
-    # vim: filetype=neomuttrc
-    source ~/.config/mutt/accounts/${account}.muttrc
-    macro index,pager i${toString i} '<sync-mailbox><enter-command>source ~/.config/mutt/accounts/${account}.muttrc<enter><change-folder>!<enter>;<check-stats>' "switch to ${account}"
-    '') cfg.usernames;
 
-  accounts_config = map (account: ''
-    # vim: filetype=neomuttrc
-    set realname = "${account.name}"
-    set from = "${account.email}"
-    set sendmail = "msmtp -a ${account.username}"
-    alias me ${account.name} <${account.email}>
-    set folder = "/home/govanify/.local/share/mail/${account.username}"
-    set header_cache = /home/govanify/.cache/mutt/${account.username}-headers
-    set message_cachedir = /home/govanify/.cache/mutt/${account.username}-bodies
-    set signature="${(writeTextFile { name=account.username+"-signature"; text=account.signature; })}"
-    set mbox_type = Maildir
-
-    bind index,pager gg noop
-    bind index,pager g noop
-    bind index,pager M noop
-    bind index,pager C noop
-    bind index gg first-entry
-    unmailboxes *
-
-    set spoolfile = "+INBOX"
-    set postponed = "+INBOX.Drafts"
-    set trash = "+INBOX.Trash"
-    # save sent mail in current folder
-    folder-hook . 'set record=^'
-
-    mailboxes `find "/home/govanify/.local/share/mail/${account.username}" -type d -name cur | sort | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | tr '\n' ' '`
-  '') cfg.usernames;
-
-  mailsync = writeScriptBin "mailsync" ''
-    #!${stdenv.shell}
-
+  mailsync = writeShellScript "mailsync.sh" ''
     if [ ! -z "$1" ]; then
         # we have to be nice to systemd apparently
         # https://github.com/systemd/systemd/issues/2123
@@ -80,20 +45,24 @@ let
 
     wait
 
-    notmuch new 2>/dev/null
+    #notmuch new 2>/dev/null
 
-    # TODO: make an unread for all accounts
     if test -f "/tmp/mailfail"; then
-        echo "error" > ~/.local/share/mail/unread-govanify && exit 1 
+        echo "error" > ~/.local/share/mail/unread && exit 1 
     fi
-    find $XDG_DATA_HOME/mail/govanify/INBOX -type f | grep -vE ',[^,]*S[^,]*$' | xargs basename -a | grep -v "^\." | wc -l > $XDG_DATA_HOME/mail/unread-govanify
+    add=0
+  '' + concatStringsSep "\n" (map (notif: 
+    "add=$(($add+`find $XDG_DATA_HOME/mail/${notif} -type f | grep -vE ',[^,]*S[^,]*$' | xargs basename -a | grep -v "^\." | wc -l`))") 
+    cfg.unread_notif) + 
+  ''
+    echo $add > $XDG_DATA_HOME/mail/unread
   '';
 
-  isync_config = map (account: ''
+  isync_config = concatStringsSep "\n" (map (account: ''
     IMAPStore ${account.username}-remote
     Host ${account.host}
-    Port  ${account.imaps_port}
-    User gauvain@govanify.com
+    Port 993
+    User ${account.email}
     PassCmd "pass navi/${account.email} | head -n 1"
     SSLType IMAPS
     CertificateFile /etc/ssl/certs/ca-certificates.crt 
@@ -114,7 +83,253 @@ let
     MaxMessages 0
     ExpireUnread no
     Patterns *
-  '') cfg.accounts;
+  '') cfg.accounts);
+
+  msmtp_config = '' 
+    defaults
+    auth on
+    tls	on
+    tls_trust_file /etc/ssl/certs/ca-certificates.crt 
+    logfile	~/.local/share/msmtp/msmtp.log
+  '' + concatStringsSep "\n" (map (account: ''
+
+    account ${account.username}
+    host ${account.host} 
+    port 587
+    from ${account.email} 
+    user ${account.email}
+    passwordeval "pass navi/${account.email} | head -n 1"
+  '') cfg.accounts);
+
+  # sourcing all accounts and setting primary account
+  accounts_source=imap1 (i: account: 
+    optionalString account.primary "source ~/.config/mutt/accounts/${account.username}.muttrc" + ''
+    macro index,pager i${toString i} '<sync-mailbox><enter-command>source ~/.config/mutt/accounts/${account.username}.muttrc<enter><change-folder>!<enter>;<check-stats>' "switch to ${account.username}"
+    '') cfg.accounts;
+
+  accounts_config = map (account: ''
+    set realname = "${account.name}"
+    set from = "${account.email}"
+    set sendmail = "msmtp -a ${account.username}"
+    alias me ${account.name} <${account.email}>
+    set folder = "/home/govanify/.local/share/mail/${account.username}"
+    set header_cache = /home/govanify/.cache/mutt/${account.username}-headers
+    set message_cachedir = /home/govanify/.cache/mutt/${account.username}-bodies
+    set signature="${(writeTextFile { name=account.username+"-signature"; text=account.signature; })}"
+    unmailboxes *
+    mailboxes `find "/home/govanify/.local/share/mail/${account.username}" -type d -name cur | sort | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | tr '\n' ' '`
+  '' + optionalString (account.pgp_key != "" ''
+    set crypt_use_gpgme = yes
+    set crypt_autosign=yes
+    set crypt_verify_sig=yes
+    set crypt_replysign=yes
+    set crypt_replyencrypt=yes
+    set crypt_replysignencrypted=yes
+    set crypt_opportunistic_encrypt=yes
+    set pgp_default_key="${account.pgp_key}"
+    set pgp_check_gpg_decrypt_status_fd
+    set pgp_self_encrypt = yes
+    set crypt_protected_headers_write = yes
+'') cfg.accounts;
+
+
+  mailcap = writeTextFile "mailcap" ''
+    text/plain; $EDITOR %s ;
+    text/html; lynx -assume_charset=%{charset} -display_charset=utf-8 -dump %s; nametemplate=%s.html; copiousoutput;
+    image/*; imv %s ; copiousoutput
+    video/*; setsid mpv --quiet %s &; copiousoutput
+    application/pdf; firefox %s ;
+    application/pgp-encrypted; gpg -d '%s'; copiousoutput;
+  '';
+
+  mutt_config = ''
+    set mailcap_path = ${mailcap}
+    set date_format="%d/%m/%y %I:%M%p"
+    set index_format="%2C %zs %?X?A& ? %D %-15.15F %s (%-4.4c)"
+    set sort = 'threads'
+    set sort_aux = 'reverse-date'
+    set rfc2047_parameters = yes
+    set sleep_time = 0		# Pause 0 seconds for informational messages
+    set markers = no		# Disables the `+` displayed at line wraps
+    set mark_old = no		# Unread mail stay unread until read
+    set mime_forward = yes		# attachments are forwarded with mail
+    set wait_key = no		# mutt won't ask "press key to continue"
+    set fast_reply			# skip to compose when replying
+    set fcc_attach			# save attachments with the body
+    set forward_format = "Fwd: %s"	# format of subject when forwarding
+    set forward_quote		# include message in forwards
+    set reverse_name		# reply as whomever it was to
+    set include			# include message in replies
+    auto_view text/html		# automatically show html 
+    auto_view application/pgp-encrypted
+    alternative_order text/plain text/enriched text/html
+    bind index,pager i noop
+    bind index,pager g noop
+    bind index \Cf noop
+    set sort = threads 
+    set sort_aux = reverse-last-date-received
+
+
+    # maybe execute macro S?
+    timeout-hook "exec sync-mailbox"
+
+    # General rebindings
+    bind attach <return> view-mailcap
+    bind attach l view-mailcap
+    bind editor <space> noop
+    bind index G last-entry
+    bind index gg first-entry
+    bind pager,attach h exit
+    bind pager j next-line
+    bind pager k previous-line
+    bind pager l view-attachments
+    bind index D delete-message
+    bind index U undelete-message
+    bind index L limit
+    bind index h noop
+    bind index l display-message
+    bind index <space> tag-entry
+    macro browser h '<change-dir><kill-line>..<enter>' "Go to parent folder"
+    bind index,pager H view-raw-message
+    bind browser l select-entry
+    bind pager,browser gg top-page
+    bind pager,browser G bottom-page
+    bind index,pager,browser d half-down
+    bind index,pager,browser u half-up
+    bind index,pager R group-reply
+    bind index \031 previous-undeleted	# Mouse wheel
+    bind index \005 next-undeleted		# Mouse wheel
+    bind pager \031 previous-line		# Mouse wheel
+    bind pager \005 next-line		# Mouse wheel
+    bind editor <Tab> complete-query
+
+    macro index,pager S "<sync-mailbox><shell-escape>${mailsync}/bin/mailsync.sh &> /dev/null &<enter>" "flush all changes and synchronize" 
+
+    macro index \Cr "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" "mark all messages as read"
+    macro index A "<limit>all\n" "show all messages (undo limit)"
+
+    # Sidebar mappings
+    set sidebar_visible = yes
+    set sidebar_width = 20
+    set sidebar_short_path = yes
+    set sidebar_next_new_wrap = yes
+    set mail_check_stats
+    set sidebar_format = '%B%?F? [%F]?%* %?N?%N/? %?S?%S?'
+    bind index,pager \Ck sidebar-prev
+    bind index,pager \Cj sidebar-next
+    bind index,pager \Co sidebar-open
+    bind index,pager \Cp sidebar-prev-new
+    bind index,pager \Cn sidebar-next-new
+    bind index,pager B sidebar-toggle-visible
+
+    # general folder mappings for email adresses
+    set mbox_type = Maildir
+    set spoolfile = "+INBOX"
+    set postponed = "+INBOX.Drafts"
+    set trash = "+INBOX.Trash"
+    folder-hook . 'set record=^'
+
+
+
+    # Default index colors:
+    color index yellow default '.*'
+    color index_author red default '.*'
+    color index_number blue default
+    color index_subject cyan default '.*'
+
+    # New mail is boldened:
+    color index brightyellow black "~N"
+    color index_author brightred black "~N"
+    color index_subject brightcyan black "~N"
+
+    # Tagged mail is highlighted:
+    color index brightyellow blue "~T"
+    color index_author brightred blue "~T"
+    color index_subject brightcyan blue "~T"
+
+    # Other colors and aesthetic settings:
+    mono bold bold
+    mono underline underline
+    mono indicator reverse
+    mono error bold
+    color normal default default
+    color indicator brightblack white
+    color sidebar_highlight red default
+    color sidebar_divider brightblack black
+    color sidebar_flagged red black
+    color sidebar_new green black
+    color normal brightyellow default
+    color error red default
+    color tilde black default
+    color message cyan default
+    color markers red white
+    color attachment white default
+    color search brightmagenta default
+    color status brightyellow black
+    color hdrdefault brightgreen default
+    color quoted green default
+    color quoted1 blue default
+    color quoted2 cyan default
+    color quoted3 yellow default
+    color quoted4 red default
+    color quoted5 brightred default
+    color signature brightgreen default
+    color bold black default
+    color underline black default
+    color normal default default
+
+    # Regex highlighting:
+    color header blue default ".*"
+    color header brightmagenta default "^(From)"
+    color header brightcyan default "^(Subject)"
+    color header brightwhite default "^(CC|BCC)"
+    color body brightred default "[\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+" # Email addresses
+    color body brightblue default "(https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+" # URL
+    color body green default "\`[^\`]*\`" # Green text between ` and `
+    color body brightblue default "^# \.*" # Headings as bold blue
+    color body brightcyan default "^## \.*" # Subheadings as bold cyan
+    color body brightgreen default "^### \.*" # Subsubheadings as bold green
+    color body yellow default "^(\t| )*(-|\\*) \.*" # List items as yellow
+    color body brightcyan default "[;:][-o][)/(|]" # emoticons
+    color body brightcyan default "[;:][)(|]" # emoticons
+    color body brightcyan default "[ ][*][^*]*[*][ ]?" # more emoticon?
+    color body brightcyan default "[ ]?[*][^*]*[*][ ]" # more emoticon?
+    color body red default "(BAD signature)"
+    color body cyan default "(Good signature)"
+    color body brightblack default "^gpg: Good signature .*"
+    color body brightyellow default "^gpg: "
+    color body brightyellow red "^gpg: BAD signature from.*"
+    mono body bold "^gpg: Good signature"
+    mono body bold "^gpg: BAD signature from.*"
+
+
+    # Patch syntax highlighting
+    color   body    brightwhite     default         ^[[:space:]].*
+    color   body    yellow          default         ^(diff).*
+    color   body    white           default         ^[\-\-\-].*
+    color   body    white           default         ^[\+\+\+].*
+    color   body    green           default         ^[\+].*
+    color   body    red             default         ^[\-].*
+    color   body    brightblue      default         [@@].*
+    color   body    brightwhite     default         ^(\s).*
+    color   body    cyan            default         ^(Signed-off-by).*
+    color   body    brightwhite     default         ^(Cc)
+    color   body    yellow          default         "^diff \-.*"
+    color   body    brightwhite     default         "^index [a-f0-9].*"
+    color   body    brightblue      default         "^---$"
+    color   body    white           default         "^\-\-\- .*"
+    color   body    white           default         "^[\+]{3} .*"
+    color   body    green           default         "^[\+][^\+]+.*"
+    color   body    red             default         "^\-[^\-]+.*"
+    color   body    brightblue      default         "^@@ .*"
+    color   body    green           default         "LGTM"
+    color   body    brightmagenta   default         "-- Commit Summary --"
+    color   body    brightmagenta   default         "-- File Changes --"
+    color   body    brightmagenta   default         "-- Patch Links --"
+    color   body    green           default         "^Merged #.*"
+    color   body    red             default         "^Closed #.*"
+    color   body    brightblue      default         "^Reply to this email.*"
+  '' + concatStringsSep "\n" accounts_source;
 # End profile
 in
 {
@@ -142,8 +357,9 @@ in
         };
         pgp_key = mkOption {
           type = types.str;
+          default = "";
           description = ''
-            The PGP key associated with the account
+            The PGP key associated with the account, if any
           '';
         };
         host = mkOption {
@@ -152,10 +368,10 @@ in
             The website hosting the mail server 
           '';
         };
-        imaps_port = mkOption {
-          type = types.str;
+        primary = mkOption {
+          type = types.bool;
           description = ''
-            The IMAPS port of the mail server
+            Whether this is your primary email account
           '';
         };
       };
@@ -172,23 +388,20 @@ in
   config = mkIf cfg.enable {
     # basic set of tools & ssh
     environment.systemPackages = with pkgs; [
-      neomutt msmtp isync abook lynx procps
-      notmuch notmuch-mutt
+      neomutt msmtp isync lynx procps
     ];
 
     # XDG_CONFIG_HOME does not get parsed correctly so we do it manually
     # you need to create the caching folder otherwise this fails
     home-manager.users.govanify = {
-      home.file.".config/msmtp/config".source  = ./../assets/mail/msmtp/config;
-      home.file.".config/mbsync/config".source  = ./../assets/mail/mbsync/config;
-      home.file.".config/mutt".source  = ./../assets/mail/mutt;
-      home.file.".config/notmuch".source  = ./../assets/mail/notmuch;
+      home.file.".config/msmtp/config".text  = msmtp_config;
+      home.file.".config/mbsync/config".text  = isync_config;
+      home.file.".config/mutt/muttrc".text  = mutt_config;
+      #home.file.".config/notmuch".source  = ./../assets/mail/notmuch;
       #home.file = map (account: {
       #  ".config/mutt/account/${account.username}.muttrc".text = }) cfg.usernames;
 
-      home.file.".config/mutt/muttrc".text  = readFile ./../assets/mail/mutt/mutt-main.muttrc + accounts_source;
     };
-    #environment.shellAliases = { neomutt = "mutt"; };
 
     # not sure why but here is let's encrypt cross signed X3 cert, needed for my
     # mail server apparently
@@ -227,10 +440,10 @@ in
     ];
 
     systemd.user.services.mailsync = {
-      description = "Synchronizes the user mailbox";
+      description = "Synchronization of the user mailbox";
       wantedBy = [ "graphical-session.target" ];
       path = with pkgs; [ procps wget isync gawk pass ];
-      serviceConfig.ExecStart = "${pkgs.bash}/bin/sh %h/.config/mutt/mailsync.sh %h";
+      serviceConfig.ExecStart = "${pkgs.bash}/bin/sh ${mailsync}/bin/mailsync.sh %h";
       startAt = [ "*:0/5" ];
     };
   };

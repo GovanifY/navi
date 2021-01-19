@@ -90,6 +90,12 @@ bind index,pager \Cp sidebar-prev-new
 bind index,pager \Cn sidebar-next-new
 bind index,pager B sidebar-toggle-visible
 
+# general folder mappings for email adresses
+set mbox_type = Maildir
+set spoolfile = "+INBOX"
+set postponed = "+INBOX.Drafts"
+set trash = "+INBOX.Trash"
+folder-hook . 'set record=^'
 
 
 

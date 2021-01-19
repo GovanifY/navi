@@ -7,7 +7,7 @@
 # like 2018-10-06 and the time (e.g., 14:01)
 date_formatted=$(date "+%a %d/%m/%Y %H:%M")
 
-mail=$(cat ~/.local/share/mail/unread-govanify)
+mail=$(cat ~/.local/share/mail/unread)
 
 # Emojis and characters for the status bar
 #     ⚡  \|

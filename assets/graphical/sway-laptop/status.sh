@@ -10,7 +10,7 @@ date_formatted=$(date "+%a %d/%m/%Y %H:%M")
 # Returns the battery status: "Full", "Discharging", or "Charging".
 battery_status=$(cat /sys/class/power_supply/BAT/status)
 
-mail=$(cat ~/.local/share/mail/unread-govanify)
+mail=$(cat ~/.local/share/mail/unread)
 
 battery_info=$(upower --show-info $(upower --enumerate |\
 grep 'BAT') |\
