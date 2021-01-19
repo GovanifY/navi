@@ -3,7 +3,6 @@
   imports =
     [ 
       ./graphical.nix
-      ./mail.nix
       ./mac.nix
       ./../component/headfull/mail.nix
       ./../pkgs/weechat.nix
@@ -70,6 +69,19 @@
     mode = "0400";
     uid = 0;
     gid = 0;
+  };
+
+
+  modules.navi.headfull.mail = {
+    enable = true;
+    accounts.govanify = {
+        email = "gauvain@govanify.com"; 
+        name = "Gauvain Roussel-Tarbouriech"; 
+        pgp_key = "52142D39A7CEF8FA872BCA7FDE62E1E2A6145556";
+        host = "govanify.com";
+        primary = true;
+    };
+    unread_notif = [ "govanify/INBOX" ];
   };
 }
 

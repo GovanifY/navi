@@ -52,14 +52,14 @@ let
     fi
     add=0
   '' + concatStringsSep "\n" (map (notif: 
-    "add=$(($add+`find $XDG_DATA_HOME/mail/${notif} -type f | grep -vE ',[^,]*S[^,]*$' | xargs basename -a | grep -v "^\." | wc -l`))") 
+    "add=$(($add+`find $XDG_DATA_HOME/mail/${notif} -type f | grep -vE ',[^,]*S[^,]*$' | xargs basename -a | grep -v \"^\\.\" | wc -l`))")  
     cfg.unread_notif) + 
   ''
     echo $add > $XDG_DATA_HOME/mail/unread
   '';
 
-  isync_config = concatStringsSep "\n" (map (account: ''
-    IMAPStore ${account.username}-remote
+  isync_config = concatStringsSep "\n" (mapAttrsToList (name: account: ''
+    IMAPStore ${name}-remote
     Host ${account.host}
     Port 993
     User ${account.email}
@@ -67,16 +67,16 @@ let
     SSLType IMAPS
     CertificateFile /etc/ssl/certs/ca-certificates.crt 
 
-    MaildirStore ${account.username}-local
+    MaildirStore ${name}-local
     Subfolders Verbatim
-    Path ~/.local/share/mail/${account.username}/
-    Inbox ~/.local/share/mail/${account.username}/INBOX
+    Path ~/.local/share/mail/${name}/
+    Inbox ~/.local/share/mail/${name}/INBOX
     Flatten .
 
-    Channel ${account.username}
+    Channel ${name}
     Expunge Both
-    Master :${account.username}-remote:
-    Slave :${account.username}-local:
+    Master :${name}-remote:
+    Slave :${name}-local:
     Create Both
     Remove Both
     SyncState *
@@ -91,9 +91,9 @@ let
     tls	on
     tls_trust_file /etc/ssl/certs/ca-certificates.crt 
     logfile	~/.local/share/msmtp/msmtp.log
-  '' + concatStringsSep "\n" (map (account: ''
+  '' + concatStringsSep "\n" (mapAttrsToList (name: account: ''
 
-    account ${account.username}
+    account ${name}
     host ${account.host} 
     port 587
     from ${account.email} 
@@ -101,23 +101,26 @@ let
     passwordeval "pass navi/${account.email} | head -n 1"
   '') cfg.accounts);
 
-  # sourcing all accounts and setting primary account
-  accounts_source=imap1 (i: account: 
-    optionalString account.primary "source ~/.config/mutt/accounts/${account.username}.muttrc" + ''
-    macro index,pager i${toString i} '<sync-mailbox><enter-command>source ~/.config/mutt/accounts/${account.username}.muttrc<enter><change-folder>!<enter>;<check-stats>' "switch to ${account.username}"
-    '') cfg.accounts;
+  # 3 steps: 
+  # 1. iterate over the attrset, generate primary and switch-to-account to list
+  # 2. iterate through the list, replace @@number@@ by a counter
+  # 3. convert the list to string!
+  accounts_source = concatStringsSep "\n" (imap1 (i: text: replaceStrings ["@@number@@"] ["${i}"] text)  (mapAttrsToList (name: account: 
+    optionalString account.primary "source ~/.config/mutt/accounts/${name}.muttrc" + ''
+    macro index,pager i@@number@@ '<sync-mailbox><enter-command>source ~/.config/mutt/accounts/${name}.muttrc<enter><change-folder>!<enter>;<check-stats>' "switch to ${name}"
+  '') cfg.accounts));
 
-  accounts_config = map (account: ''
+  accounts_config = mapAttrsToList (name: account: ''
     set realname = "${account.name}"
     set from = "${account.email}"
-    set sendmail = "msmtp -a ${account.username}"
+    set sendmail = "msmtp -a ${name}"
     alias me ${account.name} <${account.email}>
-    set folder = "/home/govanify/.local/share/mail/${account.username}"
-    set header_cache = /home/govanify/.cache/mutt/${account.username}-headers
-    set message_cachedir = /home/govanify/.cache/mutt/${account.username}-bodies
-    set signature="${(writeTextFile { name=account.username+"-signature"; text=account.signature; })}"
+    set folder = "/home/govanify/.local/share/mail/${name}"
+    set header_cache = /home/govanify/.cache/mutt/${name}-headers
+    set message_cachedir = /home/govanify/.cache/mutt/${name}-bodies
+    set signature="${(writeTextFile { name=name+"-signature"; text=account.signature; })}"
     unmailboxes *
-    mailboxes `find "/home/govanify/.local/share/mail/${account.username}" -type d -name cur | sort | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | tr '\n' ' '`
+    mailboxes `find "/home/govanify/.local/share/mail/${name}" -type d -name cur | sort | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | tr '\n' ' '`
   '' + optionalString (account.pgp_key != "" ''
     set crypt_use_gpgme = yes
     set crypt_autosign=yes
@@ -130,7 +133,7 @@ let
     set pgp_check_gpg_decrypt_status_fd
     set pgp_self_encrypt = yes
     set crypt_protected_headers_write = yes
-'') cfg.accounts;
+'')) cfg.accounts;
 
 
   mailcap = writeTextFile "mailcap" ''
@@ -329,25 +332,19 @@ let
     color   body    green           default         "^Merged #.*"
     color   body    red             default         "^Closed #.*"
     color   body    brightblue      default         "^Reply to this email.*"
-  '' + concatStringsSep "\n" accounts_source;
+  '' + accounts_source;
 # End profile
 in
 {
   options.modules.navi.mail = {
     enable = mkEnableOption "Enable navi's headfull mail sync service";
-    accounts = types.submodule {
+    accounts = with types; attrsOf (submodule {
       options = {
         email = mkOption {
             type = types.str;
             description = ''
               The email of the account
             '';
-        };
-        username = mkOption {
-          type = types.str;
-          description = ''
-            The login username of the account
-          '';
         };
         name = mkOption {
           type = types.str;
@@ -357,7 +354,7 @@ in
         };
         pgp_key = mkOption {
           type = types.str;
-          default = "";
+          #default = "";
           description = ''
             The PGP key associated with the account, if any
           '';
@@ -375,6 +372,7 @@ in
           '';
         };
       };
+    });
     unread_notif = mkOption {
       type = types.listOf types.str;
       description = ''
@@ -441,7 +439,7 @@ in
 
     systemd.user.services.mailsync = {
       description = "Synchronization of the user mailbox";
-      wantedBy = [ "graphical-session.target" ];
+      wantedBy = [ "default.target" ];
       path = with pkgs; [ procps wget isync gawk pass ];
       serviceConfig.ExecStart = "${pkgs.bash}/bin/sh ${mailsync}/bin/mailsync.sh %h";
       startAt = [ "*:0/5" ];
