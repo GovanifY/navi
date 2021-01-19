@@ -6,7 +6,7 @@
               ./headfull.nix
               ./graphical.nix
               ./gaming.nix
-              ./../component/virtualization.nix
+              ./../component/headfull/virtualization.nix
             ];
   home-manager.users.govanify = {
     home.file.".config/sway/config".source = ./../assets/graphical/sway/config;

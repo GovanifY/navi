@@ -8,9 +8,7 @@ set crypt_replysignencrypted=yes
 set crypt_opportunistic_encrypt=yes
 set pgp_default_key="52142D39A7CEF8FA872BCA7FDE62E1E2A6145556"
 set pgp_check_gpg_decrypt_status_fd
-#set pgp_use_gpg_agent = yes
 set pgp_self_encrypt = yes
-#set crypt_protected_headers_save = yes
 set crypt_protected_headers_write = yes
 
 set mailcap_path = ~/.config/mutt/mailcap
@@ -18,8 +16,6 @@ set date_format="%d/%m/%y %I:%M%p"
 set index_format="%2C %zs %?X?A& ? %D %-15.15F %s (%-4.4c)"
 set sort = 'threads'
 set sort_aux = 'reverse-date'
-set smtp_authenticators = 'gssapi:login'
-set query_command = "abook --config "$XDG_CONFIG_HOME"/abook/abookrc --datafile "$XDG_CACHE_HOME"/abook/addressbook --mutt-query '%s'"
 set rfc2047_parameters = yes
 set sleep_time = 0		# Pause 0 seconds for informational messages
 set markers = no		# Disables the `+` displayed at line wraps
@@ -32,7 +28,6 @@ set forward_format = "Fwd: %s"	# format of subject when forwarding
 set forward_quote		# include message in forwards
 set reverse_name		# reply as whomever it was to
 set include			# include message in replies
-set mail_check=60 # to avoid lags using IMAP with some email providers (yahoo for example)
 auto_view text/html		# automatically show html (mailcap uses w3m)
 auto_view application/pgp-encrypted
 alternative_order text/plain text/enriched text/html
@@ -62,7 +57,6 @@ bind index L limit
 bind index h noop
 bind index l display-message
 bind index <space> tag-entry
-#bind browser h goto-parent
 macro browser h '<change-dir><kill-line>..<enter>' "Go to parent folder"
 bind index,pager H view-raw-message
 bind browser l select-entry
@@ -79,9 +73,7 @@ bind editor <Tab> complete-query
 
 macro index,pager S "<sync-mailbox><shell-escape>~/.config/mutt/mailsync.sh &> /dev/null &<enter>" "flush all changes and synchronize" 
 
-macro index,pager a "<enter-command>set my_pipe_decode=\$pipe_decode pipe_decode<return><pipe-message>abook --config "$XDG_CONFIG_HOME"/abook/abookrc --datafile "$XDG_CACHE_HOME"/abook/addressbook --add-email<return><enter-command>set pipe_decode=\$my_pipe_decode; unset my_pipe_decode<return>" "add the sender address to abook"
 macro index \Cr "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" "mark all messages as read"
-macro index \Cf "<enter-command>unset wait_key<enter><shell-escape>read -p 'Enter a search term to find with notmuch: ' x; echo \$x >~/.cache/mutt_terms<enter><limit>~i \"\`notmuch search --output=messages \$(cat ~/.cache/mutt_terms) | head -n 600 | perl -le '@a=<>;s/\^id:// for@a;$,=\"|\";print@a' | perl -le '@a=<>; chomp@a; s/\\+/\\\\+/ for@a;print@a' \`\"<enter>" "show only messages matching a notmuch pattern"
 macro index A "<limit>all\n" "show all messages (undo limit)"
 
 # Sidebar mappings
@@ -171,7 +163,6 @@ color body brightyellow default "^gpg: "
 color body brightyellow red "^gpg: BAD signature from.*"
 mono body bold "^gpg: Good signature"
 mono body bold "^gpg: BAD signature from.*"
-color body red default "([a-z][a-z0-9+-]*://(((([a-z0-9_.!~*'();:&=+$,-]|%[0-9a-f][0-9a-f])*@)?((([a-z0-9]([a-z0-9-]*[a-z0-9])?)\\.)*([a-z]([a-z0-9-]*[a-z0-9])?)\\.?|[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+)(:[0-9]+)?)|([a-z0-9_.!~*'()$,;:@&=+-]|%[0-9a-f][0-9a-f])+)(/([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*(;([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*)*(/([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*(;([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*)*)*)?(\\?([a-z0-9_.!~*'();/?:@&=+$,-]|%[0-9a-f][0-9a-f])*)?(#([a-z0-9_.!~*'();/?:@&=+$,-]|%[0-9a-f][0-9a-f])*)?|(www|ftp)\\.(([a-z0-9]([a-z0-9-]*[a-z0-9])?)\\.)*([a-z]([a-z0-9-]*[a-z0-9])?)\\.?(:[0-9]+)?(/([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*(;([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*)*(/([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*(;([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*)*)*)?(\\?([-a-z0-9_.!~*'();/?:@&=+$,]|%[0-9a-f][0-9a-f])*)?(#([-a-z0-9_.!~*'();/?:@&=+$,]|%[0-9a-f][0-9a-f])*)?)[^].,:;!)? \t\r\n<>\"]"
 
 
 # Patch syntax highlighting

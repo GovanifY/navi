@@ -29,7 +29,9 @@ in
           # dev
           tagbar fugitive nerdtree nerdcommenter
           # dev - syntax
-          coc-snippets vim-snippets coc-nvim vim-clang-format
+          # should probably add a nix config gate for that
+          #coc-snippets vim-snippets coc-nvim 
+          vim-clang-format
           # dev - language specific
           rust-vim meson Coqtail vim-fish vim-nix coc-python
           # sessions
