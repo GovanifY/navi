@@ -5,12 +5,12 @@ navi infrastructure design documents
 1.1 User Guide
 
 The user interface given is a simple wayland-based tiling manager containing 2
-windows, firefox and kitty with its own tmux session. It is assumed most
+windows, firefox and kitty. It is assumed most
 day-to-day tasks will be done inside those two windows, while additional windows
 can of course be created into additional screens, for graphical tools such as
 ghidra, FreeCAD, KiCAD, ardour, Krita, Blender and so on.
 
-The tmux session automatically opens back the last session that you worked on
+The kitty session automatically opens back the last session that you worked on
 before system shutdown. A recommended setup is:
 
 [0: chat 1: system 2: music 3: work-chat 4: dev 5: sandboxed 6: research ]

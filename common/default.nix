@@ -13,13 +13,12 @@
       ./../secrets/deployment.nix
       ./../pkgs/vim.nix
       ./../pkgs/fish.nix
-      ./../pkgs/tmux.nix
     ];
 
 
     # basic set of tools & ssh
     environment.systemPackages = with pkgs; [
-      wget neovim fzf tmux gitAndTools.gitFull git-crypt screen htop
+      wget neovim fzf gitAndTools.gitFull git-crypt screen htop
       rsync imagemagick mosh gnupg manpages ag bat any-nix-shell
     ];
 

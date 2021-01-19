@@ -20,7 +20,7 @@ output eDP-1 scale 2.0
 exec swaymsg "workspace 1; exec ibus-daemon -dr > /dev/null 2>&1"
 exec swaymsg "workspace 1; exec firefox > /dev/null 2>&1"
 exec swaymsg "workspace 3; exec element-x11 > /dev/null 2>&1"
-exec swaymsg "workspace 2; exec kitty -e tmux > /dev/null 2>&1"
+exec swaymsg "workspace 2; exec kitty > /dev/null 2>&1"
 
 # ui chrome
 default_border pixel 1 
