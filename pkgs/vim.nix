@@ -37,7 +37,7 @@ in
           # sessions
           vim-misc workspace
           # spell check
-          vim-grammarous #vim-DetectSpellLang
+          #vim-DetectSpellLang
         ];
         extraConfig = ''
           " This should be enabled by default
@@ -124,71 +124,71 @@ in
           " automatic clang-format pickup
           let g:clang_format#detect_style_file = 1
           let g:clang_format#auto_format=1
-
-
-          " auto completion config
-          set hidden
-          set nobackup
-          set nowritebackup
-          set updatetime=300
-          set shortmess+=c
-          inoremap <silent><expr> <TAB>
-                \ pumvisible() ? coc#_select_confirm() :
-                \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump','''])\<CR>" :
-                \ <SID>check_back_space() ? "\<TAB>" :
-                \ coc#refresh()
-
-          function! s:check_back_space() abort
-            let col = col('.') - 1
-            return !col || getline('.')[col - 1]  =~# '\s'
-          endfunction
-
-          let g:coc_snippet_next = '<tab>'
-          function! s:check_back_space() abort
-            let col = col('.') - 1
-            return !col || getline('.')[col - 1]  =~# '\s'
-          endfunction
-          inoremap <silent><expr> <c-space> coc#refresh()
-
-          " Make <CR> auto-select the first completion item and notify coc.nvim to
-          " format on enter, <cr> could be remapped by other vim plugin
-          inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                                        \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-          set statusline^=%{coc#status()}%{get(b:,'coc_current_function',''')}
-
-          let g:coc_user_config = {
-          \'preferences' : { "useQuickfixForLocations": 'true' },
-          \'languageserver': {
-          \     'bash': {
-          \       "command": "${pkgs.nodePackages.bash-language-server}/bin/bash-language-server",
-          \       "args": ["start"],
-          \       "filetypes": ["sh"],
-          \       "rootPatterns": [".vim/", ".git/", ".hg/"],
-          \       "ignoredRootPaths": ["~"],
-          \     },
-          \     "nix": {
-          \        "command": "${pkgs.rnix-lsp}/bin/rnix-lsp",
-          \        "filetypes": ["nix"]
-          \     },
-          \     "clangd": {
-          \        "command": "${pkgs.llvmPackages.libclang.out}/bin/clangd",
-          \        "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".git/"],
-          \        "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp", "h"]
-          \     },
-          \     "rust": {
-          \       "command": "${pkgs.rust-analyzer}/bin/rust-analyzer",
-          \       "filetypes": ["rust", "rs"],
-          \       "rootPatterns": ["Cargo.toml"]
-          \     },
-          \     "haskell": {
-          \       "command": "${pkgs.haskellPackages.haskell-language-server.out}/bin/haskell-language-server-wrapper",
-          \       "args": ["--lsp"],
-          \       "rootPatterns": ["*.cabal", "stack.yaml", "cabal.project", "package.yaml", "hie.yaml"],
-          \       "filetypes": ["haskell", "lhaskell", "hs"]
-          \     }
-          \  }
-          \}
         '';
+
+          #" auto completion config
+          #set hidden
+          #set nobackup
+          #set nowritebackup
+          #set updatetime=300
+          #set shortmess+=c
+          #inoremap <silent><expr> <TAB>
+                #\ pumvisible() ? coc#_select_confirm() :
+                #\ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump','''])\<CR>" :
+                #\ <SID>check_back_space() ? "\<TAB>" :
+                #\ coc#refresh()
+
+          #function! s:check_back_space() abort
+            #let col = col('.') - 1
+            #return !col || getline('.')[col - 1]  =~# '\s'
+          #endfunction
+
+          #let g:coc_snippet_next = '<tab>'
+          #function! s:check_back_space() abort
+            #let col = col('.') - 1
+            #return !col || getline('.')[col - 1]  =~# '\s'
+          #endfunction
+          #inoremap <silent><expr> <c-space> coc#refresh()
+
+          #" Make <CR> auto-select the first completion item and notify coc.nvim to
+          #" format on enter, <cr> could be remapped by other vim plugin
+          #inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                                        #\: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+          #set statusline^=%{coc#status()}%{get(b:,'coc_current_function',''')}
+
+          #let g:coc_user_config = {
+          #\'preferences' : { "useQuickfixForLocations": 'true' },
+          #\'languageserver': {
+          #\     'bash': {
+          #\       "command": "${pkgs.nodePackages.bash-language-server}/bin/bash-language-server",
+          #\       "args": ["start"],
+          #\       "filetypes": ["sh"],
+          #\       "rootPatterns": [".vim/", ".git/", ".hg/"],
+          #\       "ignoredRootPaths": ["~"],
+          #\     },
+          #\     "nix": {
+          #\        "command": "${pkgs.rnix-lsp}/bin/rnix-lsp",
+          #\        "filetypes": ["nix"]
+          #\     },
+          #\     "clangd": {
+          #\        "command": "${pkgs.llvmPackages.libclang.out}/bin/clangd",
+          #\        "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".git/"],
+          #\        "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp", "h"]
+          #\     },
+          #\     "rust": {
+          #\       "command": "${pkgs.rust-analyzer}/bin/rust-analyzer",
+          #\       "filetypes": ["rust", "rs"],
+          #\       "rootPatterns": ["Cargo.toml"]
+          #\     },
+          #\     "haskell": {
+          #\       "command": "${pkgs.haskellPackages.haskell-language-server.out}/bin/haskell-language-server-wrapper",
+          #\       "args": ["--lsp"],
+          #\       "rootPatterns": ["*.cabal", "stack.yaml", "cabal.project", "package.yaml", "hie.yaml"],
+          #\       "filetypes": ["haskell", "lhaskell", "hs"]
+          #\     }
+          #\  }
+          #\}
+        #'';
       };
     };
     in

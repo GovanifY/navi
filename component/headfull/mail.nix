@@ -443,7 +443,7 @@ in
     ];
 
     systemd.user.services.mailsync = {
-      description = "Synchronization of the user mailbox";
+      description = "synchronization of the user mailbox";
       wantedBy = [ "default.target" ];
       path = with pkgs; [ procps wget isync gawk pass ];
       serviceConfig.ExecStart = "${pkgs.bash}/bin/sh ${mailsync} %h";
