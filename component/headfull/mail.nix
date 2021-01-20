@@ -3,6 +3,29 @@ with lib;
 let
   cfg = config.modules.navi.headfull.mail;
 
+  notmuch_email_list = concatStringsSep ";" (mapAttrsToList 
+    (name: account: optionalString account.primary "${account.email}") 
+    cfg.accounts);
+
+  notmuch_config = concatStringsSep "\n" (mapAttrsToList (name: account: 
+      optionalString account.primary ''
+    [database]
+    path=/home/govanify/.local/share/mail
+    [user]
+    name=${account.name}
+    primary_email=${account.email}
+    other_email=${notmuch_email_list}
+    [new]
+    tags=unread;inbox;
+    ignore=
+    [search]
+    exclude_tags=deleted;spam;
+    [maildir]
+    synchronize_flags=true
+    [crypto]
+    gpg_path=gpg
+  '') cfg.accounts);
+
   mailsync = pkgs.writeShellScript "mailsync.sh" (''
     if [ ! -z "$1" ]; then
         # we have to be nice to systemd apparently
@@ -39,7 +62,7 @@ let
 
     wait
 
-    #notmuch new 2>/dev/null 
+    notmuch new 2>/dev/null 
 
     if test -f "/tmp/mailfail"; then
         echo "error" > ~/.local/share/mail/unread && exit 1 
@@ -389,6 +412,7 @@ in
     # basic set of tools & ssh
     environment.systemPackages = with pkgs; [
       neomutt msmtp isync lynx procps
+      notmuch
     ];
 
     # XDG_CONFIG_HOME does not get parsed correctly so we do it manually
@@ -397,7 +421,7 @@ in
       ".config/msmtp/config".text  = msmtp_config;
       ".config/mbsync/config".text  = isync_config;
       ".config/mutt/muttrc".text  = mutt_config;
-      #home.file.".config/notmuch".source  = ./../assets/mail/notmuch;
+      ".config/notmuch".text  = notmuch_config;
     } // accounts_config;
 
     # not sure why but here is let's encrypt cross signed X3 cert, needed for my
