@@ -1,0 +1,19 @@
+navi's code architecture is divided into 3 parts: components, profiles and devices.
+
+A profile is composed of multiple components, and a device will usually add
+device-specific information to components that requires it.
+
+Components have a tree-like architecture. For example, in the top level
+components you can find the category headfull, which refers to devices which
+should be user operated, and a sub category of this one is graphical, since you
+can have a user operated device that doesn't have a screen, eg if you interact
+with it through ssh.
+
+Profiles, themselves, are a combination of components made to fit a certain
+task. If you want to create a web server then you'll use the web-server profile,
+which will auto enable the components required (eg a load balancer, an HTTP
+server, etc) and you will be able to add device specific information to the
+components directly (eg to add websites your device hosts).
+
+Profiles are thus done out of convenience to avoid boilerplate code across
+different machines.

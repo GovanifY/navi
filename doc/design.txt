@@ -1,6 +1,6 @@
 navi infrastructure design documents
 
-1. user facing machines, aka "headfull" devices:
+1. user facing devices, aka "headfull" devices:
 
 1.1 User Guide
 
@@ -91,7 +91,7 @@ standard user:
 
 The security of each of those components will be further discussed later on.
 CLI apps are usually preferred as they are easier to fuzz, usually snappier on
-lower end machines and integrate well with this setup overall.
+lower end devices and integrate well with this setup overall.
 
 The security architecture is overall sandbox based using firejail. Firejail was
 preferred over bwrap as filesystem whitelisting et al is supported by default

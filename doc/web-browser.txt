@@ -11,7 +11,7 @@ default, impossible and renders your traffic as uniform as the rest of the Tor
 network, as such it would be impossible to, say, if this website you visited
 belonged to you or to user X of your end node without having compromised the entry
 node too, which is a X*(10^-3) * Y*(3*(10^-3)) chance, as of 2020. If your
-adversary owns 500 different machines reparted in an equal fashion across guard
+adversary owns 500 different devices reparted in an equal fashion across guard
 and exit nodes then you are at a chance less than 18%. This is much higher than
 I hoped for but I can't really do anything about that, I'm already a tor relay
 operator. The hope of the Tor Project is that no adversary is truly global and
