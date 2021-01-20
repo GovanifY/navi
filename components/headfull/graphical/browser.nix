@@ -190,7 +190,7 @@ in
           forceWayland = true;
         };
       })
-  ];};
+    ];
 
   # blame them, not me
   networking.extraHosts = ''
@@ -201,5 +201,6 @@ in
     127.0.0.1 shavar.services.mozilla.com
     127.0.0.1 location.services.mozilla.com
   '';
+  };
 }
 
