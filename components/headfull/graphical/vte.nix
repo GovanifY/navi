@@ -8,6 +8,7 @@ in
       enable = mkEnableOption "Enable navi's graphical VTE";
     };
     config = mkIf cfg.enable {
+      environment.shellAliases.ssh = "kitty +kitten ssh";
       home-manager.users.govanify = {
         programs.kitty = {
           enable = true;
