@@ -6,6 +6,7 @@
     ./shell.nix
     ./macspoofer.nix
     ./sandboxing.nix
+    ./hardening.nix
     ./headfull
   ];
 }

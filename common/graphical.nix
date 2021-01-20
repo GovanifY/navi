@@ -209,6 +209,7 @@ in
     vte.enable = true;
     browser.enable = true;
   };
+  navi.components.hardening.scudo = false;
   # XXX: for some reason shellInit isn't called by plymouth which never starts
   # the user target, hmmm 
   #systemd.services.plymouth-quit-wait.enable = lib.mkForce false;

@@ -88,6 +88,12 @@
     };
     editor.enable = true;
   };
+
+  # locking kernel modules has a horrendous UX for headfull devices and is
+  # mostly useless for those, as they're deemed to restart frequently. A restart
+  # allows you to replace the currently running kernel by your own and thus
+  # bypass this mitigation altogether
+  navi.components.hardening.modules = false;
 }
 
 

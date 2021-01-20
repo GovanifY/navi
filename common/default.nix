@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }: {
   imports =
     [
-      ./security.nix
       ./users.nix
       ./locale.nix
       ./build-node.nix
@@ -54,5 +53,6 @@
       xdg.enable = true;
       shell.enable = true;
       macspoofer.enable = true;
+      hardening.enable = true;
     };
 }
