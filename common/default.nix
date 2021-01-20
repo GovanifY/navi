@@ -4,10 +4,9 @@
       ./security.nix
       ./users.nix
       ./locale.nix
-      ./xdg.nix
       ./sandboxing.nix
       ./build-node.nix
-      ../component/bootloader.nix
+      ../component
       (import "${builtins.fetchTarball
       https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos")
       ./../secrets/deployment.nix
@@ -53,7 +52,8 @@
     boot.kernelParams = [ "intel_iommu=on"
     "i915.enable_guc=0" "i915.enable_gvt=1" ]; # i915 iGVT-g
 
-    modules.navi.bootloader = {
-      enable = true;
+    modules.navi = {
+      bootloader.enable = true;
+      xdg.enable = true;
     };
 }
