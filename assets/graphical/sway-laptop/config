@@ -8,8 +8,6 @@ set $lock "swaylock --daemonize --indicator-radius 100 --indicator-thickness 7 -
 # auto lock
 exec swayidle -w \
          timeout 300 "swaylock --daemonize --indicator-radius 100 --indicator-thickness 7 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 -i ~/Pictures/wallpaper.png" \
-         timeout 600 'swaymsg "output * dpms off"' \
-         resume 'swaymsg "output * dpms on"' \
          before-sleep "swaylock --daemonize --indicator-radius 100 --indicator-thickness 7 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 -i ~/Pictures/wallpaper.png"
 
 # screen
