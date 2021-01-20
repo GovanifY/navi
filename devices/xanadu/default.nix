@@ -6,7 +6,6 @@
               ../../common/default.nix
               ../../common/laptop.nix
               ../../common/gaming.nix
-              ../../common/bluetooth.nix
             ];
   networking.hostName = "xanadu"; # Define your hostname.
   users.motd = ''

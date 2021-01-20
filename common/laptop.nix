@@ -36,5 +36,8 @@
   nix.extraOptions = ''
       builders-use-substitutes = true
   '';
+
+  # most laptops have some sort of bluetooth support nowadays
+  navi.components.headfull.bluetooth.enable = true;
 }
 

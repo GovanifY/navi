@@ -5,7 +5,6 @@
   imports = [ ./hardware.nix
               ../../common/default.nix
               ../../common/desktop.nix
-              ../../common/bluetooth.nix
             ];
   networking.hostName = "alastor"; 
   users.motd = ''
@@ -39,6 +38,8 @@
   home-manager.users.govanify = {
     home.file."Pictures/wallpaper.png".source  = ./wallpaper.png;
   };
+
+  navi.components.headfull.bluetooth.enable = true;
 
 
   #modules.tor.transparentProxy = {
