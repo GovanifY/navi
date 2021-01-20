@@ -3,7 +3,6 @@
   imports =
     [ 
       ./graphical.nix
-      ./mac.nix
       ./../pkgs/weechat.nix
     ];
 

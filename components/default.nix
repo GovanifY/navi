@@ -4,6 +4,7 @@
     ./bootloader.nix
     ./xdg.nix
     ./shell.nix
+    ./macspoofer.nix
     ./headfull
   ];
 }

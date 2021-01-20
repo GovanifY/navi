@@ -54,5 +54,6 @@
       bootloader.enable = true;
       xdg.enable = true;
       shell.enable = true;
+      macspoofer.enable = true;
     };
 }
