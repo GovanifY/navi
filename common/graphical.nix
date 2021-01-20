@@ -106,17 +106,6 @@ in
 
   programs.wireshark.enable = true;
 
-
-  # blame them, not me
-  networking.extraHosts = ''
-    127.0.0.1 firefox.settings.services.mozilla.com
-    127.0.0.1 tracking-protection.cdn.mozilla.net
-    127.0.0.1 push.services.mozilla.com
-    127.0.0.1 normandy.cdn.mozilla.net
-    127.0.0.1 shavar.services.mozilla.com
-    127.0.0.1 location.services.mozilla.com
-    '';
-
   fonts.fonts = with pkgs; [
     hack-font
   ];
