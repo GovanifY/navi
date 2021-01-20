@@ -39,47 +39,48 @@ in
     };
   };
   config = mkIf cfg.enable {
-    # ssh devs don't want to make ssh XDG compliant? well let's roll our own
-    # compliance!
     nixpkgs.config = {
-      packageOverrides = super: let self = super.pkgs; in {
-        openssh = super.openssh.overrideAttrs (oldAttrs: rec {
-          postPatch = oldAttrs.postPatch + ''
-            sed -i 's/"\.ssh"/"${escape ["/" "."] cfg.config}\/ssh"/' $(grep -Rl '"\.ssh"')
-          '';
-        });
+      nixpkgs.overlays = [
+        (self: super: {
+          # ssh devs don't want to make ssh XDG compliant? well let's roll our own
+          # compliance!
+          openssh = super.openssh.overrideAttrs (oldAttrs: rec {
+              postPatch = oldAttrs.postPatch + ''
+                sed -i 's/"\.ssh"/"${escape ["/" "."] cfg.config}\/ssh"/' $(grep -Rl '"\.ssh"')
+              '';
+            });
 
-      ## rarely created on my setup, seems to be x11 related? either way here we go
-      # NOT haha, this breaks nixos build at some point, so let's forget this
-     # dbus = super.dbus.overrideAttrs (oldAttrs: rec {
-        #postPatch = oldAttrs.postPatch + ''
-            #sed -i 's/"\.dbus"/"\.config\/dbus"/' $(grep -Rl '"\.dbus"')
-        #'';
-      #});
+          ## rarely created on my setup, seems to be x11 related? either way here we go
+          # NOT haha, this breaks nixos build at some point, so let's forget this
+          # dbus = super.dbus.overrideAttrs (oldAttrs: rec {
+            #postPatch = oldAttrs.postPatch + ''
+                #sed -i 's/"\.dbus"/"\.config\/dbus"/' $(grep -Rl '"\.dbus"')
+            #'';
+          #});
 
-      ## eh, it's just a forgotten pulseaudio module everyone forgot about. easier
-      ## to patch than to submit a PR.
-      pulseaudio = super.pulseaudio.overrideAttrs (oldAttrs: rec {
-        postPatch = ''
-            sed -i 's/"\.esd_auth"/"${escape ["/" "."] cfg.config}\/esd_auth"/' $(grep -Rl '"\.esd_auth"')
-        '';
-      });
+          ## eh, it's just a forgotten pulseaudio module everyone forgot about. easier
+          ## to patch than to submit a PR.
+          pulseaudio = super.pulseaudio.overrideAttrs (oldAttrs: rec {
+            postPatch = ''
+                sed -i 's/"\.esd_auth"/"${escape ["/" "."] cfg.config}\/esd_auth"/' $(grep -Rl '"\.esd_auth"')
+            '';
+          });
 
-      # would be nice to get this working
-      #freecad = super.freecad.overrideAttrs (oldAttrs: rec {
-      #  postPatch = ''
-      #      sed -i 's/"\.FreeCAD"/"\.config\/FreeCAD"/' $(grep -Rl '"\.FreeCAD"')
-      #  '';
-      #});
+          # would be nice to get this working
+          #freecad = super.freecad.overrideAttrs (oldAttrs: rec {
+          #  postPatch = ''
+          #      sed -i 's/"\.FreeCAD"/"\.config\/FreeCAD"/' $(grep -Rl '"\.FreeCAD"')
+          #  '';
+          #});
 
-      # fuck this dev, contains config+cache hence data
-      # https://github.com/baldurk/renderdoc/pull/1741
-      renderdoc = super.renderdoc.overrideAttrs (oldAttrs: rec {
-        postPatch = ''
-            sed -i 's/"\.renderdoc"/"${escape ["/" "."] cfg.data}\/renderdoc"/' $(grep -Rl '"\.renderdoc"')
-        '';
-      });
-      };
+          # fuck this dev, contains config+cache hence data
+          # https://github.com/baldurk/renderdoc/pull/1741
+          renderdoc = super.renderdoc.overrideAttrs (oldAttrs: rec {
+            postPatch = ''
+                sed -i 's/"\.renderdoc"/"${escape ["/" "."] cfg.data}\/renderdoc"/' $(grep -Rl '"\.renderdoc"')
+            '';
+          });
+      })];
     };
 
     environment.variables = {
