@@ -4,7 +4,7 @@ let
   cfg = config.modules.navi.headfull.mail;
 
   notmuch_email_list = concatStringsSep ";" (mapAttrsToList 
-    (name: account: optionalString account.primary "${account.email}") 
+    (name: account: optionalString (!account.primary) "${account.email}") 
     cfg.accounts);
 
   notmuch_config = concatStringsSep "\n" (mapAttrsToList (name: account: 
@@ -189,6 +189,8 @@ let
     set forward_quote		# include message in forwards
     set reverse_name		# reply as whomever it was to
     set include			# include message in replies
+    set query_command = "notmuch address %s" # use notmuch for address auto-complete
+    set query_format="%4c %t %-70.70a %-70.70n %?e?(%e)?" # ...and fix it :)
     auto_view text/html		# automatically show html 
     auto_view application/pgp-encrypted
     alternative_order text/plain text/enriched text/html
