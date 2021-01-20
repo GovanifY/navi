@@ -4,7 +4,6 @@
       ./security.nix
       ./users.nix
       ./locale.nix
-      ./sandboxing.nix
       ./build-node.nix
       ../components
       (import "${builtins.fetchTarball
