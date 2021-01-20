@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  cfg = config.modules.navi.shell;
+  cfg = config.navi.components.shell;
   fish_config = ''
     set fish_greeting
     set -U fish_color_normal normal
@@ -153,7 +153,7 @@ let
   '';
 in
 {
-  options.modules.navi.shell = {
+  options.navi.components.shell = {
     enable = mkEnableOption "Enable navi's custom shell";
   };
   config = mkIf cfg.enable {

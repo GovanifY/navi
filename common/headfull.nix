@@ -71,7 +71,7 @@
   };
 
 
-  modules.navi.headfull = {
+  navi.components.headfull = {
     mail = {
       enable = true;
       accounts.govanify = {

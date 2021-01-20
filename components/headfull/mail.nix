@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  cfg = config.modules.navi.headfull.mail;
+  cfg = config.navi.components.headfull.mail;
 
   notmuch_email_list = concatStringsSep ";" (mapAttrsToList 
     (name: account: optionalString (!account.primary) "${account.email}") 
@@ -361,7 +361,7 @@ let
 # End profile
 in
 {
-  options.modules.navi.headfull.mail = {
+  options.navi.components.headfull.mail = {
     enable = mkEnableOption "Enable navi's headfull mail sync service";
     accounts = mkOption {
       type = types.attrsOf (types.submodule {

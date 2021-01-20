@@ -11,10 +11,10 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  cfg = config.modules.navi.xdg;
+  cfg = config.navi.components.xdg;
 in
 {
-  options.modules.navi.xdg = {
+  options.navi.components.xdg = {
     enable = mkEnableOption "Force programs to adhere to the XDG base specification";
     config = mkOption {
       type = types.str;

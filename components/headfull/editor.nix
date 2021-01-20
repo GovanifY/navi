@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... } :
 with lib;
 let
-  cfg = config.modules.navi.headfull.editor;
+  cfg = config.navi.components.headfull.editor;
   # contains some patches for syntastic and Tagbar support since upstream is
   # abandonned
   workspace = pkgs.vimPlugins.vim-obsession.overrideAttrs (oldAttrs: rec {
@@ -191,7 +191,7 @@ let
 
 in
 {
-  options.modules.navi.headfull.editor = {
+  options.navi.components.headfull.editor = {
     enable = mkEnableOption "Enable navi's text editor";
     ide_features = mkOption {
       type = types.bool;

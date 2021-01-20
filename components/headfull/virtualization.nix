@@ -1,42 +1,40 @@
 { config, lib, pkgs, ... }:
 with lib;
 let
-  cfg = config.modules.navi.virtualization;
+  cfg = config.navi.components.virtualization;
 in {
-  options = {
-    modules.navi.virtualization = {
-      enable = mkEnableOption "Various virtualization options";
-      pci_devices = mkOption {
-        type = types.str;
-        default = "";
-        description = "List of PCI devices to isolate, colon separated list ex: 8086:1912,8086:1913";
-      };
-      bridge_devices = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = "List of interfaces the bridge binds to.";
-      };
+  options.navi.components.virtualization = {
+    enable = mkEnableOption "Various virtualization options";
+    pci_devices = mkOption {
+      type = types.str;
+      default = "";
+      description = "List of PCI devices to isolate, colon separated list ex: 8086:1912,8086:1913";
+    };
+    bridge_devices = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = "List of interfaces the bridge binds to.";
+    };
 
-      gvt = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable iGVT-d hooks";
-      };
-      gvt_pci = mkOption {
-        type = types.str;
-        default = "0000:00:02.0";
-        description = "PCI identifier for the Intel GPU.";
-      };
-      gvt_type = mkOption {
-        type = types.str;
-        default = "i915-GVTg_V5_4";
-        description = "Display type of the virtual GPU.";
-      };
-      gvt_uuid = mkOption {
-        type = types.listOf types.str;
-        default = [ "dbed0bd6-4ca7-11eb-a388-8bc211181753" ];
-        description = "UUID given to the virtual GPU.";
-      };
+    gvt = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable iGVT-d hooks";
+    };
+    gvt_pci = mkOption {
+      type = types.str;
+      default = "0000:00:02.0";
+      description = "PCI identifier for the Intel GPU.";
+    };
+    gvt_type = mkOption {
+      type = types.str;
+      default = "i915-GVTg_V5_4";
+      description = "Display type of the virtual GPU.";
+    };
+    gvt_uuid = mkOption {
+      type = types.listOf types.str;
+      default = [ "dbed0bd6-4ca7-11eb-a388-8bc211181753" ];
+      description = "UUID given to the virtual GPU.";
     };
   };
   config = mkIf cfg.enable {

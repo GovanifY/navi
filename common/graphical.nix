@@ -205,7 +205,7 @@ in
       '').outPath + "/bin/plymouth-quit"; 
     };
   systemd.services.systemd-ask-password-plymouth.enable = lib.mkForce false;
-  modules.navi.headfull.graphical = {
+  navi.components.headfull.graphical = {
     vte.enable = true;
     browser.enable = true;
   };

@@ -30,7 +30,7 @@
     "Smile, my dear! You know, you're 
      never fully dressed without one!"
 '';
-   modules.navi.virtualization = {
+   navi.components.virtualization = {
     enable = true;
     pci_devices = "8086:1912";
     bridge_devices = [ "wlp3s0" ];

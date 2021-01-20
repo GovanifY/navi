@@ -4,7 +4,7 @@
 with lib;
 let
 
-  cfg = config.modules.navi.bootloader;
+  cfg = config.navi.components.bootloader;
   # grub should be a coreboot payload when possible and patched: disable
   # grub-rescue, only cryptomount the given drive in argument and navi names.
   grubPatch = ''
@@ -22,7 +22,7 @@ in
   imports = [ ./../overlays/grub/grub.nix 
               ./../overlays/stage-1/stage-1.nix ];
 
-  options.modules.navi.bootloader = {
+  options.navi.components.bootloader = {
     enable = mkEnableOption "Enable navi's bootloader";
     no_mercy = mkOption {
       type = types.bool;

@@ -50,7 +50,7 @@
     boot.kernelParams = [ "intel_iommu=on"
     "i915.enable_guc=0" "i915.enable_gvt=1" ]; # i915 iGVT-g
 
-    modules.navi = {
+    navi.components = {
       bootloader.enable = true;
       xdg.enable = true;
       shell.enable = true;

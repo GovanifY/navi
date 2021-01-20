@@ -1,10 +1,10 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  cfg = config.modules.navi.headfull.graphical.vte;
+  cfg = config.navi.components.headfull.graphical.vte;
 in
   {
-    options.modules.navi.headfull.graphical.vte = {
+    options.navi.components.headfull.graphical.vte = {
       enable = mkEnableOption "Enable navi's graphical VTE";
     };
     config = mkIf cfg.enable {
