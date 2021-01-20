@@ -197,6 +197,12 @@ let
     bind index,pager i noop
     bind index,pager g noop
     bind index \Cf noop
+    macro index \Cf \
+    "<enter-command>set my_old_pipe_decode=\$pipe_decode my_old_wait_key=\$wait_key nopipe_decode nowait_key<enter>\
+    <shell-escape>notmuch-mutt -r --prompt search<enter>\
+    <change-folder-readonly>`echo $XDG_CACHE_HOME/notmuch/mutt/results`<enter>\
+    <enter-command>set pipe_decode=\$my_old_pipe_decode wait_key=\$my_old_wait_key<enter>" \
+    "notmuch: search mail"
     set sort = threads 
     set sort_aux = reverse-last-date-received
 
@@ -414,7 +420,7 @@ in
     # basic set of tools & ssh
     environment.systemPackages = with pkgs; [
       neomutt msmtp isync lynx procps
-      notmuch
+      notmuch notmuch-mutt
     ];
 
     # XDG_CONFIG_HOME does not get parsed correctly so we do it manually
