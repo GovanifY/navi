@@ -9,7 +9,6 @@ let
 
 in
 {
-  imports = [ ./../component ];
   services.getty.autologinUser = "govanify";
   services.redshift = {
     enable = true;

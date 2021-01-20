@@ -4,7 +4,6 @@
     [ 
       ./graphical.nix
       ./mac.nix
-      ./../component/headfull/mail.nix
       ./../pkgs/weechat.nix
     ];
 

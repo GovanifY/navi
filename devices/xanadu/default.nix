@@ -4,7 +4,6 @@
 
   imports = [ ./hardware.nix
               ../../common/default.nix
-              ../../component/tor.nix
               ../../common/laptop.nix
               ../../common/gaming.nix
               ../../common/bluetooth.nix

@@ -6,12 +6,11 @@
       ./locale.nix
       ./sandboxing.nix
       ./build-node.nix
-      ../component
+      ../components
       (import "${builtins.fetchTarball
       https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos")
       ./../secrets/deployment.nix
       ./../pkgs/vim.nix
-      ./../pkgs/fish.nix
     ];
 
 
@@ -55,5 +54,6 @@
     modules.navi = {
       bootloader.enable = true;
       xdg.enable = true;
+      shell.enable = true;
     };
 }
