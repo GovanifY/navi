@@ -6,7 +6,6 @@ let
     osName = "";
     osVersion = "";
   };
-
 in
 {
   services.getty.autologinUser = "govanify";

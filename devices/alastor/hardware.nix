@@ -84,5 +84,6 @@
   load-module module-remap-source master=alsa_input.usb-Focusrite_Scarlett_2i2_USB-00.analog-stereo source_name=Mic-Mono master_channel_map=left channel_map=mono
   set-default-source Mic-Mono
   '';
+  boot.supportedFilesystems = [ "ntfs" ];
 }
 
