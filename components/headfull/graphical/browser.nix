@@ -84,6 +84,11 @@ in
                 url = "https://addons.mozilla.org/firefox/downloads/file/3705391/noscript_security_suite-11.1.8-an+fx.xpi"; 
                 sha256 = "0w1q2ah2g23fkjxiwr1ky9icjzgknyqypdlg50a4d86z1iag3g46";
               })
+              (pkgs.fetchFirefoxAddon {
+                name = "forget-me-not";
+                url = "https://addons.mozilla.org/firefox/downloads/file/3577046/forget_me_not_forget_cookies_other_data-2.2.8-an+fx.xpi"; 
+                sha256 = "1qrbfsf5vmbyis29mhlmwb6dj933rrwpislpg0xi8b4r9xplb107";
+              })
               ];
           extraPolicies = {
             CaptivePortal = false;
