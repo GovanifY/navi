@@ -197,12 +197,7 @@ let
     bind index,pager i noop
     bind index,pager g noop
     bind index \Cf noop
-    macro index \Cf \
-    "<enter-command>set my_old_pipe_decode=\$pipe_decode my_old_wait_key=\$wait_key nopipe_decode nowait_key<enter>\
-    <shell-escape>notmuch-mutt -r --prompt search<enter>\
-    <change-folder-readonly>`echo $XDG_CACHE_HOME/notmuch/mutt/results`<enter>\
-    <enter-command>set pipe_decode=\$my_old_pipe_decode wait_key=\$my_old_wait_key<enter>" \
-    "notmuch: search mail"
+    macro index \Cf "<enter-command>unset wait_key<enter><shell-escape>printf 'Enter a search term to find with notmuch: '; read x; echo \$x >~/.cache/mutt_terms<enter><limit>~i \"\`notmuch search --output=messages \$(cat ~/.cache/mutt_terms) | head -n 600 | perl -le '@a=<>;s/\^id:// for@a;$,=\"|\";print@a' | perl -le '@a=<>; chomp@a; s/\\+/\\\\+/ for@a;print@a' \`\"<enter>" "show only messages matching a notmuch pattern"
     set sort = threads 
     set sort_aux = reverse-last-date-received
 
@@ -420,7 +415,7 @@ in
     # basic set of tools & ssh
     environment.systemPackages = with pkgs; [
       neomutt msmtp isync lynx procps
-      notmuch notmuch-mutt
+      notmuch notmuch-mutt perl
     ];
 
     # XDG_CONFIG_HOME does not get parsed correctly so we do it manually
