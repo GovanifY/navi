@@ -47,6 +47,7 @@ let
     # Check account for new mail. Notify if there is new content.
     syncandnotify() {
         acc="$(echo "$account" | sed "s/.*\///")"
+        mkdir -p ~/.local/share/mail/$acc
         mbsync -c $XDG_CONFIG_HOME/mbsync/config "$acc" || touch /tmp/mailfail 
     }
 
@@ -394,6 +395,7 @@ in
           };
           primary = mkOption {
             type = types.bool;
+            default = false;
             description = ''
               Whether this is your primary email account
             '';
