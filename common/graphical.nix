@@ -1,30 +1,9 @@
-{ config, lib, pkgs, ... }:
-let
-  breeze-navi = pkgs.breeze-plymouth.override {
-    logoFile = config.boot.plymouth.logo;
-    logoName = "navi";
-    osName = "";
-    osVersion = "";
-  };
-in
-{
+{ config, lib, pkgs, ... }: {
   services.getty.autologinUser = "govanify";
   services.redshift = {
     enable = true;
     package = pkgs.redshift-wlr;
   };
-
-  # TODO: currently doesn't hide stage1, to fix?
-  boot.plymouth.enable = true;
-  boot.plymouth.logo = 
-    pkgs.fetchurl {
-      url = "https://govanify.com/img/star.png";
-      sha256 = "19ij7sn6xax9i7df97i3jmv0nrsl9cvr9p6j9vnq4r4n5n81zq8i";
-    };
-  boot.plymouth.themePackages = [ breeze-navi ];
-
-  # firefox no segfaulty
-  xdg.portal.enable = false;
 
   boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
   programs.sway = {
@@ -184,7 +163,6 @@ in
    home.file.".config/qt5ct/qt5ct.conf".source  = ./../assets/graphical/qt5ct/qt5ct.conf;
    home.file.".config/qt5ct/colors/breeze-dark.conf".source  = ./../assets/graphical/qt5ct/breeze-dark.conf;
 
-
    # GTK theme
    #home.file.".local/share/icons/default".source = "${pkgs.breeze-qt5}/share/icons/breeze_cursors";
    #gtk-icon-theme-name=breeze-dark
@@ -196,21 +174,9 @@ in
       ''; 
   };
 
-
-  security.wrappers = { plymouth-quit.source = 
-        (pkgs.writeScriptBin "plymouth-quit" ''
-         #!${pkgs.bash}/bin/bash -p
-         ${pkgs.systemd}/bin/systemctl start plymouth-quit.service
-      '').outPath + "/bin/plymouth-quit"; 
-    };
-  systemd.services.systemd-ask-password-plymouth.enable = lib.mkForce false;
   navi.components.headfull.graphical = {
     vte.enable = true;
     browser.enable = true;
+    splash.enable = true;
   };
-  navi.components.hardening.scudo = false;
-  # XXX: for some reason shellInit isn't called by plymouth which never starts
-  # the user target, hmmm 
-  #systemd.services.plymouth-quit-wait.enable = lib.mkForce false;
-  #systemd.services.plymouth-quit.wantedBy = lib.mkForce [  ];
 }
