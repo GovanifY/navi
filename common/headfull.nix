@@ -84,9 +84,21 @@
           '';
           primary = true;
       };
+      accounts.esgi-nf = {
+          email = "esgi-nf@govanify.com"; 
+          name = "Gauvain Roussel-Tarbouriech"; 
+          host = "govanify.com";
+          signature = ''
+            Respectfully,
+            Gauvain Roussel-Tarbouriech
+          '';
+          primary = false;
+      };
+
       unread_notif = [ "govanify/INBOX" ];
     };
     editor.enable = true;
+    music.enable = true;
   };
 
   # locking kernel modules has a horrendous UX for headfull devices and is
