@@ -52,6 +52,7 @@
       bootloader.enable = true;
       xdg.enable = true;
       shell.enable = true;
+      multiplexer.enable = true;
       macspoofer.enable = true;
       hardening.enable = true;
     };
