@@ -10,8 +10,7 @@ day-to-day tasks will be done inside those two windows, while additional windows
 can of course be created into additional screens, for graphical tools such as
 ghidra, FreeCAD, KiCAD, ardour, Krita, Blender and so on.
 
-The tmux session automatically opens back the last session that you worked on
-before system shutdown. A recommended setup is:
+An empty tabbed alacritty session automatically opens at startup. A recommended setup is:
 
 [0: chat 1: system 2: music 3: work-chat 4: dev 5: sandboxed 6: research ]
 whereas:
@@ -79,7 +78,7 @@ custom user:
 standard user:
 * ibus
 * Xwayland
-* tmux
+* alacritty
 * sway
 * firefox
 * mail(isync+msmtp+neomutt+notmuch+abook+lynx)
@@ -170,7 +169,8 @@ user processes and daemons:
   see your music library. Highly unlikely to get a sandbox escape
 
 * alacritty is not sandboxed and is just a GUI terminal emulator. I would be
-  pretty damn surprised if you can take over this one.
+  pretty damn surprised if you can take over this one, especially as it's
+  written in Rust.
 
 * sway is not sandboxed and does have some attack surface. It might ends up
   being a prime target for sandbox escape for GUIs, which are delibarately

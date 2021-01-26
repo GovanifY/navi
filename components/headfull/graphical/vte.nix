@@ -13,7 +13,6 @@ in
         enable = true;
         settings = {
           colors = {
-            #font.size = 9.0;
             primary = {
               background = "#282828";
               foreground = "#ebdbb2";
