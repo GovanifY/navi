@@ -3,53 +3,45 @@ with lib;
 let
   cfg = config.navi.components.headfull.graphical.vte;
 in
-  {
-    options.navi.components.headfull.graphical.vte = {
-      enable = mkEnableOption "Enable navi's graphical VTE";
-    };
-    config = mkIf cfg.enable {
-      #environment.shellAliases.ssh = "kitty +kitten ssh";
-      home-manager.users.govanify = {
-        programs.kitty = {
-          enable = true;
-          font = { package=pkgs.hack-font; name = "Hack 9"; };
-          settings = {
-            background = "#282828";
-            foreground = "#ebdbb2";
+{
+  options.navi.components.headfull.graphical.vte = {
+    enable = mkEnableOption "Enable navi's graphical VTE";
+  };
+  config = mkIf cfg.enable {
+    home-manager.users.govanify = {
+      programs.alacritty = {
+        enable = true;
+        settings = {
+          colors = {
+            #font.size = 9.0;
+            primary = {
+              background = "#282828";
+              foreground = "#ebdbb2";
+            };
+            normal = {
+              black = "#282828";
+              red = "#cc241d";
+              green = "#98971a";
+              yellow = "#d79921";
+              blue = "#458588";
+              magenta = "#b16286";
+              cyan = "#689d6a";
+              white = "#a89984";
+            };
 
-            # dark0 + gray
-            color0 = "#282828";
-            color8 = "#928374";
-
-            # neutral_red + bright_red
-            color1 = "#cc241d";
-            color9 = "#fb4934";
-
-            # neutral_green + bright_green
-            color2 = "#98971a";
-            color10 = "#b8bb26";
-
-            # neutral_yellow + bright_yellow
-            color3 = "#d79921";
-            color11 = "#fabd2f";
-
-            # neutral_blue + bright_blue
-            color4 = "#458588";
-            color12 = "#83a598";
-
-            # neutral_purple + bright_purple
-            color5 = "#b16286";
-            color13 = "#d3869b";
-
-            # neutral_aqua + faded_aqua
-            color6 = "#689d6a";
-            color14 = "#8ec07c";
-
-            # light4 + light1
-            color7 = "#a89984";
-            color15 = "#ebdbb2";
+            bright = {
+              black = "#928374";
+              red = "#fb4934";
+              green = "#b8bb26";
+              yellow = "#fabd2f";
+              blue = "#83a598";
+              magenta = "#d3869b";
+              cyan = "#8ec07c";
+              white = "#ebdbb2";
+            };
           };
         };
       };
     };
+  };
 }

@@ -126,4 +126,4 @@ The shell (fish) -> TODO
     "nbuild pcsx2" and it will drop you into a shell environment that has all the
     required setup to build your software!
 
-The Virtual Terminal Emulator (kitty) -> TODO
+The Terminal Multiplexer (tmux) -> TODO
