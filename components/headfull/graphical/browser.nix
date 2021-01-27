@@ -209,6 +209,8 @@ in
     '';
     # firefox no segfaulty
     xdg.portal.enable = false;
+
+    environment.systemPackages = with pkgs; [ firefox ];
   };
 }
 

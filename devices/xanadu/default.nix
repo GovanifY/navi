@@ -66,12 +66,29 @@
                                          Welcome to Xanadu
 '';
 
+
+    time.timeZone = "Europe/Paris";
+    location.latitude = 48.864716;
+    location.longitude = 2.349014;
+
     #modules.tor.transparentProxy = {
     #  enable = true; 
     #  outputNic = "wlp1s0"; 
     #  inputNic = "wlp1s0"; 
     #  };
 
+
+    navi.components.headfull.graphical.wm = {
+      battery = true;
+      extraConf = ''
+        output eDP-1 scale 2.0
+        input "2:14:ETPS/2_Elantech_Touchpad" {
+            dwt enabled
+            tap enabled
+            middle_emulation enabled
+        }
+      '';
+    };
 
   home-manager.users.govanify = {
     home.file."Pictures/wallpaper.png".source  = ./wallpaper.png;

@@ -2,11 +2,8 @@
   imports =
     [
       ./users.nix
-      ./locale.nix
       ./build-node.nix
       ../components
-      (import "${builtins.fetchTarball
-      https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos")
       ./../secrets/deployment.nix
     ];
 

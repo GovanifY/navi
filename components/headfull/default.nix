@@ -5,6 +5,7 @@
     ./virtualization.nix
     ./bluetooth.nix
     ./music.nix
+    ./ime.nix
     ./graphical
   ];
 }

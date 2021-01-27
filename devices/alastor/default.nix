@@ -29,17 +29,37 @@
     "Smile, my dear! You know, you're 
      never fully dressed without one!"
 '';
-   navi.components.virtualization = {
-    enable = true;
-    pci_devices = "8086:1912";
-    bridge_devices = [ "wlp3s0" ];
-  };
 
   home-manager.users.govanify = {
     home.file."Pictures/wallpaper.png".source  = ./wallpaper.png;
   };
 
-  navi.components.headfull.bluetooth.enable = true;
+
+  time.timeZone = "Europe/Paris";
+  location.latitude = 48.864716;
+  location.longitude = 2.349014;
+
+  navi.components = {
+    virtualization = {
+      enable = true;
+      pci_devices = "8086:1912";
+      bridge_devices = [ "wlp3s0" ];
+    };
+    headfull = {
+      bluetooth.enable = true;
+      graphical.wm = {
+        azerty = true;
+        extraConf = ''
+          output DP-2 scale 2.0
+          output DP-2 pos 1920 0 res 3840x2160
+          output HDMI-A-2 pos 0 0 res 1920x1080 
+          input "5426:515:Razer_Razer_BlackWidow_Chroma" {
+              xkb_layout "fr(nodeadkeys)"
+          }
+        '';
+      };
+    };
+  };
 
 
   #modules.tor.transparentProxy = {

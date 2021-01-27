@@ -44,7 +44,12 @@
   home-manager.users.govanify = {
     home.file.".config/gnupg/key.gpg".source  = ./../secrets/key.gpg;
     home.file.".config/gnupg/trust.txt".source  = ./../secrets/gpg-trust.txt;
-    home.file.".config/gnupg/gpg.conf".source  = ./../assets/gpg/gpg.conf;
+    # try to auto retrieve gpg keys when using emails, using hkp on port 80 to
+    # bypass tor restrictions
+    home.file.".config/gnupg/gpg.conf".text  = ''
+      keyserver hkp://pgp.mit.edu:80
+      keyserver-options auto-key-retrieve
+    '';
     home.file.".config/gdb/init".text  = "source ~/.config/gdb/gdbinit-gef.py";
     home.file.".config/gdb/gdbinit-gef.py".text  = builtins.readFile (pkgs.fetchFromGitHub {
       owner = "hugsy";
@@ -99,6 +104,7 @@
     };
     editor.enable = true;
     music.enable = true;
+    ime.enable = true;
   };
 
   # locking kernel modules has a horrendous UX for headfull devices and is
