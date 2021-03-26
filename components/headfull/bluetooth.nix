@@ -25,7 +25,7 @@ in
       package = pkgs.pulseaudioFull;
     };
 
-    hardware.bluetooth.config = { General = { Enable = "Source,Sink,Media,Socket"; }; };
+    hardware.bluetooth.settings = { General = { Enable = "Source,Sink,Media,Socket"; }; };
 
     systemd.user.services.mpris-proxy = mkIf cfg.audio {
       description = "Mpris proxy";
