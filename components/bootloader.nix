@@ -17,10 +17,8 @@ let
   '';
 in
 {
-  disabledModules = [ "system/boot/loader/grub/grub.nix"
-                      "system/boot/stage-1.nix" ];
-  imports = [ ./../overlays/grub/grub.nix 
-              ./../overlays/stage-1/stage-1.nix ];
+  disabledModules = [ "system/boot/loader/grub/grub.nix" ];
+  imports = [ ./../overlays/grub/grub.nix ];
 
   options.navi.components.bootloader = {
     enable = mkEnableOption "Enable navi's bootloader";
