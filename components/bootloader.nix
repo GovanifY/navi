@@ -3,7 +3,6 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-
   cfg = config.navi.components.bootloader;
   # grub should be a coreboot payload when possible and patched: disable
   # grub-rescue, only cryptomount the given drive in argument and navi names.
@@ -17,9 +16,6 @@ let
   '';
 in
 {
-  disabledModules = [ "system/boot/loader/grub/grub.nix" ];
-  imports = [ ./../overlays/grub/grub.nix ];
-
   options.navi.components.bootloader = {
     enable = mkEnableOption "Enable navi's bootloader";
     no_mercy = mkOption {
@@ -61,6 +57,21 @@ in
     # this shows the UEFI framebuffer if it isn't cleaned, get a UEFI that likes
     # you or configure grub to clear that
     boot.loader.grub.splashImage = null;
+
+    # branding and signature of stage 1 files
+    boot.loader.grub.extraInstallCommands = ''
+      ${pkgs.findutils}/bin/find /boot -not -path "/boot/efi/*" -type f -name '*.sig' -delete
+      sed -i 's/NixOS/navi/g' /boot/grub/grub.cfg 
+
+      old_gpg_home=$GNUPGHOME
+      export GNUPGHOME="$(mktemp -d)"
+
+      ${pkgs.gnupg}/bin/gpg --import ${/var/lib/bootloader/priv.gpg} > /dev/null 2>&1
+      ${pkgs.findutils}/bin/find /boot -not -path "/boot/efi/*" -type f -exec ${pkgs.gnupg}/bin/gpg --detach-sign "{}" \; > /dev/null 2>&1
+
+      rm -rf $GNUPGHOME
+      export GNUPGHOME=$old_gpg_home
+    '';
 
     nixpkgs.overlays = [
       (self: super: {
