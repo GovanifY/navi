@@ -273,7 +273,7 @@ in
       ];
     };
 
-    services.getty.autologinUser = mkIf cfg.autologin "govanify";
+    services.getty.autologinUser = mkIf cfg.autologin config.navi.username;
 
     # QT theme engine
     programs.qt5ct.enable = true;
@@ -335,7 +335,7 @@ in
     };
 
     environment.shellInit = ''
-      if [[ -z $DISPLAY ]] && [[ "$(whoami)" == "govanify" ]]; then
+      if [[ -z $DISPLAY ]] && [[ "$(whoami)" == "${config.navi.username}" ]]; then
         if ! systemctl is-active --quiet swaywm; then
           xrdb -load /etc/X11/Xresources &> /dev/null
           systemctl --user import-environment
@@ -344,7 +344,7 @@ in
       fi
     '';
 
-    home-manager.users.govanify = {
+    home-manager.users.${config.navi.username} = {
       # QT theme
       home.file.".config/qt5ct/qt5ct.conf".text  = qt5ct-conf;
       home.file.".config/qt5ct/colors/breeze-dark.conf".text  = qt5ct-dark;

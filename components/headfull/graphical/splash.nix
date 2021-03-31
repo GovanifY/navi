@@ -4,7 +4,7 @@ let
   cfg = config.navi.components.headfull.graphical.splash;
   breeze-navi = pkgs.breeze-plymouth.override {
     logoFile = config.boot.plymouth.logo;
-    logoName = "navi";
+    logoName = config.navi.branding;
     osName = "";
     osVersion = "";
   };

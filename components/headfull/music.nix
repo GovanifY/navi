@@ -11,9 +11,9 @@ in
     services.mpd = {
       enable = true;
       startWhenNeeded = true;
-      user = "govanify";
+      user = config.navi.username;
       group = "users";
-      musicDirectory = "/home/govanify/Music";
+      musicDirectory = "/home/${config.navi.username}/Music";
       extraConfig = ''
         auto_update "yes"
       '';

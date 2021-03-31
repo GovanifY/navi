@@ -115,7 +115,7 @@ in
       NUGET_PACKAGES = "$XDG_CACHE_HOME/NuGetPackages";
     };
 
-    home-manager.users.govanify = {
+    home-manager.users.${config.navi.username} = {
       home.file.".config/wgetrc".text  = "hsts-file = \"$XDG_CACHE_HOME\"/wget-hsts";
       home.file.".config/python/startup.py".text  = ''
         import sys

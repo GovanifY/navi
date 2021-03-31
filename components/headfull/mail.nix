@@ -10,7 +10,7 @@ let
   notmuch_config = concatStringsSep "\n" (mapAttrsToList (name: account: 
       optionalString account.primary ''
     [database]
-    path=/home/govanify/.local/share/mail
+    path=/home/${config.navi.username}/.local/share/mail
     [user]
     name=${account.name}
     primary_email=${account.email}
@@ -78,7 +78,7 @@ let
     Host ${account.host}
     Port 993
     User ${account.email}
-    PassCmd "pass navi/${account.email} | head -n 1"
+    PassCmd "pass ${config.navi.branding}/${account.email} | head -n 1"
     SSLType IMAPS
     CertificateFile /etc/ssl/certs/ca-certificates.crt 
 
@@ -113,7 +113,7 @@ let
     port 587
     from ${account.email} 
     user ${account.email}
-    passwordeval "pass navi/${account.email} | head -n 1"
+    passwordeval "pass ${config.navi.branding}/${account.email} | head -n 1"
   '') cfg.accounts);
 
   # 3 steps: 
@@ -132,9 +132,9 @@ let
     set from = "${account.email}"
     set sendmail = "msmtp -a ${name}"
     alias me ${account.name} <${account.email}>
-    set folder = "/home/govanify/.local/share/mail/${name}"
-    set header_cache = /home/govanify/.cache/mutt/${name}-headers
-    set message_cachedir = /home/govanify/.cache/mutt/${name}-bodies
+    set folder = "/home/${config.navi.username}/.local/share/mail/${name}"
+    set header_cache = /home/${config.navi.username}/.cache/mutt/${name}-headers
+    set message_cachedir = /home/${config.navi.username}/.cache/mutt/${name}-bodies
     set signature="${(pkgs.writeTextFile { name=name+"-signature"; text=account.signature; })}"
     # general folder mappings for email adresses
     set mbox_type = Maildir
@@ -143,7 +143,7 @@ let
     set postponed = "+INBOX.Drafts"
     set trash = "+INBOX.Trash"
     folder-hook . 'set record=^'
-    mailboxes `find "/home/govanify/.local/share/mail/${name}" -type d -name cur | sort | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | tr '\n' ' '`
+    mailboxes `find "/home/${config.navi.username}/.local/share/mail/${name}" -type d -name cur | sort | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | tr '\n' ' '`
   '' + optionalString (account.pgp_key != "") ''
     set crypt_use_gpgme = yes
     set crypt_autosign=yes
@@ -422,7 +422,7 @@ in
 
     # XDG_CONFIG_HOME does not get parsed correctly so we do it manually
     # you need to create the caching folder otherwise this fails
-    home-manager.users.govanify.home.file = {
+    home-manager.users.${config.navi.username}.home.file = {
       ".config/msmtp/config".text  = msmtp_config;
       ".config/mbsync/config".text  = isync_config;
       ".config/mutt/muttrc".text  = mutt_config;

@@ -166,7 +166,7 @@ in
       shellAliases.nbuild = "nix-build /nix/var/nix/profiles/per-user/root/channels/nixos/ --run fish --run-env -A";
     };
     # TODO: make it for all users?
-    home-manager.users.govanify = {
+    home-manager.users.${config.navi.username} = {
       home.file.".config/fish/config.fish".text = fish_config;
       home.file.".config/fish/functions/fish_prompt.fish".text = fish_prompt;
     };

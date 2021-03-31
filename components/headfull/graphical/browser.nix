@@ -113,7 +113,7 @@ in
                SkipOnboarding = true;
              };
              SupportMenu = {
-               Title = "navi's browser";
+               Title = "${config.navi.branding}'s browser";
                URL = "https://govanify.com";
              };
              SearchBar = "unified";

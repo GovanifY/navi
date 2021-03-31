@@ -1,3 +1,5 @@
+{ config, lib, ... }:
+with lib;
 {
   imports = [
     (import "${builtins.fetchTarball
@@ -12,4 +14,21 @@
     ./hardening.nix
     ./headfull
   ];
+
+  options.navi = {
+    username = mkOption {
+        type = types.str;
+        default = "govanify";
+        description = ''
+          The main username of the infrastructure 
+        '';
+    };
+    branding = mkOption {
+        type = types.str;
+        default = "navi";
+        description = ''
+          The name of the infrastructure to use for branding
+        '';
+    };
+  };
 }

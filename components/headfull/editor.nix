@@ -213,7 +213,7 @@ in
     };
   };
   config = mkIf cfg.enable {
-    home-manager.users.govanify = vimConf;
+    home-manager.users.${config.navi.username} = vimConf;
     home-manager.users.root = vimConf;
     environment.variables = {
       EDITOR = "vim";
