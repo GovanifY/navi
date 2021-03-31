@@ -1,10 +1,9 @@
 { config, lib, pkgs, ... }:
 
 {
-
   imports = [
-              ./headfull.nix
-              ./graphical.nix
-              ./gaming.nix
-            ];
+    ./headfull.nix
+    ./graphical.nix
+  ];
+  navi.components.headfull.graphical.gaming.enable = true;
 }

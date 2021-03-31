@@ -5,7 +5,7 @@ let
 in
 {
   options.navi.components.macspoofer = {
-    enable = mkEnableOption "Force programs to adhere to the XDG base specification";
+    enable = mkEnableOption "Enables navi's MAC address spoofer";
     full_random = mkOption {
       type = types.bool;
       default = false;

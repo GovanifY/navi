@@ -27,7 +27,7 @@ in
       type = types.str;
       default = ".local/share";
       description = ''
-        Value assigned to XDG_CONFIG_HOME minus the HOME
+        Value assigned to XDG_DATA_HOME minus the HOME
       '';
     };
     cache = mkOption {

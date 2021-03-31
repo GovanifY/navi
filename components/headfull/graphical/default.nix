@@ -4,5 +4,6 @@
     ./browser.nix
     ./splash.nix
     ./wm.nix
+    ./gaming.nix
   ];
 }
