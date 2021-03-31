@@ -40,7 +40,7 @@ in
 
     boot.loader.grub.extraGrubInstallArgs = [
     "--pubkey=${pkgs.copyPathToStore /var/lib/bootloader/pub.gpg}"
-    "--modules=verifiers gcry_sha256 gcry_sha512 gcry_dsa gcry_rsa" ];
+    "--modules=gcry_sha256 gcry_sha512 gcry_dsa gcry_rsa" ];
     boot.loader.grub.configurationName = "navi";
 
     # we wait one second for esc keyboard mashing, otherwise we boot normally
