@@ -1,10 +1,10 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  cfg = config.navi.components.headfull.graphical.gaming;
+  cfg = config.navi.components.gaming;
 in
 {
-  options.navi.components.headfull.graphical.gaming = {
+  options.navi.components.gaming = {
     enable = mkEnableOption "Enable navi's gaming setup";
     retro = mkOption {
       type = types.bool;

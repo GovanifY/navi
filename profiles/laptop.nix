@@ -10,7 +10,7 @@
     '';
 
     # most laptops have some sort of bluetooth support nowadays
-    navi.components.headfull = {
+    navi.components = {
       graphical.enable = true;
       bluetooth.enable = true;
     };

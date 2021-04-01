@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  cfg = config.navi.components.headfull.graphical.splash;
+  cfg = config.navi.components.splash;
   breeze-navi = pkgs.breeze-plymouth.override {
     logoFile = config.boot.plymouth.logo;
     logoName = config.navi.branding;
@@ -10,7 +10,7 @@ let
   };
 in
 {
-  options.navi.components.headfull.graphical.splash = {
+  options.navi.components.splash = {
     enable = mkEnableOption "Enable navi's boot splash";
   };
   config = mkIf cfg.enable {

@@ -1,10 +1,10 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  cfg = config.navi.components.headfull.music;
+  cfg = config.navi.components.music;
 in
 {
-  options.navi.components.headfull.music = {
+  options.navi.components.music = {
     enable = mkEnableOption "Enable navi's music player";
   };
   config = mkIf cfg.enable {

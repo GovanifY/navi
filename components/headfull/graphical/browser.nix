@@ -51,10 +51,10 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  cfg = config.navi.components.headfull.graphical.browser;
+  cfg = config.navi.components.browser;
 in
 {
-  options.navi.components.headfull.graphical.browser = {
+  options.navi.components.browser = {
     enable = mkEnableOption "Enable navi's browser";
   };
   config = mkIf cfg.enable {

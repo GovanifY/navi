@@ -48,12 +48,25 @@
     };
 
     # define our main users
+    # TODO, XXX, TOFIX: the shadows are probably written in the nix store, do we
+    # care about that?
     users.users.${navi.username} = {
       isNormalUser = true;
       hashedPassword = readFile ./../secrets/shadow/main;
       openssh.authorizedKeys.keyFiles  = [ ./../secrets/ssh/navi.pub ];
     };
     users.users.root.hashedPassword = readFile ./../secrets/shadow/root;
+
+    # setup the distbuild account; while this might look like a backdoor for
+    # lesser privilege devices the distbuild access key is only given to at
+    # least headfull devices, thus headless devices cannot ssh into headfull.
+    # same goes for the main account.
+    users.users.distbuild = {
+      isSystemUser = true;
+      shell = pkgs.bash;
+      openssh.authorizedKeys.keyFiles = [ ./../secrets/ssh/distbuild.pub ];
+    };
+    nix.trustedUsers = [ "distbuild" ];
 
     # automatic updates & cleanup
     system.autoUpgrade.enable = true;

@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }: {
   config = mkIf (config.navi.profile.graphical) {
 
+    config.navi.profile.headfull = true;
+
     # don't want to become blind
     services.redshift = {
       enable = true;
@@ -61,27 +63,12 @@
       # math
       coq lean elan 
 
-      # matrix
-      element-desktop
-      (
-      pkgs.writeTextFile {
-        name = "element-x11";
-        destination = "/bin/element-x11";
-        executable = true;
-        text = ''
-          #! ${pkgs.bash}/bin/bash
-          # Electron sucks
-          GDK_BACKEND=x11
-          # then start the launcher 
-          exec element-desktop
-        '';
-      }
-      )
     ];
 
     # give you the rights to inspect traffic as this is a single user box/not a
     # server, android funsies and realtime audio access for ardour and jack
     programs.wireshark.enable = true;
+    programs.adb.enable = true;
     users.users.${navi.username} = {
       extraGroups = [ "wireshark" "adbusers" "audio" ]; 
     };
@@ -90,11 +77,12 @@
     # launch, so this is out of the question.
     navi.components.hardening.scudo = false;
 
-    navi.components.headfull.graphical = {
+    navi.components = {
       vte.enable = true;
       browser.enable = true;
       splash.enable = true;
       wm.enable = true;
+      chat.graphical = mkDefault true;
     };
   };
 }

@@ -1,10 +1,10 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  cfg = config.navi.components.headfull.bluetooth;
+  cfg = config.navi.components.bluetooth;
 in
 {
-  options.navi.components.headfull.bluetooth = {
+  options.navi.components.bluetooth = {
     enable = mkEnableOption "Enable bluetooth support in navi";
     audio = mkOption {
       default = true;

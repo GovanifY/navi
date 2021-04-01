@@ -78,7 +78,7 @@
     #  };
 
 
-    navi.components.headfull.graphical.wm = {
+    navi.components.wm = {
       battery = true;
       extraConf = ''
         output eDP-1 scale 2.0

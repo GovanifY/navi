@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  cfg = config.navi.components.headfull.graphical.wm;
+  cfg = config.navi.components.wm;
 
   qt5ct-dark = ''
     [ColorScheme]
@@ -122,9 +122,9 @@ let
 
     output * bg ~/Pictures/wallpaper.png fill
 
-    '' + optionalString config.navi.components.headfull.ime.enable ''
+    '' + optionalString config.navi.components.ime.enable ''
     exec swaymsg "workspace 1; exec ibus-daemon -dr > /dev/null 2>&1"
-    '' + optionalString config.navi.components.headfull.graphical.browser.enable ''
+    '' + optionalString config.navi.components.browser.enable ''
     exec swaymsg "workspace 1; exec firefox > /dev/null 2>&1"
     '' + ''
     exec swaymsg "workspace 3; exec element-x11 > /dev/null 2>&1"
@@ -134,7 +134,7 @@ let
     default_border pixel 1 
     seat seat0 xcursor_theme breeze_cursors 24
 
-    '' + optionalString config.navi.components.headfull.ime.enable ''
+    '' + optionalString config.navi.components.ime.enable ''
     bindsym $mod+i exec ${locale-sh} > /dev/null 2>&1
     '' + '' 
 
@@ -217,12 +217,12 @@ let
         }
     }
 
-    '' + optionalString config.navi.components.headfull.graphical.splash.enable ''
+    '' + optionalString config.navi.components.splash.enable ''
     exec plymouth-quit > /dev/null 2>&1"
     '' + cfg.extraConf;
 in
 {
-  options.navi.components.headfull.graphical.wm = {
+  options.navi.components.wm = {
     enable = mkEnableOption "Enable navi's window manager";
     autologin = mkOption {
       type = types.bool;

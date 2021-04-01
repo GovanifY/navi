@@ -1,10 +1,10 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  cfg = config.navi.components.headfull.ime;
+  cfg = config.navi.components.ime;
 in
 {
-  options.navi.components.headfull.ime = {
+  options.navi.components.ime = {
     enable = mkEnableOption "Enable IME support in navi";
   };
   config = mkIf cfg.enable {
