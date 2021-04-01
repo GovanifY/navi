@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... } :
+{ config, lib, pkgs, ... }:
 with lib;
 let
   cfg = config.navi.components.editor;
@@ -6,11 +6,11 @@ let
   # abandonned
   workspace = pkgs.vimPlugins.vim-obsession.overrideAttrs (oldAttrs: rec {
     src = pkgs.fetchFromGitHub {
-       owner = "GovanifY";
-       repo = "vim-session";
-       rev = "13b906f18ad0fa88f0be038237a71aa34b3335da";
-       sha256 = "1hf8gzh42iq46z6b471w6bl44nhwa9h8s02pmg1w482bvhc621w4";
-     };
+      owner = "GovanifY";
+      repo = "vim-session";
+      rev = "13b906f18ad0fa88f0be038237a71aa34b3335da";
+      sha256 = "1hf8gzh42iq46z6b471w6bl44nhwa9h8s02pmg1w482bvhc621w4";
+    };
     version = "2020-12-16";
     pname = "vim-session";
   });
@@ -22,19 +22,31 @@ let
       vimAlias = true;
       plugins = with pkgs.vimPlugins; [
         # aesthetics
-        gruvbox airline
+        gruvbox
+        airline
         # productivity
-        fzf-vim vim-visual-multi
+        fzf-vim
+        vim-visual-multi
         # dev
-        tagbar fugitive nerdtree nerdcommenter
+        tagbar
+        fugitive
+        nerdtree
+        nerdcommenter
         # dev - syntax
         vim-clang-format
         # dev - language specific
-        rust-vim meson Coqtail vim-fish vim-nix
+        rust-vim
+        meson
+        Coqtail
+        vim-fish
+        vim-nix
         # spell check
         #vim-DetectSpellLang
-      ] ++ optionals cfg.ide_features [ 
-        coc-snippets vim-snippets coc-nvim coc-python 
+      ] ++ optionals cfg.ide_features [
+        coc-snippets
+        vim-snippets
+        coc-nvim
+        coc-python
       ] ++ optionals cfg.sessions [ vim-misc workspace ];
       extraConfig = ''
         " This should be enabled by default
@@ -219,6 +231,8 @@ in
       EDITOR = "vim";
     };
     environment.systemPackages = with pkgs; [
-      neovim fzf ] ++ optionals cfg.ide_features [ nodejs ];
+      neovim
+      fzf
+    ] ++ optionals cfg.ide_features [ nodejs ];
   };
 }

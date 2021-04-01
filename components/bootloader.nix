@@ -40,7 +40,8 @@ in
 
     boot.loader.grub.extraGrubInstallArgs = [
       "--pubkey=${pkgs.copyPathToStore /var/lib/bootloader/pub.gpg}"
-      "--modules=gcry_sha256 gcry_sha512 gcry_dsa gcry_rsa" ];
+      "--modules=gcry_sha256 gcry_sha512 gcry_dsa gcry_rsa"
+    ];
     boot.loader.grub.configurationName = config.navi.branding;
 
     # we wait one second for esc keyboard mashing, otherwise we boot normally
@@ -78,7 +79,8 @@ in
         grub2 = super.grub2.overrideAttrs (oldAttrs: rec {
           postPatch = grubPatch;
         });
-      })];
+      })
+    ];
 
     boot.kernelPatches = [{
       name = "silent-boot";

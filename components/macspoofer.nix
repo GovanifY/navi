@@ -20,9 +20,9 @@ in
     # the mac is derived from a system private key, this allows to avoid a network
     # from identifying you are mac address spoofing while still preventing global
     # tracking through MAC address maps.
-    networking.networkmanager.wifi.macAddress = 
+    networking.networkmanager.wifi.macAddress =
       (if cfg.full_random then "random" else "stable");
-    networking.networkmanager.ethernet.macAddress = 
+    networking.networkmanager.ethernet.macAddress =
       (if cfg.full_random then "random" else "stable");
   };
 }

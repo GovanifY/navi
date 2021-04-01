@@ -157,8 +157,8 @@ in
     enable = mkEnableOption "Enable navi's custom shell";
   };
   config = mkIf cfg.enable {
-    users.defaultUserShell = pkgs.fish; 
-     programs.fish = {
+    users.defaultUserShell = pkgs.fish;
+    programs.fish = {
       promptInit = ''
         any-nix-shell fish --info-right | source
       '';

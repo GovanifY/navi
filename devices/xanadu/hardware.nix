@@ -9,13 +9,13 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/13edef15-425f-45b5-8e2b-c6a6bec5d536";
-    fsType = "ext4";
-  };
+    {
+      device = "/dev/disk/by-uuid/13edef15-425f-45b5-8e2b-c6a6bec5d536";
+      fsType = "ext4";
+    };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/89e0fa0a-1028-4558-9bff-e90061e3ac44"; }
-  ];
+    [{ device = "/dev/disk/by-uuid/89e0fa0a-1028-4558-9bff-e90061e3ac44"; }];
 
   boot.initrd.secrets = {
     "/keyfile.bin" = "/etc/secrets/initrd/keyfile.bin";
@@ -33,7 +33,7 @@
     device = "/dev/disk/by-id/nvme-INTEL_SSDPEKKW512G8_BTHH812200PR512D";
   };
   boot.initrd.luks.devices = {
-    root=  {
+    root = {
       device = "/dev/disk/by-uuid/d355ed2a-0b08-48f3-8578-e334f886e62b";
       preLVM = true;
       keyFile = "/keyfile.bin";

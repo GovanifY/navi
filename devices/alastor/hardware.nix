@@ -6,7 +6,8 @@
 {
 
   imports =
-    [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix> 
+    [
+      <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ];
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
   boot.loader.grub = {
@@ -28,23 +29,25 @@
   boot.initrd.kernelModules = [ "dm-snapshot" ];
   boot.extraModulePackages = [ ];
 
-  boot.initrd.luks.devices = 
-      {
-        matrix = {
-          device = "/dev/disk/by-uuid/9634d799-6103-44c2-aa91-9adecf165f91"; 
-          preLVM = true;
-          keyFile = "/keyfile_matrix.bin";
-          allowDiscards = true;
-        };
+  boot.initrd.luks.devices =
+    {
+      matrix = {
+        device = "/dev/disk/by-uuid/9634d799-6103-44c2-aa91-9adecf165f91";
+        preLVM = true;
+        keyFile = "/keyfile_matrix.bin";
+        allowDiscards = true;
       };
+    };
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/dea15455-b492-4b9c-9c5f-de8ea5dc7a6b";
+    {
+      device = "/dev/disk/by-uuid/dea15455-b492-4b9c-9c5f-de8ea5dc7a6b";
       fsType = "ext4";
     };
 
   fileSystems."/lain" =
-    { device = "/dev/disk/by-uuid/7324ad41-bd38-4516-ae7c-5570ff3da8a0";
+    {
+      device = "/dev/disk/by-uuid/7324ad41-bd38-4516-ae7c-5570ff3da8a0";
       fsType = "btrfs";
       encrypted = {
         enable = true;
@@ -55,13 +58,13 @@
     };
 
   fileSystems."/boot/efi" =
-    { device = "/dev/disk/by-uuid/5334-1848";
+    {
+      device = "/dev/disk/by-uuid/5334-1848";
       fsType = "vfat";
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/b8be1d58-dd39-454a-9754-2f23df66cd38"; }
-    ];
+    [{ device = "/dev/disk/by-uuid/b8be1d58-dd39-454a-9754-2f23df66cd38"; }];
 
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -80,9 +83,9 @@
   nix.maxJobs = lib.mkDefault 4;
   powerManagement.cpuFreqGovernor = lib.mkDefault "performance";
 
-  hardware.pulseaudio.extraConfig =  ''
-  load-module module-remap-source master=alsa_input.usb-Focusrite_Scarlett_2i2_USB-00.analog-stereo source_name=Mic-Mono master_channel_map=left channel_map=mono
-  set-default-source Mic-Mono
+  hardware.pulseaudio.extraConfig = ''
+    load-module module-remap-source master=alsa_input.usb-Focusrite_Scarlett_2i2_USB-00.analog-stereo source_name=Mic-Mono master_channel_map=left channel_map=mono
+    set-default-source Mic-Mono
   '';
   boot.supportedFilesystems = [ "ntfs" ];
 }

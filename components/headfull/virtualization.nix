@@ -2,7 +2,8 @@
 with lib;
 let
   cfg = config.navi.components.virtualization;
-in {
+in
+{
   options.navi.components.virtualization = {
     enable = mkEnableOption "Various virtualization options";
     pci_devices = mkOption {
@@ -12,7 +13,7 @@ in {
     };
     bridge_devices = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = "List of interfaces the bridge binds to.";
     };
 
@@ -41,7 +42,7 @@ in {
 
     # enable access to the system daemon for our main user
     users.users.${navi.username} = {
-      extraGroups = [ "libvirtd" ]; 
+      extraGroups = [ "libvirtd" ];
     };
 
     environment.systemPackages = with pkgs; [
@@ -51,20 +52,28 @@ in {
     virtualisation.libvirtd.enable = true;
 
     # isolate iGPU for libvirtd
-    boot.initrd.kernelModules = mkIf (cfg.pci_devices != "") [ "vfio_virqfd"
-    "vfio_pci" "vfio_iommu_type1" "vfio" ];
-    boot.kernelParams = (optionals (cfg.pci_devices != "") [ "vfio-pci.ids=${cfg.pci_devices}" 
-      ]) ++ (optionals cfg.gvt [ "intel_iommu=on" "i915.enable_guc=0"
-      "i915.enable_gvt=1" ];
-    boot.kernelModules = [ "kvm-intel" "vfio_pci" "kvmgt" "vfio-iommu-type1" "vfio-mdev"];
+    boot.initrd.kernelModules = mkIf (cfg.pci_devices != "") [
+      "vfio_virqfd"
+      "vfio_pci"
+      "vfio_iommu_type1"
+      "vfio"
+    ];
+    boot.kernelParams = (optionals (cfg.pci_devices != "") [
+      "vfio-pci.ids=${cfg.pci_devices}"
+    ]) ++ (optionals cfg.gvt [
+      "intel_iommu=on"
+      "i915.enable_guc=0"
+      "i915.enable_gvt=1"
+    ];
+      boot.kernelModules = [ "kvm-intel" "vfio_pci" "kvmgt" "vfio-iommu-type1" "vfio-mdev"];
 
-    networking = mkIf (cfg.bridge_devices != []) {
+    networking = mkIf (cfg.bridge_devices != [ ]) {
       bridges.br0.interfaces = cfg.bridge_devices;
       dhcpcd.denyInterfaces = [ "virbr0" ];
     };
 
     # iGVT hooks
-    virtualisation.kvmgt = mkIf cfg.gvt { 
+    virtualisation.kvmgt = mkIf cfg.gvt {
       enable = true;
       vgpus = {
         ${cfg.gvt_type} = {
@@ -74,25 +83,25 @@ in {
     };
     # comment out on demand iGVT-d for now
     #systemd.services.libvirtd.preStart = mkIf cfg.gvt ''
-      #mkdir -p /var/lib/libvirt/hooks
-      #chmod 755 /var/lib/libvirt/hooks
+    #mkdir -p /var/lib/libvirt/hooks
+    #chmod 755 /var/lib/libvirt/hooks
 
-      ## setup hook file on service startup 
-      #cp -f ${(pkgs.writeShellScriptBin "igvt_hook" ''
-      #GVT_PCI="${cfg.gvt_pci}"
-      #GVT_GUID="$(${pkgs.libxml2}/bin/xmllint --xpath 'string(/domain/devices/hostdev[@type="mdev"]/source/address/@uuid)' -)"
-      #MDEV_TYPE="${cfg.gvt_type}"
-      #if [ $# -ge 3 ]; then
-          #if [ ! -z "$GVT_GUID" ] && [ $2 = "prepare" ] && [ $3 = "begin" ]; then
-              #echo "$GVT_GUID" > "/sys/bus/pci/devices/$GVT_PCI/mdev_supported_types/$MDEV_TYPE/create"
-          #elif [ ! -z "$GVT_GUID" ] && [ $2 = "release" ] && [ $3 = "end" ]; then
-              #echo 1 > /sys/bus/pci/devices/$GVT_PCI/$GVT_GUID/remove
-          #fi
-      #fi
-      #'').outPath}/bin/igvt_hook /var/lib/libvirt/hooks/qemu
+    ## setup hook file on service startup 
+    #cp -f ${(pkgs.writeShellScriptBin "igvt_hook" ''
+    #GVT_PCI="${cfg.gvt_pci}"
+    #GVT_GUID="$(${pkgs.libxml2}/bin/xmllint --xpath 'string(/domain/devices/hostdev[@type="mdev"]/source/address/@uuid)' -)"
+    #MDEV_TYPE="${cfg.gvt_type}"
+    #if [ $# -ge 3 ]; then
+    #if [ ! -z "$GVT_GUID" ] && [ $2 = "prepare" ] && [ $3 = "begin" ]; then
+    #echo "$GVT_GUID" > "/sys/bus/pci/devices/$GVT_PCI/mdev_supported_types/$MDEV_TYPE/create"
+    #elif [ ! -z "$GVT_GUID" ] && [ $2 = "release" ] && [ $3 = "end" ]; then
+    #echo 1 > /sys/bus/pci/devices/$GVT_PCI/$GVT_GUID/remove
+    #fi
+    #fi
+    #'').outPath}/bin/igvt_hook /var/lib/libvirt/hooks/qemu
 
-      ## Make them executable
-      #chmod +x /var/lib/libvirt/hooks/qemu
+    ## Make them executable
+    #chmod +x /var/lib/libvirt/hooks/qemu
     #'';
   };
 }

@@ -64,32 +64,32 @@ in
           # automatic updates are not possible at the moment: https://github.com/NixOS/nixpkgs/issues/105783
           # probably should drop within the next year (i hope)
           nixExtensions = [
-              (pkgs.fetchFirefoxAddon {
-                name = "ublock-origin";
-                url = "https://github.com/gorhill/uBlock/releases/download/1.32.4/uBlock0_1.32.4.firefox.xpi";
-                sha256 = "05ld465vs92ahaia0z8ifj0m9sdx85k9dshdy8nvil0r0si7cwrh";
-              })
-              (pkgs.fetchFirefoxAddon {
-                name = "decentraleyes";
-                url = "https://git.synz.io/Synzvato/decentraleyes/uploads/a36861e0609e43d87379805ca0db063f/Decentraleyes.v2.0.15-firefox.xpi"; 
-                sha256 = "1pvdb0fz7jqbzwlrhdkjxhafai70bncywdsx3qsw3325d28hcm15";
-              })
-              (pkgs.fetchFirefoxAddon {
-                name = "stylus";
-                url = "https://addons.mozilla.org/firefox/downloads/file/3614089/stylus-1.5.13-fx.xpi"; 
-                sha256 = "0nd1g3vr9vbpk6hqixsg1dqyh7pi075b7fiir4706khlapk7kcrb";
-              })
-              (pkgs.fetchFirefoxAddon {
-                name = "noscript";
-                url = "https://addons.mozilla.org/firefox/downloads/file/3705391/noscript_security_suite-11.1.8-an+fx.xpi"; 
-                sha256 = "0w1q2ah2g23fkjxiwr1ky9icjzgknyqypdlg50a4d86z1iag3g46";
-              })
-              (pkgs.fetchFirefoxAddon {
-                name = "forget-me-not";
-                url = "https://addons.mozilla.org/firefox/downloads/file/3577046/forget_me_not_forget_cookies_other_data-2.2.8-an+fx.xpi"; 
-                sha256 = "1qrbfsf5vmbyis29mhlmwb6dj933rrwpislpg0xi8b4r9xplb107";
-              })
-              ];
+            (pkgs.fetchFirefoxAddon {
+              name = "ublock-origin";
+              url = "https://github.com/gorhill/uBlock/releases/download/1.32.4/uBlock0_1.32.4.firefox.xpi";
+              sha256 = "05ld465vs92ahaia0z8ifj0m9sdx85k9dshdy8nvil0r0si7cwrh";
+            })
+            (pkgs.fetchFirefoxAddon {
+              name = "decentraleyes";
+              url = "https://git.synz.io/Synzvato/decentraleyes/uploads/a36861e0609e43d87379805ca0db063f/Decentraleyes.v2.0.15-firefox.xpi";
+              sha256 = "1pvdb0fz7jqbzwlrhdkjxhafai70bncywdsx3qsw3325d28hcm15";
+            })
+            (pkgs.fetchFirefoxAddon {
+              name = "stylus";
+              url = "https://addons.mozilla.org/firefox/downloads/file/3614089/stylus-1.5.13-fx.xpi";
+              sha256 = "0nd1g3vr9vbpk6hqixsg1dqyh7pi075b7fiir4706khlapk7kcrb";
+            })
+            (pkgs.fetchFirefoxAddon {
+              name = "noscript";
+              url = "https://addons.mozilla.org/firefox/downloads/file/3705391/noscript_security_suite-11.1.8-an+fx.xpi";
+              sha256 = "0w1q2ah2g23fkjxiwr1ky9icjzgknyqypdlg50a4d86z1iag3g46";
+            })
+            (pkgs.fetchFirefoxAddon {
+              name = "forget-me-not";
+              url = "https://addons.mozilla.org/firefox/downloads/file/3577046/forget_me_not_forget_cookies_other_data-2.2.8-an+fx.xpi";
+              sha256 = "1qrbfsf5vmbyis29mhlmwb6dj933rrwpislpg0xi8b4r9xplb107";
+            })
+          ];
           extraPolicies = {
             CaptivePortal = false;
             DisableFirefoxStudies = true;
@@ -108,30 +108,30 @@ in
               Highlights = false;
               TopSites = true;
             };
-             UserMessaging = {
-               ExtensionRecommendations = false;
-               SkipOnboarding = true;
-             };
-             SupportMenu = {
-               Title = "${config.navi.branding}'s browser";
-               URL = "https://govanify.com";
-             };
-             SearchBar = "unified";
-             PictureInPicture.Enabled = false;
-             PasswordManagerEnabled = false;
-             NoDefaultBookmarks = false;
-             DontCheckDefaultBrowser = true;
-             DisableSetDesktopBackground = true;
-             # probably handled by nix extensions but oh well
-             DisableSystemAddonUpdate = true;
-             ExtensionUpdate = false;
-             EnableTrackingProtection = {
-               Value = false;
-               Locked = true;
-             };
-             DisableFeedbackCommands = true;
-             SearchEngines.Default = "DuckDuckGo";
-             BlockAboutAddons = true;
+            UserMessaging = {
+              ExtensionRecommendations = false;
+              SkipOnboarding = true;
+            };
+            SupportMenu = {
+              Title = "${config.navi.branding}'s browser";
+              URL = "https://govanify.com";
+            };
+            SearchBar = "unified";
+            PictureInPicture.Enabled = false;
+            PasswordManagerEnabled = false;
+            NoDefaultBookmarks = false;
+            DontCheckDefaultBrowser = true;
+            DisableSetDesktopBackground = true;
+            # probably handled by nix extensions but oh well
+            DisableSystemAddonUpdate = true;
+            ExtensionUpdate = false;
+            EnableTrackingProtection = {
+              Value = false;
+              Locked = true;
+            };
+            DisableFeedbackCommands = true;
+            SearchEngines.Default = "DuckDuckGo";
+            BlockAboutAddons = true;
           };
           extraPrefs = '' 
             // make tracking much harder

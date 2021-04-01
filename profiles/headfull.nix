@@ -2,22 +2,33 @@
   config = mkIf (config.navi.profile.headfull) {
     environment.systemPackages = with pkgs; [
       # defaults
-      file 
+      file
       # misc utilities
-      cmus asciinema ranger pass pinentry-curses
+      cmus
+      asciinema
+      ranger
+      pass
+      pinentry-curses
       rtorrent
       # stem
       texlive.combined.scheme-medium
       # dev
-      cargo python R clang meson ninja
-      gnumake ghc gdb
+      cargo
+      python
+      R
+      clang
+      meson
+      ninja
+      gnumake
+      ghc
+      gdb
     ];
 
 
     # headfull main user is essentially an admin, reflect that by giving it the
     # wheel group
     users.users.${navi.username} = {
-      extraGroups = [ "wheel" "networkmanager" ]; 
+      extraGroups = [ "wheel" "networkmanager" ];
     };
 
     # cups and networkmanager by default
@@ -30,15 +41,15 @@
 
     # we setup the personal ssh and gpg key of our headfull user
     home-manager.users.${navi.username} = {
-      home.file.".config/gnupg/key.gpg".source  = ./../secrets/assets/gpg/key.gpg;
-      home.file.".config/gnupg/trust.txt".source  = ./../secrets/assets/gpg/gpg-trust.txt;
-      home.file.".config/ssh/id_ed25519".source  = ./../secrets/assets/ssh/navi;
-      home.file.".config/ssh/id_ed25519.pub".source  = ./../secrets/assets/ssh/navi.pub;
+      home.file.".config/gnupg/key.gpg".source = ./../secrets/assets/gpg/key.gpg;
+      home.file.".config/gnupg/trust.txt".source = ./../secrets/assets/gpg/gpg-trust.txt;
+      home.file.".config/ssh/id_ed25519".source = ./../secrets/assets/ssh/navi;
+      home.file.".config/ssh/id_ed25519.pub".source = ./../secrets/assets/ssh/navi.pub;
 
       # try to auto retrieve gpg keys when using emails, using hkp on port 80 to
       # bypass tor restrictions -- PROBABLY A VERY BAD IDEA SECURITY WISE, TOFIX,
       # TODO, XXX
-      home.file.".config/gnupg/gpg.conf".text  = ''
+      home.file.".config/gnupg/gpg.conf".text = ''
         keyserver hkp://pgp.mit.edu:80
         keyserver-options auto-key-retrieve
       '';

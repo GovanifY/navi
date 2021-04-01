@@ -6,7 +6,7 @@
     # low power also means low performance
     nix.distributedBuilds = true;
     nix.extraOptions = ''
-        builders-use-substitutes = true
+      builders-use-substitutes = true
     '';
 
     # most laptops have some sort of bluetooth support nowadays

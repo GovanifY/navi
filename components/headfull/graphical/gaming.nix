@@ -41,6 +41,7 @@ in
             exec steam
           '';
         }
-      )] ++ optionals cfg.retro [ retroarch pcsx2 ];
-    };
+      )
+    ] ++ optionals cfg.retro [ retroarch pcsx2 ];
+  };
 }

@@ -3,28 +3,30 @@ with lib;
 let
   cfg = config.navi.components.mail;
 
-  notmuch_email_list = concatStringsSep ";" (mapAttrsToList 
-    (name: account: optionalString (!account.primary) "${account.email}") 
+  notmuch_email_list = concatStringsSep ";" (mapAttrsToList
+    (name: account: optionalString (!account.primary) "${account.email}")
     cfg.accounts);
 
-  notmuch_config = concatStringsSep "\n" (mapAttrsToList (name: account: 
+  notmuch_config = concatStringsSep "\n" (mapAttrsToList
+    (name: account:
       optionalString account.primary ''
-    [database]
-    path=/home/${config.navi.username}/.local/share/mail
-    [user]
-    name=${account.name}
-    primary_email=${account.email}
-    other_email=${notmuch_email_list}
-    [new]
-    tags=unread;inbox;
-    ignore=
-    [search]
-    exclude_tags=deleted;spam;
-    [maildir]
-    synchronize_flags=true
-    [crypto]
-    gpg_path=gpg
-  '') cfg.accounts);
+        [database]
+        path=/home/${config.navi.username}/.local/share/mail
+        [user]
+        name=${account.name}
+        primary_email=${account.email}
+        other_email=${notmuch_email_list}
+        [new]
+        tags=unread;inbox;
+        ignore=
+        [search]
+        exclude_tags=deleted;spam;
+        [maildir]
+        synchronize_flags=true
+        [crypto]
+        gpg_path=gpg
+      '')
+    cfg.accounts);
 
   mailsync = pkgs.writeShellScript "mailsync.sh" (''
     if [ ! -z "$1" ]; then
@@ -69,44 +71,48 @@ let
         echo "error" > ~/.local/share/mail/unread && exit 1 
     fi
     add=0
-  '' + concatStringsSep "\n" (map (notif: 
-    "add=$(($add+`find $XDG_DATA_HOME/mail/${notif} -type f | grep -vE ',[^,]*S[^,]*$' | xargs basename -a | grep -v \"^\\.\" | wc -l`))")  
+  '' + concatStringsSep "\n" (map
+    (notif:
+      "add=$(($add+`find $XDG_DATA_HOME/mail/${notif} -type f | grep -vE ',[^,]*S[^,]*$' | xargs basename -a | grep -v \"^\\.\" | wc -l`))")
     cfg.unread_notif) + "\necho $add > $XDG_DATA_HOME/mail/unread");
 
-  isync_config = concatStringsSep "\n" (mapAttrsToList (name: account: ''
-    IMAPStore ${name}-remote
-    Host ${account.host}
-    Port 993
-    User ${account.email}
-    PassCmd "pass ${config.navi.branding}/${account.email} | head -n 1"
-    SSLType IMAPS
-    CertificateFile /etc/ssl/certs/ca-certificates.crt 
+  isync_config = concatStringsSep "\n" (mapAttrsToList
+    (name: account: ''
+      IMAPStore ${name}-remote
+      Host ${account.host}
+      Port 993
+      User ${account.email}
+      PassCmd "pass ${config.navi.branding}/${account.email} | head -n 1"
+      SSLType IMAPS
+      CertificateFile /etc/ssl/certs/ca-certificates.crt 
 
-    MaildirStore ${name}-local
-    Subfolders Verbatim
-    Path ~/.local/share/mail/${name}/
-    Inbox ~/.local/share/mail/${name}/INBOX
-    Flatten .
+      MaildirStore ${name}-local
+      Subfolders Verbatim
+      Path ~/.local/share/mail/${name}/
+      Inbox ~/.local/share/mail/${name}/INBOX
+      Flatten .
 
-    Channel ${name}
-    Expunge Both
-    Master :${name}-remote:
-    Slave :${name}-local:
-    Create Both
-    Remove Both
-    SyncState *
-    MaxMessages 0
-    ExpireUnread no
-    Patterns *
-  '') cfg.accounts);
+      Channel ${name}
+      Expunge Both
+      Master :${name}-remote:
+      Slave :${name}-local:
+      Create Both
+      Remove Both
+      SyncState *
+      MaxMessages 0
+      ExpireUnread no
+      Patterns *
+    '')
+    cfg.accounts);
 
   msmtp_config = '' 
     defaults
     auth on
-    tls	on
+    tls  on
     tls_trust_file /etc/ssl/certs/ca-certificates.crt 
-    logfile	~/.local/share/msmtp/msmtp.log
-  '' + concatStringsSep "\n" (mapAttrsToList (name: account: ''
+    logfile  ~/.local/share/msmtp/msmtp.log
+  '' + concatStringsSep "\n" (mapAttrsToList
+    (name: account: ''
 
     account ${name}
     host ${account.host} 
@@ -114,49 +120,57 @@ let
     from ${account.email} 
     user ${account.email}
     passwordeval "pass ${config.navi.branding}/${account.email} | head -n 1"
-  '') cfg.accounts);
+  '')
+    cfg.accounts);
 
   # 3 steps: 
   # 1. iterate over the attrset, generate primary and switch-to-account to list
   # 2. iterate through the list, replace @@number@@ by a counter
   # 3. convert the list to string!
-  accounts_source = concatStringsSep "\n" (imap1 (i: text: replaceStrings ["@@number@@"] ["${toString i}"] text)  (mapAttrsToList (name: account: 
-    optionalString account.primary "source ~/.config/mutt/accounts/${name}.muttrc\n" + ''
-    macro index,pager i@@number@@ '<sync-mailbox><enter-command>source ~/.config/mutt/accounts/${name}.muttrc<enter><change-folder>!<enter>;<check-stats>' "switch to ${name}"
-  '') cfg.accounts));
+  accounts_source = concatStringsSep "\n" (imap1 (i: text: replaceStrings [ "@@number@@" ] [ "${toString i}" ] text) (mapAttrsToList
+    (name: account:
+      optionalString account.primary "source ~/.config/mutt/accounts/${name}.muttrc\n" + ''
+        macro index,pager i@@number@@ '<sync-mailbox><enter-command>source ~/.config/mutt/accounts/${name}.muttrc<enter><change-folder>!<enter>;<check-stats>' "switch to ${name}"
+      '')
+    cfg.accounts));
 
   #(".config/mutt/accounts/" + name + ".muttrc") ( {
-  accounts_config = mapAttrs' (name: account: nameValuePair
-    (".config/mutt/accounts/" + name + ".muttrc") ( { text=''
-    set realname = "${account.name}"
-    set from = "${account.email}"
-    set sendmail = "msmtp -a ${name}"
-    alias me ${account.name} <${account.email}>
-    set folder = "/home/${config.navi.username}/.local/share/mail/${name}"
-    set header_cache = /home/${config.navi.username}/.cache/mutt/${name}-headers
-    set message_cachedir = /home/${config.navi.username}/.cache/mutt/${name}-bodies
-    set signature="${(pkgs.writeTextFile { name=name+"-signature"; text=account.signature; })}"
-    # general folder mappings for email adresses
-    set mbox_type = Maildir
-    unmailboxes *
-    set spoolfile = "+INBOX"
-    set postponed = "+INBOX.Drafts"
-    set trash = "+INBOX.Trash"
-    folder-hook . 'set record=^'
-    mailboxes `find "/home/${config.navi.username}/.local/share/mail/${name}" -type d -name cur | sort | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | tr '\n' ' '`
-  '' + optionalString (account.pgp_key != "") ''
-    set crypt_use_gpgme = yes
-    set crypt_autosign=yes
-    set crypt_verify_sig=yes
-    set crypt_replysign=yes
-    set crypt_replyencrypt=yes
-    set crypt_replysignencrypted=yes
-    set crypt_opportunistic_encrypt=yes
-    set pgp_default_key="${account.pgp_key}"
-    set pgp_check_gpg_decrypt_status_fd
-    set pgp_self_encrypt = yes
-    set crypt_protected_headers_write = yes
-  '';})) cfg.accounts;
+  accounts_config = mapAttrs'
+    (name: account: nameValuePair
+      (".config/mutt/accounts/" + name + ".muttrc")
+      ({
+        text = ''
+          set realname = "${account.name}"
+          set from = "${account.email}"
+          set sendmail = "msmtp -a ${name}"
+          alias me ${account.name} <${account.email}>
+          set folder = "/home/${config.navi.username}/.local/share/mail/${name}"
+          set header_cache = /home/${config.navi.username}/.cache/mutt/${name}-headers
+          set message_cachedir = /home/${config.navi.username}/.cache/mutt/${name}-bodies
+          set signature="${(pkgs.writeTextFile { name = name + "-signature"; text = account.signature; })}"
+          # general folder mappings for email adresses
+          set mbox_type = Maildir
+          unmailboxes *
+          set spoolfile = "+INBOX"
+          set postponed = "+INBOX.Drafts"
+          set trash = "+INBOX.Trash"
+          folder-hook . 'set record=^'
+          mailboxes `find "/home/${config.navi.username}/.local/share/mail/${name}" -type d -name cur | sort | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | tr '\n' ' '`
+        '' + optionalString (account.pgp_key != "") ''
+          set crypt_use_gpgme = yes
+          set crypt_autosign=yes
+          set crypt_verify_sig=yes
+          set crypt_replysign=yes
+          set crypt_replyencrypt=yes
+          set crypt_replysignencrypted=yes
+          set crypt_opportunistic_encrypt=yes
+          set pgp_default_key="${account.pgp_key}"
+          set pgp_check_gpg_decrypt_status_fd
+          set pgp_self_encrypt = yes
+          set crypt_protected_headers_write = yes
+        '';
+      }))
+    cfg.accounts;
 
 
 
@@ -179,20 +193,20 @@ let
     set sort = 'threads'
     set sort_aux = 'reverse-date'
     set rfc2047_parameters = yes
-    set sleep_time = 0		# Pause 0 seconds for informational messages
-    set markers = no		# Disables the `+` displayed at line wraps
-    set mark_old = no		# Unread mail stay unread until read
-    set mime_forward = yes		# attachments are forwarded with mail
-    set wait_key = no		# mutt won't ask "press key to continue"
-    set fast_reply			# skip to compose when replying
-    set fcc_attach			# save attachments with the body
-    set forward_format = "Fwd: %s"	# format of subject when forwarding
-    set forward_quote		# include message in forwards
-    set reverse_name		# reply as whomever it was to
-    set include			# include message in replies
+    set sleep_time = 0    # Pause 0 seconds for informational messages
+    set markers = no    # Disables the `+` displayed at line wraps
+    set mark_old = no    # Unread mail stay unread until read
+    set mime_forward = yes    # attachments are forwarded with mail
+    set wait_key = no    # mutt won't ask "press key to continue"
+    set fast_reply      # skip to compose when replying
+    set fcc_attach      # save attachments with the body
+    set forward_format = "Fwd: %s"  # format of subject when forwarding
+    set forward_quote    # include message in forwards
+    set reverse_name    # reply as whomever it was to
+    set include      # include message in replies
     set query_command = "notmuch address %s" # use notmuch for address auto-complete
     set query_format="%4c %t %-70.70a %-70.70n %?e?(%e)?" # ...and fix it :)
-    auto_view text/html		# automatically show html 
+    auto_view text/html    # automatically show html 
     auto_view application/pgp-encrypted
     alternative_order text/plain text/enriched text/html
     bind index,pager i noop
@@ -230,10 +244,10 @@ let
     bind index,pager,browser d half-down
     bind index,pager,browser u half-up
     bind index,pager R group-reply
-    bind index \031 previous-undeleted	# Mouse wheel
-    bind index \005 next-undeleted		# Mouse wheel
-    bind pager \031 previous-line		# Mouse wheel
-    bind pager \005 next-line		# Mouse wheel
+    bind index \031 previous-undeleted  # Mouse wheel
+    bind index \005 next-undeleted    # Mouse wheel
+    bind pager \031 previous-line    # Mouse wheel
+    bind pager \005 next-line    # Mouse wheel
     bind editor <Tab> complete-query
 
     macro index,pager S "<sync-mailbox><shell-escape>${mailsync} &> /dev/null &<enter>" "flush all changes and synchronize" 
@@ -354,7 +368,7 @@ let
     color   body    red             default         "^Closed #.*"
     color   body    brightblue      default         "^Reply to this email.*"
   '' + accounts_source;
-# End profile
+  # End profile
 in
 {
   options.navi.components.mail = {
@@ -363,10 +377,10 @@ in
       type = types.attrsOf (types.submodule {
         options = {
           email = mkOption {
-              type = types.str;
-              description = ''
-                The email of the account
-              '';
+            type = types.str;
+            description = ''
+              The email of the account
+            '';
           };
           name = mkOption {
             type = types.str;
@@ -416,53 +430,60 @@ in
   config = mkIf cfg.enable {
     # basic set of tools & ssh
     environment.systemPackages = with pkgs; [
-      neomutt msmtp isync lynx procps
-      notmuch notmuch-mutt perl
+      neomutt
+      msmtp
+      isync
+      lynx
+      procps
+      notmuch
+      notmuch-mutt
+      perl
     ];
 
     # XDG_CONFIG_HOME does not get parsed correctly so we do it manually
     # you need to create the caching folder otherwise this fails
     home-manager.users.${config.navi.username}.home.file = {
-      ".config/msmtp/config".text  = msmtp_config;
-      ".config/mbsync/config".text  = isync_config;
-      ".config/mutt/muttrc".text  = mutt_config;
-      ".config/notmuch".text  = notmuch_config;
+      ".config/msmtp/config".text = msmtp_config;
+      ".config/mbsync/config".text = isync_config;
+      ".config/mutt/muttrc".text = mutt_config;
+      ".config/notmuch".text = notmuch_config;
     } // accounts_config;
 
     # not sure why but here is let's encrypt cross signed X3 cert, needed for my
     # mail server apparently
-    security.pki.certificates = [ ''
-      -----BEGIN CERTIFICATE-----
-      MIIFFjCCAv6gAwIBAgIRAJErCErPDBinU/bWLiWnX1owDQYJKoZIhvcNAQELBQAw
-      TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
-      cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwHhcNMjAwOTA0MDAwMDAw
-      WhcNMjUwOTE1MTYwMDAwWjAyMQswCQYDVQQGEwJVUzEWMBQGA1UEChMNTGV0J3Mg
-      RW5jcnlwdDELMAkGA1UEAxMCUjMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
-      AoIBAQC7AhUozPaglNMPEuyNVZLD+ILxmaZ6QoinXSaqtSu5xUyxr45r+XXIo9cP
-      R5QUVTVXjJ6oojkZ9YI8QqlObvU7wy7bjcCwXPNZOOftz2nwWgsbvsCUJCWH+jdx
-      sxPnHKzhm+/b5DtFUkWWqcFTzjTIUu61ru2P3mBw4qVUq7ZtDpelQDRrK9O8Zutm
-      NHz6a4uPVymZ+DAXXbpyb/uBxa3Shlg9F8fnCbvxK/eG3MHacV3URuPMrSXBiLxg
-      Z3Vms/EY96Jc5lP/Ooi2R6X/ExjqmAl3P51T+c8B5fWmcBcUr2Ok/5mzk53cU6cG
-      /kiFHaFpriV1uxPMUgP17VGhi9sVAgMBAAGjggEIMIIBBDAOBgNVHQ8BAf8EBAMC
-      AYYwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMBMBIGA1UdEwEB/wQIMAYB
-      Af8CAQAwHQYDVR0OBBYEFBQusxe3WFbLrlAJQOYfr52LFMLGMB8GA1UdIwQYMBaA
-      FHm0WeZ7tuXkAXOACIjIGlj26ZtuMDIGCCsGAQUFBwEBBCYwJDAiBggrBgEFBQcw
-      AoYWaHR0cDovL3gxLmkubGVuY3Iub3JnLzAnBgNVHR8EIDAeMBygGqAYhhZodHRw
-      Oi8veDEuYy5sZW5jci5vcmcvMCIGA1UdIAQbMBkwCAYGZ4EMAQIBMA0GCysGAQQB
-      gt8TAQEBMA0GCSqGSIb3DQEBCwUAA4ICAQCFyk5HPqP3hUSFvNVneLKYY611TR6W
-      PTNlclQtgaDqw+34IL9fzLdwALduO/ZelN7kIJ+m74uyA+eitRY8kc607TkC53wl
-      ikfmZW4/RvTZ8M6UK+5UzhK8jCdLuMGYL6KvzXGRSgi3yLgjewQtCPkIVz6D2QQz
-      CkcheAmCJ8MqyJu5zlzyZMjAvnnAT45tRAxekrsu94sQ4egdRCnbWSDtY7kh+BIm
-      lJNXoB1lBMEKIq4QDUOXoRgffuDghje1WrG9ML+Hbisq/yFOGwXD9RiX8F6sw6W4
-      avAuvDszue5L3sz85K+EC4Y/wFVDNvZo4TYXao6Z0f+lQKc0t8DQYzk1OXVu8rp2
-      yJMC6alLbBfODALZvYH7n7do1AZls4I9d1P4jnkDrQoxB3UqQ9hVl3LEKQ73xF1O
-      yK5GhDDX8oVfGKF5u+decIsH4YaTw7mP3GFxJSqv3+0lUFJoi5Lc5da149p90Ids
-      hCExroL1+7mryIkXPeFM5TgO9r0rvZaBFOvV2z0gp35Z0+L4WPlbuEjN/lxPFin+
-      HlUjr8gRsI3qfJOQFy/9rKIJR0Y/8Omwt/8oTWgy1mdeHmmjk7j1nYsvC9JSQ6Zv
-      MldlTTKB3zhThV1+XWYp6rjd5JW1zbVWEkLNxE7GJThEUG3szgBVGP7pSWTUTsqX
-      nLRbwHOoq7hHwg==
-      -----END CERTIFICATE-----
-    ''
+    security.pki.certificates = [
+      ''
+        -----BEGIN CERTIFICATE-----
+        MIIFFjCCAv6gAwIBAgIRAJErCErPDBinU/bWLiWnX1owDQYJKoZIhvcNAQELBQAw
+        TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
+        cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwHhcNMjAwOTA0MDAwMDAw
+        WhcNMjUwOTE1MTYwMDAwWjAyMQswCQYDVQQGEwJVUzEWMBQGA1UEChMNTGV0J3Mg
+        RW5jcnlwdDELMAkGA1UEAxMCUjMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+        AoIBAQC7AhUozPaglNMPEuyNVZLD+ILxmaZ6QoinXSaqtSu5xUyxr45r+XXIo9cP
+        R5QUVTVXjJ6oojkZ9YI8QqlObvU7wy7bjcCwXPNZOOftz2nwWgsbvsCUJCWH+jdx
+        sxPnHKzhm+/b5DtFUkWWqcFTzjTIUu61ru2P3mBw4qVUq7ZtDpelQDRrK9O8Zutm
+        NHz6a4uPVymZ+DAXXbpyb/uBxa3Shlg9F8fnCbvxK/eG3MHacV3URuPMrSXBiLxg
+        Z3Vms/EY96Jc5lP/Ooi2R6X/ExjqmAl3P51T+c8B5fWmcBcUr2Ok/5mzk53cU6cG
+        /kiFHaFpriV1uxPMUgP17VGhi9sVAgMBAAGjggEIMIIBBDAOBgNVHQ8BAf8EBAMC
+        AYYwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMBMBIGA1UdEwEB/wQIMAYB
+        Af8CAQAwHQYDVR0OBBYEFBQusxe3WFbLrlAJQOYfr52LFMLGMB8GA1UdIwQYMBaA
+        FHm0WeZ7tuXkAXOACIjIGlj26ZtuMDIGCCsGAQUFBwEBBCYwJDAiBggrBgEFBQcw
+        AoYWaHR0cDovL3gxLmkubGVuY3Iub3JnLzAnBgNVHR8EIDAeMBygGqAYhhZodHRw
+        Oi8veDEuYy5sZW5jci5vcmcvMCIGA1UdIAQbMBkwCAYGZ4EMAQIBMA0GCysGAQQB
+        gt8TAQEBMA0GCSqGSIb3DQEBCwUAA4ICAQCFyk5HPqP3hUSFvNVneLKYY611TR6W
+        PTNlclQtgaDqw+34IL9fzLdwALduO/ZelN7kIJ+m74uyA+eitRY8kc607TkC53wl
+        ikfmZW4/RvTZ8M6UK+5UzhK8jCdLuMGYL6KvzXGRSgi3yLgjewQtCPkIVz6D2QQz
+        CkcheAmCJ8MqyJu5zlzyZMjAvnnAT45tRAxekrsu94sQ4egdRCnbWSDtY7kh+BIm
+        lJNXoB1lBMEKIq4QDUOXoRgffuDghje1WrG9ML+Hbisq/yFOGwXD9RiX8F6sw6W4
+        avAuvDszue5L3sz85K+EC4Y/wFVDNvZo4TYXao6Z0f+lQKc0t8DQYzk1OXVu8rp2
+        yJMC6alLbBfODALZvYH7n7do1AZls4I9d1P4jnkDrQoxB3UqQ9hVl3LEKQ73xF1O
+        yK5GhDDX8oVfGKF5u+decIsH4YaTw7mP3GFxJSqv3+0lUFJoi5Lc5da149p90Ids
+        hCExroL1+7mryIkXPeFM5TgO9r0rvZaBFOvV2z0gp35Z0+L4WPlbuEjN/lxPFin+
+        HlUjr8gRsI3qfJOQFy/9rKIJR0Y/8Omwt/8oTWgy1mdeHmmjk7j1nYsvC9JSQ6Zv
+        MldlTTKB3zhThV1+XWYp6rjd5JW1zbVWEkLNxE7GJThEUG3szgBVGP7pSWTUTsqX
+        nLRbwHOoq7hHwg==
+        -----END CERTIFICATE-----
+      ''
     ];
 
     systemd.user.services.mailsync = {

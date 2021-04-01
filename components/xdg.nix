@@ -44,24 +44,24 @@ in
         # ssh devs don't want to make ssh XDG compliant? well let's roll our own
         # compliance!
         openssh = super.openssh.overrideAttrs (oldAttrs: rec {
-            postPatch = oldAttrs.postPatch + ''
-              sed -i 's/"\.ssh"/"${escape ["/" "."] cfg.config}\/ssh"/' $(grep -Rl '"\.ssh"')
-            '';
-          });
+          postPatch = oldAttrs.postPatch + ''
+            sed -i 's/"\.ssh"/"${escape [ "/" "." ] cfg.config}\/ssh"/' $(grep -Rl '"\.ssh"')
+          '';
+        });
 
         ## rarely created on my setup, seems to be x11 related? either way here we go
         # NOT haha, this breaks nixos build at some point, so let's forget this
         # dbus = super.dbus.overrideAttrs (oldAttrs: rec {
-          #postPatch = oldAttrs.postPatch + ''
-              #sed -i 's/"\.dbus"/"\.config\/dbus"/' $(grep -Rl '"\.dbus"')
-          #'';
+        #postPatch = oldAttrs.postPatch + ''
+        #sed -i 's/"\.dbus"/"\.config\/dbus"/' $(grep -Rl '"\.dbus"')
+        #'';
         #});
 
         ## eh, it's just a forgotten pulseaudio module everyone forgot about. easier
         ## to patch than to submit a PR.
         pulseaudio = super.pulseaudio.overrideAttrs (oldAttrs: rec {
           postPatch = ''
-              sed -i 's/"\.esd_auth"/"${escape ["/" "."] cfg.config}\/esd_auth"/' $(grep -Rl '"\.esd_auth"')
+            sed -i 's/"\.esd_auth"/"${escape [ "/" "." ] cfg.config}\/esd_auth"/' $(grep -Rl '"\.esd_auth"')
           '';
         });
 
@@ -76,10 +76,11 @@ in
         # https://github.com/baldurk/renderdoc/pull/1741
         renderdoc = super.renderdoc.overrideAttrs (oldAttrs: rec {
           postPatch = ''
-              sed -i 's/"\.renderdoc"/"${escape ["/" "."] cfg.data}\/renderdoc"/' $(grep -Rl '"\.renderdoc"')
+            sed -i 's/"\.renderdoc"/"${escape [ "/" "." ] cfg.data}\/renderdoc"/' $(grep -Rl '"\.renderdoc"')
           '';
         });
-    })];
+      })
+    ];
 
     environment.variables = {
       XDG_CONFIG_HOME = "$HOME/${cfg.config}";
@@ -116,8 +117,8 @@ in
     };
 
     home-manager.users.${config.navi.username} = {
-      home.file.".config/wgetrc".text  = "hsts-file = \"$XDG_CACHE_HOME\"/wget-hsts";
-      home.file.".config/python/startup.py".text  = ''
+      home.file.".config/wgetrc".text = "hsts-file = \"$XDG_CACHE_HOME\"/wget-hsts";
+      home.file.".config/python/startup.py".text = ''
         import sys
         def register_readline_completion():
           # rlcompleter must be loaded for Python-specific completion
@@ -133,7 +134,7 @@ in
             readline.parse_and_bind('tab: complete')
         sys.__interactivehook__ = register_readline_completion
       '';
-      home.file.".config/npm/npmrc".text  = ''
+      home.file.".config/npm/npmrc".text = ''
         prefix=$XDG_DATA_HOME/npm
         cache=$XDG_CACHE_HOME/npm
         tmp=$XDG_RUNTIME_DIR/npm

@@ -3,9 +3,9 @@ with lib;
 let
   cfg = config.navi.components.hardening;
   kernelPackages = with pkgs;
-  recurseIntoAttrs (linuxPackagesFor (linux_latest_hardened.override {
-    features.ia32Emulation = true;
-  }));
+    recurseIntoAttrs (linuxPackagesFor (linux_latest_hardened.override {
+      features.ia32Emulation = true;
+    }));
 in
 {
   options.navi.components.hardening = {
@@ -19,14 +19,14 @@ in
     };
     scudo = mkOption {
       type = types.bool;
-      default = true; 
+      default = true;
       description = ''
         Enables scudo to harden against memory corruption attacks
       '';
     };
     modules = mkOption {
       type = types.bool;
-      default = true; 
+      default = true;
       description = ''
         Locks runtime loading of kernel modules 
       '';
@@ -49,7 +49,7 @@ in
         IA32_EMULATION y
       '';
     }];
-    
+
     environment.memoryAllocator.provider = if cfg.scudo then "scudo" else "libc";
     security.lockKernelModules = cfg.modules;
 

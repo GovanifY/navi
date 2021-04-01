@@ -8,7 +8,7 @@ let
     active_colors=#eff0f1, #31363b, #4c545c, #40464d, #171a1c, #2a2e32, #eff0f1, #ffffff, #eff0f1, #232629, #31363b, #111314, #3daee9, #eff0f1, #2980b9, #7f8c8d, #31363b, #000000, #31363b, #eff0f1
     disabled_colors=#6e7175, #2e3338, #4a5259, #3e444a, #16191b, #282c30, #65686a, #ffffff, #6e7175, #212427, #2e3338, #101213, #2e3338, #6e7175, #234257, #404648, #2e3338, #000000, #31363b, #eff0f1
     inactive_colors=#eff0f1, #31363b, #4c545c, #40464d, #171a1c, #2a2e32, #eff0f1, #ffffff, #eff0f1, #232629, #31363b, #111314, #224e65, #eff0f1, #2980b9, #7f8c8d, #31363b, #000000, #31363b, #eff0f1
-    '';
+  '';
 
   qt5ct-conf = ''
     [Appearance]
@@ -67,48 +67,49 @@ let
     echo "mail: $mail${bat-opt} | $date_formatted"
   '');
 
-  layout-keycaps = if cfg.azerty then ''
-    bindsym $mod+ampersand workspace 1
-    bindsym $mod+eacute workspace 2
-    bindsym $mod+quotedbl workspace 3
-    bindsym $mod+apostrophe workspace 4
-    bindsym $mod+parenleft workspace 5
-    bindsym $mod+minus workspace 6
-    bindsym $mod+egrave workspace 7
-    bindsym $mod+underscore workspace 8
-    bindsym $mod+ccedilla workspace 9
-    bindsym $mod+agrave workspace 10
-    bindsym $mod+Shift+ampersand move container to workspace 1
-    bindsym $mod+Shift+eacute move container to workspace 2
-    bindsym $mod+Shift+quotedbl move container to workspace 3
-    bindsym $mod+Shift+apostrophe move container to workspace 4
-    bindsym $mod+Shift+parenleft move container to workspace 5
-    bindsym $mod+Shift+minus move container to workspace 6
-    bindsym $mod+Shift+egrave move container to workspace 7
-    bindsym $mod+Shift+underscore move container to workspace 8
-    bindsym $mod+Shift+ccedilla move container to workspace 9
-    bindsym $mod+Shift+agrave move container to workspace 10
+  layout-keycaps =
+    if cfg.azerty then ''
+      bindsym $mod+ampersand workspace 1
+      bindsym $mod+eacute workspace 2
+      bindsym $mod+quotedbl workspace 3
+      bindsym $mod+apostrophe workspace 4
+      bindsym $mod+parenleft workspace 5
+      bindsym $mod+minus workspace 6
+      bindsym $mod+egrave workspace 7
+      bindsym $mod+underscore workspace 8
+      bindsym $mod+ccedilla workspace 9
+      bindsym $mod+agrave workspace 10
+      bindsym $mod+Shift+ampersand move container to workspace 1
+      bindsym $mod+Shift+eacute move container to workspace 2
+      bindsym $mod+Shift+quotedbl move container to workspace 3
+      bindsym $mod+Shift+apostrophe move container to workspace 4
+      bindsym $mod+Shift+parenleft move container to workspace 5
+      bindsym $mod+Shift+minus move container to workspace 6
+      bindsym $mod+Shift+egrave move container to workspace 7
+      bindsym $mod+Shift+underscore move container to workspace 8
+      bindsym $mod+Shift+ccedilla move container to workspace 9
+      bindsym $mod+Shift+agrave move container to workspace 10
     '' else ''
-    bindsym $mod+1 workspace 1
-    bindsym $mod+2 workspace 2
-    bindsym $mod+3 workspace 3
-    bindsym $mod+4 workspace 4
-    bindsym $mod+5 workspace 5
-    bindsym $mod+6 workspace 6
-    bindsym $mod+7 workspace 7
-    bindsym $mod+8 workspace 8
-    bindsym $mod+9 workspace 9
-    bindsym $mod+0 workspace 10
-    bindsym $mod+Shift+1 move container to workspace 1
-    bindsym $mod+Shift+2 move container to workspace 2
-    bindsym $mod+Shift+3 move container to workspace 3
-    bindsym $mod+Shift+4 move container to workspace 4
-    bindsym $mod+Shift+5 move container to workspace 5
-    bindsym $mod+Shift+6 move container to workspace 6
-    bindsym $mod+Shift+7 move container to workspace 7
-    bindsym $mod+Shift+8 move container to workspace 8
-    bindsym $mod+Shift+9 move container to workspace 9
-    bindsym $mod+Shift+0 move container to workspace 10
+      bindsym $mod+1 workspace 1
+      bindsym $mod+2 workspace 2
+      bindsym $mod+3 workspace 3
+      bindsym $mod+4 workspace 4
+      bindsym $mod+5 workspace 5
+      bindsym $mod+6 workspace 6
+      bindsym $mod+7 workspace 7
+      bindsym $mod+8 workspace 8
+      bindsym $mod+9 workspace 9
+      bindsym $mod+0 workspace 10
+      bindsym $mod+Shift+1 move container to workspace 1
+      bindsym $mod+Shift+2 move container to workspace 2
+      bindsym $mod+Shift+3 move container to workspace 3
+      bindsym $mod+Shift+4 move container to workspace 4
+      bindsym $mod+Shift+5 move container to workspace 5
+      bindsym $mod+Shift+6 move container to workspace 6
+      bindsym $mod+Shift+7 move container to workspace 7
+      bindsym $mod+Shift+8 move container to workspace 8
+      bindsym $mod+Shift+9 move container to workspace 9
+      bindsym $mod+Shift+0 move container to workspace 10
     '';
   sway-config = ''
     set $mod Mod4
@@ -122,11 +123,11 @@ let
 
     output * bg ~/Pictures/wallpaper.png fill
 
-    '' + optionalString config.navi.components.ime.enable ''
+  '' + optionalString config.navi.components.ime.enable ''
     exec swaymsg "workspace 1; exec ibus-daemon -dr > /dev/null 2>&1"
-    '' + optionalString config.navi.components.browser.enable ''
+  '' + optionalString config.navi.components.browser.enable ''
     exec swaymsg "workspace 1; exec firefox > /dev/null 2>&1"
-    '' + ''
+  '' + ''
     exec swaymsg "workspace 3; exec element-x11 > /dev/null 2>&1"
     exec swaymsg "workspace 2; layout tabbed; exec alacritty > /dev/null 2>&1"
 
@@ -134,9 +135,9 @@ let
     default_border pixel 1 
     seat seat0 xcursor_theme breeze_cursors 24
 
-    '' + optionalString config.navi.components.ime.enable ''
+  '' + optionalString config.navi.components.ime.enable ''
     bindsym $mod+i exec ${locale-sh} > /dev/null 2>&1
-    '' + '' 
+  '' + '' 
 
     bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5% > /dev/null 2>&1
     bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5% > /dev/null 2>&1
@@ -219,7 +220,7 @@ let
 
     '' + optionalString config.navi.components.splash.enable ''
     exec plymouth-quit > /dev/null 2>&1"
-    '' + cfg.extraConf;
+  '' + cfg.extraConf;
 in
 {
   options.navi.components.wm = {
@@ -250,11 +251,11 @@ in
       '';
     };
     extraConf = mkOption {
-       type = types.str;
-       default = "";
-       description = ''
-         Extra configuration to add to navi's window manager.
-       '';
+      type = types.str;
+      default = "";
+      description = ''
+        Extra configuration to add to navi's window manager.
+      '';
     };
   };
 
@@ -263,13 +264,21 @@ in
       enable = true;
       extraPackages = with pkgs; [
         # lockscreen
-        swaylock swayidle 
+        swaylock
+        swayidle
         # X
-        xwayland xorg.xrdb
+        xwayland
+        xorg.xrdb
         # misc
-        wofi grim wl-clipboard slurp brightnessctl
+        wofi
+        grim
+        wl-clipboard
+        slurp
+        brightnessctl
         # themes
-        breeze-gtk breeze-qt5 breeze-icons
+        breeze-gtk
+        breeze-qt5
+        breeze-icons
       ];
     };
 
@@ -282,35 +291,41 @@ in
       # fix sway java bug
       _JAVA_AWT_WM_NONREPARENTING = "1";
       # QT theme
-      QT_QPA_PLATFORMTHEME="qt5ct";
+      QT_QPA_PLATFORMTHEME = "qt5ct";
       # force wayland
-      QT_QPA_PLATFORM="wayland-egl";
-      GDK_BACKEND="wayland";
+      QT_QPA_PLATFORM = "wayland-egl";
+      GDK_BACKEND = "wayland";
       MOZ_ENABLE_WAYLAND = "1";
       GTK_THEME = "Breeze-Dark";
     };
 
     environment.sessionVariables = {
-        XCURSOR_PATH = [
-          "${config.system.path}/share/icons"
-          "$HOME/.nix-profile/share/icons/"
-          "$HOME/.local/share/icons/"
-          "${pkgs.breeze-qt5}/share/icons/"
-        ];
-        GTK_DATA_PREFIX = [
-          "${config.system.path}"
-        ];
+      XCURSOR_PATH = [
+        "${config.system.path}/share/icons"
+        "$HOME/.nix-profile/share/icons/"
+        "$HOME/.local/share/icons/"
+        "${pkgs.breeze-qt5}/share/icons/"
+      ];
+      GTK_DATA_PREFIX = [
+        "${config.system.path}"
+      ];
     };
 
 
     environment = {
       etc = {
-        "gtk-2.0/gtkrc" = { text = ''
-          gtk-icon-theme-name=breeze-dark
-        ''; mode = "444"; };
-        "X11/Xresources" = { text = ''
-          Xcursor.size: 12 
-        ''; mode = "444"; };
+        "gtk-2.0/gtkrc" = {
+          text = ''
+            gtk-icon-theme-name=breeze-dark
+          '';
+          mode = "444";
+        };
+        "X11/Xresources" = {
+          text = ''
+            Xcursor.size: 12 
+          '';
+          mode = "444";
+        };
       };
     };
 
@@ -346,17 +361,17 @@ in
 
     home-manager.users.${config.navi.username} = {
       # QT theme
-      home.file.".config/qt5ct/qt5ct.conf".text  = qt5ct-conf;
-      home.file.".config/qt5ct/colors/breeze-dark.conf".text  = qt5ct-dark;
+      home.file.".config/qt5ct/qt5ct.conf".text = qt5ct-conf;
+      home.file.".config/qt5ct/colors/breeze-dark.conf".text = qt5ct-dark;
 
       # GTK theme
-      home.file.".config/gtk-3.0/settings.ini".text  = ''
-           [Settings]
-           gtk-theme-name=Breeze-Dark
-           gtk-application-prefer-dark-theme = true
-           gtk-cursor-theme-name=breeze_cursors
-      ''; 
+      home.file.".config/gtk-3.0/settings.ini".text = ''
+        [Settings]
+        gtk-theme-name=Breeze-Dark
+        gtk-application-prefer-dark-theme = true
+        gtk-cursor-theme-name=breeze_cursors
+      '';
       home.file.".config/sway/config".text = sway-config;
-   };
- };
+    };
+  };
 }

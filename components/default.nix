@@ -17,18 +17,18 @@ with lib;
 
   options.navi = {
     username = mkOption {
-        type = types.str;
-        default = "govanify";
-        description = ''
-          The main username of the infrastructure 
-        '';
+      type = types.str;
+      default = "govanify";
+      description = ''
+        The main username of the infrastructure 
+      '';
     };
     branding = mkOption {
-        type = types.str;
-        default = "navi";
-        description = ''
-          The name of the infrastructure to use for branding
-        '';
+      type = types.str;
+      default = "navi";
+      description = ''
+        The name of the infrastructure to use for branding
+      '';
     };
   };
 }

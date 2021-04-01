@@ -14,10 +14,10 @@
 
     # make obs work with wayland + virtual camera module
     home-manager.users.${navi.username} = {
-       programs.obs-studio = {
-         enable = true;
-         plugins = [ pkgs.obs-wlrobs pkgs.obs-v4l2sink ];
-       };
+      programs.obs-studio = {
+        enable = true;
+        plugins = [ pkgs.obs-wlrobs pkgs.obs-v4l2sink ];
+      };
     };
 
     environment.systemPackages = with pkgs; [
@@ -25,43 +25,57 @@
       wineWowPackages.full
 
       # multimedia
-      mpv imv 
+      mpv
+      imv
 
       # reading
-      calibre okular kcc
+      calibre
+      okular
+      kcc
 
       # art
-      blender krita kdenlive ardour
+      blender
+      krita
+      kdenlive
+      ardour
 
       # stem
-      kicad wireshark pandoc limesuite ghidra
+      kicad
+      wireshark
+      pandoc
+      limesuite
+      ghidra
       #freecad sourcetrail
 
       # recording/streaming
-      obs-studio obs-wlrobs obs-v4l2sink
+      obs-studio
+      obs-wlrobs
+      obs-v4l2sink
 
       jdk
       android-studio
       (
-      pkgs.writeTextFile {
-        name = "startandroid";
-        destination = "/bin/startandroid";
-        executable = true;
-        text = ''
-          #! ${pkgs.bash}/bin/bash
-          # Java sucks
-          export QT_QPA_PLATFORM=xcb
-          export GDK_BACKEND=xcb
-          mkdir -p $XDG_DATA_HOME/android-home
-          export HOME=$XDG_DATA_HOME/android-home
-          # then start the launcher 
-          exec android-studio 
-        '';
-      }
+        pkgs.writeTextFile {
+          name = "startandroid";
+          destination = "/bin/startandroid";
+          executable = true;
+          text = ''
+            #! ${pkgs.bash}/bin/bash
+            # Java sucks
+            export QT_QPA_PLATFORM=xcb
+            export GDK_BACKEND=xcb
+            mkdir -p $XDG_DATA_HOME/android-home
+            export HOME=$XDG_DATA_HOME/android-home
+            # then start the launcher 
+            exec android-studio 
+          '';
+        }
       )
 
       # math
-      coq lean elan 
+      coq
+      lean
+      elan
 
     ];
 
@@ -70,7 +84,7 @@
     programs.wireshark.enable = true;
     programs.adb.enable = true;
     users.users.${navi.username} = {
-      extraGroups = [ "wireshark" "adbusers" "audio" ]; 
+      extraGroups = [ "wireshark" "adbusers" "audio" ];
     };
 
     # scudo breaks everything on a graphical setup, eg firefox can't even
