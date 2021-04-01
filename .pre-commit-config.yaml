@@ -1,4 +1,5 @@
+repos:
 -   repo: https://github.com/nix-community/nixpkgs-fmt
-    rev: master
+    rev: v1.2.0
     hooks:
     -   id: nixpkgs-fmt
