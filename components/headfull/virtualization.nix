@@ -39,6 +39,10 @@ in {
   };
   config = mkIf cfg.enable {
 
+    # enable access to the system daemon for our main user
+    users.users.${navi.username} = {
+      extraGroups = [ "libvirtd" ]; 
+    };
 
     environment.systemPackages = with pkgs; [
       virt-manager
@@ -49,7 +53,9 @@ in {
     # isolate iGPU for libvirtd
     boot.initrd.kernelModules = mkIf (cfg.pci_devices != "") [ "vfio_virqfd"
     "vfio_pci" "vfio_iommu_type1" "vfio" ];
-    boot.kernelParams = mkIf (cfg.pci_devices != "") [ "vfio-pci.ids=${cfg.pci_devices}" ];
+    boot.kernelParams = (optionals (cfg.pci_devices != "") [ "vfio-pci.ids=${cfg.pci_devices}" 
+      ]) ++ (optionals cfg.gvt [ "intel_iommu=on" "i915.enable_guc=0"
+      "i915.enable_gvt=1" ];
     boot.kernelModules = [ "kvm-intel" "vfio_pci" "kvmgt" "vfio-iommu-type1" "vfio-mdev"];
 
     networking = mkIf (cfg.bridge_devices != []) {

@@ -1,0 +1,7 @@
+{
+  imports = [
+    ./components
+    ./secrets
+    ./profiles
+  ];
+}

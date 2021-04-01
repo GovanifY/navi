@@ -11,7 +11,7 @@
     users.users.distbuild = {
       isSystemUser = true;
       shell = pkgs.bash;
-      openssh.authorizedKeys.keyFiles = [ ./../secrets/ssh_keys/distbuild.pub ];
+      openssh.authorizedKeys.keyFiles = [ ./../secrets/ssh/distbuild.pub ];
     };
     nix.trustedUsers = [ "distbuild" ];
 }

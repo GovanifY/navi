@@ -218,8 +218,7 @@ in
     environment.variables = {
       EDITOR = "vim";
     };
-    environment.systemPackages = with pkgs; mkIf cfg.ide_features [
-      nodejs
-    ];
+    environment.systemPackages = with pkgs; [
+      neovim fzf ] ++ optionals cfg.ide_features [ nodejs ];
   };
 }

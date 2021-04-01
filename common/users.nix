@@ -5,12 +5,9 @@
   ];
 
   users.users.govanify = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "audio" "wireshark" "adbusers"
-                    "libvirtd" ]; 
+    extraGroups = [ "wheel" "networkmanager" ]; 
    };
 
-   users.users.govanify.openssh.authorizedKeys.keyFiles  = [ ./../secrets/ssh_keys/navi.pub ];
    home-manager.users.govanify = {
      programs.git = {
        enable = true;
@@ -25,10 +22,6 @@
            smtpserveroption = [ "-a" "govanify"];
          };
        };
-     };
-     programs.obs-studio = {
-       enable = true;
-       plugins = [ pkgs.obs-wlrobs pkgs.obs-v4l2sink ];
      };
    };
  }

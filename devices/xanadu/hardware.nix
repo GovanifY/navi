@@ -42,5 +42,17 @@
   networking.useDHCP = false;
   networking.interfaces.wlp1s0.useDHCP = true;
 
+  # we enable opengl intel drivers to get hw accel
+  nixpkgs.config.packageOverrides = pkgs: {
+    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+  };
+  hardware.opengl = {
+    enable = true;
+    extraPackages = with pkgs; [
+      vaapiVdpau
+      libvdpau-va-gl
+      intel-media-driver
+    ];
+  };
 
 }
