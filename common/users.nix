@@ -1,9 +1,5 @@
 { config, pkgs, ... }:
 {
-  imports =
-    [ ./../secrets/passwords.nix
-  ];
-
    home-manager.users.govanify = {
      programs.git = {
        enable = true;

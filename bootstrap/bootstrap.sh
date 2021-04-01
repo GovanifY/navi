@@ -42,8 +42,8 @@ old_gpg_home=$GNUPGHOME
 export GNUPGHOME="$3/home/$2/.config/gnupg"
 find $3/home/$2/.config/gnupg -type f -exec chmod 600 {} \;
 find $3/home/$2/.config/gnupg -type d -exec chmod 700 {} \;
-gpg --import ../secrets/gpg/key.gpg 
-gpg --import-ownertrust ../secrets/gpg/gpg-trust.txt 
+gpg --import ../secrets/assets/gpg/key.gpg 
+gpg --import-ownertrust ../secrets/assets/gpg/gpg-trust.txt 
 mkdir -p $3/home/$2/.local/share/mail/ &> /dev/null
 mkdir -p $3/home/$2/.cache/mutt/ &> /dev/null
 mkdir -p $3/home/$2/.local/share/wineprefixes/ &> /dev/null

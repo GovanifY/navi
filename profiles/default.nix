@@ -52,10 +52,10 @@
     # care about that?
     users.users.${navi.username} = {
       isNormalUser = true;
-      hashedPassword = readFile ./../secrets/shadow/main;
-      openssh.authorizedKeys.keyFiles  = [ ./../secrets/ssh/navi.pub ];
+      hashedPassword = readFile ./../secrets/assets/shadow/main;
+      openssh.authorizedKeys.keyFiles  = [ ./../secrets/assets/ssh/navi.pub ];
     };
-    users.users.root.hashedPassword = readFile ./../secrets/shadow/root;
+    users.users.root.hashedPassword = readFile ./../secrets/assets/shadow/root;
 
     # setup the distbuild account; while this might look like a backdoor for
     # lesser privilege devices the distbuild access key is only given to at
@@ -64,7 +64,7 @@
     users.users.distbuild = {
       isSystemUser = true;
       shell = pkgs.bash;
-      openssh.authorizedKeys.keyFiles = [ ./../secrets/ssh/distbuild.pub ];
+      openssh.authorizedKeys.keyFiles = [ ./../secrets/assets/ssh/distbuild.pub ];
     };
     nix.trustedUsers = [ "distbuild" ];
 

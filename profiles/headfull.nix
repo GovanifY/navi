@@ -30,10 +30,10 @@
 
     # we setup the personal ssh and gpg key of our headfull user
     home-manager.users.${navi.username} = {
-      home.file.".config/gnupg/key.gpg".source  = ./../secrets/gpg/key.gpg;
-      home.file.".config/gnupg/trust.txt".source  = ./../secrets/gpg/gpg-trust.txt;
-      home.file.".config/ssh/id_ed25519".source  = ./../secrets/ssh/navi;
-      home.file.".config/ssh/id_ed25519.pub".source  = ./../secrets/ssh/navi.pub;
+      home.file.".config/gnupg/key.gpg".source  = ./../secrets/assets/gpg/key.gpg;
+      home.file.".config/gnupg/trust.txt".source  = ./../secrets/assets/gpg/gpg-trust.txt;
+      home.file.".config/ssh/id_ed25519".source  = ./../secrets/assets/ssh/navi;
+      home.file.".config/ssh/id_ed25519.pub".source  = ./../secrets/assets/ssh/navi.pub;
 
       # try to auto retrieve gpg keys when using emails, using hkp on port 80 to
       # bypass tor restrictions -- PROBABLY A VERY BAD IDEA SECURITY WISE, TOFIX,
@@ -46,7 +46,7 @@
 
     # store our distbuild key so we can login to our infra
     environment.etc."distbuild_ssh" = {
-      text = builtins.readFile ./../secrets/ssh/distbuild;
+      text = builtins.readFile ./../secrets/assets/ssh/distbuild;
       mode = "0400";
       uid = 0;
       gid = 0;
