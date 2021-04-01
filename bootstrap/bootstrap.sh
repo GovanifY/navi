@@ -1,4 +1,6 @@
 #!/bin/sh
+echo "Welcome to navi's bootstrapper!"
+cat icon.motd
 if [ "$#" -ne 2 ]; then
     echo "usage: ./bootstrap.sh hostname username root"
     echo "example: ./bootstrap.sh alastor govanify /mnt"
