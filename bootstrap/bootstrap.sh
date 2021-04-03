@@ -1,6 +1,14 @@
 #!/bin/sh
 echo "Welcome to navi's bootstrapper!"
 cat icon.motd
+
+echo "4d16330208714286d397e2cf7d8a977ac2771ac9fa0311226afc0df06e00b4d6 ../secrets/assets/canary" \
+    | sha256sum --check --status &> /dev/null
+
+if [ "$?" -ne 0 ]; then
+    echo "failed to verify canary"
+fi
+
 if [ "$#" -ne 2 ]; then
     echo "usage: ./bootstrap.sh hostname username root"
     echo "example: ./bootstrap.sh alastor govanify /mnt"
