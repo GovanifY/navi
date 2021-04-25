@@ -9,7 +9,6 @@ with lib;
 
   options.navi.device = mkOption {
     type = types.str;
-    default = "none";
     description = ''
       The name of the device you target 
     '';
