@@ -108,8 +108,8 @@ let
 
           Channel ${name}
           Expunge Both
-          Master :${name}-remote:
-          Slave :${name}-local:
+          Far :${name}-remote:
+          Near :${name}-local:
           Create Both
           Remove Both
           SyncState *
