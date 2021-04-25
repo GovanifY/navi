@@ -1,4 +1,6 @@
-{ config, lib, pkgs, ... }: {
+{ config, lib, pkgs, ... }:
+with lib;
+{
   config = mkIf (config.navi.profile.headfull) {
     environment.systemPackages = with pkgs; [
       # defaults
@@ -27,7 +29,7 @@
 
     # headfull main user is essentially an admin, reflect that by giving it the
     # wheel group
-    users.users.${navi.username} = {
+    users.users.${config.navi.username} = {
       extraGroups = [ "wheel" "networkmanager" ];
     };
 
@@ -40,7 +42,7 @@
     hardware.pulseaudio.enable = true;
 
     # we setup the personal ssh and gpg key of our headfull user
-    home-manager.users.${navi.username} = {
+    home-manager.users.${config.navi.username} = {
       home.file.".config/gnupg/key.gpg".source = ./../secrets/assets/gpg/key.gpg;
       home.file.".config/gnupg/trust.txt".source = ./../secrets/assets/gpg/gpg-trust.txt;
       home.file.".config/ssh/id_ed25519".source = ./../secrets/assets/ssh/navi;

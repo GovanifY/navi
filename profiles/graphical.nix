@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }: {
-  config = mkIf (config.navi.profile.graphical) {
+{ config, lib, pkgs, ... }:
+with lib;
+{
+  config = mkIf config.navi.profile.graphical {
 
-    config.navi.profile.headfull = true;
+    navi.profile.headfull = true;
 
     # don't want to become blind
     services.redshift = {
@@ -13,7 +15,7 @@
     boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
 
     # make obs work with wayland + virtual camera module
-    home-manager.users.${navi.username} = {
+    home-manager.users.${config.navi.username} = {
       programs.obs-studio = {
         enable = true;
         plugins = [ pkgs.obs-wlrobs pkgs.obs-v4l2sink ];
@@ -44,7 +46,7 @@
       wireshark
       pandoc
       limesuite
-      ghidra
+      ghidra-bin
       #freecad sourcetrail
 
       # recording/streaming
@@ -83,7 +85,7 @@
     # server, android funsies and realtime audio access for ardour and jack
     programs.wireshark.enable = true;
     programs.adb.enable = true;
-    users.users.${navi.username} = {
+    users.users.${config.navi.username} = {
       extraGroups = [ "wireshark" "adbusers" "audio" ];
     };
 

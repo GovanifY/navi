@@ -7,5 +7,6 @@
     ./music.nix
     ./ime.nix
     ./graphical
+    ./chat.nix
   ];
 }

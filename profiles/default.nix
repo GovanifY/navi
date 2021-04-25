@@ -5,6 +5,9 @@ with lib;
     [
       ./laptop.nix
       ./desktop.nix
+      ./graphical.nix
+      ./headfull.nix
+      ./server.nix
     ];
 
 

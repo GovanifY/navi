@@ -14,5 +14,7 @@ with lib;
     # most laptops have some sort of bluetooth support nowadays
     navi.components.bluetooth.enable = true;
     navi.profile.graphical = true;
+
+    navi.components.gaming.enable = true;
   };
 }
