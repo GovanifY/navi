@@ -3,9 +3,13 @@ with lib;
 let
   cfg = config.navi.components.hardening;
   kernelPackages = with pkgs;
-    recurseIntoAttrs (linuxPackagesFor (linux_latest_hardened.override {
-      features.ia32Emulation = true;
-    }));
+    recurseIntoAttrs (
+      linuxPackagesFor (
+        linux_latest_hardened.override {
+          features.ia32Emulation = true;
+        }
+      )
+    );
 in
 {
   options.navi.components.hardening = {
@@ -42,13 +46,15 @@ in
   config = mkIf cfg.enable {
     # Use the hardened kernel but keep IA32 emulation.
     boot.kernelPackages = mkIf cfg.legacy kernelPackages;
-    boot.kernelPatches = mkIf cfg.legacy [{
-      name = "keep-ia32";
-      patch = null;
-      extraConfig = ''
-        IA32_EMULATION y
-      '';
-    }];
+    boot.kernelPatches = mkIf cfg.legacy [
+      {
+        name = "keep-ia32";
+        patch = null;
+        extraConfig = ''
+          IA32_EMULATION y
+        '';
+      }
+    ];
 
     environment.memoryAllocator.provider = if cfg.scudo then "scudo" else "libc";
     security.lockKernelModules = cfg.modules;

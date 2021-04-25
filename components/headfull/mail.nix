@@ -3,107 +3,123 @@ with lib;
 let
   cfg = config.navi.components.mail;
 
-  notmuch_email_list = concatStringsSep ";" (mapAttrsToList
-    (name: account: optionalString (!account.primary) "${account.email}")
-    cfg.accounts);
+  notmuch_email_list = concatStringsSep ";" (
+    mapAttrsToList
+      (name: account: optionalString (!account.primary) "${account.email}")
+      cfg.accounts
+  );
 
-  notmuch_config = concatStringsSep "\n" (mapAttrsToList
-    (name: account:
-      optionalString account.primary ''
-        [database]
-        path=/home/${config.navi.username}/.local/share/mail
-        [user]
-        name=${account.name}
-        primary_email=${account.email}
-        other_email=${notmuch_email_list}
-        [new]
-        tags=unread;inbox;
-        ignore=
-        [search]
-        exclude_tags=deleted;spam;
-        [maildir]
-        synchronize_flags=true
-        [crypto]
-        gpg_path=gpg
-      '')
-    cfg.accounts);
+  notmuch_config = concatStringsSep "\n" (
+    mapAttrsToList
+      (
+        name: account:
+          optionalString account.primary ''
+            [database]
+            path=/home/${config.navi.username}/.local/share/mail
+            [user]
+            name=${account.name}
+            primary_email=${account.email}
+            other_email=${notmuch_email_list}
+            [new]
+            tags=unread;inbox;
+            ignore=
+            [search]
+            exclude_tags=deleted;spam;
+            [maildir]
+            synchronize_flags=true
+            [crypto]
+            gpg_path=gpg
+          ''
+      )
+      cfg.accounts
+  );
 
-  mailsync = pkgs.writeShellScript "mailsync.sh" (''
-    if [ ! -z "$1" ]; then
-        # we have to be nice to systemd apparently
-        # https://github.com/systemd/systemd/issues/2123
-        export HOME=$1
-        export XDG_CONFIG_HOME=$HOME/.config
-        export XDG_CACHE_HOME=$HOME/.cache
-        export XDG_DATA_HOME=$HOME/.local/share
-        export WGETRC=$HOME/.config/wgetrc
-        export PASSWORD_STORE_DIR=$HOME/.config/pass
-        export GNUPGHOME=$HOME/.config/gnupg
-    fi
-    # Run only if not already running in other instance
-    pgrep -x mbsync >/dev/null && { echo "mbsync is already running." ; exit ;}
+  mailsync = pkgs.writeShellScript "mailsync.sh" (
+    ''
+      if [ ! -z "$1" ]; then
+          # we have to be nice to systemd apparently
+          # https://github.com/systemd/systemd/issues/2123
+          export HOME=$1
+          export XDG_CONFIG_HOME=$HOME/.config
+          export XDG_CACHE_HOME=$HOME/.cache
+          export XDG_DATA_HOME=$HOME/.local/share
+          export WGETRC=$HOME/.config/wgetrc
+          export PASSWORD_STORE_DIR=$HOME/.config/pass
+          export GNUPGHOME=$HOME/.config/gnupg
+      fi
+      # Run only if not already running in other instance
+      pgrep -x mbsync >/dev/null && { echo "mbsync is already running." ; exit ;}
 
-    # check if the mailserver is online || if we have internet connection
-    wget -q --spider https://govanify.com || { echo "No internet connection detected."; exit ;}
+      # check if the mailserver is online || if we have internet connection
+      wget -q --spider https://govanify.com || { echo "No internet connection detected."; exit ;}
 
-    # Check account for new mail. Notify if there is new content.
-    syncandnotify() {
-        acc="$(echo "$account" | sed "s/.*\///")"
-        mkdir -p ~/.local/share/mail/$acc
-        mbsync -c $XDG_CONFIG_HOME/mbsync/config "$acc" || touch /tmp/mailfail 
-    }
+      # Check account for new mail. Notify if there is new content.
+      syncandnotify() {
+          acc="$(echo "$account" | sed "s/.*\///")"
+          mkdir -p ~/.local/share/mail/$acc
+          mbsync -c $XDG_CONFIG_HOME/mbsync/config "$acc" || touch /tmp/mailfail 
+      }
 
-    # Sync accounts passed as argument or all.
-    accounts="$(awk '/^Channel/ {print $2}' "$XDG_CONFIG_HOME/mbsync/config")"
+      # Sync accounts passed as argument or all.
+      accounts="$(awk '/^Channel/ {print $2}' "$XDG_CONFIG_HOME/mbsync/config")"
 
-    rm /tmp/mailfail 2>/dev/null
-    # Parallelize multiple accounts
-    for account in $accounts
-    do
-        syncandnotify &
-    done
+      rm /tmp/mailfail 2>/dev/null
+      # Parallelize multiple accounts
+      for account in $accounts
+      do
+          syncandnotify &
+      done
 
-    wait
+      wait
 
-    notmuch new 2>/dev/null 
+      notmuch new 2>/dev/null 
 
-    if test -f "/tmp/mailfail"; then
-        echo "error" > ~/.local/share/mail/unread && exit 1 
-    fi
-    add=0
-  '' + concatStringsSep "\n" (map
-    (notif:
-      "add=$(($add+`find $XDG_DATA_HOME/mail/${notif} -type f | grep -vE ',[^,]*S[^,]*$' | xargs basename -a | grep -v \"^\\.\" | wc -l`))")
-    cfg.unread_notif) + "\necho $add > $XDG_DATA_HOME/mail/unread");
+      if test -f "/tmp/mailfail"; then
+          echo "error" > ~/.local/share/mail/unread && exit 1 
+      fi
+      add=0
+    '' + concatStringsSep "\n" (
+      map
+        (
+          notif:
+          "add=$(($add+`find $XDG_DATA_HOME/mail/${notif} -type f | grep -vE ',[^,]*S[^,]*$' | xargs basename -a | grep -v \"^\\.\" | wc -l`))"
+        )
+        cfg.unread_notif
+    ) + "\necho $add > $XDG_DATA_HOME/mail/unread"
+  );
 
-  isync_config = concatStringsSep "\n" (mapAttrsToList
-    (name: account: ''
-      IMAPStore ${name}-remote
-      Host ${account.host}
-      Port 993
-      User ${account.email}
-      PassCmd "pass ${config.navi.branding}/${account.email} | head -n 1"
-      SSLType IMAPS
-      CertificateFile /etc/ssl/certs/ca-certificates.crt 
+  isync_config = concatStringsSep "\n" (
+    mapAttrsToList
+      (
+        name: account: ''
+          IMAPStore ${name}-remote
+          Host ${account.host}
+          Port 993
+          User ${account.email}
+          PassCmd "pass ${config.navi.branding}/${account.email} | head -n 1"
+          SSLType IMAPS
+          CertificateFile /etc/ssl/certs/ca-certificates.crt 
 
-      MaildirStore ${name}-local
-      Subfolders Verbatim
-      Path ~/.local/share/mail/${name}/
-      Inbox ~/.local/share/mail/${name}/INBOX
-      Flatten .
+          MaildirStore ${name}-local
+          Subfolders Verbatim
+          Path ~/.local/share/mail/${name}/
+          Inbox ~/.local/share/mail/${name}/INBOX
+          Flatten .
 
-      Channel ${name}
-      Expunge Both
-      Master :${name}-remote:
-      Slave :${name}-local:
-      Create Both
-      Remove Both
-      SyncState *
-      MaxMessages 0
-      ExpireUnread no
-      Patterns *
-    '')
-    cfg.accounts);
+          Channel ${name}
+          Expunge Both
+          Master :${name}-remote:
+          Slave :${name}-local:
+          Create Both
+          Remove Both
+          SyncState *
+          MaxMessages 0
+          ExpireUnread no
+          Patterns *
+        ''
+      )
+      cfg.accounts
+  );
 
   msmtp_config = '' 
     defaults
@@ -111,8 +127,10 @@ let
     tls  on
     tls_trust_file /etc/ssl/certs/ca-certificates.crt 
     logfile  ~/.local/share/msmtp/msmtp.log
-  '' + concatStringsSep "\n" (mapAttrsToList
-    (name: account: ''
+  '' + concatStringsSep "\n" (
+    mapAttrsToList
+      (
+        name: account: ''
 
     account ${name}
     host ${account.host} 
@@ -120,56 +138,68 @@ let
     from ${account.email} 
     user ${account.email}
     passwordeval "pass ${config.navi.branding}/${account.email} | head -n 1"
-  '')
-    cfg.accounts);
+  ''
+      )
+      cfg.accounts
+  );
 
   # 3 steps: 
   # 1. iterate over the attrset, generate primary and switch-to-account to list
   # 2. iterate through the list, replace @@number@@ by a counter
   # 3. convert the list to string!
-  accounts_source = concatStringsSep "\n" (imap1 (i: text: replaceStrings [ "@@number@@" ] [ "${toString i}" ] text) (mapAttrsToList
-    (name: account:
-      optionalString account.primary "source ~/.config/mutt/accounts/${name}.muttrc\n" + ''
-        macro index,pager i@@number@@ '<sync-mailbox><enter-command>source ~/.config/mutt/accounts/${name}.muttrc<enter><change-folder>!<enter>;<check-stats>' "switch to ${name}"
-      '')
-    cfg.accounts));
+  accounts_source = concatStringsSep "\n" (
+    imap1 (i: text: replaceStrings [ "@@number@@" ] [ "${toString i}" ] text) (
+      mapAttrsToList
+        (
+          name: account:
+            optionalString account.primary "source ~/.config/mutt/accounts/${name}.muttrc\n" + ''
+              macro index,pager i@@number@@ '<sync-mailbox><enter-command>source ~/.config/mutt/accounts/${name}.muttrc<enter><change-folder>!<enter>;<check-stats>' "switch to ${name}"
+            ''
+        )
+        cfg.accounts
+    )
+  );
 
   #(".config/mutt/accounts/" + name + ".muttrc") ( {
   accounts_config = mapAttrs'
-    (name: account: nameValuePair
-      (".config/mutt/accounts/" + name + ".muttrc")
-      ({
-        text = ''
-          set realname = "${account.name}"
-          set from = "${account.email}"
-          set sendmail = "msmtp -a ${name}"
-          alias me ${account.name} <${account.email}>
-          set folder = "/home/${config.navi.username}/.local/share/mail/${name}"
-          set header_cache = /home/${config.navi.username}/.cache/mutt/${name}-headers
-          set message_cachedir = /home/${config.navi.username}/.cache/mutt/${name}-bodies
-          set signature="${(pkgs.writeTextFile { name = name + "-signature"; text = account.signature; })}"
-          # general folder mappings for email adresses
-          set mbox_type = Maildir
-          unmailboxes *
-          set spoolfile = "+INBOX"
-          set postponed = "+INBOX.Drafts"
-          set trash = "+INBOX.Trash"
-          folder-hook . 'set record=^'
-          mailboxes `find "/home/${config.navi.username}/.local/share/mail/${name}" -type d -name cur | sort | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | tr '\n' ' '`
-        '' + optionalString (account.pgp_key != "") ''
-          set crypt_use_gpgme = yes
-          set crypt_autosign=yes
-          set crypt_verify_sig=yes
-          set crypt_replysign=yes
-          set crypt_replyencrypt=yes
-          set crypt_replysignencrypted=yes
-          set crypt_opportunistic_encrypt=yes
-          set pgp_default_key="${account.pgp_key}"
-          set pgp_check_gpg_decrypt_status_fd
-          set pgp_self_encrypt = yes
-          set crypt_protected_headers_write = yes
-        '';
-      }))
+    (
+      name: account: nameValuePair
+        (".config/mutt/accounts/" + name + ".muttrc")
+        (
+          {
+            text = ''
+              set realname = "${account.name}"
+              set from = "${account.email}"
+              set sendmail = "msmtp -a ${name}"
+              alias me ${account.name} <${account.email}>
+              set folder = "/home/${config.navi.username}/.local/share/mail/${name}"
+              set header_cache = /home/${config.navi.username}/.cache/mutt/${name}-headers
+              set message_cachedir = /home/${config.navi.username}/.cache/mutt/${name}-bodies
+              set signature="${(pkgs.writeTextFile { name = name + "-signature"; text = account.signature; })}"
+              # general folder mappings for email adresses
+              set mbox_type = Maildir
+              unmailboxes *
+              set spoolfile = "+INBOX"
+              set postponed = "+INBOX.Drafts"
+              set trash = "+INBOX.Trash"
+              folder-hook . 'set record=^'
+              mailboxes `find "/home/${config.navi.username}/.local/share/mail/${name}" -type d -name cur | sort | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | tr '\n' ' '`
+            '' + optionalString (account.pgp_key != "") ''
+              set crypt_use_gpgme = yes
+              set crypt_autosign=yes
+              set crypt_verify_sig=yes
+              set crypt_replysign=yes
+              set crypt_replyencrypt=yes
+              set crypt_replysignencrypted=yes
+              set crypt_opportunistic_encrypt=yes
+              set pgp_default_key="${account.pgp_key}"
+              set pgp_check_gpg_decrypt_status_fd
+              set pgp_self_encrypt = yes
+              set crypt_protected_headers_write = yes
+            '';
+          }
+        )
+    )
     cfg.accounts;
 
 
@@ -374,48 +404,50 @@ in
   options.navi.components.mail = {
     enable = mkEnableOption "Enable navi's headfull mail sync service";
     accounts = mkOption {
-      type = types.attrsOf (types.submodule {
-        options = {
-          email = mkOption {
-            type = types.str;
-            description = ''
-              The email of the account
-            '';
+      type = types.attrsOf (
+        types.submodule {
+          options = {
+            email = mkOption {
+              type = types.str;
+              description = ''
+                The email of the account
+              '';
+            };
+            name = mkOption {
+              type = types.str;
+              description = ''
+                The display name associated with the account
+              '';
+            };
+            pgp_key = mkOption {
+              type = types.str;
+              default = "";
+              description = ''
+                The PGP key associated with the account, if any
+              '';
+            };
+            host = mkOption {
+              type = types.str;
+              description = ''
+                The website hosting the mail server 
+              '';
+            };
+            signature = mkOption {
+              type = types.str;
+              description = ''
+                The signature appended at the end of your emails
+              '';
+            };
+            primary = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Whether this is your primary email account
+              '';
+            };
           };
-          name = mkOption {
-            type = types.str;
-            description = ''
-              The display name associated with the account
-            '';
-          };
-          pgp_key = mkOption {
-            type = types.str;
-            default = "";
-            description = ''
-              The PGP key associated with the account, if any
-            '';
-          };
-          host = mkOption {
-            type = types.str;
-            description = ''
-              The website hosting the mail server 
-            '';
-          };
-          signature = mkOption {
-            type = types.str;
-            description = ''
-              The signature appended at the end of your emails
-            '';
-          };
-          primary = mkOption {
-            type = types.bool;
-            default = false;
-            description = ''
-              Whether this is your primary email account
-            '';
-          };
-        };
-      });
+        }
+      );
     };
     unread_notif = mkOption {
       type = types.listOf types.str;

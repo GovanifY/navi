@@ -22,11 +22,13 @@ in
       ncmpcpp
     ];
     nixpkgs.overlays = [
-      (self: super: {
-        ncmpcpp = super.ncmpcpp.override {
-          visualizerSupport = true;
-        };
-      })
+      (
+        self: super: {
+          ncmpcpp = super.ncmpcpp.override {
+            visualizerSupport = true;
+          };
+        }
+      )
     ];
   };
 }

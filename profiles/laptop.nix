@@ -1,6 +1,8 @@
-{ config, lib, ... }: {
+{ config, lib, ... }:
+with lib;
+{
   config = mkIf (config.navi.profile.name == "laptop") {
-    hardware.enableAllFirmware = true;
+    #hardware.enableAllFirmware = true;
     services.upower.enable = true;
 
     # low power also means low performance
@@ -10,9 +12,7 @@
     '';
 
     # most laptops have some sort of bluetooth support nowadays
-    navi.components = {
-      graphical.enable = true;
-      bluetooth.enable = true;
-    };
+    navi.components.bluetooth.enable = true;
+    navi.profile.graphical = true;
   };
 }

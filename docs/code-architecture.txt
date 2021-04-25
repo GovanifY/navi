@@ -1,5 +1,5 @@
-navi's code architecture is divided into 4 parts: components, profiles, devices
-and assets.
+navi's code architecture is divided into 4 parts: components, profiles,
+infrastructure  and assets.
 
 A profile is composed of multiple components, and a device will usually add
 device-specific information to components that requires it, while the assets

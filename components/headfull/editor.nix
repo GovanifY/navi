@@ -4,16 +4,18 @@ let
   cfg = config.navi.components.editor;
   # contains some patches for syntastic and Tagbar support since upstream is
   # abandonned
-  workspace = pkgs.vimPlugins.vim-obsession.overrideAttrs (oldAttrs: rec {
-    src = pkgs.fetchFromGitHub {
-      owner = "GovanifY";
-      repo = "vim-session";
-      rev = "13b906f18ad0fa88f0be038237a71aa34b3335da";
-      sha256 = "1hf8gzh42iq46z6b471w6bl44nhwa9h8s02pmg1w482bvhc621w4";
-    };
-    version = "2020-12-16";
-    pname = "vim-session";
-  });
+  workspace = pkgs.vimPlugins.vim-obsession.overrideAttrs (
+    oldAttrs: rec {
+      src = pkgs.fetchFromGitHub {
+        owner = "GovanifY";
+        repo = "vim-session";
+        rev = "13b906f18ad0fa88f0be038237a71aa34b3335da";
+        sha256 = "1hf8gzh42iq46z6b471w6bl44nhwa9h8s02pmg1w482bvhc621w4";
+      };
+      version = "2020-12-16";
+      pname = "vim-session";
+    }
+  );
   vimConf = {
     programs.neovim = {
       enable = true;

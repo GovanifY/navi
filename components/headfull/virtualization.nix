@@ -58,14 +58,18 @@ in
       "vfio_iommu_type1"
       "vfio"
     ];
-    boot.kernelParams = (optionals (cfg.pci_devices != "") [
-      "vfio-pci.ids=${cfg.pci_devices}"
-    ]) ++ (optionals cfg.gvt [
-      "intel_iommu=on"
-      "i915.enable_guc=0"
-      "i915.enable_gvt=1"
-    ];
-      boot.kernelModules = [ "kvm-intel" "vfio_pci" "kvmgt" "vfio-iommu-type1" "vfio-mdev"];
+    boot.kernelParams = (
+      optionals (cfg.pci_devices != "") [
+        "vfio-pci.ids=${cfg.pci_devices}"
+      ]
+    ) ++ (
+      optionals cfg.gvt [
+        "intel_iommu=on"
+        "i915.enable_guc=0"
+        "i915.enable_gvt=1"
+      ]
+    );
+    boot.kernelModules = [ "kvm-intel" "vfio_pci" "kvmgt" "vfio-iommu-type1" "vfio-mdev" ];
 
     networking = mkIf (cfg.bridge_devices != [ ]) {
       bridges.br0.interfaces = cfg.bridge_devices;
@@ -105,6 +109,3 @@ in
     #'';
   };
 }
-
-
-

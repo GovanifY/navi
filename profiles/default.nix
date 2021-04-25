@@ -1,4 +1,6 @@
-{ config, pkgs, lib, ... }: {
+{ config, pkgs, lib, ... }:
+with lib;
+{
   imports =
     [
       ./laptop.nix
@@ -60,7 +62,7 @@
     # define our main users
     # TODO, XXX, TOFIX: the shadows are probably written in the nix store, do we
     # care about that?
-    users.users.${navi.username} = {
+    users.users.${config.navi.username} = {
       isNormalUser = true;
       hashedPassword = readFile ./../secrets/assets/shadow/main;
       openssh.authorizedKeys.keyFiles = [ ./../secrets/assets/ssh/navi.pub ];
@@ -118,7 +120,7 @@
       multiplexer.enable = true;
       macspoofer.enable = true;
       hardening.enable = true;
-      headfull.editor.enable = true;
+      editor.enable = true;
     };
   };
 }

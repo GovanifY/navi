@@ -75,19 +75,25 @@ in
     '';
 
     nixpkgs.overlays = [
-      (self: super: {
-        grub2 = super.grub2.overrideAttrs (oldAttrs: rec {
-          postPatch = grubPatch;
-        });
-      })
+      (
+        self: super: {
+          grub2 = super.grub2.overrideAttrs (
+            oldAttrs: rec {
+              postPatch = grubPatch;
+            }
+          );
+        }
+      )
     ];
 
-    boot.kernelPatches = [{
-      name = "silent-boot";
-      patch = null;
-      extraConfig = ''
-        X86_VERBOSE_BOOTUP n
-      '';
-    }];
+    boot.kernelPatches = [
+      {
+        name = "silent-boot";
+        patch = null;
+        extraConfig = ''
+          X86_VERBOSE_BOOTUP n
+        '';
+      }
+    ];
   };
 }
