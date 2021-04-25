@@ -64,10 +64,10 @@ with lib;
     # care about that?
     users.users.${config.navi.username} = {
       isNormalUser = true;
-      hashedPassword = readFile ./../secrets/assets/shadow/main;
+      hashedPassword = fileContents ./../secrets/assets/shadow/main;
       openssh.authorizedKeys.keyFiles = [ ./../secrets/assets/ssh/navi.pub ];
     };
-    users.users.root.hashedPassword = readFile ./../secrets/assets/shadow/root;
+    users.users.root.hashedPassword = fileContents ./../secrets/assets/shadow/root;
 
     # setup the distbuild account; while this might look like a backdoor for
     # lesser privilege devices the distbuild access key is only given to at
