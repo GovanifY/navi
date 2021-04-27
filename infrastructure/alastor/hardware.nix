@@ -18,7 +18,6 @@ with lib;
 
     boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" ];
     # virtualization and iGVT-g
-    boot.kernelModules = [ "ieee80211_crypt_tkip" ];
     boot.initrd.kernelModules = [ "dm-snapshot" ];
     boot.extraModulePackages = [ ];
 
