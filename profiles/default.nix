@@ -103,10 +103,8 @@ with lib;
     # currently, nscd is not used for caching purposes on nixos, but merely to
     # make sure connections work fine on network namespaces related to systemd's
     # nss modules. 
-    # since, afaict, we don't make use of these even though upstream forces
-    # them being loaded, let's just disable the service the barbaric way, since
-    # the standard way has been gated behind an assert.
-    systemd.services.nscd.enable = lib.mkForce false;
+    services.nscd.enable = false;
+    system.nssModules = mkForce [ ];
 
     navi.components = {
       bootloader = {
