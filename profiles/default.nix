@@ -91,6 +91,11 @@ with lib;
     };
     boot.cleanTmpDir = true;
 
+    # it is an unwanted feature to wait for the network on headful devices 
+    # while headless will not use NetworkManager, period, thus let's always
+    # disable the wait-online
+    systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
+
     # auto downloads softwares when trying to use them
     environment.variables.NIX_AUTO_RUN = "1";
     programs.command-not-found.enable = true;
