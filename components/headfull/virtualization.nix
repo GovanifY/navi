@@ -41,7 +41,7 @@ in
   config = mkIf cfg.enable {
 
     # enable access to the system daemon for our main user
-    users.users.${navi.username} = {
+    users.users.${config.navi.username} = {
       extraGroups = [ "libvirtd" ];
     };
 
