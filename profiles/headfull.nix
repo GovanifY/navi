@@ -74,10 +74,7 @@ with lib;
     navi.components = {
       music.enable = true;
       ime.enable = true;
-      chat = {
-        enable = true;
-        graphical = false;
-      };
+      chat.enable = true;
     };
   };
 }

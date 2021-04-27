@@ -98,7 +98,7 @@ with lib;
       browser.enable = true;
       splash.enable = true;
       wm.enable = true;
-      chat.graphical = mkDefault true;
+      chat.graphical = true;
     };
   };
 }
