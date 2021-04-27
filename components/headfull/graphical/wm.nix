@@ -53,17 +53,14 @@ let
     fi
   '';
 
-  bat-opt = if cfg.battery then " | bat: $battery_info" else "";
+  bat-opt = if cfg.battery then " | bat: $battery_info%" else "";
 
   status-sh = pkgs.writeShellScript "status.sh" (
     ''
       date_formatted=$(date "+%a %d/%m/%Y %H:%M")
       mail=$(cat ~/.local/share/mail/unread)
     '' + optionalString cfg.battery ''
-      battery_status=$(cat /sys/class/power_supply/BAT/status)
-      battery_info=$(upower --show-info $(upower --enumerate |\
-      grep 'BAT') |\
-      egrep "state|percentage" | grep -oP '[0-9]*%') 
+      battery_info=$(cat /sys/class/power_supply/BAT/capacity)
     '' + ''
       echo "mail: $mail${bat-opt} | $date_formatted"
     ''

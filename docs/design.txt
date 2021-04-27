@@ -65,7 +65,6 @@ programs:
 
 root:
 * dhcpcd
-* upowerd
 * sshd
 * NetworkManager & friends
 * systemd and friends 
@@ -219,10 +218,8 @@ Per-application security for the root user is basically:
 * sshd is not sandboxed for obvious reasons but I would be very surprised if
   someone was able to break into it.
 
-* dhcpcd are so small and so limited in their scope that I doubt it would be
-  likely to break into the system through them. With that said I'd classify
-  upower as a slightly higher risk than dhcpcd, and I believe both would need
-  some kind of root access to be exploited successfully
+* dhcpcd is so small and limited in its scope that I doubt it would be
+  likely to break into the system through them.
 
 * At this point attacking NetworkManager would result in attacking its API,
   which I would hope is secure enough.
