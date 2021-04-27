@@ -100,27 +100,6 @@ with lib;
     environment.variables.NIX_AUTO_RUN = "1";
     programs.command-not-found.enable = true;
 
-    # no UDP when through tor, so we use http date to synchronize the system
-    # clock
-    services.timesyncd.enable = false;
-    services.htpdate.enable = true;
-    services.htpdate.servers = [
-      "db.debian.org"
-      "www.eff.org"
-      "www.torproject.org"
-      "cve.mitre.org"
-      "en.wikipedia.org"
-      "google.com"
-      "govanify.com"
-      "lkml.org"
-      "www.apache.org"
-      "www.duckduckgo.com"
-      "www.kernel.org"
-      "www.mozilla.org"
-      "www.xkcd.com"
-    ];
-
-
     navi.components = {
       bootloader.enable = true;
       xdg.enable = true;

@@ -37,6 +37,9 @@ with lib;
     networking.networkmanager.enable = true;
     services.printing.enable = true;
 
+    # boot time is important on headfull devices
+    networking.dhcpcd.wait = "background";
+
     # Enable sound.
     sound.enable = true;
     hardware.pulseaudio.enable = true;

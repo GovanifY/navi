@@ -30,11 +30,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    # verbosity
-    boot.initrd.verbose = false;
-    boot.consoleLogLevel = 0;
-    console.earlySetup = true;
-    boot.kernelParams = [ "vt.global_cursor_default=0" "quiet" "udev.log_priority=3" ];
     # required so we can write the .sig
     boot.loader.grub.copyKernels = true;
 

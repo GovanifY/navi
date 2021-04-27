@@ -37,8 +37,6 @@ with lib;
 
 
     time.timeZone = "Europe/Paris";
-    location.latitude = 48.864716;
-    location.longitude = 2.349014;
 
     navi.components = {
       virtualization = {

@@ -65,6 +65,28 @@ in
         DNSPort = dnsPort;
       };
     };
+
+
+    # no UDP when through tor, so we use http date to synchronize the system
+    # clock
+    services.timesyncd.enable = false;
+    services.htpdate.enable = true;
+    services.htpdate.servers = [
+      "db.debian.org"
+      "www.eff.org"
+      "www.torproject.org"
+      "cve.mitre.org"
+      "en.wikipedia.org"
+      "google.com"
+      "govanify.com"
+      "lkml.org"
+      "www.apache.org"
+      "www.duckduckgo.com"
+      "www.kernel.org"
+      "www.mozilla.org"
+      "www.xkcd.com"
+    ];
+
     networking.nameservers = [ "127.0.0.1" ];
     networking.firewall.enable = true;
     networking.firewall.extraCommands =

@@ -5,12 +5,6 @@ with lib;
 
     navi.profile.headfull = true;
 
-    # don't want to become blind
-    services.redshift = {
-      enable = true;
-      package = pkgs.redshift-wlr;
-    };
-
     # needed to export obs as a virtual camera
     boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
 
@@ -96,7 +90,10 @@ with lib;
     navi.components = {
       vte.enable = true;
       browser.enable = true;
-      splash.enable = true;
+      # userspace takes ~2s to boot with the standard configuration, enabling a
+      # splash with this much time to wait just doesn't make sense, so let's
+      # disable it until our boot time stops being so blazingly fast :)
+      #splash.enable = true;
       wm.enable = true;
       chat.graphical = true;
     };
