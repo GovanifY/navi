@@ -31,6 +31,7 @@ in
         ).outPath + "/bin/plymouth-quit";
     };
     systemd.services.systemd-ask-password-plymouth.enable = lib.mkForce false;
+    systemd.paths.systemd-ask-password-plymouth.enable = lib.mkForce false;
     # XXX: for some reason shellInit isn't called by plymouth which never starts
     # the user target, hmmm -- govanify
     #systemd.services.plymouth-quit-wait.enable = lib.mkForce false;
