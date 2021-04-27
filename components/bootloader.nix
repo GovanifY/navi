@@ -27,6 +27,14 @@ in
         should only be enabled for debugging purposes.
       '';
     };
+    verbose = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Enables verbosity of the boot process of navi.
+      '';
+    };
+
   };
 
   config = mkIf cfg.enable {
@@ -68,6 +76,11 @@ in
       rm -rf $GNUPGHOME
       export GNUPGHOME=$old_gpg_home
     '';
+
+    boot.consoleLogLevel = mkIf (!cfg.verbose) 0;
+    boot.initrd.verbose = mkIf (!cfg.verbose) false;
+    boot.kernelParams = mkIf (!cfg.verbose) [ "vt.global_cursor_default=0" "quiet" "udev.log_priority=3" ];
+    console.earlySetup = mkIf (!cfg.verbose) true;
 
     nixpkgs.overlays = [
       (

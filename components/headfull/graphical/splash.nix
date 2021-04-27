@@ -14,6 +14,7 @@ in
     enable = mkEnableOption "Enable navi's boot splash";
   };
   config = mkIf cfg.enable {
+    navi.components.bootloader.verbose = false;
     boot.plymouth.enable = true;
     boot.plymouth.logo =
       pkgs.fetchurl {
@@ -33,11 +34,6 @@ in
     systemd.services.systemd-ask-password-plymouth.enable = lib.mkForce false;
     systemd.paths.systemd-ask-password-plymouth.enable = lib.mkForce false;
 
-    # verbosity
-    boot.consoleLogLevel = 0;
-    console.earlySetup = true;
-    boot.initrd.verbose = false;
-    boot.kernelParams = [ "vt.global_cursor_default=0" "quiet" "udev.log_priority=3" ];
     # XXX: for some reason shellInit isn't called by plymouth which never starts
     # the user target, hmmm -- govanify
     #systemd.services.plymouth-quit-wait.enable = lib.mkForce false;

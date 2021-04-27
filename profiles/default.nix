@@ -100,8 +100,19 @@ with lib;
     environment.variables.NIX_AUTO_RUN = "1";
     programs.command-not-found.enable = true;
 
+    # currently, nscd is not used for caching purposes on nixos, but merely to
+    # make sure connections work fine on network namespaces related to systemd's
+    # nss modules. 
+    # since, afaict, we don't make use of these even though upstream forces
+    # them being loaded, let's just disable the service the barbaric way, since
+    # the standard way has been gated behind an assert.
+    systemd.services.nscd.enable = lib.mkForce false;
+
     navi.components = {
-      bootloader.enable = true;
+      bootloader = {
+        enable = true;
+        verbose = false;
+      };
       xdg.enable = true;
       shell.enable = true;
       multiplexer.enable = true;
