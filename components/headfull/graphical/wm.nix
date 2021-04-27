@@ -118,8 +118,6 @@ let
     set $right l
     set $lock "swaylock --daemonize --indicator-radius 100 --indicator-thickness 7 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 -i ~/Pictures/wallpaper.png"
 
-    exec swayidle -w timeout 300 $lock before-sleep $lock
-
     output * bg ~/Pictures/wallpaper.png fill
 
   '' + optionalString config.navi.components.ime.enable ''
@@ -264,7 +262,6 @@ in
       extraPackages = with pkgs; [
         # lockscreen
         swaylock
-        swayidle
         # X
         xwayland
         xorg.xrdb
