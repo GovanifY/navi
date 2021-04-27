@@ -30,11 +30,10 @@ with lib;
     # headfull main user is essentially an admin, reflect that by giving it the
     # wheel group
     users.users.${config.navi.username} = {
-      extraGroups = [ "wheel" "networkmanager" ];
+      extraGroups = [ "wheel" ];
     };
 
-    # cups and networkmanager by default
-    networking.networkmanager.enable = true;
+    # cups by default
     services.printing.enable = true;
 
     # boot time is important on headfull devices
@@ -93,6 +92,7 @@ with lib;
         type = "-";
         value = "-11";
       }];
+
 
     navi.components = {
       music.enable = true;

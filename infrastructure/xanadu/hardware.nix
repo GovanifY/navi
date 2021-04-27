@@ -68,5 +68,6 @@ with lib;
       "ath3k"
     ];
     services.tlp.enable = lib.mkDefault true;
+    networking.wireless.enable = true;
   };
 }

@@ -80,5 +80,6 @@ with lib;
       set-default-source Mic-Mono
     '';
     boot.supportedFilesystems = [ "ntfs" ];
+    networking.wireless.enable = true;
   };
 }
