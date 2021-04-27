@@ -27,11 +27,12 @@ in
 
     hardware.bluetooth.settings = { General = { Enable = "Source,Sink,Media,Socket"; }; };
 
-    systemd.user.services.mpris-proxy = mkIf cfg.audio {
-      description = "Mpris proxy";
-      after = [ "network.target" "sound.target" ];
-      serviceConfig.ExecStart = "${pkgs.bluez}/bin/mpris-proxy";
-      wantedBy = [ "graphical-session.target" ];
-    };
+    # we don't really need mpris afaict
+    #systemd.user.services.mpris-proxy = mkIf cfg.audio {
+    #description = "Mpris proxy";
+    #after = [ "network.target" "sound.target" ];
+    #serviceConfig.ExecStart = "${pkgs.bluez}/bin/mpris-proxy";
+    #wantedBy = [ "graphical-session.target" ];
+    #};
   };
 }

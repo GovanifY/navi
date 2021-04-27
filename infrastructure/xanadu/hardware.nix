@@ -7,7 +7,7 @@ with lib;
       lib.mkDefault config.hardware.enableRedistributableFirmware;
     boot.initrd.availableKernelModules = [ "ahci" "nvme" ];
     boot.initrd.kernelModules = [ "dm-snapshot" ];
-    boot.kernelModules = [ "i915" "kvm-intel" "vfat" ];
+    boot.kernelModules = [ "i915" ];
     boot.extraModulePackages = [ ];
 
     fileSystems."/" =
