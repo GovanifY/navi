@@ -325,6 +325,15 @@ in
       };
     };
 
+    # sway drops its privileges as soon as it finishes setting up its display,
+    # well before it parses any configuration. The chance of this being
+    # exploitable is ~0. It would have gathered those rights regardless if
+    # PolKit was installed, so this is just a workaround to avoid having the
+    # whole machinery
+    security.wrappers = {
+      sway.source = "${pkgs.sway}/bin/sway";
+    };
+
     systemd.user.services.swaywm = {
       description = "Sway - Wayland window manager";
       documentation = [ "man:sway(5)" ];
@@ -337,7 +346,7 @@ in
       serviceConfig = {
         Type = "simple";
         ExecStart = ''
-          ${pkgs.sway}/bin/sway
+          /run/wrappers/bin/sway
         '';
         Restart = "on-failure";
         RestartSec = 1;

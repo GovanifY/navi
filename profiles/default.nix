@@ -106,6 +106,8 @@ with lib;
     services.nscd.enable = false;
     system.nssModules = mkForce [ ];
 
+    #security.polkit.enable = false;
+
     navi.components = {
       bootloader = {
         enable = true;

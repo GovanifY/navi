@@ -71,6 +71,6 @@ in
     nix.useSandbox = true;
 
     # ssh attacks & co are flooding my logs
-    services.fail2ban.enable = true;
+    services.fail2ban.enable = mkDefault true;
   };
 }
