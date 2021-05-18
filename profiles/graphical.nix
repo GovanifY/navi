@@ -125,6 +125,9 @@ with lib;
     services.fail2ban.enable = false;
 
 
+    environment.variables.XDG_DATA_DIRS = mkForce
+      "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}:$XDG_DATA_DIRS";
+
     # give you the rights to inspect traffic as this is a single user box/not a
     # server, android funsies and realtime audio access for ardour and jack
     programs.wireshark.enable = true;
