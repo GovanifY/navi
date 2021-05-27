@@ -5,76 +5,6 @@ with lib;
 
     navi.profile.headfull = true;
 
-    # needed to export obs as a virtual camera
-    boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
-
-    # make obs work with wayland + virtual camera module
-    home-manager.users.${config.navi.username} = {
-      programs.obs-studio = {
-        enable = true;
-        plugins = [ pkgs.obs-wlrobs pkgs.obs-v4l2sink ];
-      };
-    };
-
-    environment.systemPackages = with pkgs; [
-      # legacy windows
-      wineWowPackages.full
-
-      # multimedia
-      mpv
-      imv
-
-      # reading
-      calibre
-      okular
-      kcc
-
-      # art
-      blender
-      krita
-      kdenlive
-      ardour
-
-      # stem
-      kicad
-      wireshark
-      pandoc
-      limesuite
-      ghidra-bin
-      #freecad sourcetrail
-
-      # recording/streaming
-      obs-studio
-      obs-wlrobs
-      obs-v4l2sink
-
-      jdk
-      android-studio
-      (
-        pkgs.writeTextFile {
-          name = "startandroid";
-          destination = "/bin/startandroid";
-          executable = true;
-          text = ''
-            #! ${pkgs.bash}/bin/bash
-            # Java sucks
-            export QT_QPA_PLATFORM=xcb
-            export GDK_BACKEND=xcb
-            mkdir -p $XDG_DATA_HOME/android-home
-            export HOME=$XDG_DATA_HOME/android-home
-            # then start the launcher 
-            exec android-studio 
-          '';
-        }
-      )
-
-      # math
-      coq
-      lean
-      elan
-
-    ];
-
     # I'll probably be chastised as a heretic for what I'm about to say but here
     # we goooooooooo.
     # We don't need logging on graphical devices
@@ -112,6 +42,8 @@ with lib;
     systemd.sockets.systemd-journald-audit.enable = lib.mkForce false;
     systemd.sockets.systemd-journald-dev-log.enable = lib.mkForce false;
     systemd.sockets.systemd-journald.enable = lib.mkForce false;
+    # side effect of disabling journald
+    systemd.sockets.systemd-coredump.enable = lib.mkForce false;
     # a side-effect of disabling journaling is that we cannot have fail2ban. But
     # the effect is somewhat limited as the only "service" which fail2ban looks
     # at on user facing devices is ssh, which is pubkey only. But if we have no
@@ -122,15 +54,7 @@ with lib;
     # know there are other ways to do forensics for such a situation and that if
     # the attacker is able to hide one log, he's able to hide all of them, and
     # the inverse is true.
-    services.fail2ban.enable = false;
-
-    # give you the rights to inspect traffic as this is a single user box/not a
-    # server, android funsies and realtime audio access for ardour and jack
-    programs.wireshark.enable = true;
-    programs.adb.enable = true;
-    users.users.${config.navi.username} = {
-      extraGroups = [ "wireshark" "adbusers" "audio" ];
-    };
+    services.fail2ban.enable = mkForce false;
 
     # scudo breaks everything on a graphical setup, eg firefox can't even
     # launch, so this is out of the question.

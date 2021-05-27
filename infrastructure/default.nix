@@ -5,6 +5,7 @@ with lib;
   imports = [
     ./xanadu
     ./alastor
+    ./graphical.nix
   ];
 
   options.navi.device = mkOption {
