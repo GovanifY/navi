@@ -44,5 +44,5 @@ keys, unwillingly. While solutions like grapheneos tries to mitigate this by
 only having minimal infos on your device (model, version, ip) updates can still
 be targetted nevertheless by geoip-based targetting and/or VPN recognition, if
 the user is using one. As a side-note this is a _hard_ problem and I have no
-solutions to it, only mitigations. navi is only vulnerable to it at multiple
+solutions to it, only mitigations. navi is also vulnerable to it at multiple
 levels: git cloning heuristics, nixos cache backdooring, etc.
