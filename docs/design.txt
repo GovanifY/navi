@@ -66,21 +66,19 @@ programs:
 root:
 * dhcpcd
 * sshd
-* NetworkManager & friends
 * systemd and friends 
 custom user:
 * tor
 * nscd
 * dbus-daemon
-* polkit            \ might be able to remove those two
-* rtkit             /
+* polkit     < might be able to remove in the future
 standard user:
 * ibus
 * Xwayland
 * alacritty
 * sway
 * firefox
-* mail(isync+msmtp+neomutt+notmuch+abook+lynx)
+* mail(isync+msmtp+neomutt+notmuch+lynx)
 * music(cmus)
 * dev(vim/ssh etc)
 * weechat
@@ -221,13 +219,12 @@ Per-application security for the root user is basically:
 * dhcpcd is so small and limited in its scope that I doubt it would be
   likely to break into the system through them.
 
-* At this point attacking NetworkManager would result in attacking its API,
-  which I would hope is secure enough.
+* wpa_supplicant, which is closed off to external communications. A successful
+  takeover would leave me almost as surprised as sshd.
 
 So the shortest chain so far seems to be firefox->sway->systemd or
-firefox->sway->NetworkManager since no I
-cannot think of a successful sandbox escape from isync and without sandbox
-escape no DBus access is earned. 
+since I cannot think of a successful sandbox escape from isync 
+and without sandbox escape no DBus access is earned. 
 
 Finally per-application security for constrained user:
 
@@ -243,18 +240,12 @@ Finally per-application security for constrained user:
   couple of bugs. As it is in a restrained environment though I doubt it would
   be of much use when developping a chain.
 
-* rtkit is very unlikely to be used as an attack factor because of how small its
-  scope is but it's using dbus so nothing is certain.
-
-* nscd is basically the same as rtkit, but without dbus. Attack is fairly
-  unlikely at this stage.
-
 
 Kernel security is hardened through the NixOS hardened profile, but that only
 helps so much compared to removing entire classes of bugs altogether.
 
 So, for a full remote root compromise, the shortest attack vectors seem to be
-firefox->sway->{systemd,NetworkManager,kernel} (or kernel directly if you're the
+firefox->sway->{systemd,kernel} (or kernel directly if you're the
 luckiest bastard in the world). A full remote user compromise would then be
 firefox->sway as RCE is useless without a double sandbox escape in this
 scenario, a local powered on compromise would simply require plugging the correct device
@@ -284,6 +275,6 @@ is undeniable.
 Overall it's very much a proof-of-concept and a fun thought exercise but I think
 this ain't half bad.
 
-[1]: TODO make grub tamper proof
+[1]: see bootloader.txt
 NB: This is in an ideal world, some of those features are not yet in navi!
 

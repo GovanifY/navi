@@ -4,13 +4,6 @@ The bootloader is GRUB based, with stage 1 requiring a password to boot into
 stage 2 without any recovery options. navi's grub definition will be used for
 any multiboot definition.
 
-we should (not doneyet):
-
-* enforce check_signatures on kern
-* rename menu entries
-* disable menu timeout entirely, only enable on trigger
-
-
 Some thoughts on tamper proofing:
 
 A tamper evident boot cannot, at the time being, properly be implemented.

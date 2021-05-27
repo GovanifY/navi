@@ -1,7 +1,9 @@
 navi tools are not necessarily the most user friendly if you don't know what
 they do, but are fairly optimized towards productivity.
-This document intends to give a digestible list of the most useful features that
-navi has to offer.
+This document intends to give a digestible list of the most discernible 
+useful features that navi has to offer. Feel free to checkout the original
+projects manuals, as this document only aims to document configurations specific
+to navi!
 
 
 The text editor: Neovim
@@ -125,5 +127,3 @@ The shell (fish) -> TODO
     can simply run "nbuild <package>" where <package> is your package name, eg
     "nbuild pcsx2" and it will drop you into a shell environment that has all the
     required setup to build your software!
-
-The Terminal Multiplexer (tmux) -> TODO

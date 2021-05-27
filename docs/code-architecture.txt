@@ -1,5 +1,5 @@
 navi's code architecture is divided into 4 parts: components, profiles,
-infrastructure  and assets.
+infrastructure and assets, with a possible additional secrets top-level.
 
 A profile is composed of multiple components, and a device will usually add
 device-specific information to components that requires it, while the assets
@@ -23,3 +23,18 @@ components directly (eg to add websites your device hosts).
 
 Profiles are thus done out of convenience to avoid boilerplate code across
 different machines.
+
+Infrastructure, finally, organizes configuration that should be shared between
+your devices but is not a profile (eg your default username) along with every 
+device's specific configuration. 
+
+Secrets, additionally, can create an additional top-level tree of all of the
+above, which should not be public.
+
+
+If lateral information is an issue for you, you might want to use submodules for
+each device built into your main configuration and make git non fail when
+failing to fetch a submodule, preventing any information leakage. This is not a
+strong issue in my current configuration as no sensitive informations are shared
+between devices that others do not necessarily know about. All sensitive data,
+as a rule of thumb, lives outside of Nix.
