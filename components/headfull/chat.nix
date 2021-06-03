@@ -41,7 +41,7 @@ in
             # Electron sucks
             GDK_BACKEND=x11
             # then start the launcher 
-            exec element-desktop
+            exec element-desktop --enable-features=UseOzonePlatform --ozone-platform=wayland
           '';
         }
       )
