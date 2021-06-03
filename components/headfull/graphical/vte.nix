@@ -8,6 +8,11 @@ in
     enable = mkEnableOption "Enable navi's graphical VTE";
   };
   config = mkIf cfg.enable {
+
+    fonts.fonts = with pkgs; [
+      hack-font
+    ];
+
     home-manager.users.govanify = {
       programs.alacritty = {
         enable = true;
@@ -38,6 +43,10 @@ in
               cyan = "#8ec07c";
               white = "#ebdbb2";
             };
+          };
+          font.normal = {
+            family = "Hack";
+            style = "Regular";
           };
         };
       };
