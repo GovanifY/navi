@@ -68,8 +68,8 @@ in
               (
                 pkgs.fetchFirefoxAddon {
                   name = "ublock-origin";
-                  url = "https://github.com/gorhill/uBlock/releases/download/1.32.4/uBlock0_1.32.4.firefox.xpi";
-                  sha256 = "05ld465vs92ahaia0z8ifj0m9sdx85k9dshdy8nvil0r0si7cwrh";
+                  url = "https://github.com/gorhill/uBlock/releases/download/1.35.2/uBlock0_1.35.2.firefox.xpi";
+                  sha256 = "177pxq2raaap2g024xqsmyl0bnx02fg35j3q93p1sznp8yfi00ns";
                 }
               )
               (
@@ -82,15 +82,15 @@ in
               (
                 pkgs.fetchFirefoxAddon {
                   name = "stylus";
-                  url = "https://addons.mozilla.org/firefox/downloads/file/3614089/stylus-1.5.13-fx.xpi";
-                  sha256 = "0nd1g3vr9vbpk6hqixsg1dqyh7pi075b7fiir4706khlapk7kcrb";
+                  url = "https://addons.mozilla.org/firefox/downloads/file/3732726/stylus-1.5.17-fx.xpi";
+                  sha256 = "02cgwp5fc4zmnhikly5i8wydyi885namazgc7r9ki2dzgq67f3bd";
                 }
               )
               (
                 pkgs.fetchFirefoxAddon {
                   name = "noscript";
-                  url = "https://addons.mozilla.org/firefox/downloads/file/3705391/noscript_security_suite-11.1.8-an+fx.xpi";
-                  sha256 = "0w1q2ah2g23fkjxiwr1ky9icjzgknyqypdlg50a4d86z1iag3g46";
+                  url = "https://addons.mozilla.org/firefox/downloads/file/3778947/noscript_security_suite-11.2.8-an+fx.xpi";
+                  sha256 = "0rrlhlzljlmgns7j49c43ilb8wij2zcysrbpap1xxsfbkbczji27";
                 }
               )
               (
