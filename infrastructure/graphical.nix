@@ -5,13 +5,6 @@ with lib;
     # needed to export obs as a virtual camera
     boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
 
-    # make obs work with wayland + virtual camera module
-    home-manager.users.${config.navi.username} = {
-      programs.obs-studio = {
-        enable = true;
-        plugins = [ pkgs.obs-wlrobs pkgs.obs-v4l2sink ];
-      };
-    };
 
     environment.systemPackages = with pkgs; [
       # legacy windows
@@ -41,9 +34,11 @@ with lib;
       #freecad sourcetrail
 
       # recording/streaming
-      obs-studio
-      obs-wlrobs
-      obs-v4l2sink
+      (wrapOBS {
+        plugins = with obs-studio-plugins; [
+          wlrobs
+        ];
+      })
 
       jdk
       android-studio
