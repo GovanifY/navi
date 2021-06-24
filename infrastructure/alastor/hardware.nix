@@ -82,5 +82,7 @@ with lib;
     boot.supportedFilesystems = [ "ntfs" ];
     networking.wireless.enable = true;
     hardware.enableRedistributableFirmware = lib.mkDefault true;
+
+    networking.wireless.interfaces = [ "wlp3s0" ];
   };
 }
