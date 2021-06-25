@@ -295,7 +295,7 @@ in
       QT_QPA_PLATFORM = "wayland-egl";
       GDK_BACKEND = "wayland";
       MOZ_ENABLE_WAYLAND = "1";
-      GTK_THEME = "Adwaita:Dark";
+      GTK_THEME = "Adwaita:dark";
       #GTK_THEME = "Breeze-Dark";
     };
 
