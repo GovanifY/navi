@@ -271,12 +271,15 @@ in
         wl-clipboard
         slurp
         brightnessctl
-        # themes
-        breeze-gtk
-        breeze-qt5
-        breeze-icons
       ];
     };
+
+    environment.systemPackages = with pkgs; [
+      # qt theme
+      breeze-gtk
+      breeze-qt5
+      breeze-icons
+    ];
 
     services.getty.autologinUser = mkIf cfg.autologin config.navi.username;
 
@@ -297,10 +300,10 @@ in
 
     environment.sessionVariables = {
       XCURSOR_PATH = [
+        "${pkgs.breeze-qt5}/share/icons/"
         "${config.system.path}/share/icons"
         "$HOME/.nix-profile/share/icons/"
         "$HOME/.local/share/icons/"
-        "${pkgs.breeze-qt5}/share/icons/"
       ];
       GTK_DATA_PREFIX = [
         "${config.system.path}"
@@ -345,7 +348,9 @@ in
       environment.PATH = lib.mkForce null;
       # we need the gsettings schema otherwise gtk have the nice idea to simply
       # segfault/sigtrap when using some of its features
-      environment.XDG_DATA_DIRS = config.environment.variables.XDG_DATA_DIRS + ":${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}";
+      environment.XDG_DATA_DIRS = config.environment.variables.XDG_DATA_DIRS +
+        ":${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}"
+        + ":${pkgs.gnome3.adwaita-icon-theme}/share/";
       serviceConfig = {
         Type = "simple";
         ExecStart = ''
