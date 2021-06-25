@@ -66,8 +66,8 @@ in
       optionals cfg.gvt [
         "i915.enable_guc=0"
         "i915.enable_gvt=1"
-      ] ++ [ "intel_iommu=on" ];
-      );
+      ]
+    ) ++ [ "intel_iommu=on" ];
     boot.kernelModules = [ "kvm-intel" "vfio_pci" "kvmgt" "vfio-iommu-type1" "vfio-mdev" ];
 
     networking = mkIf (cfg.bridge_devices != [ ]) {
