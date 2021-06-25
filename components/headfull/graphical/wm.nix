@@ -292,7 +292,7 @@ in
       QT_QPA_PLATFORM = "wayland-egl";
       GDK_BACKEND = "wayland";
       MOZ_ENABLE_WAYLAND = "1";
-      GTK_THEME = "Breeze-Dark";
+      #GTK_THEME = "Breeze-Dark";
     };
 
     environment.sessionVariables = {
@@ -310,12 +310,12 @@ in
 
     environment = {
       etc = {
-        "gtk-2.0/gtkrc" = {
-          text = ''
-            gtk-icon-theme-name=breeze-dark
-          '';
-          mode = "444";
-        };
+        #"gtk-2.0/gtkrc" = {
+        #text = ''
+        #gtk-icon-theme-name=breeze-dark
+        #'';
+        #mode = "444";
+        #};
         "X11/Xresources" = {
           text = ''
             Xcursor.size: 12 
@@ -373,12 +373,12 @@ in
       home.file.".config/qt5ct/colors/breeze-dark.conf".text = qt5ct-dark;
 
       # GTK theme
-      home.file.".config/gtk-3.0/settings.ini".text = ''
-        [Settings]
-        gtk-theme-name=Breeze-Dark
-        gtk-application-prefer-dark-theme = true
-        gtk-cursor-theme-name=breeze_cursors
-      '';
+      #home.file.".config/gtk-3.0/settings.ini".text = ''
+      #[Settings]
+      #gtk-theme-name=Breeze-Dark
+      #gtk-application-prefer-dark-theme = true
+      #gtk-cursor-theme-name=breeze_cursors
+      #'';
       home.file.".config/sway/config".text = sway-config;
     };
   };
