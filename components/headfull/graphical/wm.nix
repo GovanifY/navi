@@ -215,6 +215,12 @@ let
         }
     }
 
+    # gtk does need to setup its cursor theme through the dbus interface even if
+    # it is set in its own settings.ini because, guess what, that's right, it
+    # can ignore it! I seriously have no clue what gtk designers were smoking
+    # when designing their mandatory IPC interface but it must have been
+    # something pretty bad
+    exec gsettings set org.gnome.desktop.interface cursor-theme 'breeze_cursors'
     '' + optionalString config.navi.components.splash.enable ''
     exec plymouth-quit > /dev/null 2>&1"
   '' + cfg.extraConf;
@@ -271,6 +277,8 @@ in
         wl-clipboard
         slurp
         brightnessctl
+        # gtk api
+        glib
       ];
     };
 
@@ -314,12 +322,6 @@ in
 
     environment = {
       etc = {
-        #"gtk-2.0/gtkrc" = {
-        #text = ''
-        #gtk-icon-theme-name=breeze-dark
-        #'';
-        #mode = "444";
-        #};
         "X11/Xresources" = {
           text = ''
             Xcursor.size: 12 
@@ -344,14 +346,14 @@ in
       bindsTo = [ "graphical-session.target" ];
       wants = [ "graphical-session-pre.target" ];
       after = [ "graphical-session-pre.target" ];
-      # We explicitly unset PATH here, as we want it to be set by
+      # we explicitly unset PATH here, as we want it to be set by
       # systemctl --user import-environment in startsway
       environment.PATH = lib.mkForce null;
       # we need the gsettings schema otherwise gtk have the nice idea to simply
       # segfault/sigtrap when using some of its features
       environment.XDG_DATA_DIRS = config.environment.variables.XDG_DATA_DIRS +
         ":${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}"
-        + ":${pkgs.gnome3.adwaita-icon-theme}/share/";
+        + ":${pkgs.gnome3.adwaita-icon-theme}/share/" + ":${pkgs.breeze-icons}/share/";
       serviceConfig = {
         Type = "simple";
         ExecStart = ''
@@ -378,14 +380,22 @@ in
       home.file.".config/qt5ct/qt5ct.conf".text = qt5ct-conf;
       home.file.".config/qt5ct/colors/breeze-dark.conf".text = qt5ct-dark;
 
-      # GTK theme
-      #home.file.".config/gtk-3.0/settings.ini".text = ''
-      #[Settings]
-      #gtk-theme-name=Breeze-Dark
-      #gtk-application-prefer-dark-theme = true
-      #gtk-cursor-theme-name=breeze_cursors
-      #'';
+      # as Qt uses Breeze it should be a no brainer to use it for GTK and
+      # continue with a singular theme, right? Turns out that no, for some
+      # reason, GTK isn't happy with Breeze theme and will happily, say,
+      # in firefox, drop its display handle when not finding some icon
+      # theme, leading to firefox closing when opening webext windows.
+      # obviously, the icon themes don't load overall and the breeze dark 
+      # theme isn't that readable compared to the native adwaita, since it
+      # apparently puts some black on black text everywhere. BUT IT DOESN'T
+      # STOP THERE! Unhappy to require dbus, some applications will, for some
+      # reason, ignore dbus and parse the settings. So you need both. gdi gtk.
+      home.file.".config/gtk-3.0/settings.ini".text = ''
+        [Settings]
+        gtk-cursor-theme-name=breeze_cursors
+      '';
       home.file.".config/sway/config".text = sway-config;
     };
+
   };
 }
