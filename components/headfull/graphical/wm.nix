@@ -153,7 +153,7 @@ let
     bindsym $mod+z exec "wofi --show run > /dev/null 2>&1" 
 
     bindsym $mod+c exec "grim /tmp/screenshot.png > /dev/null 2>&1" 
-    bindsym $mod+d exec "grim -g "$(slurp)" /tmp/screenshot.png > /dev/null 2>&1" 
+    bindsym $mod+d exec 'grim -g "$(slurp)" /tmp/screenshot.png > /dev/null 2>&1'
 
     bindsym $mod+Ctrl+l exec $lock
     bindsym Ctrl+Alt+l exec $lock 
