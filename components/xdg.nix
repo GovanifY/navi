@@ -100,8 +100,6 @@ in
       ZDOTDIR = "$XDG_CONFIG_HOME/zsh";
       CARGO_HOME = "$HOME/${cfg.data}/cargo";
       WINEPREFIX = "$HOME/${cfg.data}/wineprefixes/default";
-      # does not parse it correctly for some reason
-      WEECHAT_HOME = "$HOME/${cfg.config}/weechat";
       GNUPGHOME = "$HOME/${cfg.config}/gnupg";
       GRADLE_USER_HOME = "$XDG_DATA_HOME/gradle";
       GEM_HOME = "$XDG_DATA_HOME/gem";
