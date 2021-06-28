@@ -79,6 +79,43 @@ with lib;
       load-module module-remap-source master=alsa_input.usb-Focusrite_Scarlett_2i2_USB-00.analog-stereo source_name=Mic-Mono master_channel_map=left channel_map=mono
       set-default-source Mic-Mono
     '';
+
+    # scarlett 2i2 needs a few niceties to avoid drops
+    # see https://github.com/dasgeekchannel/scarlett2i2daemon.conf
+    hardware.pulseaudio.daemon.config = {
+      high-priority = "yes";
+      nice-level = "-15";
+      realtime-scheduling = "yes";
+      realtime-priority = "5";
+      resample-method = "speex-float-5";
+      flat-volumes = "no";
+      rlimit-fsize = "-1";
+      rlimit-data = "-1";
+      rlimit-stack = "-1";
+      rlimit-core = "-1";
+      rlimit-as = "-1";
+      rlimit-rss = "-1";
+      rlimit-nproc = "-1";
+      rlimit-nofile = "256";
+      rlimit-memlock = "-1";
+      rlimit-locks = "-1";
+      rlimit-sigpending = "-1";
+      rlimit-msgqueue = "-1";
+      rlimit-nice = "31";
+      rlimit-rtprio = "9";
+      rlimit-rttime = "200000";
+      default-sample-format = "s24le";
+      default-sample-rate = "96000";
+      alternate-sample-rate = "44100";
+      default-sample-channels = "2";
+      default-channel-map = "front-left,front-right";
+      default-fragments = "2";
+      default-fragment-size-msec = "250";
+      enable-deferred-volume = "yes";
+      deferred-volume-safety-margin-usec = "1";
+      deferred-volume-extra-delay-usec = "0";
+    };
+
     boot.supportedFilesystems = [ "ntfs" ];
     networking.wireless.enable = true;
     hardware.enableRedistributableFirmware = lib.mkDefault true;
