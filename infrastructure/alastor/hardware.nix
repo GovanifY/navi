@@ -84,25 +84,10 @@ with lib;
     # see https://github.com/dasgeekchannel/scarlett2i2daemon.conf
     hardware.pulseaudio.daemon.config = {
       high-priority = "yes";
-      nice-level = "-15";
       realtime-scheduling = "yes";
-      realtime-priority = "5";
       resample-method = "speex-float-5";
       flat-volumes = "no";
-      rlimit-fsize = "-1";
-      rlimit-data = "-1";
-      rlimit-stack = "-1";
-      rlimit-core = "-1";
-      rlimit-as = "-1";
-      rlimit-rss = "-1";
-      rlimit-nproc = "-1";
-      rlimit-nofile = "256";
       rlimit-memlock = "-1";
-      rlimit-locks = "-1";
-      rlimit-sigpending = "-1";
-      rlimit-msgqueue = "-1";
-      rlimit-nice = "31";
-      rlimit-rtprio = "9";
       rlimit-rttime = "200000";
       default-sample-format = "s24le";
       default-sample-rate = "96000";

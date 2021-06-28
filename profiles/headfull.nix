@@ -84,13 +84,13 @@ with lib;
       domain = "${config.navi.username}";
       item = "rtprio";
       type = "-";
-      value = "5";
+      value = "9";
     }
       {
         domain = "${config.navi.username}";
         item = "nice";
         type = "-";
-        value = "-15";
+        value = "-11";
       }];
 
 
