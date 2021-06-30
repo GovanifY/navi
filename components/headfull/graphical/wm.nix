@@ -41,6 +41,86 @@ let
     geometry=@ByteArray(\x1\xd9\xd0\xcb\0\x3\0\0\0\0\0\0\0\0\0\x14\0\0\x3\xbd\0\0\x4\x34\0\0\0\0\0\0\0\x14\0\0\x3\x14\0\0\x3\x92\0\0\0\0\x2\0\0\0\a\x80\0\0\0\0\0\0\0\x14\0\0\x3\xbd\0\0\x4\x34)
   '';
 
+  pulse_conf = pkgs.writeText "default.pa" ''
+    .fail
+
+    ### Automatically restore the volume of streams and devices
+    load-module module-device-restore
+    load-module module-stream-restore
+    load-module module-card-restore
+
+    ### Automatically augment property information from .desktop files
+    ### stored in /usr/share/application
+    load-module module-augment-properties
+
+    ### Should be after module-*-restore but before module-*-detect
+    load-module module-switch-on-port-available
+
+    ### Automatically load driver modules depending on the hardware available
+    .ifexists module-udev-detect.so
+    load-module module-udev-detect
+    .else
+    ### Use the static hardware detection module (for systems that lack udev support)
+    load-module module-detect
+    .endif
+
+    ### Automatically connect sink and source if JACK server is present
+    .ifexists module-jackdbus-detect.so
+    .nofail
+    load-module module-jackdbus-detect channels=2
+    .fail
+    .endif
+
+    ### Automatically load driver modules for Bluetooth hardware
+    .ifexists module-bluetooth-policy.so
+    load-module module-bluetooth-policy
+    .endif
+
+    .ifexists module-bluetooth-discover.so
+    load-module module-bluetooth-discover
+    .endif
+
+    ### Load several protocols
+    load-module module-native-protocol-unix
+
+    ### Automatically restore the default sink/source when changed by the user
+    ### during runtime
+    ### NOTE: This should be loaded as early as possible so that subsequent modules
+    ### that look up the default sink/source get the right value
+    load-module module-default-device-restore
+
+    ### Make sure we always have a sink around, even if it is a null sink.
+    load-module module-always-sink
+
+    ### Honour intended role device property
+    load-module module-intended-roles
+
+    ### Automatically suspend sinks/sources that become idle for too long
+    load-module module-suspend-on-idle
+
+    ### If autoexit on idle is enabled we want to make sure we only quit
+    ### when no local session needs us anymore.
+    .ifexists module-console-kit.so
+    load-module module-console-kit
+    .endif
+    .ifexists module-systemd-login.so
+    load-module module-systemd-login
+    .endif
+
+    ### Enable positioned event sounds
+    load-module module-position-event-sounds
+
+    ### Cork music/video streams when a phone stream is active
+    load-module module-role-cork
+
+    ### Modules to allow autoloading of filters (such as echo cancellation)
+    ### on demand. module-filter-heuristics tries to determine what filters
+    ### make sense, and module-filter-apply does the heavy-lifting of
+    ### loading modules and rerouting streams.
+    load-module module-filter-heuristics
+    load-module module-filter-apply
+  '';
+
   # TODO: add more languages? I don't need more of CJK for now but could be
   # useful for others -- govanify
   locale-sh = pkgs.writeShellScript "locale.sh" ''
@@ -364,6 +444,10 @@ in
         TimeoutStopSec = 10;
       };
     };
+
+    # mostly the default pulse config with a few tweaks to make it a bit more
+    # minimal
+    hardware.pulseaudio.configFile = pulse_conf;
 
     environment.shellInit = ''
       if [[ -z $DISPLAY ]] && [[ "$(whoami)" == "${config.navi.username}" ]]; then

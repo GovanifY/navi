@@ -60,16 +60,6 @@ in
           #'';
           #});
 
-          ## eh, it's just a forgotten pulseaudio module everyone forgot about. easier
-          ## to patch than to submit a PR.
-          pulseaudio = super.pulseaudio.overrideAttrs (
-            oldAttrs: rec {
-              postPatch = ''
-                sed -i 's/"\.esd_auth"/"${escape [ "/" "." ] cfg.config}\/esd_auth"/' $(grep -Rl '"\.esd_auth"')
-              '';
-            }
-          );
-
           # would be nice to get this working
           #freecad = super.freecad.overrideAttrs (oldAttrs: rec {
           #  postPatch = ''
