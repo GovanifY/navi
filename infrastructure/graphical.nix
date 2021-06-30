@@ -20,7 +20,7 @@ with lib;
       kcc
 
       # art
-      blender
+      #blender
       krita
       kdenlive
       ardour

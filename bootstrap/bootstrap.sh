@@ -68,3 +68,7 @@ chmod +x $3/home/$2/.config/pass/.git/hooks/post-commit
 
 chown $2 -R $3/home/$2/
 export GNUPGHOME=$old_gpg_home
+
+# in lieu of fully automating everything let's, for now, do an echo for when i
+# have the time to setup something better
+echo "Done! Make sure to setup nixpkgs and home-manager channels!"
