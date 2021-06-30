@@ -72,7 +72,7 @@ with lib;
     programs.wireshark.enable = true;
     programs.adb.enable = true;
     users.users.${config.navi.username} = {
-      extraGroups = [ "wireshark" "adbusers" "audio" ];
+      extraGroups = [ "wireshark" "adbusers" "audio" "input" ];
     };
   };
 }
