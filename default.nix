@@ -4,7 +4,7 @@ let
     then
       abort
         "Incorrect secrets. Please be sure to run ./bootstrap.sh if this
-    is your first time using navi!"
+         is your first time using navi, otherwise run git-crypt unlock!"
     else { };
 in
 {
