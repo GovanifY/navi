@@ -71,7 +71,7 @@ in
       export GNUPGHOME="$(mktemp -d)"
 
       ${pkgs.gnupg}/bin/gpg --import ${/var/lib/bootloader/priv.gpg} > /dev/null 2>&1
-      ${pkgs.findutils}/bin/find /boot -not -path "/boot/efi/*" -type f -exec ${pkgs.gnupg}/bin/gpg --detach-sign "{}" \; > /dev/null 2>&1
+      ${pkgs.findutils}/bin/find /boot -not -path "/boot/efi/*" -type f -exec ${pkgs.gnupg}/bin/gpg --batch --yes --detach-sign "{}" \; > /dev/null 2>&1
 
       rm -rf $GNUPGHOME
       export GNUPGHOME=$old_gpg_home
