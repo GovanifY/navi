@@ -45,10 +45,10 @@ with lib;
 
     # we setup the personal ssh and gpg key of our headfull user
     home-manager.users.${config.navi.username} = {
-      home.file.".config/gnupg/key.gpg".source = ./../secrets/assets/gpg/key.gpg;
-      home.file.".config/gnupg/trust.txt".source = ./../secrets/assets/gpg/gpg-trust.txt;
-      home.file.".config/ssh/id_ed25519".source = ./../secrets/assets/ssh/navi;
-      home.file.".config/ssh/id_ed25519.pub".source = ./../secrets/assets/ssh/navi.pub;
+      home.file.".config/gnupg/key.gpg".source = ./../secrets/headfull/assets/gpg/key.gpg;
+      home.file.".config/gnupg/trust.txt".source = ./../secrets/headfull/assets/gpg/gpg-trust.txt;
+      home.file.".config/ssh/id_ed25519".source = ./../secrets/headfull/assets/ssh/navi;
+      home.file.".config/ssh/id_ed25519.pub".source = ./../secrets/headfull/assets/ssh/navi.pub;
 
       # try to auto retrieve gpg keys when using emails, using hkp on port 80 to
       # bypass tor restrictions -- PROBABLY A VERY BAD IDEA SECURITY WISE, TOFIX,
@@ -61,11 +61,27 @@ with lib;
 
     # store our distbuild key so we can login to our infra
     environment.etc."distbuild_ssh" = {
-      text = builtins.readFile ./../secrets/assets/ssh/distbuild;
+      text = builtins.readFile ./../secrets/headfull/assets/ssh/distbuild;
       mode = "0400";
       uid = 0;
       gid = 0;
     };
+
+    # setup the distbuild account; while this might look like a backdoor for
+    # lesser privilege devices the distbuild access key is only given to at
+    # least headfull devices, thus headless devices cannot ssh into headfull.
+    # same goes for the main account.
+    users.users.distbuild = {
+      isSystemUser = true;
+      shell = pkgs.bash;
+      openssh.authorizedKeys.keyFiles = [ ./../secrets/headfull/assets/ssh/distbuild.pub ];
+    };
+    nix.trustedUsers = [ "distbuild" ];
+
+    # TODO, XXX, TOFIX: the shadows are probably written in the nix store, do we
+    # care about that?
+    users.users.${config.navi.username}.hashedPassword = fileContents ./../secrets/headfull/assets/shadow/main;
+    users.users.root.hashedPassword = fileContents ./../secrets/headfull/assets/shadow/root;
 
     # locking kernel modules has a horrendous UX for headfull devices and is
     # mostly useless for those, as they're deemed to restart frequently. A restart

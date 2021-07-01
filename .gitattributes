@@ -1,1 +1,3 @@
-secrets/** filter=git-crypt diff=git-crypt
+secrets/headfull/** filter=git-crypt diff=git-crypt
+secrets/emet-selch/** filter=git-crypt-emet-selch diff=git-crypt-emet-selch
+secrets/common/** filter=git-crypt-common diff=git-crypt-common

@@ -1,8 +1,11 @@
 #!/bin/sh
+# THIS IS A HEADFULL ONLY BOOTSTRAPPER! I NEED TO MAKE ONE FOR OTHER DEVICES TOO
+# AAAAAAA
+
 echo "Welcome to navi's bootstrapper!"
 cat icon.motd
 
-echo "4d16330208714286d397e2cf7d8a977ac2771ac9fa0311226afc0df06e00b4d6 ../secrets/assets/canary" \
+echo "4d16330208714286d397e2cf7d8a977ac2771ac9fa0311226afc0df06e00b4d6 ../secrets/common/assets/canary" \
     | sha256sum --check --status &> /dev/null
 
 if [ "$?" -ne 0 ]; then
@@ -52,8 +55,8 @@ old_gpg_home=$GNUPGHOME
 export GNUPGHOME="$3/home/$2/.config/gnupg"
 find $3/home/$2/.config/gnupg -type f -exec chmod 600 {} \;
 find $3/home/$2/.config/gnupg -type d -exec chmod 700 {} \;
-gpg --import ../secrets/assets/gpg/key.gpg 
-gpg --import-ownertrust ../secrets/assets/gpg/gpg-trust.txt 
+gpg --import ../secrets/headfull/assets/gpg/key.gpg 
+gpg --import-ownertrust ../secrets/headfull/assets/gpg/gpg-trust.txt 
 mkdir -p $3/home/$2/.local/share/mail/ &> /dev/null
 mkdir -p $3/home/$2/.cache/mutt/ &> /dev/null
 mkdir -p $3/home/$2/.local/share/wineprefixes/ &> /dev/null
