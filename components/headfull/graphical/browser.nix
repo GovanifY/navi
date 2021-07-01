@@ -222,6 +222,7 @@ in
     # firefox no segfaulty
     xdg.portal.enable = false;
 
+    environment.variables.BROWSER = "firefox";
     environment.systemPackages = with pkgs; [ firefox ];
   };
 }
