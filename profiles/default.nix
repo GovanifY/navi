@@ -34,6 +34,13 @@ with lib;
         Whether the targetted profile is headfull or not
       '';
     };
+    server = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether the targetted profile is graphical or not
+      '';
+    };
   };
 
   config = mkIf (config.navi.profile.name != "") {

@@ -37,13 +37,15 @@ with lib;
     # exploited regardless.
     # For those reasons, graphical only devices will not get journald.
     # *bonk*
-    systemd.services.systemd-journal-flush.enable = lib.mkForce false;
-    systemd.services.systemd-journald.enable = lib.mkForce false;
-    systemd.sockets.systemd-journald-audit.enable = lib.mkForce false;
-    systemd.sockets.systemd-journald-dev-log.enable = lib.mkForce false;
-    systemd.sockets.systemd-journald.enable = lib.mkForce false;
-    # side effect of disabling journald
-    systemd.sockets.systemd-coredump.enable = lib.mkForce false;
+    systemd = mkIf (!config.navi.profile.server) {
+      services.systemd-journal-flush.enable = lib.mkForce false;
+      services.systemd-journald.enable = lib.mkForce false;
+      sockets.systemd-journald-audit.enable = lib.mkForce false;
+      sockets.systemd-journald-dev-log.enable = lib.mkForce false;
+      sockets.systemd-journald.enable = lib.mkForce false;
+      # side effect of disabling journald
+      sockets.systemd-coredump.enable = lib.mkForce false;
+    };
     # a side-effect of disabling journaling is that we cannot have fail2ban. But
     # the effect is somewhat limited as the only "service" which fail2ban looks
     # at on user facing devices is ssh, which is pubkey only. But if we have no
@@ -54,7 +56,9 @@ with lib;
     # know there are other ways to do forensics for such a situation and that if
     # the attacker is able to hide one log, he's able to hide all of them, and
     # the inverse is true.
-    services.fail2ban.enable = mkForce false;
+    services.fail2ban = mkIf (!config.navi.profile.server) {
+      enable = mkForce false;
+    };
 
     # scudo breaks everything on a graphical setup, eg firefox can't even
     # launch, so this is out of the question.
