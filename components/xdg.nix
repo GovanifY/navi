@@ -110,6 +110,7 @@ in
       NPM_CONFIG_USERCONFIG = "$XDG_CONFIG_HOME/npm/npmrc";
       GDBHISTFILE = "$HOME/${cfg.data}/gdb_history";
       NUGET_PACKAGES = "$XDG_CACHE_HOME/NuGetPackages";
+      PARALLEL_HOME = "$XDG_CONFIG_HOME/parallel";
     };
 
     home-manager.users.${config.navi.username} = {
