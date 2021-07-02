@@ -41,7 +41,7 @@ let
     geometry=@ByteArray(\x1\xd9\xd0\xcb\0\x3\0\0\0\0\0\0\0\0\0\x14\0\0\x3\xbd\0\0\x4\x34\0\0\0\0\0\0\0\x14\0\0\x3\x14\0\0\x3\x92\0\0\0\0\x2\0\0\0\a\x80\0\0\0\0\0\0\0\x14\0\0\x3\xbd\0\0\x4\x34)
   '';
 
-  pulse_conf = pkgs.writeText "default.pa" ''
+  pulse_conf = pkgs.writeText "default.pa" (''
     .fail
 
     ### Automatically restore the volume of streams and devices
@@ -119,7 +119,11 @@ let
     ### loading modules and rerouting streams.
     load-module module-filter-heuristics
     load-module module-filter-apply
-  '';
+  '' + optionalString config.navi.components.bluetooth.enable ''
+    load-module module-bluetooth-policy
+    load-module module-bluez5-device
+    load-module module-bluez5-discover
+  '');
 
   # TODO: add more languages? I don't need more of CJK for now but could be
   # useful for others -- govanify
