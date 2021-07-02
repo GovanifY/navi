@@ -69,5 +69,6 @@ with lib;
     ];
     services.tlp.enable = lib.mkDefault true;
     networking.wireless.enable = true;
+    networking.wireless.interfaces = [ "wlp1s0" ];
   };
 }
