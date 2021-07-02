@@ -12,6 +12,8 @@ with lib;
       pass
       pinentry-curses
       rtorrent
+      # navi
+      pre-commit
       # stem
       texlive.combined.scheme-medium
       # dev
