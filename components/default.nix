@@ -12,6 +12,7 @@ with lib;
     ./sandboxing.nix
     ./hardening.nix
     ./headfull
+    ./server
   ];
 
   options.navi = {
