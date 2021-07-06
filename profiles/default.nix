@@ -76,6 +76,8 @@ with lib;
     };
 
     # automatic updates & cleanup
+    # TODO: add service for automatic signed updates of git repo before update!
+    # git pull --verify-signatures origin master
     system.autoUpgrade.enable = true;
     nix.gc = {
       automatic = true;
