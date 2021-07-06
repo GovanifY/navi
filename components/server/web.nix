@@ -2,6 +2,43 @@
 with lib;
 let
   cfg = config.navi.components.web-server;
+
+  git_paths_bringup = concatStrings (
+    mapAttrsToList
+      (domain: attr: optionalString (attr.git.user != null) ''
+        if [[ ! -d "/home/${attr.git.user}/${domain}.git/" ]]
+        then
+            ${pkgs.git}/bin/git init /home/${attr.git.user}/${domain}.git/
+            ${pkgs.git}/bin/git clone -l /home/${attr.git.user}/${domain}.git/ /var/www/${domain}
+            cat <<'EOF' >> /home/${attr.git.user}/${domain}.git/hooks/post-receive
+            #!/bin/sh
+            GIT_WORK_TREE=/home/${attr.git.user}/${domain}.git/ ${pkgs.git}/bin/git checkout -f
+            EOF
+            chmod +x /home/${attr.git.user}/${domain}.git/hooks/post-receive
+            chown ${attr.git.user}:users -R /home/${attr.git.user}/${domain}.git/
+            chown ${attr.git.user}:users -R /var/www/${domain}
+            chmod a+r /var/www/${domain}
+        fi
+      '')
+      cfg.domains);
+
+  virtualhosts = mapAttrs' (domain: attr: {
+    "${domain}" = {
+      forceSSL = attr.tls;
+      enableACME = attr.tls;
+      root = mkIf (attr.static || (attr.git.user != null)) (if attr.root == null then
+        "/var/www/${domain}" else attr.root);
+      return = mkIf (attr.return != null) attr.return;
+    };
+  } cfg.domains);
+
+  git_users = mapAttrs' (_: attr: {
+    "${attr.git.user}" = mkIf (attr.git.user != null) {
+      isNormalUser = true;
+      openssh.authorizedKeys.keyFiles = attr.git.keys;
+    };
+  } cfg.domains);
+
 in
 {
   options.navi.components.web-server = {
@@ -36,83 +73,52 @@ in
             default = null;
             description = "Return code that this domain should return. Useful for maintenance.";
           };
-          git = mkOption
-            {
-              default = { };
-              description = ''
-                Whether to use a git based versionning system for static websites.
-                If you toggle this option, you will be able to update your prod
-                website by pushing to the following git path:
-                user@example.com:~/domain.git
-              '';
-              user = mkOption {
-                type = types.nullOr types.str;
-                example = "govanify";
-                description = "The username to use to manage the git website.";
-              };
-              keys = mkOption {
-                type = types.nullOr (types.listOf types.path);
-                description = "The ssh public key allowed to manage remotely the website.";
-              };
-              );
-              };
-              config.url = mkDefault url;
-            }));
-        };
-
-        config = mkIf cfg.enable {
-          networking.firewall.allowedTCPPorts = [ 80 443 ];
-          security.acme.acceptTerms = true;
-          security.acme.email = cfg.email;
-          services.nginx = {
-            enable = true;
-            recommendedGzipSettings = true;
-            recommendedOptimisation = true;
-            recommendedProxySettings = true;
-            recommendedTlsSettings = true;
-          };
-
-          services.nginx.virtualHosts = mapAttrs'
-            (domain: attr:
-              {
-                "${domain}" = {
-                  forceSSL = attr.tls;
-                  enableACME = attr.tls;
-                  root = mkIf (attr.static) "/var/www/${domain}";
-                  return = mkIf (attr.return != null) attr.return;
-                };
-              })
-            cfg.domains;
-
-
-          users.users = mapAttrs'
-            (_: attr:
-              {
-                "${attr.git.user}" = mkIf (attr.git.user != null) {
-                  isNormalUser = true;
-                  openssh.authorizedKeys.keyFiles = attr.git.keys;
-                };
-              };
-            }) cfg.domains;
-
-          systemd.services.make-git-paths = {
-            script = ''
-              if [[ ! -d "/home/<user>/<domain.git>/" ]]
-              then
-                  ${pkgs.git}/bin/git init /home/<user>/<domain.git>/
-                  ${pkgs.git}/bin/git clone -l /home/<user>/<domain.git>/ /var/www/<domain>
-                  cat <<'EOF' >> /home/<user>/<domain>.git/hooks/post-receive
-                  #!/bin/sh
-                  GIT_WORK_TREE=/home/<user>/<domain.git>/ ${pkgs.git}/bin/git checkout -f
-                  EOF
-                  chmod +x /home/<user>/<domain>.git/hooks/post-receive
-                  chown <user>:users -R /home/<user>/<domain>.git
-                  chown <user>:users -R /home/<user>/<domain>.git /var/www/<domain>
-                  chmod a+r /home/<user>/<domain>.git /var/www/<domain>
-              fi
+          git = mkOption {
+            default = { };
+            description = ''
+              Whether to use a git based versionning system for static websites.
+              If you toggle this option, you will be able to update your prod
+              website by pushing to the following git path:
+              user@example.com:~/domain.git
             '';
-            wantedBy = [ "multi-user.target" ];
+            type = types.submodule {
+              options = {
+                user = mkOption {
+                  type = types.nullOr types.str;
+                  example = "govanify";
+                  description = "The username to use to manage the git website.";
+                };
+                keys = mkOption {
+                  type = types.nullOr (types.listOf types.path);
+                  description = "The ssh public key allowed to manage remotely the website.";
+                };
+              };
+            };
           };
-
         };
-      }
+      }));
+    };
+  };
+
+  config = mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = [ 80 443 ];
+    security.acme.acceptTerms = true;
+    security.acme.email = cfg.email;
+    services.nginx = {
+      enable = true;
+      recommendedGzipSettings = true;
+      recommendedOptimisation = true;
+      recommendedProxySettings = true;
+      recommendedTlsSettings = true;
+    };
+
+    services.nginx.virtualHosts = virtualhosts;
+    users.users = git_users;
+    # automatically setups the git repositories and /var/www perms, with
+    # an automatic git fetch hook. Ready to push!
+    systemd.services.make-git-paths = {
+      script = git_paths_bringup;
+      wantedBy = [ "multi-user.target" ];
+    };
+  };
+}
