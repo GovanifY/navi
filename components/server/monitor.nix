@@ -28,6 +28,8 @@ in
     };
 
     # TODO: maybe configure to add the default dashboard & set base user?
+    # also add some basic blind testing scenario eg for patchouli alerting that
+    # emet-selch is down
     services.grafana = {
       enable = true;
       domain = "monitor.govanify.com";
