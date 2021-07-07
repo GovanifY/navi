@@ -85,6 +85,7 @@ with lib;
       serviceConfig.Type = "oneshot";
       environment = config.nix.envVars // {
         inherit (config.environment.sessionVariables) NIX_PATH;
+        inherit (config.environment.variables) GNUPGHOME;
         HOME = "/root";
       } // config.networking.proxy.envVars;
       script = "cd /etc/nixos && ${pkgs.git}/bin/git pull --verify-signatures origin master";
