@@ -76,8 +76,21 @@ with lib;
     };
 
     # automatic updates & cleanup
-    # TODO: add service for automatic signed updates of git repo before update!
-    # git pull --verify-signatures origin master
+    home-manager.users.root = {
+      home.file.".config/gnupg/pubring.kbx".source = ./../secrets/common/assets/gpg/updates/pubring.kbx;
+      home.file.".config/gnupg/trustdb.gpg".source = ./../secrets/common/assets/gpg/updates/trustdb.gpg;
+    };
+    systemd.services.navi-update = {
+      description = "navi update";
+      serviceConfig.Type = "oneshot";
+      environment = config.nix.envVars // {
+        inherit (config.environment.sessionVariables) NIX_PATH;
+        HOME = "/root";
+      } // config.networking.proxy.envVars;
+      script = "cd /etc/nixos && ${pkgs.git}/bin/git pull --verify-signatures origin master";
+    };
+    systemd.services.nixos-upgrade.require = [ "navi-update.service" ];
+    systemd.services.nixos-upgrade.after = [ "navi-update.service" ];
     system.autoUpgrade.enable = true;
     nix.gc = {
       automatic = true;
