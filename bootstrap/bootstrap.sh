@@ -32,44 +32,54 @@ if [ "$?" -ne 0 ]; then
                 read -p "Please enter the path of your gpg admin private key: " gpg_key
                 read -p "Please enter the path of your ssh private key: " ssh_key
                 read -p "Please enter the path of your gpg common private key: " gpg_c_key
-                read -p "Please enter the default root password of headfull devices: " pass_root
-                read -p "Please enter the default user password of headfull devices: " pass_user
-                rm -rf ../.git-crypt
-                rm -rf ../secrets/*/
-                mkdir -p ../secrets/common/assets/gpg/updates
-                mkdir -p ../secrets/common/assets/ssh
-                cp -rf $ssh_key.pub ../secrets/common/assets/ssh/navi.pub
-                cp -rf canary ../secrets/common/assets/canary
-                cp -rf common_default.nix ../secrets/common/default.nix
+                echo -n "Please enter the default root password of headfull devices: " 
+                read -s pass_root
+                printf "\n"
+                echo -n "Please enter the default user password of headfull devices: "
+                read -s pass_user
+                {
+                    rm -rf ../.git-crypt
+                    rm -rf ../secrets/*/
+                    mkdir -p ../secrets/common/assets/gpg/updates
+                    mkdir -p ../secrets/common/assets/ssh
+                    cp -rf $ssh_key.pub ../secrets/common/assets/ssh/navi.pub
+                    cp -rf canary ../secrets/common/assets/canary
+                    cp -rf common_default.nix ../secrets/common/default.nix
 
-                mkdir -p ../secrets/headfull/assets/gpg
-                mkdir -p ../secrets/headfull/assets/shadow
-                mkdir -p ../secrets/headfull/assets/ssh
-                cp -rf headfull_canary ../secrets/headfull/assets/canary
-                cp -rf common_default.nix ../secrets/headfull/default.nix
-                cp -rf $sshkey ../secrets/headfull/assets/ssh/navi
+                    mkdir -p ../secrets/headfull/assets/gpg
+                    mkdir -p ../secrets/headfull/assets/shadow
+                    mkdir -p ../secrets/headfull/assets/ssh
+                    cp -rf headfull_canary ../secrets/headfull/assets/canary
+                    cp -rf common_default.nix ../secrets/headfull/default.nix
+                    cp -rf $ssh_key ../secrets/headfull/assets/ssh/navi
 
-                old_gpg_home=$GNUPGHOME
-                export GNUPGHOME="$(mktemp -d)"
-                # import gpg key, get pubring and trustdb
-                gpg --import $gpg_key
-                for fpr in $(gpg --list-keys --with-colons  | awk -F: '/fpr:/ {print $10}' | sort -u); do  echo -e "5\ny\n" |  gpg --command-fd 0 --expert --edit-key $fpr trust; done
-                cp -rf $GNUPGHOME/pubring.kbx ../secrets/common/assets/gpg/updates/pubring.kbx
-                cp -rf $GNUPGHOME/trustdb.gpg ../secrets/common/assets/gpg/updates/trustdb.gpg
-                cp -rf $GNUPGHOME/key.gpg ../secrets/headfull/assets/gpg/key.gpg
-                cp -rf $GNUPGHOME/gpg-trust.txt ../secrets/headfull/assets/gpg/gpg-trust.txt
-                gpg_common=$(gpg --show-keys $gpg_c_key | sed -n 2p | xargs)
-                gpg_admin=$(gpg --show-keys $gpg_key | sed -n 2p | xargs)
-                git-crypt init
-                git-crypt add-gpg-user $gpg_admin
-                git-crypt init -k common
-                git-crypt add-gpg-user -k common $gpg_admin
-                git-crypt add-gpg-user -k common $gpg_common
-                rm -rf $GNUPGHOME
-                export GNUPGHOME=$old_gpg_home
-                ssh-keygen -t ed25519 -C "distbuild@navi" -N "" -f ../secrets/headfull/assets/ssh/distbuild
-                echo "$pass_root" | mkpasswd --method=SHA-512 --stdin > ../secrets/headfull/assets/shadow/root
-                echo "$pass_user" | mkpasswd --method=SHA-512 --stdin > ../secrets/headfull/assets/shadow/main
+                    old_gpg_home=$GNUPGHOME
+                    export GNUPGHOME="$(mktemp -d)"
+                    # import gpg key, get pubring and trustdb
+                    gpg --import $gpg_key
+                    gpg_admin=$(gpg --show-keys $gpg_key | sed -n 2p | xargs)
+                    echo -e "5\ny\n" |  gpg --batch --command-fd 0 --expert --edit-key $gpg_admin trust
+                    cp -rf $GNUPGHOME/pubring.kbx ../secrets/common/assets/gpg/updates/pubring.kbx
+                    cp -rf $GNUPGHOME/trustdb.gpg ../secrets/common/assets/gpg/updates/trustdb.gpg
+                    cp -rf $gpg_key ../secrets/headfull/assets/gpg/key.gpg
+                    cp -rf $GNUPGHOME/trust.txt ../secrets/headfull/assets/gpg/gpg-trust.txt
+                    # we reimport after as we need the pubring without the common
+                    # key, to only allow updates signed with the admin key
+                    gpg --import $gpg_c_key
+                    gpg_common=$(gpg --show-keys $gpg_c_key | sed -n 2p | xargs)
+                    echo -e "5\ny\n" |  gpg --batch --command-fd 0 --expert --edit-key $gpg_common trust
+
+                    git-crypt init
+                    git-crypt add-gpg-user $gpg_admin
+                    git-crypt init -k common
+                    git-crypt add-gpg-user -k common $gpg_admin
+                    git-crypt add-gpg-user -k common $gpg_common
+                    rm -rf $GNUPGHOME
+                    export GNUPGHOME=$old_gpg_home
+                    ssh-keygen -t ed25519 -C "distbuild@navi" -N "" -f ../secrets/headfull/assets/ssh/distbuild
+                    echo "$pass_root" | mkpasswd --method=SHA-512 --stdin > ../secrets/headfull/assets/shadow/root
+                    echo "$pass_user" | mkpasswd --method=SHA-512 --stdin > ../secrets/headfull/assets/shadow/main
+                } > /dev/null 2>&1
                 printf "\n\nAll done! You can now run again this script to\n"
                 printf "proceed with the per device setup :)\n"
                 exit;;
