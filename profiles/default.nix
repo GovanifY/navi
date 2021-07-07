@@ -90,7 +90,7 @@ with lib;
       } // config.networking.proxy.envVars;
       script = "cd /etc/nixos && ${pkgs.git}/bin/git pull --verify-signatures origin master";
     };
-    systemd.services.nixos-upgrade.require = [ "navi-update.service" ];
+    systemd.services.nixos-upgrade.requires = [ "navi-update.service" ];
     systemd.services.nixos-upgrade.after = [ "navi-update.service" ];
     system.autoUpgrade.enable = true;
     nix.gc = {
