@@ -28,7 +28,6 @@ in
         server. Can be created by using the command `pwgen -s 64 1`.
       '';
     };
-
   };
 
   config = mkIf cfg.enable {
@@ -80,10 +79,11 @@ in
           type = "http";
           tls = false;
           x_forwarded = true;
+          enable_metrics = navi.components.monitor.enable;
           registration_shared_secret = cfg.secret;
           resources = [
             {
-              names = [ "client" "federation" ];
+              names = [ "client" "federation" ] ++ optionals navi.components.monitor.enable [ "client" ];
               compress = false;
             }
           ];
@@ -91,7 +91,7 @@ in
       ];
     };
 
-    # TODO: modify postgresql password!!!
+    # default postgresql password set by the service
     services.postgresql = {
       enable = true;
       initialScript = pkgs.writeText "synapse-init.sql" ''

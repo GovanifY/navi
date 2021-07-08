@@ -46,6 +46,8 @@ in
           FILE_EXTENSIONS = .rst
           RENDER_COMMAND = ${docutils}/bin/rst2html.py
           IS_INPUT_FILE = false
+          [metrics]
+          ENABLED=true
         '';
     };
 
