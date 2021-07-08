@@ -1,6 +1,4 @@
 #!/bin/sh
-# THIS IS A HEADFULL ONLY BOOTSTRAPPER! I NEED TO MAKE ONE FOR OTHER DEVICES TOO
-# AAAAAAA
 
 echo "Welcome to navi's bootstrapper!"
 cat icon.motd
@@ -84,71 +82,151 @@ if [ "$?" -ne 0 ]; then
                 printf "proceed with the per device setup :)\n"
                 exit;;
             [Nn]* ) printf "\nPlease run git-crypt unlock then!\n"; exit;;
-            * ) echo "Please answer yes or no.";;
+            * ) echo "Please answer yes or no."; exit;;
         esac
     done
 fi
 
-if [ "$#" -ne 2 ]; then
-    echo "usage: ./bootstrap.sh hostname username root"
-    echo "example: ./bootstrap.sh alastor govanify /mnt"
-    exit 1
+printf "\n\nWelcome to navi's device bootstrapper!\n\n"
+printf "This script is going to automatically provision\n"
+printf "your disks and setup device-specific keys.\n\n"
+printf "So, first of all, let's decide which drive we should\n"
+printf "target; here's a handy list:\n\n"
+lsblk
+read -p "Do you want to provision a drive(y) or use an existing partition(n) [y/n]: " yn
+case $yn in
+    [Yy]* ) provision=true; break;;
+    [Nn]* ) provision=false; break;;
+    * ) echo "Please answer yes or no."; exit;;
+esac
+read -p "Enter the drive or partition you want to use: " $device
+partition=""
+case "$device" in 
+  *nvme*)
+      partition="p"
+    ;;
+esac
+read -p "Do you want this drive to be encrypted? [y/n]: " yn
+case $yn in
+    [Yy]* ) encrypted=true; break;;
+    [Nn]* ) encrypted=false; break;;
+    * ) echo "Please answer yes or no."; exit;;
+esac
+if [ "$encrypted" = true ] ; then
+    echo -n "Please enter the encryption password of this device: " 
+    read -s passphrase
+    printf "\n"
+fi
+echo -n "Please enter the bootloader password of this device: " 
+read -s boot_pass
+printf "\n"
+read -p "Enter the name of the device: " device_name 
+read -p "Enter the main username of the device: " username
+read -p "Is your device a headfull device? [y/n]: " yn
+case $yn in
+    [Yy]* ) headfull=true; break;;
+    [Nn]* ) headfull=false; break;;
+    * ) echo "Please answer yes or no."; exit;;
+esac
+if [ "$headfull" = true ] ; then
+    read -p "Please enter the url of your git password repository : " git_url
 fi
 
-mkdir $3/var/lib/bootloader
-if [ ! -d "$3/var/lib/bootloader" ]; then
-    echo "could not create secret path! do you have sufficient rights?"
-    exit 1
+{
+
+if [ "$encrypted" = true ] ; then
+    if [ "$provision" = true ] ; then
+        sgdisk -o /dev/$device
+        sgdisk -n 1:: /dev/$device
+        device="/dev/${device}${partition}1"
+    fi
+
+    keyfile="$(mktemp)"
+    dd if=/dev/urandom of=$keyfile bs=1024 count=4
+    printf "YES\n$passphrase\n$passphrase\n" | cryptsetup luksFormat --type luks1 -c aes-xts-plain64 -s 256 -h sha512 $device
+    printf "$passphrase\n" | cryptsetup luksAddKey $device $keyfile 
+    pvcreate /dev/mapper/matrix
+    vgcreate matrix /dev/mapper/matrix
+    lvcreate -L 8G -n swap matrix
+    lvcreate -l '100%FREE' -n root matrix
+    mkfs.ext4 -L root /dev/matrix/root
+    mount /dev/matrix/root /mnt
+    swapon /dev/matrix/swap
+    mkdir -p /mnt/etc/secrets/initrd
+    cp -rf $keyfile /mnt/etc/secrets/initrd/keyfile.bin
+else
+    if [ "$provision" = true ] ; then
+        sgdisk -o /dev/$device
+        sgdisk -n 1::8G /dev/$device
+        sgdisk -n 2:: /dev/$device
+        swapon /dev/${device}${partition}1
+        device="/dev/${device}${partition}2"
+    fi
+    mkfs.ext4 -L root $device
+    mount /dev/$device /mnt
 fi
+
+
 
 old_gpg_home=$GNUPGHOME
 export GNUPGHOME="$(mktemp -d)"
 script_key="$(mktemp)"
 
+mkdir /mnt/var/lib/bootloader
 cat >$script_key <<EOF
 %no-protection
 Key-Type: default
 Subkey-Type: default
 Name-Real: navi bootloader device key
-Name-Email: $1@navi
+Name-Email: $device_name@navi
 Passphrase: '' 
 Expire-Date: 0
 EOF
 gpg --batch --generate-key $script_key
-gpg --output $3/var/lib/bootloader/pub.gpg --export $1@navi 
-gpg --output $3/var/lib/bootloader/priv.gpg --export-secret-key $1@navi 
+gpg --batch --output /mnt/var/lib/bootloader/pub.gpg --export $device_name@navi 
+gpg --batch --output /mnt/var/lib/bootloader/priv.gpg --export-secret-key $device_name@navi 
 rm -rf $script_key
 rm -rf $GNUPGHOME
 export GNUPGHOME=$old_gpg_home
 
 tmp_password=$(mktemp)
-echo "Please set the password of your bootloader" 
-grub-mkpasswd-pbkdf2 | tee $tmp_password
-grep "grub." $tmp_password | sed -r 's/.*grub\./grub\./' > $3/var/lib/bootloader/pass_hash
+printf "$boot_pass\n$boot_pass\n" | grub-mkpasswd-pbkdf2 | tee $tmp_password
+grep "grub." $tmp_password | sed -r 's/.*grub\./grub\./' > /mnt/var/lib/bootloader/pass_hash
 rm -rf $tmp_password
 
 
-old_gpg_home=$GNUPGHOME
-export GNUPGHOME="$3/home/$2/.config/gnupg"
-find $3/home/$2/.config/gnupg -type f -exec chmod 600 {} \;
-find $3/home/$2/.config/gnupg -type d -exec chmod 700 {} \;
-gpg --import ../secrets/headfull/assets/gpg/key.gpg 
-gpg --import-ownertrust ../secrets/headfull/assets/gpg/gpg-trust.txt 
-mkdir -p $3/home/$2/.local/share/mail/ &> /dev/null
-mkdir -p $3/home/$2/.cache/mutt/ &> /dev/null
-mkdir -p $3/home/$2/.local/share/wineprefixes/ &> /dev/null
-mkdir -p $3/home/$2/.config/gdb &> /dev/null
-mkdir -p $3/home/$2/.local/share/wineprefixes/default &> /dev/null 
-touch $3/home/$2/.config/gdb/init &> /dev/null
+if [ "$headfull" = true ] ; then
+    old_gpg_home=$GNUPGHOME
+    export GNUPGHOME="/mnt/home/$username/.config/gnupg"
+    find /mnt/home/$username/.config/gnupg -type f -exec chmod 600 {} \;
+    find /mnt/home/$username/.config/gnupg -type d -exec chmod 700 {} \;
+    gpg --import ../secrets/headfull/assets/gpg/key.gpg 
+    gpg --import-ownertrust ../secrets/headfull/assets/gpg/gpg-trust.txt 
+    mkdir -p /mnt/home/$username/.local/share/mail/ &> /dev/null
+    mkdir -p /mnt/home/$username/.cache/mutt/ &> /dev/null
+    mkdir -p /mnt/home/$username/.local/share/wineprefixes/ &> /dev/null
+    mkdir -p /mnt/home/$username/.config/gdb &> /dev/null
+    mkdir -p /mnt/home/$username/.local/share/wineprefixes/default &> /dev/null 
+    touch /mnt/home/$username/.config/gdb/init &> /dev/null
 
-git clone git@code.govanify.com:govanify/passwords.git $3/home/$2/.config/pass
-echo "git pull --rebase" > $3/home/$2/.config/pass/.git/hooks/post-commit
-echo "git push" >> $3/home/$2/.config/pass/.git/hooks/post-commit
-chmod +x $3/home/$2/.config/pass/.git/hooks/post-commit                                                                                                                                                                                                               
+    git clone $git_url /mnt/home/$username/.config/pass
+    echo "git pull --rebase" > /mnt/home/$username/.config/pass/.git/hooks/post-commit
+    echo "git push" >> /mnt/home/$username/.config/pass/.git/hooks/post-commit
+    chmod +x /mnt/home/$username/.config/pass/.git/hooks/post-commit
+fi
 
-chown $2 -R $3/home/$2/
+chown $username -R /mnt/home/$username/
 export GNUPGHOME=$old_gpg_home
+
+rm -rf /mnt/etc/nixos
+# should i make this url configurable?
+git clone https://code.govanify.com/govanify/navi /mnt/etc/nixos
+nixos-generate-config --root /mnt
+} > /dev/null 2>&1
 
 # in lieu of fully automating everything let's, for now, do an echo for when i
 # have the time to setup something better
-echo "Done! Make sure to setup nixpkgs and home-manager channels!"
+printf "\n\nDone! Make sure to setup nixpkgs and home-manager channels\n"
+printf "and then configure your device correctly! Look at infrastructure/\n"
+printf "for examples. For luks devices you'll need to set the path to your\n"
+printf "keyfile (found in /etc/secrets/initrd)."
