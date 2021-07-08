@@ -4,6 +4,6 @@
     ./chat.nix
     ./projects.nix
     ./mail.nix
-    ./monitor
+    ./monitor.nix
   ];
 }

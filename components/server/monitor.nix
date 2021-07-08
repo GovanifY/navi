@@ -73,7 +73,7 @@ in
             name = "General";
             type = "file";
             disableDeletion = true;
-            options.path = ./dashboards;
+            options.path = ./../../assets/dashboards;
           })
         ];
         datasources = [

@@ -39,7 +39,7 @@ in
       home = "/var/lib/gitea";
       group = "gitea";
     };
-    user.extraGroups = [ "gitea" ];
+    users.extraGroups = [ "gitea" ];
 
     services.gitea = {
       enable = true;
