@@ -1,3 +1,4 @@
 configuration.nix
+vm-*.nix
 *.qcow2
 result

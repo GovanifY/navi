@@ -11,12 +11,7 @@ in
 
   options.navi.components.mail-server = {
     enable = mkEnableOption "Enable navi's mail server";
-    accounts = mkOption {
-      type = mailserver.loginAccounts.type;
-      description = ''
-        List of accounts and per-accounts rules for the mail server.
-      '';
-    };
+    #inherit (options.mailserver) loginAccounts;
     domains = mkOption {
       type = types.listOf types.str;
       default = [ ];
@@ -44,7 +39,7 @@ in
       keyFile = "${cert}/key.pem";
       dkimSelector = config.navi.device;
       dkimKeyBits = 2048;
-      loginAccounts = cfg.accounts;
+      #loginAccounts = cfg.accounts;
     };
     navi.components.web-server = {
       enable = true;

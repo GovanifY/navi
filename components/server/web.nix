@@ -5,39 +5,49 @@ let
 
   git_paths_bringup = concatStrings (
     mapAttrsToList
-      (domain: attr: optionalString (attr.git.user != null) ''
-        if [[ ! -d "/home/${attr.git.user}/${domain}.git/" ]]
+      (name: attr: optionalString (attr.git.user != null) ''
+        if [[ ! -d "/home/${attr.git.user}/${name}.git/" ]]
         then
-            ${pkgs.git}/bin/git init /home/${attr.git.user}/${domain}.git/
-            ${pkgs.git}/bin/git clone -l /home/${attr.git.user}/${domain}.git/ /var/www/${domain}
-            cat <<'EOF' >> /home/${attr.git.user}/${domain}.git/hooks/post-receive
+            ${pkgs.git}/bin/git init /home/${attr.git.user}/${name}.git/
+            ${pkgs.git}/bin/git clone -l /home/${attr.git.user}/${name}.git/ /var/www/${name}
+            cat <<'EOF' >> /home/${attr.git.user}/${name}.git/hooks/post-receive
             #!/bin/sh
-            GIT_WORK_TREE=/home/${attr.git.user}/${domain}.git/ ${pkgs.git}/bin/git checkout -f
+            GIT_WORK_TREE=/home/${attr.git.user}/${name}.git/ ${pkgs.git}/bin/git checkout -f
             EOF
-            chmod +x /home/${attr.git.user}/${domain}.git/hooks/post-receive
-            chown ${attr.git.user}:users -R /home/${attr.git.user}/${domain}.git/
-            chown ${attr.git.user}:users -R /var/www/${domain}
-            chmod a+r /var/www/${domain}
+            chmod +x /home/${attr.git.user}/${name}.git/hooks/post-receive
+            chown ${attr.git.user}:users -R /home/${attr.git.user}/${name}.git/
+            chown ${attr.git.user}:users -R /var/www/${name}
+            chmod a+r /var/www/${name}
         fi
       '')
       cfg.domains);
 
-  virtualhosts = mapAttrs' (domain: attr: {
-    "${domain}" = {
-      forceSSL = attr.tls;
-      enableACME = attr.tls;
-      root = mkIf (attr.static || (attr.git.user != null)) (if attr.root == null then
-        "/var/www/${domain}" else attr.root);
-      return = mkIf (attr.return != null) attr.return;
-    };
-  } cfg.domains);
+  virtualhosts = mapAttrs'
+    (name: attr: (lib.nameValuePair
+      "${name}"
+      {
+        forceSSL = attr.tls;
+        enableACME = attr.tls;
+        root =
+          if (attr.static || (attr.git.user != null)) then
+            (if attr.root == null then
+              "/var/www/${name}" else attr.root) else null;
+        locations = if (attr.return != null) then { "/".return = attr.return; } else { };
+      }))
+    cfg.domains;
 
-  git_users = mapAttrs' (_: attr: {
-    "${attr.git.user}" = mkIf (attr.git.user != null) {
-      isNormalUser = true;
-      openssh.authorizedKeys.keyFiles = attr.git.keys;
-    };
-  } cfg.domains);
+  git_users = mapAttrs'
+    (name: attr: (if (attr.git.user != null) then
+      (lib.nameValuePair
+        "${attr.git.user}"
+        {
+          isNormalUser = true;
+          openssh.authorizedKeys.keyFiles = attr.git.keys;
+          # we already have set the main username's data, as such nix won't fail
+          # in a weird fashion trying to create a blank user! Probably a better
+          # way to do this but nix syntax is _so_ obtuse sometimes
+        }) else lib.nameValuePair "${config.navi.username}" { }))
+    cfg.domains;
 
 in
 {
@@ -58,6 +68,12 @@ in
             example = "example.com";
             description = "The url of the domain.";
           };
+          root = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "/var/www/example.com";
+            description = "The root folder of the domain, if static.";
+          };
           static = mkOption {
             type = types.bool;
             default = false;
@@ -73,26 +89,23 @@ in
             default = null;
             description = "Return code that this domain should return. Useful for maintenance.";
           };
-          git = mkOption {
-            default = { };
-            description = ''
-              Whether to use a git based versionning system for static websites.
-              If you toggle this option, you will be able to update your prod
-              website by pushing to the following git path:
-              user@example.com:~/domain.git
-            '';
-            type = types.submodule {
-              options = {
-                user = mkOption {
-                  type = types.nullOr types.str;
-                  example = "govanify";
-                  description = "The username to use to manage the git website.";
-                };
-                keys = mkOption {
-                  type = types.nullOr (types.listOf types.path);
-                  description = "The ssh public key allowed to manage remotely the website.";
-                };
-              };
+          git = {
+            user = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              example = "govanify";
+              description = ''
+                The username to use to manage the git website.
+                Setting this will toggle a git based versionning system for static websites.
+                If you toggle this option, you will be able to update your prod
+                website by pushing to the following git path:
+                user@example.com:~/domain.git
+              '';
+            };
+            keys = mkOption {
+              type = types.nullOr (types.listOf types.path);
+              default = null;
+              description = "The ssh public key allowed to manage remotely the website.";
             };
           };
         };

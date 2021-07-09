@@ -118,23 +118,23 @@ in
           enabledCollectors = [ "systemd" ];
           port = 9002;
         };
-        nginx = mkIf navi.components.web-server.enable {
+        nginx = mkIf config.navi.components.web-server.enable {
           enable = true;
           port = 9113;
         };
-        tor = mkIf services.tor.enable {
+        tor = mkIf config.services.tor.enable {
           enable = true;
           port = 9130;
         };
-        postgres = mkIf services.postgresql.enable {
+        postgres = mkIf config.services.postgresql.enable {
           enable = true;
           port = 9187;
         };
-        postfix = mkIf navi.components.mail-server.enable {
+        postfix = mkIf config.navi.components.mail-server.enable {
           enable = true;
           port = 9154;
         };
-        dovecot = mkIf navi.components.mail-server.enable {
+        dovecot = mkIf config.navi.components.mail-server.enable {
           enable = true;
           port = 9166;
         };
@@ -145,7 +145,7 @@ in
           targets = [ "127.0.0.1:9002" ];
         }];
       }] ++ optionals
-        navi.components.chat-server.enable
+        config.navi.components.chat-server.enable
         [{
           job_name = "synapse";
           metrics_path = "/_synapse/metrics";
@@ -153,35 +153,35 @@ in
             targets = [ "127.0.0.1:8008" ];
           }];
         }] ++ optionals
-        navi.components.web-server.enable
+        config.navi.components.web-server.enable
         [{
           job_name = "nginx";
           static_configs = [{
             targets = [ "127.0.0.1:9112" ];
           }];
         }] ++ optionals
-        services.tor.enable
+        config.services.tor.enable
         [{
           job_name = "tor";
           static_configs = [{
             targets = [ "127.0.0.1:9130" ];
           }];
         }] ++ optionals
-        services.postgresql.enable
+        config.services.postgresql.enable
         [{
           job_name = "postgres";
           static_configs = [{
             targets = [ "127.0.0.1:9187" ];
           }];
         }] ++ optionals
-        navi.components.projects.enable
+        config.navi.components.projects.enable
         [{
           job_name = "gitea";
           static_configs = [{
             targets = [ "127.0.0.1:3001" ];
           }];
         }] ++ optionals
-        navi.components.mail-server.enable
+        config.navi.components.mail-server.enable
         [{
           job_name = "postfix";
           static_configs = [{

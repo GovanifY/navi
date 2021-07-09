@@ -85,8 +85,9 @@ with lib;
       serviceConfig.Type = "oneshot";
       environment = config.nix.envVars // {
         inherit (config.environment.sessionVariables) NIX_PATH;
-        inherit (config.environment.variables) GNUPGHOME;
         HOME = "/root";
+      } // optionalAttrs config.navi.components.xdg.enable {
+        inherit (config.environment.variables) GNUPGHOME;
       } // config.networking.proxy.envVars;
       path = [ pkgs.gnupg pkgs.git ];
       script = "cd /etc/nixos && git pull --verify-signatures origin master";

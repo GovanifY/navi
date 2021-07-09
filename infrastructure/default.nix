@@ -5,6 +5,7 @@ with lib;
   imports = [
     ./xanadu
     ./alastor
+    ./emet-selch
     ./graphical.nix
   ];
 
@@ -14,7 +15,7 @@ with lib;
       The name of the device you target 
     '';
   };
-  config = {
+  config = mkIf (config.navi.profile.headfull) {
     # setup the trusted build servers here
     nix.buildMachines = [
       {

@@ -72,6 +72,8 @@ in
     services.matrix-synapse = {
       enable = true;
       server_name = cfg.domain;
+      enable_metrics = config.navi.components.monitor.enable;
+      registration_shared_secret = cfg.secret;
       listeners = [
         {
           port = 8008;
@@ -79,11 +81,9 @@ in
           type = "http";
           tls = false;
           x_forwarded = true;
-          enable_metrics = navi.components.monitor.enable;
-          registration_shared_secret = cfg.secret;
           resources = [
             {
-              names = [ "client" "federation" ] ++ optionals navi.components.monitor.enable [ "client" ];
+              names = [ "client" "federation" ] ++ optionals config.navi.components.monitor.enable [ "client" ];
               compress = false;
             }
           ];
