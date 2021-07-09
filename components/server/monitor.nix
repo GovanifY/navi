@@ -303,6 +303,10 @@ in
         listenAddress = "localhost";
         configuration = {
           route.receiver = "email";
+          global = {
+            smtp_smarthost = "localhost:25";
+            smtp_from = "alertmanager@${cfg.domain}";
+          };
           receivers = [
             {
               name = "email";

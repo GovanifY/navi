@@ -119,10 +119,7 @@ with lib;
     #security.polkit.enable = false;
 
     navi.components = {
-      bootloader = {
-        enable = true;
-        verbose = false;
-      };
+      bootloader.enable = true;
       xdg.enable = true;
       shell.enable = true;
       multiplexer.enable = true;

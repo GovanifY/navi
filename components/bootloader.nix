@@ -94,7 +94,7 @@ in
       )
     ];
 
-    boot.kernelPatches = [
+    boot.kernelPatches = mkIf (cfg.verbose) [
       {
         name = "silent-boot";
         patch = null;

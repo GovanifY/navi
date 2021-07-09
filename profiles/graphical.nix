@@ -65,6 +65,7 @@ with lib;
     navi.components.hardening.scudo = false;
 
     navi.components = {
+      bootloader.verbose = false;
       vte.enable = true;
       browser.enable = true;
       # userspace takes ~2s to boot with the standard configuration, enabling a
