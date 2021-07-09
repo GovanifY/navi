@@ -67,10 +67,11 @@ with lib;
                                  [38;5;0;48;2;44;46;52m▄▄▄▄▄▄               [48;2;44;46;52m▄▄▄▄▄▄[49m                              [0m
                                                                                           [0m
                                                                                           [0m
-                      But come! Let us cast aside titles and pretense, 
+                                    Welcome to emet-selch!
+                      "But come! Let us cast aside titles and pretense, 
                        and reveal our true faces to one another! I am
-                        I am Hades! He who shall awaken our brethren 
-                                 from their dark slumber!
+                          Hades! He who shall awaken our brethren 
+                                  from their dark slumber!"
     '';
 
     time.timeZone = "Europe/Paris";
