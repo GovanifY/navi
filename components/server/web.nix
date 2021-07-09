@@ -6,19 +6,19 @@ let
   git_paths_bringup = concatStrings (
     mapAttrsToList
       (name: attr: optionalString (attr.git.user != null) ''
-                if [[ ! -d "/home/${attr.git.user}/${name}.git/" ]]
-                then
-                    ${pkgs.git}/bin/git init /home/${attr.git.user}/${name}.git/
-                    ${pkgs.git}/bin/git clone -l /home/${attr.git.user}/${name}.git/ /var/www/${name}
-                    cat <<'EOF' >> /home/${attr.git.user}/${name}.git/hooks/post-receive
-        #!/bin/sh
-        GIT_WORK_TREE=/home/${attr.git.user}/${name}.git/ ${pkgs.git}/bin/git checkout -f
+        if [[ ! -d "/home/${attr.git.user}/${name}.git/" ]]
+        then
+            ${pkgs.git}/bin/git init /home/${attr.git.user}/${name}.git/
+            ${pkgs.git}/bin/git clone -l /home/${attr.git.user}/${name}.git/ /var/www/${name}
+            cat > /home/${attr.git.user}/${name}.git/.git/hooks/post-receive <<EOF
+            #!/bin/sh
+            GIT_WORK_TREE=/home/${attr.git.user}/${name}.git/${pkgs.git}/bin/git checkout -f
         EOF
-                    chmod +x /home/${attr.git.user}/${name}.git/hooks/post-receive
-                    chown ${attr.git.user}:users -R /home/${attr.git.user}/${name}.git/
-                    chown ${attr.git.user}:users -R /var/www/${name}
-                    chmod a+r /var/www/${name}
-                fi
+            chmod +x /home/${attr.git.user}/${name}.git/.git/hooks/post-receive
+            chown ${attr.git.user}:users -R /home/${attr.git.user}/${name}.git/
+            chown ${attr.git.user}:users -R /var/www/${name}
+            chmod a+r /var/www/${name}
+        fi
       '')
       cfg.domains);
 
