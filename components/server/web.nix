@@ -11,8 +11,8 @@ let
             ${pkgs.git}/bin/git init /home/${attr.git.user}/${name}.git/
             ${pkgs.git}/bin/git clone -l /home/${attr.git.user}/${name}.git/ /var/www/${name}
             cat > /home/${attr.git.user}/${name}.git/.git/hooks/post-receive <<EOF
-            #!/bin/sh
-            GIT_WORK_TREE=/home/${attr.git.user}/${name}.git/${pkgs.git}/bin/git checkout -f
+        #!/bin/sh
+        GIT_WORK_TREE=/home/${attr.git.user}/${name}.git/${pkgs.git}/bin/git checkout -f
         EOF
             chmod +x /home/${attr.git.user}/${name}.git/.git/hooks/post-receive
             chown ${attr.git.user}:users -R /home/${attr.git.user}/${name}.git/
