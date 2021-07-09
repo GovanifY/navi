@@ -305,6 +305,10 @@ let
     # when designing their mandatory IPC interface but it must have been
     # something pretty bad
     exec gsettings set org.gnome.desktop.interface cursor-theme 'breeze_cursors'
+    # AND ON ANOTHER REBOOT AGES AFTER I ADDED THE CHANGE ABOVE SUDDENLY GTK
+    # DECIDES TO CHANGE THE SYSTEM WIDE DEFAULT FONT THEME FOR NO GOD DAMN
+    # REASON. gosh I _hate_ this library.
+    exec gsettings set org.gnome.desktop.interface font-name "Sans 12"
     '' + optionalString config.navi.components.splash.enable ''
     exec plymouth-quit > /dev/null 2>&1"
   '' + cfg.extraConf;
