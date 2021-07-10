@@ -5,5 +5,6 @@
     ./projects.nix
     ./mail.nix
     ./monitor.nix
+    ./monitor-rules.nix
   ];
 }
