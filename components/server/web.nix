@@ -8,13 +8,13 @@ let
       (name: attr: optionalString (attr.git.user != null) ''
         if [[ ! -d "/home/${attr.git.user}/${name}.git/" ]]
         then
-            ${pkgs.git}/bin/git init /home/${attr.git.user}/${name}.git/
+            ${pkgs.git}/bin/git init --bare /home/${attr.git.user}/${name}.git/
             ${pkgs.git}/bin/git clone -l /home/${attr.git.user}/${name}.git/ /var/www/${name}
-            cat > /home/${attr.git.user}/${name}.git/.git/hooks/post-receive <<EOF
+            cat > /home/${attr.git.user}/${name}.git/hooks/post-receive <<EOF
         #!/bin/sh
-        GIT_WORK_TREE=/home/${attr.git.user}/${name}.git/${pkgs.git}/bin/git checkout -f
+        GIT_WORK_TREE=/var/www/${name} ${pkgs.git}/bin/git checkout -f
         EOF
-            chmod +x /home/${attr.git.user}/${name}.git/.git/hooks/post-receive
+            chmod +x /home/${attr.git.user}/${name}.git/hooks/post-receive
             chown ${attr.git.user}:users -R /home/${attr.git.user}/${name}.git/
             chown ${attr.git.user}:users -R /var/www/${name}
             chmod a+r /var/www/${name}
