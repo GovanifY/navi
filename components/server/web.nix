@@ -119,6 +119,7 @@ in
     security.acme.email = cfg.email;
     services.nginx = {
       enable = true;
+      statusPage = config.navi.components.monitor.enable;
       recommendedGzipSettings = true;
       recommendedOptimisation = true;
       recommendedProxySettings = true;
