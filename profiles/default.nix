@@ -130,7 +130,7 @@ with lib;
 
 
     # sane defaults for any modern virtualization setup
-    virtualisation = {
+    virtualisation = lib.optionalAttrs (builtins.hasAttr "virtualisation" options) {
       msize = mkDefault 100000;
       writableStoreUseTmpfs = mkDefault false;
       memorySize = mkDefault 8192;
