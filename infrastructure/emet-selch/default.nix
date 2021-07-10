@@ -76,6 +76,9 @@ with lib;
 
     time.timeZone = "Europe/Paris";
 
+    users.users.${config.navi.username}.initialHashedPassword = fileContents ./../../secrets/emet-selch/assets/shadow/main;
+    users.users.root.initialHashedPassword = fileContents ./../../secrets/emet-selch/assets/shadow/root;
+
     navi.profile.name = "server";
   };
 }
