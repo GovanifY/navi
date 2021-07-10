@@ -33,6 +33,7 @@ let
             (if attr.root == null then
               "/var/www/${name}" else attr.root) else null;
         locations = if (attr.return != null) then { "/".return = attr.return; } else { };
+        default = attr.default;
       }))
     cfg.domains;
 
@@ -88,6 +89,11 @@ in
             type = types.nullOr types.str;
             default = null;
             description = "Return code that this domain should return. Useful for maintenance.";
+          };
+          default = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Sets the default domain to show when no correct domain name is given.";
           };
           git = {
             user = mkOption {
