@@ -9,8 +9,15 @@ let
       {
         plugins = with availablePlugins; [
           (python.withPackages (_: [ pkgs.weechatScripts.weechat-matrix ]))
+          perl
         ];
-        scripts = with pkgs.weechatScripts; [ weechat-autosort weechat-matrix ];
+        scripts = with pkgs.weechatScripts; [
+          weechat-autosort
+          weechat-matrix
+          weechat-go
+          highmon
+          buffer_autoset
+        ];
       };
   };
 in
