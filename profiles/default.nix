@@ -127,5 +127,14 @@ with lib;
       hardening.enable = true;
       editor.enable = true;
     };
+
+
+    # sane defaults for any modern virtualization setup
+    virtualisation = {
+      msize = mkDefault 100000;
+      writableStoreUseTmpfs = mkDefault false;
+      memorySize = mkDefault 8192;
+      diskSize = mkDefault 10000;
+    };
   };
 }
