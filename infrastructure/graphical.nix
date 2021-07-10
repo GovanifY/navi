@@ -5,6 +5,12 @@ with lib;
     # needed to export obs as a virtual camera
     boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
 
+    # useful for nixos-rebuild build-vm, passthrough ssh to port 2221 locally.
+    # example:
+    # $ nixos-rebuild build-vm --fast -I nixos-config=./vm-sachet.nix
+    # $ ./result/bin/run-sachet-vm
+    # $ ssh govanify@localhost -p 2221
+    environment.variables.QEMU_NET_OPTS = "hostfwd=tcp::2221-:22";
 
     environment.systemPackages = with pkgs; [
       # legacy windows
