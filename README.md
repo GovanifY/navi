@@ -15,14 +15,30 @@ software! Please read `docs/README.txt` at the very least!
 
 ## Development Notes
 
+To setup navi you'll first need to bootstrap it:
+
+```
+cd bootstrap && ./bootstrap.sh
+```
+This will setup secrets needed for the entire infrastructure to work.
+
+
+If you want to test the setup before installing it on a real machine you can 
+
+```
+sudo nixos-rebuild build-vm -I nixos-config=./configuration.sample.nix
+```
+
+If you want to install navi on a live machine, you'll need to run the
+bootstrapper again to generate device-specific keys, paths, and other required
+components. It will generate a default configuration which you should tailor to
+your needs. Installing is then as simple as running
+
+```
+sudo nixos-install
+```
+
+## Contributing
+
 Do not forget to run `pre-commit install` to get the formatting hooks running
 before contributing!
-
-For security reasons, you will want to set git pull path to https and git push
-patch to ssh, obviously this is only useful if you actually develop navi.
-
-To do that run the following commands, using my own repository as an example:
-```sh
-git remote set-url origin https://code.govanify.com/govanify/navi.git
-git remote set-url origin --push git@code.govanify.com:govanify/navi.git
-```

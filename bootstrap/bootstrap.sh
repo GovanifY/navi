@@ -221,12 +221,18 @@ export GNUPGHOME=$old_gpg_home
 rm -rf /mnt/etc/nixos
 # should i make this url configurable?
 git clone https://code.govanify.com/govanify/navi /mnt/etc/nixos
+cd /mnt/etc/nixos
+git remote set-url origin --push git@code.govanify.com:govanify/navi.git
 nixos-generate-config --root /mnt
+rm -rf configuration.nix
+cp -rf configuration.sample.nix configuration.nix
 } > /dev/null 2>&1
 
 # in lieu of fully automating everything let's, for now, do an echo for when i
 # have the time to setup something better
 printf "\n\nDone! Make sure to setup nixpkgs and home-manager channels\n"
 printf "and then configure your device correctly! Look at infrastructure/\n"
-printf "for examples. For luks devices you'll need to set the path to your\n"
-printf "keyfile (found in /etc/secrets/initrd)."
+printf "for examples. To help you, a hardware.nix file has been auto-generated\n"
+printf "but it will possibly require manual intervention. For example, luks\n"
+printf "devices will need the path to their keyfile set\n"
+printf "(found in /etc/secrets/initrd)."
