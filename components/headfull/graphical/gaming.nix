@@ -25,23 +25,8 @@ in
     nixpkgs.config.allowUnfree = true;
 
     environment.systemPackages = with pkgs; [
-      steam
-      (
-        pkgs.writeTextFile {
-          name = "startsteam";
-          destination = "/bin/startsteam";
-          executable = true;
-          text = ''
-            #!${pkgs.bash}/bin/bash
-
-            # XDG compliance
-            mkdir -p $XDG_DATA_HOME/steam-home
-            HOME=$XDG_DATA_HOME/steam-home
-            # then start the launcher
-            exec steam
-          '';
-        }
-      )
+      (pkgs.steam.override { extraLibraries = pkgs: [ pkgs.pipewire ]; })
+      lutris
     ] ++ optionals cfg.retro [ retroarch pcsx2 ];
   };
 }
