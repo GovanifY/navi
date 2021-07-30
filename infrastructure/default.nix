@@ -21,7 +21,7 @@ with lib;
       {
         hostName = "alastor";
         system = "x86_64-linux";
-        maxJobs = 4;
+        maxJobs = 16;
         speedFactor = 2;
         supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
         mandatoryFeatures = [ ];

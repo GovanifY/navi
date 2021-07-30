@@ -36,7 +36,7 @@ with lib;
       wireshark
       pandoc
       limesuite
-      ghidra-bin
+      #ghidra-bin
       #freecad sourcetrail
 
       # recording/streaming

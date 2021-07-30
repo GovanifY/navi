@@ -2,13 +2,11 @@
 with lib;
 {
   config = mkIf (config.navi.device == "alastor") {
-    boot.loader.efi.efiSysMountPoint = "/boot/efi";
     boot.loader.grub = {
       enable = true;
-      device = "nodev";
       version = 2;
-      efiSupport = true;
       enableCryptodisk = true;
+      device = "/dev/disk/by-id/nvme-eui.0000000001000000e4d25c52ca784f01";
     };
 
     boot.initrd.secrets = {
@@ -49,12 +47,6 @@ with lib;
         };
       };
 
-    fileSystems."/boot/efi" =
-      {
-        device = "/dev/disk/by-uuid/5334-1848";
-        fsType = "vfat";
-      };
-
     swapDevices =
       [{ device = "/dev/disk/by-uuid/b8be1d58-dd39-454a-9754-2f23df66cd38"; }];
 
@@ -72,7 +64,7 @@ with lib;
 
     console.keyMap = "fr";
 
-    nix.maxJobs = lib.mkDefault 4;
+    nix.maxJobs = lib.mkDefault 16;
     powerManagement.cpuFreqGovernor = lib.mkDefault "performance";
 
     hardware.pulseaudio.extraConfig = ''
@@ -105,6 +97,6 @@ with lib;
     networking.wireless.enable = true;
     hardware.enableRedistributableFirmware = lib.mkDefault true;
 
-    networking.wireless.interfaces = [ "wlp3s0" ];
+    networking.wireless.interfaces = [ "wlp1s0" ];
   };
 }
