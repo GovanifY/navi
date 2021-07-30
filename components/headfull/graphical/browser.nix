@@ -154,12 +154,6 @@ in
             lockPref("network.dns.blockDotOnion", false);
             lockPref("network.http.referer.hideOnionSource", true);
 
-            // force webrender since firefox think having hw accel is an unwanted
-            // feature
-            lockPref("gfx.webrender.compositor.force-enabled", true);
-            lockPref("gfx.webrender.compositor", true);
-            lockPref("gfx.webrender.all", true);
-
             // no i do not want you to police me on what i can and cannot do
             // mozilla
             lockPref("extensions.blocklist.enabled", false);
