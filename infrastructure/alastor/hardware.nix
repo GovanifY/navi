@@ -12,6 +12,7 @@ with lib;
     boot.initrd.secrets = {
       "/keyfile_lain.bin" = "/etc/secrets/initrd/keyfile_lain.bin";
       "/keyfile_matrix.bin" = "/etc/secrets/initrd/keyfile_matrix.bin";
+      "/keyfile_axolotl.bin" = "/etc/secrets/initrd/keyfile_axolotl.bin";
     };
 
     boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" ];
@@ -35,17 +36,28 @@ with lib;
         fsType = "ext4";
       };
 
-    fileSystems."/lain" =
-      {
-        device = "/dev/disk/by-uuid/7324ad41-bd38-4516-ae7c-5570ff3da8a0";
-        fsType = "btrfs";
-        encrypted = {
-          enable = true;
-          label = "lain";
-          blkDev = "/dev/disk/by-uuid/11902459-0de9-44a0-99c6-1841ea7bc96d";
-          keyFile = "/keyfile_lain.bin";
-        };
+    fileSystems."/mnt/lain" = {
+      device = "/dev/disk/by-uuid/7324ad41-bd38-4516-ae7c-5570ff3da8a0";
+      fsType = "btrfs";
+      encrypted = {
+        enable = true;
+        label = "lain";
+        blkDev = "/dev/disk/by-uuid/11902459-0de9-44a0-99c6-1841ea7bc96d";
+        keyFile = "/keyfile_lain.bin";
       };
+    };
+
+    fileSystems."/mnt/axolotl" = {
+      device = "/dev/disk/by-uuid/70d71b12-df28-49ed-9712-fdeb0569e1ac";
+      fsType = "ext4";
+      encrypted = {
+        enable = true;
+        label = "axolotl";
+        blkDev = "/dev/disk/by-uuid/f8719a12-5597-43a5-8913-a265d1ec84d5";
+        keyFile = "/keyfile_axolotl.bin";
+      };
+    };
+
 
     swapDevices =
       [{ device = "/dev/disk/by-uuid/b8be1d58-dd39-454a-9754-2f23df66cd38"; }];
