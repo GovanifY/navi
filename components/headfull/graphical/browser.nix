@@ -61,46 +61,51 @@ in
     nixpkgs.overlays = [
       (
         self: super: {
+          #firefox-unwrapped = super.firefox-unwrapped.overrideAttrs {
+          #extraMakeFlags = [ "MOZ_REQUIRE_SIGNING=0" ];
+          #};
           firefox = super.wrapFirefox super.firefox-unwrapped {
             # automatic updates are not possible at the moment: https://github.com/NixOS/nixpkgs/issues/105783
             # probably should drop within the next year (i hope)
-            nixExtensions = [
-              (
-                pkgs.fetchFirefoxAddon {
-                  name = "ublock-origin";
-                  url = "https://github.com/gorhill/uBlock/releases/download/1.35.2/uBlock0_1.35.2.firefox.xpi";
-                  sha256 = "177pxq2raaap2g024xqsmyl0bnx02fg35j3q93p1sznp8yfi00ns";
-                }
-              )
-              (
-                pkgs.fetchFirefoxAddon {
-                  name = "decentraleyes";
-                  url = "https://git.synz.io/Synzvato/decentraleyes/uploads/a36861e0609e43d87379805ca0db063f/Decentraleyes.v2.0.15-firefox.xpi";
-                  sha256 = "1pvdb0fz7jqbzwlrhdkjxhafai70bncywdsx3qsw3325d28hcm15";
-                }
-              )
-              (
-                pkgs.fetchFirefoxAddon {
-                  name = "stylus";
-                  url = "https://addons.mozilla.org/firefox/downloads/file/3732726/stylus-1.5.17-fx.xpi";
-                  sha256 = "02cgwp5fc4zmnhikly5i8wydyi885namazgc7r9ki2dzgq67f3bd";
-                }
-              )
-              (
-                pkgs.fetchFirefoxAddon {
-                  name = "noscript";
-                  url = "https://addons.mozilla.org/firefox/downloads/file/3778947/noscript_security_suite-11.2.8-an+fx.xpi";
-                  sha256 = "0rrlhlzljlmgns7j49c43ilb8wij2zcysrbpap1xxsfbkbczji27";
-                }
-              )
-              (
-                pkgs.fetchFirefoxAddon {
-                  name = "forget-me-not";
-                  url = "https://addons.mozilla.org/firefox/downloads/file/3577046/forget_me_not_forget_cookies_other_data-2.2.8-an+fx.xpi";
-                  sha256 = "1qrbfsf5vmbyis29mhlmwb6dj933rrwpislpg0xi8b4r9xplb107";
-                }
-              )
-            ];
+            # WARNING: nixExtensions do not work currently and I don't have the
+            # time to fix them, so I'll check that later.
+            #nixExtensions = [
+            #(
+            #pkgs.fetchFirefoxAddon {
+            #name = "ublock-origin";
+            #url = "https://github.com/gorhill/uBlock/releases/download/1.37.2/uBlock0_1.37.2.firefox.xpi";
+            #sha256 = "0nrhcln2i677yw9gal2r0kwvjwl4i0mx1q1xa9m8viqkwh7q70am";
+            #}
+            #)
+            #(
+            #pkgs.fetchFirefoxAddon {
+            #name = "decentraleyes";
+            #url = "https://git.synz.io/Synzvato/decentraleyes/uploads/a36861e0609e43d87379805ca0db063f/Decentraleyes.v2.0.15-firefox.xpi";
+            #sha256 = "1pvdb0fz7jqbzwlrhdkjxhafai70bncywdsx3qsw3325d28hcm15";
+            #}
+            #)
+            #(
+            #pkgs.fetchFirefoxAddon {
+            #name = "stylus";
+            #url = "https://addons.mozilla.org/firefox/downloads/file/3732726/stylus-1.5.17-fx.xpi";
+            #sha256 = "02cgwp5fc4zmnhikly5i8wydyi885namazgc7r9ki2dzgq67f3bd";
+            #}
+            #)
+            #(
+            #pkgs.fetchFirefoxAddon {
+            #name = "noscript";
+            #url = "https://addons.mozilla.org/firefox/downloads/file/3778947/noscript_security_suite-11.2.8-an+fx.xpi";
+            #sha256 = "0rrlhlzljlmgns7j49c43ilb8wij2zcysrbpap1xxsfbkbczji27";
+            #}
+            #)
+            #(
+            #pkgs.fetchFirefoxAddon {
+            #name = "forget-me-not";
+            #url = "https://addons.mozilla.org/firefox/downloads/file/3577046/forget_me_not_forget_cookies_other_data-2.2.8-an+fx.xpi";
+            #sha256 = "1qrbfsf5vmbyis29mhlmwb6dj933rrwpislpg0xi8b4r9xplb107";
+            #}
+            #)
+            #];
             extraPolicies = {
               CaptivePortal = false;
               DisableFirefoxStudies = true;
@@ -142,7 +147,7 @@ in
               };
               DisableFeedbackCommands = true;
               SearchEngines.Default = "DuckDuckGo";
-              BlockAboutAddons = true;
+              BlockAboutAddons = false;
             };
             extraPrefs = '' 
             // make tracking much harder
