@@ -5,7 +5,7 @@ let
   kernelPackages = with pkgs;
     recurseIntoAttrs (
       linuxPackagesFor (
-        linux_latest_hardened.override {
+        linux_hardened.override {
           features.ia32Emulation = true;
         }
       )
