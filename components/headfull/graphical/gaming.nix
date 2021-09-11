@@ -25,7 +25,7 @@ in
     nixpkgs.config.allowUnfree = true;
 
     environment.systemPackages = with pkgs; [
-      (pkgs.steam.override { extraLibraries = pkgs: [ pkgs.pipewire ]; })
+      (pkgs.steam.override { extraLibraries = pkgs: with pkgs; [ pango harfbuzz libthai ]; })
       lutris
     ] ++ optionals cfg.retro [ retroarch pcsx2 ];
   };
