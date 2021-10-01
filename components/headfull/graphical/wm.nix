@@ -424,8 +424,10 @@ in
     # exploitable is ~0. It would have gathered those rights regardless if
     # PolKit was installed, so this is just a workaround to avoid having the
     # whole machinery
-    security.wrappers = {
-      sway.source = "${pkgs.sway}/bin/sway";
+    security.wrappers.sway = {
+      source = "${pkgs.sway}/bin/sway";
+      owner = "root";
+      group = "root";
     };
 
     systemd.user.services.swaywm = {

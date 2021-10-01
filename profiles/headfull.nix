@@ -81,6 +81,7 @@ with lib;
       isSystemUser = true;
       shell = pkgs.bash;
       openssh.authorizedKeys.keyFiles = [ ./../secrets/headfull/assets/ssh/distbuild.pub ];
+      group = "distbuild";
     };
     nix.trustedUsers = [ "distbuild" ];
 
