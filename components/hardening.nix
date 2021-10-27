@@ -5,7 +5,10 @@ let
   kernelPackages = with pkgs;
     recurseIntoAttrs (
       linuxPackagesFor (
-        linux_hardened.override {
+        # XXX: this used to work on just linux_hardened but it kept defaulting
+        # to an older kernel version, I need to check this whenever I have more
+        # free time!
+        linux_5_14_hardened.override {
           features.ia32Emulation = true;
         }
       )
