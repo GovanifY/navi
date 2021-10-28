@@ -48,9 +48,9 @@ with lib;
       wm = {
         azerty = true;
         extraConf = ''
-          output DP-2 scale 2.0
-          output DP-2 pos 1920 0 res 3840x2160
-          output HDMI-A-2 pos 0 0 res 1920x1080 
+          output DP-5 scale 2.0
+          output DP-5 pos 1920 0 res 3840x2160
+          output HDMI-A-5 pos 0 0 res 1920x1080 
           input "5426:515:Razer_Razer_BlackWidow_Chroma" {
               xkb_layout "fr(nodeadkeys)"
           }
