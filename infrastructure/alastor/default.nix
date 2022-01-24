@@ -39,11 +39,7 @@ with lib;
     time.timeZone = "Europe/Paris";
 
     navi.components = {
-      virtualization = {
-        enable = true;
-        pci_devices = "8086:1912";
-        bridge_devices = [ "wlp3s0" ];
-      };
+      virtualization.enable = true;
       bluetooth.enable = true;
       wm = {
         azerty = true;
