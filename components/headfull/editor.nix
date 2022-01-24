@@ -31,7 +31,6 @@ let
         vim-visual-multi
         # dev
         tagbar
-        ctags
         fugitive
         nerdtree
         nerdcommenter
@@ -236,6 +235,7 @@ in
     environment.systemPackages = with pkgs; [
       neovim
       fzf
+      ctags
     ] ++ optionals cfg.ide_features [ nodejs ];
   };
 }
