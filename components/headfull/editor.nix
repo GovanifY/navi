@@ -31,6 +31,7 @@ let
         vim-visual-multi
         # dev
         tagbar
+        ctags
         fugitive
         nerdtree
         nerdcommenter
