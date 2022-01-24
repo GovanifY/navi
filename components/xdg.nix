@@ -8,6 +8,12 @@
 # need to verify: dbus, doesn't appear on my system and breaks nixos build
 # anyways
 # firefox: wait for PR
+
+# as it turns out, making openssh xdg compliant is not sustainable.
+# not only is it essentially impossible without patching its source code, and
+# doing so requires you to rebuild the entirety of nix, but it just breaks too
+# much stuff, eg on servers. 
+# Let's just not do that. Sorry.
 { config, pkgs, lib, ... }:
 with lib;
 let
@@ -42,16 +48,6 @@ in
     nixpkgs.overlays = [
       (
         self: super: {
-          # ssh devs don't want to make ssh XDG compliant? well let's roll our own
-          # compliance!
-          openssh = super.openssh.overrideAttrs (
-            oldAttrs: rec {
-              postPatch = oldAttrs.postPatch + ''
-                sed -i 's/"\.ssh"/"${escape [ "/" "." ] cfg.config}\/ssh"/' $(grep -Rl '"\.ssh"')
-              '';
-            }
-          );
-
           ## rarely created on my setup, seems to be x11 related? either way here we go
           # NOT haha, this breaks nixos build at some point, so let's forget this
           # dbus = super.dbus.overrideAttrs (oldAttrs: rec {
@@ -100,9 +96,6 @@ in
       PYTHONSTARTUP = "$HOME/${cfg.config}/python/startup.py";
       PASSWORD_STORE_DIR = "$HOME/${cfg.config}/pass";
       NOTMUCH_CONFIG = "$HOME/${cfg.config}/notmuch";
-      # i'm... not sure myself but this seems to be required for ssh to use the
-      # godforsaken correct xdg path
-      GIT_SSH = "ssh";
       ANDROID_SDK_HOME = "$XDG_CONFIG_HOME/android";
       ADB_VENDOR_KEY = "$XDG_CONFIG_HOME/android";
       CCACHE_CONFIGPATH = "$XDG_CONFIG_HOME/ccache.config";

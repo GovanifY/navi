@@ -53,8 +53,8 @@ with lib;
     home-manager.users.${config.navi.username} = {
       home.file.".config/gnupg/key.gpg".source = ./../secrets/headfull/assets/gpg/key.gpg;
       home.file.".config/gnupg/trust.txt".source = ./../secrets/headfull/assets/gpg/gpg-trust.txt;
-      home.file.".config/ssh/id_ed25519".source = ./../secrets/headfull/assets/ssh/navi;
-      home.file.".config/ssh/id_ed25519.pub".source = ./../secrets/common/assets/ssh/navi.pub;
+      home.file.".ssh/id_ed25519".source = ./../secrets/headfull/assets/ssh/navi;
+      home.file.".ssh/id_ed25519.pub".source = ./../secrets/common/assets/ssh/navi.pub;
 
       # try to auto retrieve gpg keys when using emails, using hkp on port 80 to
       # bypass tor restrictions -- PROBABLY A VERY BAD IDEA SECURITY WISE, TOFIX,
