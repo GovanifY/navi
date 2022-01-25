@@ -138,7 +138,7 @@ let
     fi
   '';
 
-  bat-opt = if cfg.battery then " | bat: $battery_info%" else "";
+  bat-opt = if cfg.battery then " | 🔋: $battery_info%" else "";
 
   status-sh = pkgs.writeShellScript "status.sh" (
     ''
@@ -150,10 +150,10 @@ let
       song_info=$(basename "$(mpc current)" | cut -d. -f1)
       if [[ -n "$song_info" ]];
       then
-        song_info="song: $song_info |"
+        song_info="🎵: $song_info |"
       fi
     '' + ''
-      echo "$song_info mail: $mail${bat-opt} | $date_formatted"
+      echo "$song_info 📧: $mail${bat-opt} | $date_formatted"
     ''
   );
 
