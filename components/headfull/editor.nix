@@ -96,6 +96,9 @@ let
 
         " Hack supports this so let's use it
         let g:airline_powerline_fonts = 1
+        " ...but doesn't support the E0A3 symbol yet, so let's do that
+        let g:airline_symbols = {}
+        let g:airline_symbols.colnr = "㏇"
 
         set t_Co=256
         set termguicolors
