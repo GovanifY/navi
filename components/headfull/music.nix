@@ -10,7 +10,6 @@ in
   config = mkIf cfg.enable {
     services.mpd = {
       enable = true;
-      startWhenNeeded = true;
       user = config.navi.username;
       group = "users";
       musicDirectory = "/home/${config.navi.username}/Music";
