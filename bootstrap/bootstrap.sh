@@ -207,6 +207,7 @@ if [ "$headfull" = true ] ; then
     mkdir -p /mnt/home/$username/.local/share/wineprefixes/ &> /dev/null
     mkdir -p /mnt/home/$username/.config/gdb &> /dev/null
     mkdir -p /mnt/home/$username/.local/share/wineprefixes/default &> /dev/null 
+    mkdir -p /mnt/home/$username/.local/share/mpd &> /dev/null
     touch /mnt/home/$username/.config/gdb/init &> /dev/null
 
     git clone $git_url /mnt/home/$username/.config/pass
@@ -220,9 +221,9 @@ export GNUPGHOME=$old_gpg_home
 
 rm -rf /mnt/etc/nixos
 # should i make this url configurable?
-git clone https://code.govanify.com/govanify/navi /mnt/etc/nixos
+git clone https://projects.govanify.com/govanify/navi /mnt/etc/nixos
 cd /mnt/etc/nixos
-git remote set-url origin --push git@code.govanify.com:govanify/navi.git
+git remote set-url origin --push git@projects.govanify.com:govanify/navi.git
 nixos-generate-config --root /mnt
 rm -rf configuration.nix
 cp -rf configuration.sample.nix configuration.nix

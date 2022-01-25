@@ -12,9 +12,16 @@ in
       enable = true;
       user = config.navi.username;
       group = "users";
+      dataDir = "/home/${config.navi.username}/${config.navi.components.xdg.data}/mpd";
       musicDirectory = "/home/${config.navi.username}/Music";
       extraConfig = ''
         auto_update "yes"
+        audio_output {  
+            type  "pulse"  
+            name  "pulse audio"
+            device "pulse" 
+            mixer_type "hardware" 
+        }  
       '';
     };
     environment.systemPackages = with pkgs; [
