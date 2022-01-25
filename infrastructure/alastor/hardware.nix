@@ -77,15 +77,14 @@ with lib;
     swapDevices =
       [{ device = "/dev/disk/by-uuid/b8be1d58-dd39-454a-9754-2f23df66cd38"; }];
 
-    # networking.hostName = "nixos"; # Define your hostname.
-    # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
     # The global useDHCP flag is deprecated, therefore explicitly set to false here.
     # Per-interface useDHCP will be mandatory in the future, so this generated config
     # replicates the default behaviour.
     networking.useDHCP = false;
-    networking.interfaces.enp0s31f6.useDHCP = true;
-    networking.interfaces.wlp3s0.useDHCP = true;
+    networking.interfaces.eno1.useDHCP = true;
+    networking.interfaces.eno2.useDHCP = true;
+    networking.interfaces.wlp1s0.useDHCP = true;
 
     console.keyMap = "fr";
 
@@ -119,9 +118,6 @@ with lib;
     };
 
     boot.supportedFilesystems = [ "ntfs" ];
-    networking.wireless.enable = true;
     hardware.enableRedistributableFirmware = lib.mkDefault true;
-
-    networking.wireless.interfaces = [ "wlp1s0" ];
   };
 }

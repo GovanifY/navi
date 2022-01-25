@@ -78,7 +78,7 @@ with lib;
     programs.wireshark.enable = true;
     programs.adb.enable = true;
     users.users.${config.navi.username} = {
-      extraGroups = [ "wireshark" "adbusers" "audio" "input" ];
+      extraGroups = [ "wireshark" "adbusers" "audio" "input" "networkmanager" ];
     };
 
     # make my printer actually work
