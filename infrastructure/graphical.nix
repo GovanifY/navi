@@ -81,6 +81,9 @@ with lib;
       extraGroups = [ "wireshark" "adbusers" "audio" "input" ];
     };
 
+    # make my printer actually work
+    services.printing.drivers = [ pkgs.hplip ];
+
     # bluetooth controllers
     services.udev.extraRules = ''
       KERNEL=="uinput", MODE="0666"
