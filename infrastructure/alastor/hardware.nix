@@ -2,11 +2,20 @@
 with lib;
 {
   config = mkIf (config.navi.device == "alastor") {
-    boot.loader.grub = {
-      enable = true;
-      version = 2;
-      enableCryptodisk = true;
-      device = "/dev/disk/by-id/nvme-eui.0000000001000000e4d25c52ca784f01";
+    boot.loader = {
+      grub = {
+        enable = true;
+        version = 2;
+        enableCryptodisk = true;
+        device = "nodev";
+        efiSupport = true;
+      };
+
+      efi = {
+        canTouchEfiVariables = true;
+        efiSysMountPoint = "/boot/efi";
+      };
+
     };
 
     boot.initrd.secrets = {
@@ -36,6 +45,12 @@ with lib;
         fsType = "ext4";
       };
 
+    fileSystems."/boot/efi" =
+      {
+        device = "/dev/disk/by-uuid/BF91-4E3A";
+        fsType = "vfat";
+      };
+
     fileSystems."/mnt/lain" = {
       device = "/dev/disk/by-uuid/7324ad41-bd38-4516-ae7c-5570ff3da8a0";
       fsType = "btrfs";
@@ -61,8 +76,6 @@ with lib;
 
     swapDevices =
       [{ device = "/dev/disk/by-uuid/b8be1d58-dd39-454a-9754-2f23df66cd38"; }];
-
-    boot.loader.efi.canTouchEfiVariables = true;
 
     # networking.hostName = "nixos"; # Define your hostname.
     # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
