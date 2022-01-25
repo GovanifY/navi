@@ -208,6 +208,7 @@ if [ "$headfull" = true ] ; then
     mkdir -p /mnt/home/$username/.config/gdb &> /dev/null
     mkdir -p /mnt/home/$username/.local/share/wineprefixes/default &> /dev/null 
     mkdir -p /mnt/home/$username/.local/share/mpd &> /dev/null
+    mkdir -p /mnt/home/$username/.config/ncmpcpp &> /dev/null
     touch /mnt/home/$username/.config/gdb/init &> /dev/null
 
     git clone $git_url /mnt/home/$username/.config/pass

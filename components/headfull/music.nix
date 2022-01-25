@@ -21,6 +21,13 @@ in
             name  "Pulseaudio"
             server "127.0.0.1"
         }  
+
+        audio_output {
+            type                    "fifo"
+            name                    "my_fifo"
+            path                    "/tmp/mpd.fifo"
+            format                  "44100:16:2"
+        }
       '';
     };
 
@@ -33,6 +40,15 @@ in
       ncmpcpp
       mpc_cli
     ];
+
+    home-manager.users.${config.navi.username}.home.file."${config.navi.components.xdg.config}/ncmpcpp/config".text =
+      ''
+        visualizer_data_source = "/tmp/mpd.fifo"
+        visualizer_output_name = "my_fifo"
+        visualizer_in_stereo = "yes"
+        visualizer_type = "spectrum"
+        visualizer_look = "+|"
+      '';
 
     nixpkgs.overlays = [
       (
