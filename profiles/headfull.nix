@@ -53,11 +53,8 @@ with lib;
       home.file.".ssh/id_ed25519".source = ./../secrets/headfull/assets/ssh/navi;
       home.file.".ssh/id_ed25519.pub".source = ./../secrets/common/assets/ssh/navi.pub;
 
-      # try to auto retrieve gpg keys when using emails, using hkp on port 80 to
-      # bypass tor restrictions -- PROBABLY A VERY BAD IDEA SECURITY WISE, TOFIX,
-      # TODO, XXX
       home.file.".config/gnupg/gpg.conf".text = ''
-        keyserver hkp://pgp.mit.edu:80
+        keyserver hkps://pgp.mit.edu
         keyserver-options auto-key-retrieve
       '';
     };
