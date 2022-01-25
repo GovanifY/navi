@@ -95,7 +95,6 @@ in
       WGETRC = "$HOME/${cfg.config}/wgetrc";
       PYTHONSTARTUP = "$HOME/${cfg.config}/python/startup.py";
       PASSWORD_STORE_DIR = "$HOME/${cfg.config}/pass";
-      NOTMUCH_CONFIG = "$HOME/${cfg.config}/notmuch";
       ANDROID_SDK_HOME = "$XDG_CONFIG_HOME/android";
       ADB_VENDOR_KEY = "$XDG_CONFIG_HOME/android";
       CCACHE_CONFIGPATH = "$XDG_CONFIG_HOME/ccache.config";

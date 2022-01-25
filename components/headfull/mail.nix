@@ -478,7 +478,7 @@ in
       ".config/msmtp/config".text = msmtp_config;
       ".config/mbsync/config".text = isync_config;
       ".config/mutt/muttrc".text = mutt_config;
-      ".config/notmuch".text = notmuch_config;
+      ".config/notmuch/default/config".text = notmuch_config;
     } // accounts_config;
 
     systemd.user.services.mailsync = {
