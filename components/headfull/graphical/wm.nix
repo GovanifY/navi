@@ -209,8 +209,8 @@ let
   '' + optionalString config.navi.components.browser.enable ''
     exec swaymsg "workspace 1; exec firefox > /dev/null 2>&1"
   '' + ''
-    exec swaymsg "workspace 3; exec element-x11 > /dev/null 2>&1"
-    exec swaymsg "workspace 2; layout tabbed; exec alacritty > /dev/null 2>&1"
+    exec swaymsg "workspace 2; exec element-x11 > /dev/null 2>&1"
+    exec swaymsg "workspace 3; layout tabbed; exec alacritty > /dev/null 2>&1"
 
     # ui chrome
     default_border pixel 1 

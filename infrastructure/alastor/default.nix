@@ -50,6 +50,9 @@ with lib;
           input "5426:515:Razer_Razer_BlackWidow_Chroma" {
               xkb_layout "fr"
           }
+          workspace 1 output DP-1
+          workspace 2 output HDMI-A-2
+          workspace 3 output DP-1
         '';
       };
     };
