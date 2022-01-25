@@ -80,6 +80,7 @@ with lib;
       openssh.authorizedKeys.keyFiles = [ ./../secrets/headfull/assets/ssh/distbuild.pub ];
       group = "distbuild";
     };
+    users.groups.distbuild = { };
     nix.trustedUsers = [ "distbuild" ];
 
 
