@@ -55,7 +55,7 @@ in
     boot.consoleLogLevel = mkIf (!cfg.verbose) 0;
     boot.initrd.verbose = mkIf (!cfg.verbose) false;
     boot.kernelParams = mkIf (!cfg.verbose) [ "vt.global_cursor_default=0" "quiet" "udev.log_priority=3" ];
-    console.earlySetup = mkIf (!cfg.verbose) true;
+    boot.plymouth.enable = mkIf (!cfg.verbose) true;
 
     boot.kernelPatches = mkIf (cfg.verbose) [
       {
