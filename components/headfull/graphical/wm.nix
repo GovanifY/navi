@@ -125,6 +125,7 @@ let
     load-module module-bluez5-discover
   '');
 
+
   # TODO: add more languages? I don't need more of CJK for now but could be
   # useful for others -- govanify
   locale-sh = pkgs.writeShellScript "locale.sh" ''
@@ -145,8 +146,14 @@ let
       mail=$(cat ~/.local/share/mail/unread)
     '' + optionalString cfg.battery ''
       battery_info=$(cat /sys/class/power_supply/BAT/capacity)
+    '' + optionalString config.navi.components.music.enable ''
+      song_info=$(basename "$(mpc current)" | cut -d. -f1)
+      if [[ -n "$song_info" ]];
+      then
+        song_info="song: $song_info |"
+      fi
     '' + ''
-      echo "mail: $mail${bat-opt} | $date_formatted"
+      echo "$song_info mail: $mail${bat-opt} | $date_formatted"
     ''
   );
 
