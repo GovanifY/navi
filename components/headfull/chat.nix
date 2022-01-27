@@ -36,22 +36,7 @@ in
     environment.systemPackages = with pkgs; [
       weechat
     ] ++ optionals cfg.graphical [
-      # matrix
       element-desktop
-      (
-        pkgs.writeTextFile {
-          name = "element-x11";
-          destination = "/bin/element-x11";
-          executable = true;
-          text = ''
-            #! ${pkgs.bash}/bin/bash
-            # Electron sucks
-            GDK_BACKEND=x11
-            # then start the launcher 
-            exec element-desktop
-          '';
-        }
-      )
     ];
   };
 }
