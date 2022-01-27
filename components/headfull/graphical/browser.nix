@@ -52,6 +52,7 @@
 with lib;
 let
   cfg = config.navi.components.browser;
+  sandboxing = config.navi.components.sandboxing;
 in
 {
   options.navi.components.browser = {
@@ -222,6 +223,9 @@ in
     xdg.portal.enable = false;
 
     environment.variables.BROWSER = "firefox";
-    environment.systemPackages = with pkgs; [ firefox ];
+    environment.systemPackages = mkIf (!sandboxing.enable) [ pkgs.firefox ];
+    navi.components.sandboxing.programs = mkIf sandboxing.enable {
+      firefox = "${lib.getBin pkgs.firefox}/bin/firefox";
+    };
   };
 }

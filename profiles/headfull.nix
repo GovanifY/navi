@@ -111,6 +111,7 @@ with lib;
     navi.components = {
       music.enable = true;
       chat.enable = true;
+      sandboxing.enable = true;
       # the experience is pretty meh and i barely write in japanese myself, plus
       # this adds a dependency on dbus, so i'll let it sit like this up until
       # i absolutely need it
