@@ -19,14 +19,10 @@ with lib;
       # multimedia
       mpv
       imv
-
-      # reading
-      calibre
-      okular
-      kcc
+      libreoffice
 
       # art
-      #blender
+      blender
       krita
       kdenlive
       ardour
@@ -36,8 +32,8 @@ with lib;
       wireshark
       pandoc
       limesuite
-      #ghidra-bin
-      #freecad sourcetrail
+      ghidra-bin
+      freecad
 
       # recording/streaming
       (wrapOBS {
