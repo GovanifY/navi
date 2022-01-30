@@ -78,7 +78,7 @@ with lib;
       group = "distbuild";
     };
     users.groups.distbuild = { };
-    nix.trustedUsers = [ "distbuild" ];
+    nix.settings.trusted-users = [ "distbuild" ];
 
 
     # locking kernel modules has a horrendous UX for headfull devices and is

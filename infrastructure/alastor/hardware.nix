@@ -88,7 +88,7 @@ with lib;
 
     console.keyMap = "fr";
 
-    nix.maxJobs = lib.mkDefault 16;
+    nix.settings.max-jobs = lib.mkDefault 16;
     powerManagement.cpuFreqGovernor = lib.mkDefault "performance";
 
     hardware.pulseaudio.extraConfig = ''

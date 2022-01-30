@@ -71,7 +71,7 @@ in
 
     # user namespaces are required for sandboxing
     security.allowUserNamespaces = true;
-    nix.useSandbox = true;
+    nix.settings.sandbox = true;
 
     # ssh attacks & co are flooding my logs
     services.fail2ban.enable = mkDefault true;
