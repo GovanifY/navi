@@ -217,7 +217,7 @@ let
     exec swaymsg "workspace 1; exec firefox > /dev/null 2>&1"
   '' + ''
     # doesn't seem to pick up on electron-flags.conf, so let's do it manually!
-    exec swaymsg "workspace 2; exec element-desktop --enable-features=UseOzonePlatform --ozone-platform=wayland > /dev/null 2>&1"
+    exec swaymsg "workspace 2; exec element-desktop > /dev/null 2>&1"
     exec swaymsg "workspace 3; layout tabbed; exec alacritty > /dev/null 2>&1"
 
     # ui chrome

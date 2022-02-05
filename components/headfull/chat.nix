@@ -36,7 +36,7 @@ in
     environment.systemPackages = with pkgs; [
       weechat
     ] ++ optionals cfg.graphical [
-      element-desktop
+      element-desktop-wayland
     ];
   };
 }
