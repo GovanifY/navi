@@ -19,7 +19,6 @@ with lib;
     };
 
     boot.initrd.secrets = {
-      "/keyfile_lain.bin" = "/etc/secrets/initrd/keyfile_lain.bin";
       "/keyfile_matrix.bin" = "/etc/secrets/initrd/keyfile_matrix.bin";
       "/keyfile_axolotl.bin" = "/etc/secrets/initrd/keyfile_axolotl.bin";
     };

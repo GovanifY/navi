@@ -54,8 +54,8 @@ with lib;
       htop
       rsync
       imagemagick
-      manpages
-      ag
+      man-pages
+      silver-searcher
       bat
       any-nix-shell
     ];

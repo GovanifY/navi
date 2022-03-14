@@ -456,6 +456,13 @@ in
         emails. 
       '';
     };
+    mailto = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Handle mailto: uri scheme
+      '';
+    };
   };
 
 
@@ -474,12 +481,25 @@ in
 
     # XDG_CONFIG_HOME does not get parsed correctly so we do it manually
     # you need to create the caching folder otherwise this fails
-    home-manager.users.${config.navi.username}.home.file = {
-      ".config/msmtp/config".text = msmtp_config;
-      ".config/mbsync/config".text = isync_config;
-      ".config/mutt/muttrc".text = mutt_config;
-      ".config/notmuch/default/config".text = notmuch_config;
-    } // accounts_config;
+    home-manager.users.${config.navi.username} = {
+      home.file = {
+        ".config/msmtp/config".text = msmtp_config;
+        ".config/mbsync/config".text = isync_config;
+        ".config/mutt/muttrc".text = mutt_config;
+        ".config/notmuch/default/config".text = notmuch_config;
+      } // accounts_config;
+      xdg.dataFile."applications/neomutt.desktop".text = mkIf cfg.mailto ''
+        [Desktop Entry]
+        Type=Application
+        Name=neomutt-desktop
+        Categories=Email
+        Exec=${pkgs.alacritty}/bin/alacritty -t Email -e neomutt %u
+        StartupNotify=true
+        MimeType=x-scheme-handler/mailto;
+      '';
+      xdg.mimeApps.defaultApplications."x-scheme-handler/mailto" =
+        mkIf cfg.mailto [ "neomutt.desktop" ];
+    };
 
     systemd.user.services.mailsync = {
       description = "synchronization of the user mailbox";

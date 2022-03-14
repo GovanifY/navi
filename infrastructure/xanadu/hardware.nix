@@ -2,47 +2,83 @@
 with lib;
 {
   config = mkIf (config.navi.device == "xanadu") {
+    boot.loader = {
+      grub = {
+        enable = true;
+        version = 2;
+        enableCryptodisk = true;
+        device = "nodev";
+        efiSupport = true;
+      };
 
-    hardware.cpu.intel.updateMicrocode =
-      lib.mkDefault config.hardware.enableRedistributableFirmware;
-    boot.initrd.availableKernelModules = [ "ahci" "nvme" ];
+      efi = {
+        canTouchEfiVariables = true;
+        efiSysMountPoint = "/boot/efi";
+      };
+
+    };
+
+    boot.initrd.secrets = {
+      "/keyfile_matrix.bin" = "/etc/secrets/initrd/keyfile_matrix.bin";
+      "/keyfile_axolotl.bin" = "/etc/secrets/initrd/keyfile_axolotl.bin";
+    };
+
+
+    boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" ];
     boot.initrd.kernelModules = [ "dm-snapshot" ];
-    boot.kernelModules = [ "i915" ];
+    boot.kernelModules = [ "i915" "kvm-intel" ];
     boot.extraModulePackages = [ ];
+
+    boot.initrd.luks.devices =
+      {
+        matrix = {
+          device = "/dev/disk/by-uuid/3fc8b7d4-47e0-4e2d-b6b8-ffce64c79a8d";
+          preLVM = true;
+          keyFile = "/keyfile_matrix.bin";
+          allowDiscards = true;
+        };
+      };
+
+    fileSystems."/boot/efi" =
+      {
+        device = "/dev/disk/by-uuid/7ACD-64F6";
+        fsType = "vfat";
+      };
 
     fileSystems."/" =
       {
-        device = "/dev/disk/by-uuid/13edef15-425f-45b5-8e2b-c6a6bec5d536";
+        device = "/dev/disk/by-uuid/5fd80bdb-928f-4848-befc-b21ebdee107b";
         fsType = "ext4";
       };
 
-    swapDevices =
-      [{ device = "/dev/disk/by-uuid/89e0fa0a-1028-4558-9bff-e90061e3ac44"; }];
-
-    boot.initrd.secrets = {
-      "/keyfile.bin" = "/etc/secrets/initrd/keyfile.bin";
-    };
-
-    nix.maxJobs = lib.mkDefault 4;
-    powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
-    # High-DPI console
-    console.font = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
-
-    boot.loader.grub = {
-      enable = true;
-      version = 2;
-      enableCryptodisk = true;
-      device = "/dev/disk/by-id/nvme-INTEL_SSDPEKKW512G8_BTHH812200PR512D";
-    };
-    boot.initrd.luks.devices = {
-      root = {
-        device = "/dev/disk/by-uuid/d355ed2a-0b08-48f3-8578-e334f886e62b";
-        preLVM = true;
-        keyFile = "/keyfile.bin";
+    fileSystems."/mnt/axolotl" = {
+      device = "/dev/disk/by-uuid/918de1f9-c23d-4512-9e1d-0f0106073932";
+      fsType = "ext4";
+      encrypted = {
+        enable = true;
+        label = "axolotl";
+        blkDev = "/dev/disk/by-uuid/e26ef933-86dd-44df-870f-90379d497308";
+        keyFile = "/keyfile_axolotl.bin";
       };
     };
+
+    #    swapDevices =
+    #      [{ device = "/dev/disk/by-uuid/004afa6c-c91f-4d37-ac07-d50a3654c6fd"; }];
+
+
+    nix.settings.max-jobs = lib.mkDefault 12;
+    powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+    # High-DPI console
+    console.keyMap = "fr";
+    hardware.video.hidpi.enable = lib.mkDefault true;
+    hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+    hardware.enableRedistributableFirmware = true;
+    hardware.enableAllFirmware = true;
+
     networking.useDHCP = false;
-    networking.interfaces.wlp1s0.useDHCP = true;
+    networking.interfaces.wlp3s0.useDHCP = true;
+    networking.interfaces.enp1s0.useDHCP = lib.mkDefault true;
+
 
     # we enable opengl intel drivers to get hw accel
     nixpkgs.config.packageOverrides = pkgs: {
@@ -58,15 +94,6 @@ with lib;
       ];
     };
 
-    services.udev.extraHwdb = ''
-      # Purism Librem 13 V3
-      evdev:atkbd:dmi:bvn*:bvr*:bd*:svnPurism*:pn*Librem13v3*:pvr*
-       KEYBOARD_KEY_56=backslash
-    '';
-
-    boot.blacklistedKernelModules = lib.optionals (!config.hardware.enableRedistributableFirmware) [
-      "ath3k"
-    ];
     services.tlp.enable = lib.mkDefault true;
   };
 }

@@ -145,7 +145,7 @@ let
       date_formatted=$(date "+%a %d/%m/%Y %H:%M")
       mail=$(cat ~/.local/share/mail/unread)
     '' + optionalString cfg.battery ''
-      battery_info=$(cat /sys/class/power_supply/BAT/capacity)
+      battery_info=$(cat /sys/class/power_supply/BAT0/capacity)
     '' + optionalString config.navi.components.music.enable ''
       song_info=$(basename "$(mpc current)" | cut -d. -f1)
       if [[ -n "$song_info" ]];
@@ -207,7 +207,8 @@ let
     set $down j
     set $up k
     set $right l
-    set $lock "swaylock --daemonize --indicator-radius 100 --indicator-thickness 7 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 -i ~/Pictures/wallpaper.png"
+    set $lock "${pkgs.swaylock}/bin/swaylock --daemonize --indicator-radius 100 --indicator-thickness 7 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 -i ~/Pictures/wallpaper.png"
+    exec swayidle -w before-sleep '$lock'
 
     output * bg ~/Pictures/wallpaper.png fill
 
@@ -364,6 +365,7 @@ in
       extraPackages = with pkgs; [
         # lockscreen
         swaylock
+        swayidle
         # X
         xwayland
         xorg.xrdb

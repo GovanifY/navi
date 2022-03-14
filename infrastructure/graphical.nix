@@ -28,7 +28,7 @@ with lib;
       ardour
 
       # stem
-      kicad
+      # kicad
       wireshark
       pandoc
       limesuite

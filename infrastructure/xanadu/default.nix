@@ -82,11 +82,6 @@ with lib;
         battery = true;
         extraConf = ''
           output eDP-1 scale 2.0
-          input "2:14:ETPS/2_Elantech_Touchpad" {
-              dwt enabled
-              tap enabled
-              middle_emulation enabled
-          }
         '';
       };
     };
