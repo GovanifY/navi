@@ -82,6 +82,9 @@ with lib;
         battery = true;
         extraConf = ''
           output eDP-1 scale 2.0
+          input "2:10:TPPS/2_IBM_TrackPoint" {
+            pointer_accel 0.5
+          }
         '';
       };
     };
