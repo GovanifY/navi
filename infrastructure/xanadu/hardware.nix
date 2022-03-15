@@ -62,10 +62,6 @@ with lib;
       };
     };
 
-    #    swapDevices =
-    #      [{ device = "/dev/disk/by-uuid/004afa6c-c91f-4d37-ac07-d50a3654c6fd"; }];
-
-
     nix.settings.max-jobs = lib.mkDefault 12;
     powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
     # High-DPI console
