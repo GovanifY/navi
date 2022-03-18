@@ -163,7 +163,7 @@ in
         any-nix-shell fish --info-right | source
       '';
       enable = true;
-      shellAliases.nbuild = "nix-build /nix/var/nix/profiles/per-user/root/channels/nixos/ --run fish --run-env -A";
+      shellAliases.nbuild = "nix-build /nix/var/nix/profiles/per-user/root/channels/nixos/ --run-env --run fish -A ";
     };
     # TODO: make it for all users?
     home-manager.users.${config.navi.username} = {
