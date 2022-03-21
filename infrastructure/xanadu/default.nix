@@ -78,6 +78,7 @@ with lib;
 
     navi.components = {
       bluetooth.enable = true;
+      virtualization.enable = true;
       wm = {
         battery = true;
         extraConf = ''
