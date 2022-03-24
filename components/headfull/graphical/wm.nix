@@ -201,16 +201,18 @@ let
       bindsym $mod+Shift+9 move container to workspace 9
       bindsym $mod+Shift+0 move container to workspace 10
     '';
+
+  lockscreen = "${pkgs.swaylock}/bin/swaylock --daemonize --indicator-radius 100 --indicator-thickness 7 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 -i /home/${config.navi.username}/Pictures/wallpaper.png";
+
   sway-config = ''
     set $mod Mod4
     set $left h
     set $down j
     set $up k
     set $right l
-    set $lock "${pkgs.swaylock}/bin/swaylock --daemonize --indicator-radius 100 --indicator-thickness 7 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 -i ~/Pictures/wallpaper.png"
-    exec swayidle -w before-sleep '$lock'
+    exec ${pkgs.swayidle}/bin/swayidle -w before-sleep "${lockscreen}"
 
-    output * bg ~/Pictures/wallpaper.png fill
+    output * bg /home/${config.navi.username}/Pictures/wallpaper.png fill
 
   '' + optionalString config.navi.components.ime.enable ''
     exec swaymsg "workspace 1; exec ibus-daemon -dr > /dev/null 2>&1"
@@ -248,8 +250,8 @@ let
     bindsym $mod+c exec "grim /tmp/screenshot.png > /dev/null 2>&1" 
     bindsym $mod+d exec 'grim -g "$(slurp)" /tmp/screenshot.png > /dev/null 2>&1'
 
-    bindsym $mod+Ctrl+l exec $lock
-    bindsym Ctrl+Alt+l exec $lock 
+    bindsym $mod+Ctrl+l exec ${lockscreen}
+    bindsym Ctrl+Alt+l exec ${lockscreen} 
     bindsym $mod+Shift+q kill
 
     floating_modifier $mod normal
