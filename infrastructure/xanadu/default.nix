@@ -81,6 +81,7 @@ with lib;
       virtualization.enable = true;
       wm = {
         battery = true;
+        azerty = true;
         extraConf = ''
           output eDP-1 scale 2.0
           input "2:10:TPPS/2_IBM_TrackPoint" {
