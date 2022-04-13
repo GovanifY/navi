@@ -6,6 +6,7 @@ with lib;
     ./xanadu
     ./alastor
     ./emet-selch
+    ./star
     ./graphical.nix
   ];
 
