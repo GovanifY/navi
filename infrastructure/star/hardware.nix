@@ -63,7 +63,7 @@ with lib;
 
     networking.useDHCP = false;
     networking.interfaces.wlp3s0.useDHCP = true;
-    networking.interfaces.enp1s0.useDHCP = lib.mkDefault true;
+    networking.interfaces.enp0s31f6.useDHCP = lib.mkDefault true;
 
     services.tlp.enable = lib.mkDefault true;
   };
