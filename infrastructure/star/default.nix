@@ -31,6 +31,9 @@ with lib;
           input "2:10:TPPS/2_IBM_TrackPoint" {
             pointer_accel 0.7
           }
+          input "1739:0:Synaptics_TM3276-022" {
+            tap enabled
+          }
         '';
       };
     };
