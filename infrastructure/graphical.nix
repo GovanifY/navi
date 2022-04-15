@@ -4,6 +4,10 @@ with lib;
   config = mkIf config.navi.profile.graphical {
     # needed to export obs as a virtual camera
     boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
+    boot.kernelModules = [ "v4l2loopback" ];
+    boot.extraModprobeConfig = ''
+      options v4l2loopback exclusive_caps=1 card_label=virt
+    '';
 
     # useful for nixos-rebuild build-vm, passthrough ssh to port 2221 locally.
     # example:
