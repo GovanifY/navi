@@ -21,8 +21,8 @@ with lib;
     systemd.timers.nixos-upgrade.timerConfig.Persistent = "true";
 
     services.udev.extraRules = ''
-      # Suspend the system when battery level drops to 5% or lower
-      SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", ATTR{capacity}=="[0-5]", RUN+="${pkgs.systemd}/bin/systemctl suspend"
+      # Suspend the system when primary battery level drops to 5% or lower
+      SUBSYSTEM=="power_supply", KERNEL=="BAT0", ATTR{status}=="Discharging", ATTR{capacity}=="[0-5]", RUN+="${pkgs.systemd}/bin/systemctl suspend"
     '';
   };
 }
