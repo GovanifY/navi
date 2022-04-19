@@ -18,7 +18,7 @@ with lib;
       texlive.combined.scheme-medium
       # dev
       cargo
-      python
+      python3
       R
       clang
       meson

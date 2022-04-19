@@ -1,5 +1,13 @@
 { config, lib, pkgs, ... }:
 with lib;
+let
+  python-validity = pkgs.callPackage ../../overlays/python-validity.nix { };
+  open-fprintd = pkgs.callPackage ../../overlays/open-fprintd.nix { };
+  python-drivers = pkgs.python3.withPackages (p: with p; [
+    python-validity
+    open-fprintd
+  ]);
+in
 {
   config = mkIf (config.navi.device == "star") {
     boot.loader = {
@@ -21,8 +29,6 @@ with lib;
     boot.initrd.secrets = {
       "/keyfile_matrix.bin" = "/etc/secrets/initrd/keyfile_matrix.bin";
     };
-
-
 
     boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "sd_mod" "usb_storage" ];
     boot.initrd.kernelModules = [ "dm-snapshot" ];
@@ -74,10 +80,27 @@ with lib;
     # we make sure CUDA is globally available in that case
     environment.systemPackages = with pkgs; [
       cudatoolkit
+      python-drivers
+      python-validity
+      open-fprintd
     ];
     environment.variables.CUDA_PATH = "${pkgs.cudatoolkit}";
     environment.variables.LD_LIBRARY_PATH = "${pkgs.cudatoolkit}/lib:/run/opengl-driver/lib";
 
+
+    # and let's enable our fingerprint sensor too
+    services.fprintd.enable = true;
+    services.fprintd.package = open-fprintd;
+    security.pam.services.swaylock.fprintAuth = true;
+    systemd.services.python3-validity = {
+      wantedBy = [ "open-fprintd.service" ];
+      description = "python-validity driver dbus service";
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = "${python-validity}/lib/python-validity/dbus-service";
+        Restart = "no";
+      };
+    };
 
     services.tlp.enable = lib.mkDefault true;
   };
