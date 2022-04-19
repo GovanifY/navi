@@ -65,6 +65,13 @@ with lib;
     networking.interfaces.wlp3s0.useDHCP = true;
     networking.interfaces.enp0s31f6.useDHCP = lib.mkDefault true;
 
+    # nouveau is just not good enough for any usage whatsoever.
+    # if you wish to not use the proprietary drivers, might as well disable the
+    # gpu entirely.
+    nixpkgs.config.allowUnfree = true;
+    services.xserver.videoDrivers = [ "nvidia" ];
+    hardware.nvidia.nvidiaPersistenced = true;
+
     services.tlp.enable = lib.mkDefault true;
   };
 }

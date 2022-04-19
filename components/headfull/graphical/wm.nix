@@ -459,7 +459,7 @@ in
       serviceConfig = {
         Type = "simple";
         ExecStart = ''
-          /run/wrappers/bin/sway
+          /run/wrappers/bin/sway --unsupported-gpu
         '';
         Restart = "on-failure";
         RestartSec = 1;
