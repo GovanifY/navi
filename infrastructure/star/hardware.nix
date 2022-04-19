@@ -71,6 +71,13 @@ with lib;
     nixpkgs.config.allowUnfree = true;
     services.xserver.videoDrivers = [ "nvidia" ];
     hardware.nvidia.nvidiaPersistenced = true;
+    # we make sure CUDA is globally available in that case
+    environment.systemPackages = with pkgs; [
+      cudatoolkit
+    ];
+    environment.variables.CUDA_PATH = "${pkgs.cudatoolkit}";
+    environment.variables.LD_LIBRARY_PATH = "${pkgs.cudatoolkit}/lib:/run/opengl-driver/lib";
+
 
     services.tlp.enable = lib.mkDefault true;
   };
