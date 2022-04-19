@@ -18,7 +18,7 @@ with lib;
     # at it use a persistent state so that systemd realize when the system was
     # shut down for quite some time.
     system.autoUpgrade.dates = "Mon *-*-* 20:00:00";
-    systemd.timers.nixos-upgrade.timerConfig.Persistent = "true";
+    systemd.timers.nixos-upgrade.timerConfig.Persistent = true;
 
     services.udev.extraRules = ''
       # Suspend the system when primary battery level drops to 5% or lower
