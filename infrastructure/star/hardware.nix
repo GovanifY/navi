@@ -32,7 +32,7 @@ in
 
     boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "sd_mod" "usb_storage" ];
     boot.initrd.kernelModules = [ "dm-snapshot" ];
-    boot.kernelModules = [ "kvm-intel" ];
+    boot.kernelModules = [ "kvm-intel" "qmi_wwan" "qcserial" ];
     boot.extraModulePackages = [ ];
 
     boot.initrd.luks.devices =
@@ -83,6 +83,7 @@ in
       python-drivers
       python-validity
       open-fprintd
+      libqmi
     ];
     environment.variables.CUDA_PATH = "${pkgs.cudatoolkit}";
     environment.variables.LD_LIBRARY_PATH = "${pkgs.cudatoolkit}/lib:/run/opengl-driver/lib";
