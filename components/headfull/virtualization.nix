@@ -49,7 +49,10 @@ in
       virt-manager
     ];
 
-    virtualisation.libvirtd.enable = true;
+    virtualisation.libvirtd = {
+      enable = true;
+      qemu.swtpm.enable = true;
+    };
 
     # isolate iGPU for libvirtd
     boot.initrd.kernelModules = mkIf (cfg.pci_devices != "") [
