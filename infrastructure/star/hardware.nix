@@ -92,15 +92,18 @@ in
     services.fprintd.enable = true;
     services.fprintd.package = open-fprintd;
     security.pam.services.swaylock.fprintAuth = true;
+    services.udev.packages = [ python-validity ];
     systemd.services.python3-validity = {
-      wantedBy = [ "open-fprintd.service" ];
       description = "python-validity driver dbus service";
       serviceConfig = {
         Type = "simple";
         ExecStart = "${python-validity}/lib/python-validity/dbus-service";
         Restart = "no";
       };
+      wantedBy = [ "multi-user.target" ];
     };
+    # smart card
+    services.pcscd.enable = true;
 
     services.tlp.enable = lib.mkDefault true;
   };
