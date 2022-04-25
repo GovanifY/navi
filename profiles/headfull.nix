@@ -11,7 +11,6 @@ with lib;
       ranger
       pass
       pinentry-curses
-      rtorrent
       # navi
       pre-commit
       # stem

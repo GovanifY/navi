@@ -128,6 +128,15 @@ with lib;
       editor.enable = true;
     };
 
+    # the torrent config is common across devices but let's only enable it on
+    # devices with a large uptime
+    services.rtorrent = {
+      openFirewall = true;
+      configText = ''
+        dht.mode.set = auto
+        protocol.pex.set = yes
+      '';
+    };
 
     # sane defaults for any modern virtualization setup
     virtualisation = lib.optionalAttrs (builtins.hasAttr "virtualisation" options) {

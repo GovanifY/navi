@@ -35,6 +35,9 @@ with lib;
       home.file."Pictures/wallpaper.png".source = ./wallpaper.png;
     };
 
+    services.rtorrent = {
+      downloadDir = "/mnt/axolotl/download";
+    };
 
     time.timeZone = "Europe/Paris";
 
