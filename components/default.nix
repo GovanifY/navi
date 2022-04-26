@@ -11,6 +11,7 @@ with lib;
     ./macspoofer.nix
     ./sandboxing.nix
     ./hardening.nix
+    ./torrent.nix
     ./headfull
     ./server
   ];

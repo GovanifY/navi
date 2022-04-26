@@ -126,16 +126,7 @@ with lib;
       macspoofer.enable = true;
       hardening.enable = true;
       editor.enable = true;
-    };
-
-    # the torrent config is common across devices but let's only enable it on
-    # devices with a large uptime
-    services.rtorrent = {
-      openFirewall = true;
-      configText = ''
-        dht.mode.set = auto
-        protocol.pex.set = yes
-      '';
+      torrent.enable = true;
     };
 
     # sane defaults for any modern virtualization setup
