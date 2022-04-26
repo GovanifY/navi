@@ -49,8 +49,13 @@ with lib;
         extraConf = ''
           output DP-1 scale 2.0
           output DP-1 pos 1920 0 res 3840x2160
+          output HDMI-A-1 scale 2.0
+          output HDMI-A-1 pos 3840 0 res 3840x2160
           output HDMI-A-2 pos 0 0 res 1920x1080 
           input "5426:515:Razer_Razer_BlackWidow_Chroma" {
+              xkb_layout "fr"
+          }
+          input "6127:24801:TrackPoint_Keyboard_II_Keyboard" {
               xkb_layout "fr"
           }
           workspace 1 output DP-1
