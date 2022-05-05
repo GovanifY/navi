@@ -106,5 +106,6 @@ with lib;
       KERNEL=="hidraw*", KERNELS=="*28DE:*", MODE="0666"
     '';
     hardware.xpadneo.enable = true;
+    services.xserver.wacom.enable = true;
   };
 }
