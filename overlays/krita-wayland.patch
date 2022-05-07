@@ -1,0 +1,96 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -490,7 +490,7 @@ endif()
+ 
+ if (NOT WIN32 AND NOT APPLE AND NOT ANDROID)
+ 
+-    find_package(Qt5 ${MIN_QT_VERSION} REQUIRED X11Extras)
++    #find_package(Qt5 ${MIN_QT_VERSION} REQUIRED X11Extras)
+ 
+     find_package(Qt5DBus ${MIN_QT_VERSION})
+     set(HAVE_DBUS ${Qt5DBus_FOUND})
+@@ -508,9 +508,9 @@ if (NOT WIN32 AND NOT APPLE AND NOT ANDROID)
+         TYPE OPTIONAL
+         PURPOSE "Optionally used to provide crash reporting on Linux")
+ 
+-    find_package(X11 REQUIRED COMPONENTS Xinput)
+-    set(HAVE_X11 TRUE)
+-    add_definitions(-DHAVE_X11)
++    #find_package(X11 REQUIRED COMPONENTS Xinput)
++    #set(HAVE_X11 TRUE)
++    #add_definitions(-DHAVE_X11)
+ 
+ else()
+     set(HAVE_DBUS FALSE)
+diff --git a/krita/main.cc b/krita/main.cc
+index 917ccabd97..2cafe8bd9f 100644
+--- a/krita/main.cc
++++ b/krita/main.cc
+@@ -507,10 +507,12 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
+ 
+     installTranslators(app);
+ 
++#if 0
+     if (app.platformName() == "wayland") {
+         QMessageBox::critical(0, i18nc("@title:window", "Fatal Error"), i18n("Krita does not support the Wayland platform. Use XWayland to run Krita on Wayland. Krita will close now."));
+         return -1;
+     }
++#endif
+ 
+     KisUsageLogger::writeHeader();
+     KisOpenGL::initialize();
+diff --git a/libs/ui/CMakeLists.txt b/libs/ui/CMakeLists.txt
+index 692377a25a..aa966e8741 100644
+--- a/libs/ui/CMakeLists.txt
++++ b/libs/ui/CMakeLists.txt
+@@ -682,13 +682,13 @@ endif ()
+ target_link_libraries(kritaui ${OPENEXR_LIBRARIES})
+ 
+ # Add VSync disable workaround
+-if(NOT WIN32 AND NOT APPLE AND NOT ANDROID)
+-    target_link_libraries(kritaui ${CMAKE_DL_LIBS} Qt5::X11Extras)
+-endif()
+-
+-if(X11_FOUND)
+-    target_link_libraries(kritaui Qt5::X11Extras ${X11_LIBRARIES})
+-endif()
++#if(NOT WIN32 AND NOT APPLE AND NOT ANDROID)
++#    target_link_libraries(kritaui ${CMAKE_DL_LIBS} Qt5::X11Extras)
++#endif()
++#
++#if(X11_FOUND)
++#    target_link_libraries(kritaui Qt5::X11Extras ${X11_LIBRARIES})
++#endif()
+ 
+ target_include_directories(kritaui
+     PUBLIC
+diff --git a/libs/ui/opengl/KisOpenGLModeProber.cpp b/libs/ui/opengl/KisOpenGLModeProber.cpp
+index 813af4c9da..aea1618d0c 100644
+--- a/libs/ui/opengl/KisOpenGLModeProber.cpp
++++ b/libs/ui/opengl/KisOpenGLModeProber.cpp
+@@ -189,6 +189,8 @@ KisOpenGLModeProber::probeFormat(const KisOpenGL::RendererConfig &rendererConfig
+         dbgOpenGL << "OpenGL context is not valid while checking Qt's OpenGL status";
+         return boost::none;
+     }
++	//std::cout << context << std::endl;
++	//std::cout << surface << std::endl;
+     if (!context.makeCurrent(&surface)) {
+         dbgOpenGL << "OpenGL context cannot be made current";
+         return boost::none;
+diff --git a/libs/widgets/CMakeLists.txt b/libs/widgets/CMakeLists.txt
+index 5d16245aa1..5ba03ba137 100644
+--- a/libs/widgets/CMakeLists.txt
++++ b/libs/widgets/CMakeLists.txt
+@@ -108,9 +108,9 @@ target_link_libraries(kritawidgets
+     KF5::Completion
+ )
+ 
+-if(X11_FOUND)
+-    target_link_libraries(kritawidgets Qt5::X11Extras ${X11_LIBRARIES})
+-endif()
++#if(X11_FOUND)
++#    target_link_libraries(kritawidgets Qt5::X11Extras ${X11_LIBRARIES})
++#endif()
+ 
+ set_target_properties(kritawidgets PROPERTIES
+     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

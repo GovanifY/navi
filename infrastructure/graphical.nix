@@ -107,5 +107,18 @@ with lib;
     '';
     hardware.xpadneo.enable = true;
     services.xserver.wacom.enable = true;
+
+
+    nixpkgs.overlays = [
+      (
+        self: super: {
+          krita = super.krita.overrideAttrs (
+            oldAttrs: rec {
+              patches = (super.patches or [ ]) ++ [ ./../overlays/krita-wayland.patch ];
+            }
+          );
+        }
+      )
+    ];
   };
 }
