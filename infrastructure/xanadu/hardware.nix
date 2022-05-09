@@ -90,6 +90,11 @@ with lib;
       ];
     };
 
+
+    # and let's enable our fingerprint sensor too
+    services.fprintd.enable = true;
+    security.pam.services.swaylock.fprintAuth = true;
+
     services.tlp.enable = lib.mkDefault true;
   };
 }
