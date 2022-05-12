@@ -180,7 +180,7 @@ in
       '';
       enable = true;
       shellAliases.nbuild = "nix-build /nix/var/nix/profiles/per-user/root/channels/nixos/ --run-env --run fish -A ";
-      shellAliases."${cfg.branding}-update" = "sudo nixos-rebuild switch";
+      shellAliases."${config.navi.branding}-update" = "sudo nixos-rebuild switch";
     };
 
 
