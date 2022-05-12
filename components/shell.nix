@@ -151,10 +151,26 @@ let
         echo -n -s $arrow ' '$cwd $repo_info $normal $nix_shell_info ' '
     end
   '';
+
+  # this is necessary as not-found is only aliased in a let and used by
+  # bash/zsh, never getting a proper handle to it
+  not-found = ''
+    function fish_command_not_found
+        ${pkgs.expect}/bin/unbuffer /run/current-system/sw/bin/command-not-found \"$@\" 2>&1 | exec ${pkgs.nix-output-monitor}/bin/nom
+    end
+  '';
 in
 {
   options.navi.components.shell = {
     enable = mkEnableOption "Enable navi's custom shell";
+    build-beautify = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Beautify the outputs of build and update nix commands, adding additional
+        metrics for the user.
+      '';
+    };
   };
   config = mkIf cfg.enable {
     users.defaultUserShell = pkgs.fish;
@@ -164,15 +180,27 @@ in
       '';
       enable = true;
       shellAliases.nbuild = "nix-build /nix/var/nix/profiles/per-user/root/channels/nixos/ --run-env --run fish -A ";
+      shellAliases.${cfg.branding}-update = "sudo nixos-rebuild switch";
     };
+
+
+    environment.systemPackages = mkIf cfg.build-beautify [
+      (pkgs.writeShellScriptBin "nix-build" "${pkgs.expect}/bin/unbuffer ${pkgs.nix}/bin/nix-build \"$@\" 2>&1 | exec ${pkgs.nix-output-monitor}/bin/nom")
+      (pkgs.writeShellScriptBin "nixos-rebuild" "${pkgs.expect}/bin/unbuffer ${pkgs.nixos-rebuild}/bin/nixos-rebuild \"$@\" 2>&1 | exec ${pkgs.nix-output-monitor}/bin/nom")
+      (pkgs.writeShellScriptBin "nix-shell" "${pkgs.expect}/bin/unbuffer ${pkgs.nix}/bin/nix-shell \"$@\" 2>&1 | exec ${pkgs.nix-output-monitor}/bin/nom")
+      # command
+    ];
+
     # TODO: make it for all users?
     home-manager.users.${config.navi.username} = {
       home.file.".config/fish/config.fish".text = fish_config;
       home.file.".config/fish/functions/fish_prompt.fish".text = fish_prompt;
+      home.file.".config/fish/functions/command-not-found.fish".text = not-found;
     };
     home-manager.users.root = {
       home.file.".config/fish/config.fish".text = fish_config;
       home.file.".config/fish/functions/fish_prompt.fish".text = fish_prompt;
+      home.file.".config/fish/functions/command-not-found.fish".text = not-found;
     };
   };
 }

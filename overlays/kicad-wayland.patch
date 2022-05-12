@@ -1,0 +1,31 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -126,7 +126,7 @@ cmake_dependent_option( KICAD_WIN32_CONTEXT_WINFIBER
+
+ option( KICAD_USE_EGL
+     "Build KiCad with EGL backend support for Wayland."
+-    OFF )
++    ON )
+
+ cmake_dependent_option( KICAD_USE_BUNDLED_GLEW
+     "Use the bundled version of GLEW - only available when KICAD_USE_EGL is set"
+diff --git a/libs/kiplatform/gtk/environment.cpp b/libs/kiplatform/gtk/environment.cpp
+index 8c7e288b2a..a07693f213 100644
+--- a/libs/kiplatform/gtk/environment.cpp
++++ b/libs/kiplatform/gtk/environment.cpp
+@@ -37,7 +37,7 @@ void KIPLATFORM::ENV::Init()
+
+     // Force the use of X11 backend (or wayland-x11 compatibility layer).  This is
+     // required until wxWidgets supports the Wayland compositors
+-    wxSetEnv( wxT( "GDK_BACKEND" ), wxT( "x11" ) );
++    // wxSetEnv( wxT( "GDK_BACKEND" ), wxT( "x11" ) );
+
+     // Set GTK2-style input instead of xinput2.  This disables touchscreen and smooth
+     // scrolling.  It's needed to ensure that we are not getting multiple mouse scroll
+@@ -112,4 +112,4 @@ bool KIPLATFORM::ENV::GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG&
+ bool KIPLATFORM::ENV::VerifyFileSignature( const wxString& aPath )
+ {
+     return true;
+-}
+\ No newline at end of file
++}
