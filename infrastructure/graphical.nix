@@ -18,7 +18,7 @@ with lib;
 
     environment.systemPackages = with pkgs; [
       # legacy windows
-      wineWowPackages.full
+      wineWowPackages.waylandFull
 
       # multimedia
       mpv
