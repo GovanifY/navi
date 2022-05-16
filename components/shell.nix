@@ -151,14 +151,6 @@ let
         echo -n -s $arrow ' '$cwd $repo_info $normal $nix_shell_info ' '
     end
   '';
-
-  # this is necessary as not-found is only aliased in a let and used by
-  # bash/zsh, never getting a proper handle to it
-  not-found = ''
-    function fish_command_not_found
-        ${pkgs.expect}/bin/unbuffer /run/current-system/sw/bin/command-not-found \"$@\" 2>&1 | exec ${pkgs.nix-output-monitor}/bin/nom
-    end
-  '';
 in
 {
   options.navi.components.shell = {
@@ -195,12 +187,10 @@ in
     home-manager.users.${config.navi.username} = {
       home.file.".config/fish/config.fish".text = fish_config;
       home.file.".config/fish/functions/fish_prompt.fish".text = fish_prompt;
-      home.file.".config/fish/functions/command-not-found.fish".text = not-found;
     };
     home-manager.users.root = {
       home.file.".config/fish/config.fish".text = fish_config;
       home.file.".config/fish/functions/fish_prompt.fish".text = fish_prompt;
-      home.file.".config/fish/functions/command-not-found.fish".text = not-found;
     };
   };
 }
