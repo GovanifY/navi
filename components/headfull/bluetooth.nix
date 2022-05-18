@@ -20,11 +20,6 @@ in
     hardware.bluetooth.package = pkgs.bluezFull;
     services.blueman.enable = true;
 
-    hardware.pulseaudio = mkIf cfg.audio {
-      enable = true;
-      package = pkgs.pulseaudioFull;
-    };
-
     hardware.bluetooth.settings = { General = { Enable = "Source,Sink,Media,Socket"; }; };
 
     # we don't really need mpris afaict

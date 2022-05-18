@@ -25,6 +25,10 @@ with lib;
       gnumake
       ghc
       gdb
+      # sound utils
+      pulseaudio
+      pavucontrol
+      qjackctl
     ];
 
 
@@ -42,8 +46,14 @@ with lib;
     services.printing.enable = true;
 
     # Enable sound.
-    sound.enable = true;
-    hardware.pulseaudio.enable = true;
+    security.rtkit.enable = true;
+    services.pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+      jack.enable = true;
+    };
 
     # we setup the personal ssh and gpg key of our headfull user
     home-manager.users.${config.navi.username} = {
@@ -85,27 +95,6 @@ with lib;
     # allows you to replace the currently running kernel by your own and thus
     # bypass this mitigation altogether
     navi.components.hardening.modules = false;
-
-    # we do NOT need a full fledged rtkit setup, as only pulseaudio uses it in
-    # our system. instead gives our main user rights to setup realtime and
-    # niceness itself; I doubt anyone would abuse any of this on a headfull
-    # device, especially as malicious intents go as far as making your computer
-    # look slower than it should, which you can fix back anyways since you have
-    # the rights to fix the niceness now :D
-    security.rtkit.enable = mkForce false;
-    security.pam.loginLimits = [{
-      domain = "${config.navi.username}";
-      item = "rtprio";
-      type = "-";
-      value = "9";
-    }
-      {
-        domain = "${config.navi.username}";
-        item = "nice";
-        type = "-";
-        value = "-11";
-      }];
-
 
     navi.components = {
       music.enable = true;

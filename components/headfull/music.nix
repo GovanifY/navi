@@ -17,9 +17,8 @@ in
       extraConfig = ''
         auto_update "yes"
         audio_output {  
-            type  "pulse"  
-            name  "Pulseaudio"
-            server "127.0.0.1"
+            type "pipewire"
+            name "PipeWire Sound Server"
         }  
 
         audio_output {
@@ -31,11 +30,11 @@ in
       '';
     };
 
-
-    hardware.pulseaudio.tcp = {
-      enable = true;
-      anonymousClients.allowedIpRanges = [ "127.0.0.1" ];
-    };
+    # https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/609
+    # do note this only works in a single user environment with the default UID.
+    # As Nix is declarative, though, this shouldn't change, and should we need
+    # multiple streams we can just add another output :)
+    systemd.services.mpd.environment.XDG_RUNTIME_DIR = "/run/user/1000";
 
     environment.systemPackages = with pkgs; [
       ncmpcpp

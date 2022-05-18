@@ -97,24 +97,42 @@ with lib;
 
     # scarlett 2i2 needs a few niceties to avoid drops
     # see https://github.com/dasgeekchannel/scarlett2i2daemon.conf
-    hardware.pulseaudio.daemon.config = {
-      high-priority = "yes";
-      realtime-scheduling = "yes";
-      resample-method = "speex-float-5";
-      flat-volumes = "no";
-      rlimit-memlock = "-1";
-      rlimit-rttime = "200000";
-      default-sample-format = "s24le";
-      default-sample-rate = "96000";
-      alternate-sample-rate = "44100";
-      default-sample-channels = "2";
-      default-channel-map = "front-left,front-right";
-      default-fragments = "2";
-      default-fragment-size-msec = "250";
-      enable-deferred-volume = "yes";
-      deferred-volume-safety-margin-usec = "1";
-      deferred-volume-extra-delay-usec = "0";
-    };
+    services.pipewire.config.pipewire = ''
+      {   name = libpipewire-module-loopback
+              args = {
+                  capture.props = {
+                      audio.position = [FL, FL]
+                      node.target = alsa_input.usb-Focusrite_Scarlett_2i2_USB-00.analog-stereo
+                  }
+                  playback.props = {
+                      media.class = Audio/Source
+                      node.name = mono-microphone
+                      node.description = "Scarlett 2i2 Left"
+                      audio.position = [mono]
+                  }
+              }
+      }
+    '';
+
+    # TODO: check if latency is fine for the scarlett by default
+    #    hardware.pulseaudio.daemon.config = {
+    #      high-priority = "yes";
+    #      realtime-scheduling = "yes";
+    #      resample-method = "speex-float-5";
+    #      flat-volumes = "no";
+    #      rlimit-memlock = "-1";
+    #      rlimit-rttime = "200000";
+    #      default-sample-format = "s24le";
+    #      default-sample-rate = "96000";
+    #      alternate-sample-rate = "44100";
+    #      default-sample-channels = "2";
+    #      default-channel-map = "front-left,front-right";
+    #      default-fragments = "2";
+    #      default-fragment-size-msec = "250";
+    #      enable-deferred-volume = "yes";
+    #      deferred-volume-safety-margin-usec = "1";
+    #      deferred-volume-extra-delay-usec = "0";
+    #    };
 
     boot.supportedFilesystems = [ "ntfs" ];
     hardware.enableRedistributableFirmware = lib.mkDefault true;
