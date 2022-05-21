@@ -20,9 +20,12 @@ with lib;
       # we need to set this up, otherwise ardour won't be able to find our
       # plugins!
       LV2_PATH = "$HOME/.lv2:$HOME/.nix-profile/lib/lv2:/run/current-system/sw/lib/lv2";
+      VST3_PATH = "$HOME/.vst3:$HOME/.nix-profile/lib/vst3:/run/current-system/sw/lib/vst3:/run/current-system/sw/lib";
     };
 
     environment.systemPackages = with pkgs; [
+      waypipe
+
       # legacy windows
       wineWowPackages.waylandFull
 
@@ -40,6 +43,8 @@ with lib;
       ardour
       calf
       zynaddsubfx
+      yabridge
+      yabridgectl
 
       # stem
       kicad

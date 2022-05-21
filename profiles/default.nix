@@ -58,6 +58,7 @@ with lib;
       silver-searcher
       bat
       any-nix-shell
+      killall
     ];
 
     # manpages are love
