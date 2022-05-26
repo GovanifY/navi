@@ -31,6 +31,9 @@ with lib;
       qjackctl
     ];
 
+    # in case we need to bypass NAT filtering better to add a higher port range
+    services.openssh.ports = [ 22 32000 ];
+
 
     # headfull main user is essentially an admin, reflect that by giving it the
     # wheel group
