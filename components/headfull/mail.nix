@@ -218,6 +218,7 @@ let
 
   mutt_config = ''
     set mailcap_path = ${mailcap}
+    set hostname = "${config.networking.hostName}" # only show machine name on hostname
     set date_format="%d/%m/%y %I:%M%p"
     set index_format="%2C %zs %?X?A& ? %D %-15.15F %s (%-4.4c)"
     set sort = 'threads'
