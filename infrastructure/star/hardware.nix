@@ -66,6 +66,8 @@ in
     hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
     hardware.enableRedistributableFirmware = true;
     hardware.enableAllFirmware = true;
+    # enable trackpoint & buttons
+    boot.kernelParams = [ "psmouse.synaptics_intertouch=1" ];
 
     networking.useDHCP = false;
     networking.interfaces.wlp3s0.useDHCP = true;
@@ -86,7 +88,7 @@ in
       libqmi
     ];
     environment.variables.CUDA_PATH = "${pkgs.cudatoolkit}";
-    environment.variables.LD_LIBRARY_PATH = "${pkgs.cudatoolkit}/lib:/run/opengl-driver/lib";
+    environment.variables.LD_LIBRARY_PATH = mkForce "${pkgs.cudatoolkit}/lib:/run/opengl-driver/lib";
 
 
     # and let's enable our fingerprint sensor too
