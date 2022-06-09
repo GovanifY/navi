@@ -105,6 +105,7 @@ in
     };
     # smart card
     services.pcscd.enable = true;
+    services.fwupd.enable = true;
 
     services.tlp.enable = lib.mkDefault true;
   };

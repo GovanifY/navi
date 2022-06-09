@@ -61,12 +61,16 @@ with lib;
       virtualization.enable = true;
       wm = {
         battery = true;
+        azerty = true;
         extraConf = ''
-          input "2:10:TPPS/2_IBM_TrackPoint" {
-            pointer_accel 0.7
-          }
-          input "1739:0:Synaptics_TM3276-022" {
-            tap enabled
+                input "2:10:TPPS/2_IBM_TrackPoint" {
+                  pointer_accel 0.7
+                }
+                input "2:7:SynPS/2_Synaptics_TouchPad" {
+                  tap enabled
+                }
+          input "1:1:AT_Translated_Set_2_keyboard" {
+            xkb_layout "fr"
           }
         '';
       };
