@@ -66,7 +66,7 @@ with lib;
           input "2:10:TPPS/2_IBM_TrackPoint" {
             pointer_accel 0.7
           }
-          input "2:7:SynPS/2_Synaptics_TouchPad" {
+          input "1739:0:Synaptics_TM3288-003" {
             tap enabled
           }
           input "1:1:AT_Translated_Set_2_keyboard" {
