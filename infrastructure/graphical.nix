@@ -25,6 +25,7 @@ with lib;
 
     environment.systemPackages = with pkgs; [
       waypipe
+      mupdf
 
       # legacy windows
       wineWowPackages.waylandFull

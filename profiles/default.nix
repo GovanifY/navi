@@ -59,6 +59,9 @@ with lib;
       bat
       any-nix-shell
       killall
+      pciutils
+      tree
+      acpi
     ];
 
     # manpages are love
