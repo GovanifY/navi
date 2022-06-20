@@ -62,6 +62,7 @@ with lib;
       pciutils
       tree
       acpi
+      bintools
     ];
 
     # manpages are love
