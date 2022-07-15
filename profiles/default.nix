@@ -44,6 +44,17 @@ with lib;
   };
 
   config = mkIf (config.navi.profile.name != "") {
+
+    system.stateVersion = "22.05";
+    home-manager.users."${config.navi.username}".home.stateVersion = "22.05";
+
+    home-manager.users.root = {
+      home.stateVersion = "22.05";
+      home.file.".config/gnupg/pubring.kbx".source = ./../secrets/common/assets/gpg/updates/pubring.kbx;
+      home.file.".config/gnupg/trustdb.gpg".source = ./../secrets/common/assets/gpg/updates/trustdb.gpg;
+    };
+
+
     # basic set of tools & ssh
     environment.systemPackages = with pkgs; [
       wget
@@ -81,10 +92,6 @@ with lib;
     };
 
     # automatic updates & cleanup
-    home-manager.users.root = {
-      home.file.".config/gnupg/pubring.kbx".source = ./../secrets/common/assets/gpg/updates/pubring.kbx;
-      home.file.".config/gnupg/trustdb.gpg".source = ./../secrets/common/assets/gpg/updates/trustdb.gpg;
-    };
     systemd.services.navi-update = {
       description = "navi update";
       serviceConfig.Type = "oneshot";
