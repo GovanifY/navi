@@ -47,6 +47,13 @@ in
 
         protocol.encryption.set = allow_incoming,try_outgoing,enable_retry
 
+        # Limits for file handle resources, this is optimized for
+        # an `ulimit` of 1024 (a common default). You MUST leave
+        # a ceiling of handles reserved for rTorrent's internal needs!
+        network.http.max_open.set = 50
+        network.max_open_files.set = 600
+        network.max_open_sockets.set = 300
+
         pieces.memory.max.set = 4000M
         network.xmlrpc.size_limit.set = 4M
 
