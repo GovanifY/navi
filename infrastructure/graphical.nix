@@ -128,6 +128,7 @@ with lib;
     fileSystems."/mnt/drive0" = {
       device = "/dev/sr0";
       options = [ "ro" "user" "noauto" "unhide" ];
+      noCheck = true;
     };
 
     nixpkgs.overlays = [
