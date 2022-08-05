@@ -40,7 +40,7 @@ with lib;
     # TODO, XXX, TOFIX: the shadows are probably written in the nix store, do we
     # care about that?
     users.users.${config.navi.username} = {
-      extraGroups = [ "wheel" ];
+      extraGroups = [ "wheel" "cdrom" ];
       hashedPassword = fileContents ./../secrets/headfull/assets/shadow/main;
     };
     users.users.root.hashedPassword = fileContents ./../secrets/headfull/assets/shadow/root;
