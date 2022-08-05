@@ -127,7 +127,7 @@ with lib;
     # enable external drive auto-mount
     fileSystems."/mnt/drive0" = {
       device = "/dev/sr0";
-      options = "ro,user,noauto,unhide";
+      options = [ "ro" "user" "noauto" "unhide" ];
     };
 
     nixpkgs.overlays = [
