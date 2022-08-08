@@ -44,6 +44,7 @@ with lib;
     navi.components = {
       virtualization.enable = true;
       bluetooth.enable = true;
+      fahrenheit.enable = true;
       wm = {
         azerty = true;
         extraConf = ''
@@ -64,6 +65,7 @@ with lib;
         '';
       };
     };
+
 
     navi.profile.name = "desktop";
 
