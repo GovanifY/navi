@@ -3,7 +3,6 @@ with lib;
 {
   imports = [
     <home-manager/nixos>
-    ./tor.nix
     ./bootloader.nix
     ./xdg.nix
     ./shell.nix

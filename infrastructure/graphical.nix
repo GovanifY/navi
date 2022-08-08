@@ -94,7 +94,7 @@ with lib;
     programs.wireshark.enable = true;
     programs.adb.enable = true;
     users.users.${config.navi.username} = {
-      extraGroups = [ "wireshark" "adbusers" "audio" "input" "networkmanager" "video" ];
+      extraGroups = [ "wireshark" "adbusers" "audio" "input" "networkmanager" "video" "cdrom" ];
     };
 
     environment.shellAliases.dgpu = "__NV_PRIME_RENDER_OFFLOAD=1 __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0 __GLX_VENDOR_LIBRARY_NAME=nvidia __VK_LAYER_NV_optimus=NVIDIA_only ";
@@ -131,16 +131,11 @@ with lib;
       noCheck = true;
     };
 
-    nixpkgs.overlays = [
-      (
-        self: super: {
-          krita = super.krita.overrideAttrs (
-            oldAttrs: rec {
-              patches = (super.patches or [ ]) ++ [ ./../overlays/krita-wayland.patch ];
-            }
-          );
-        }
-      )
-    ];
+    # enable client tor by default so apps can make use of it as they see fit
+    services.tor = {
+      enable = true;
+      client.enable = true;
+    };
+
   };
 }
