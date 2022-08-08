@@ -112,7 +112,6 @@ in
               DisableFirefoxStudies = true;
               DisablePocket = true;
               DisableTelemetry = true;
-              DisableFirefoxAccounts = true;
               EncryptedMediaExtensions.Enable = false;
               SearchSuggestEnabled = false;
               OfferToSaveLogins = false;
@@ -183,6 +182,7 @@ in
             lockPref("browser.discovery.enabled", false);
             lockPref("browser.urlbar.speculativeConnect.enabled", false);
             lockPref("browser.messaging-system.whatsNewPanel.enabled", false);
+            lockPref("browser.newtabpage.activity-stream.showSponsoredTopSites", false);
 
 
             // disable unwanted features
