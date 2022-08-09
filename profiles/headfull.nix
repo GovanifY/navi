@@ -71,6 +71,13 @@ with lib;
       '';
     };
 
+    environment.etc."navi_ssh" = {
+      text = builtins.readFile ./../secrets/headfull/assets/ssh/navi;
+      mode = "0400";
+      uid = 0;
+      gid = 0;
+    };
+
     # store our distbuild key so we can login to our infra
     environment.etc."distbuild_ssh" = {
       text = builtins.readFile ./../secrets/headfull/assets/ssh/distbuild;

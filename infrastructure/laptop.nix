@@ -2,13 +2,21 @@
 with lib;
 {
   config = mkIf (config.navi.profile.name == "laptop") {
-    systemd.user.services.mountpoint = {
+    fileSystems."/mnt/axolotl" =
+      {
+        device = "alastor-user:/mnt/axolotl";
+        fsType = "fuse.sshfs";
+        options = [ "defaults" "allow_other" "_netdev" ];
+      };
+
+    systemd.services.forward = {
       description = "Sixty degrees that come in threes";
-      wantedBy = [ "default.target" ];
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "simple";
         ExecStart = ''
-          ${pkgs.sshfs}/bin/sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 alastor:/mnt/axolotl /mnt/axolotl/
+          ${pkgs.autossh}/bin/autossh -M 20000 -L 3000:localhost:3000 alastor-user
         '';
         Restart = "on-failure";
       };
