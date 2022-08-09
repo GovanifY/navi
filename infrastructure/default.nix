@@ -8,6 +8,7 @@ with lib;
     ./emet-selch
     ./star
     ./graphical.nix
+    ./laptop.nix
   ];
 
   options.navi.device = mkOption {
@@ -20,7 +21,7 @@ with lib;
     # setup the trusted build servers here
     nix.buildMachines = [
       {
-        hostName = "alastor";
+        hostName = "alastor-build";
         system = "x86_64-linux";
         maxJobs = 16;
         speedFactor = 2;

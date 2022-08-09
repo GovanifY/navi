@@ -138,7 +138,6 @@ with lib;
       macspoofer.enable = true;
       hardening.enable = true;
       editor.enable = true;
-      torrent.enable = true;
     };
 
     # sane defaults for any modern virtualization setup
