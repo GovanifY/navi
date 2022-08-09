@@ -35,15 +35,15 @@ with lib;
       home.file."Pictures/wallpaper.png".source = ./wallpaper.png;
     };
 
-    services.rtorrent = {
-      downloadDir = "/mnt/axolotl/download";
-    };
-
     time.timeZone = "Europe/Paris";
 
     navi.components = {
       virtualization.enable = true;
       bluetooth.enable = true;
+      torrent = {
+        enable = true;
+        dataDir = "/mnt/axolotl/torrent";
+      };
       fahrenheit.enable = true;
       wm = {
         azerty = true;
