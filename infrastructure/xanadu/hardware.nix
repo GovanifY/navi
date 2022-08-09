@@ -20,7 +20,7 @@ with lib;
 
     boot.initrd.secrets = {
       "/keyfile_matrix.bin" = "/etc/secrets/initrd/keyfile_matrix.bin";
-      "/keyfile_axolotl.bin" = "/etc/secrets/initrd/keyfile_axolotl.bin";
+      "/keyfile_meduse.bin" = "/etc/secrets/initrd/keyfile_meduse.bin";
     };
 
 
@@ -51,14 +51,14 @@ with lib;
         fsType = "ext4";
       };
 
-    fileSystems."/mnt/axolotl" = {
+    fileSystems."/mnt/meduse" = {
       device = "/dev/disk/by-uuid/918de1f9-c23d-4512-9e1d-0f0106073932";
       fsType = "ext4";
       encrypted = {
         enable = true;
-        label = "axolotl";
+        label = "meduse";
         blkDev = "/dev/disk/by-uuid/e26ef933-86dd-44df-870f-90379d497308";
-        keyFile = "/keyfile_axolotl.bin";
+        keyFile = "/keyfile_meduse.bin";
       };
     };
 
