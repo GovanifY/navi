@@ -94,7 +94,16 @@ with lib;
     programs.wireshark.enable = true;
     programs.adb.enable = true;
     users.users.${config.navi.username} = {
-      extraGroups = [ "wireshark" "adbusers" "audio" "input" "networkmanager" "video" "cdrom" ];
+      extraGroups = [
+        "wireshark"
+        "adbusers"
+        "audio"
+        "input"
+        "networkmanager"
+        "video"
+        "cdrom"
+        "rtorrent"
+      ];
     };
 
     environment.shellAliases.dgpu = "__NV_PRIME_RENDER_OFFLOAD=1 __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0 __GLX_VENDOR_LIBRARY_NAME=nvidia __VK_LAYER_NV_optimus=NVIDIA_only ";
