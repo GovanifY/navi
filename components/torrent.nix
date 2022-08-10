@@ -19,6 +19,9 @@ in
       enable = true;
       openFirewall = true;
       dataDir = cfg.dataDir;
+      configText = ''
+        pieces.hash.on_completion.set = no
+      '';
     };
     systemd.services."flood" = {
       enable = true;
