@@ -2,6 +2,7 @@
 with lib;
 {
   config = mkIf (config.navi.profile.name == "laptop") {
+    programs.fuse.userAllowOther = true;
     fileSystems."/mnt/axolotl" =
       {
         device = "alastor-user:/mnt/axolotl";
