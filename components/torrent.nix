@@ -15,6 +15,11 @@ in
     };
   };
   config = mkIf cfg.enable {
+    # used by flood's stats window
+    environment.systemPackages = with pkgs; [
+      mediainfo
+    ];
+
     services.rtorrent = {
       enable = true;
       openFirewall = true;
