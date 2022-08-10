@@ -83,6 +83,7 @@ with lib;
     services.openssh = {
       enable = true;
       passwordAuthentication = false;
+      gatewayPorts = true;
     };
 
     # define our main users
