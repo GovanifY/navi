@@ -74,6 +74,7 @@ with lib;
       tree
       acpi
       bintools
+      sshfs
     ];
 
     # manpages are love

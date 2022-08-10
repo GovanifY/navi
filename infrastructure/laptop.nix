@@ -14,13 +14,16 @@ with lib;
       description = "Sixty degrees that come in threes";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      environment.AUTOSSH_PIDFILE = "/run/forward";
       serviceConfig = {
-        Type = "simple";
+        Type = "forking";
+        PIDFile = "/run/forward";
         ExecStart = ''
-          ${pkgs.autossh}/bin/autossh -M 20000 -L 3000:localhost:3000 alastor-user
+          ${pkgs.autossh}/bin/autossh -M 20000 -f -N -L 3000:localhost:3000 alastor-user
         '';
         Restart = "on-failure";
       };
+
     };
   };
 }
