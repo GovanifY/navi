@@ -15,11 +15,6 @@ in
     };
   };
   config = mkIf cfg.enable {
-    # used by flood's stats window
-    environment.systemPackages = with pkgs; [
-      mediainfo
-    ];
-
     services.rtorrent = {
       enable = true;
       openFirewall = true;
@@ -35,6 +30,7 @@ in
         WorkingDirectory = cfg.dataDir;
         ExecStart = "${pkgs.flood}/bin/flood";
         Restart = "on-failure";
+        ExecSearchPath = "${pkgs.mediainfo}/bin";
       };
       environment = {
         NODE_ENV = "production";
