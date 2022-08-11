@@ -7,7 +7,7 @@ with lib;
       {
         device = "alastor-user:/mnt/axolotl";
         fsType = "fuse.sshfs";
-        options = [ "defaults" "allow_other" "_netdev" ];
+        options = [ "defaults" "x-systemd.automount" "allow_other" "_netdev" ];
       };
 
     systemd.services.forward = {
