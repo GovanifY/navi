@@ -14,7 +14,10 @@ with lib;
       description = "Sixty degrees that come in threes";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment.AUTOSSH_PIDFILE = "/run/forward";
+      environment = {
+        AUTOSSH_PIDFILE = "/run/forward";
+        AUTOSSH_POLL = "15";
+      };
       serviceConfig = {
         Type = "forking";
         PIDFile = "/run/forward";
