@@ -25,12 +25,12 @@ in
     };
     systemd.services."flood" = {
       enable = true;
+      path = [ pkgs.mediainfo ];
       serviceConfig = {
         User = "rtorrent";
         WorkingDirectory = cfg.dataDir;
         ExecStart = "${pkgs.flood}/bin/flood";
         Restart = "on-failure";
-        ExecSearchPath = "${pkgs.mediainfo}/bin";
       };
       environment = {
         NODE_ENV = "production";
