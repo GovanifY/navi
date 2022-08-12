@@ -21,6 +21,7 @@ in
       dataDir = cfg.dataDir;
       configText = ''
         pieces.hash.on_completion.set = no
+        system.umask.set = 0007
       '';
     };
     systemd.services."flood" = {
