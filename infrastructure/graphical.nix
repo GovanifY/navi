@@ -23,6 +23,19 @@ with lib;
       VST3_PATH = "$HOME/.vst3:$HOME/.nix-profile/lib/vst3:/run/current-system/sw/lib/vst3:/run/current-system/sw/lib";
     };
 
+    # enable blu-ray decoding libraries
+    nixpkgs.overlays = [
+      (
+        self: super: {
+          libbluray = super.libbluray.override {
+            withAACS = true;
+            withBDplus = true;
+            withJava = true;
+          };
+        }
+      )
+    ];
+
     environment.systemPackages = with pkgs; [
       waypipe
       mupdf
@@ -32,6 +45,7 @@ with lib;
 
       # multimedia
       mpv
+      vlc
       imv
       libreoffice
 
