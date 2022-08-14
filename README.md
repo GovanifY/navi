@@ -38,6 +38,10 @@ your needs. Installing is then as simple as running
 sudo nixos-install
 ```
 
+Don't forget to change your initial hashed password at boot for headfull, they
+are written to the world readable nix store! Someone could try to LPE by
+brute-forcing them.
+
 ## Contributing
 
 Do not forget to run `pre-commit install` to get the formatting hooks running

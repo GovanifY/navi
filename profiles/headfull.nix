@@ -37,8 +37,6 @@ with lib;
 
     # headfull main user is essentially an admin, reflect that by giving it the
     # wheel group
-    # TODO, XXX, TOFIX: the shadows are probably written in the nix store, do we
-    # care about that?
     users.users.${config.navi.username} = {
       extraGroups = [ "wheel" ];
       hashedPassword = fileContents ./../secrets/headfull/assets/shadow/main;
@@ -58,32 +56,43 @@ with lib;
       jack.enable = true;
     };
 
+
+    age.secrets.gpg-key = {
+      path = "/home/${config.navi.username}/.config/gnupg/key.gpg";
+      owner = config.navi.username;
+    };
+
+    # store our distbuild key so we can login to our infra
+    age.secrets.ssh-distbuild = {
+      path = "/etc/distbuild_ssh";
+      owner = "0";
+      group = "0";
+      mode = "0400";
+    };
+
+    age.secrets.ssh-navi = {
+      path = "/etc/navi_ssh";
+      owner = "0";
+      group = "0";
+      mode = "0400";
+    };
+
+    age.secrets.ssh-navi-2 = {
+      path = "/home/${config.navi.username}/.ssh/id_ed25519";
+      owner = config.navi.username;
+      mode = "0400";
+    };
+
+
     # we setup the personal ssh and gpg key of our headfull user
     home-manager.users.${config.navi.username} = {
-      home.file.".config/gnupg/key.gpg".source = ./../secrets/headfull/assets/gpg/key.gpg;
       home.file.".config/gnupg/trust.txt".source = ./../secrets/headfull/assets/gpg/gpg-trust.txt;
-      home.file.".ssh/id_ed25519".source = ./../secrets/headfull/assets/ssh/navi;
       home.file.".ssh/id_ed25519.pub".source = ./../secrets/common/assets/ssh/navi.pub;
 
       home.file.".config/gnupg/gpg.conf".text = ''
         keyserver hkps://pgp.mit.edu
         keyserver-options auto-key-retrieve
       '';
-    };
-
-    environment.etc."navi_ssh" = {
-      text = builtins.readFile ./../secrets/headfull/assets/ssh/navi;
-      mode = "0400";
-      uid = 0;
-      gid = 0;
-    };
-
-    # store our distbuild key so we can login to our infra
-    environment.etc."distbuild_ssh" = {
-      text = builtins.readFile ./../secrets/headfull/assets/ssh/distbuild;
-      mode = "0400";
-      uid = 0;
-      gid = 0;
     };
 
     # setup the distbuild account; while this might look like a backdoor for
