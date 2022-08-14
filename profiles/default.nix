@@ -8,6 +8,7 @@ with lib;
       ./graphical.nix
       ./headfull.nix
       ./server.nix
+      <agenix/modules/age.nix>
     ];
 
 
@@ -75,6 +76,7 @@ with lib;
       acpi
       bintools
       sshfs
+      (pkgs.callPackage <agenix/pkgs/agenix.nix> { })
     ];
 
     # manpages are love
