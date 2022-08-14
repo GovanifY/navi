@@ -3,11 +3,10 @@ with lib;
 {
   config = mkIf (config.navi.profile.name == "laptop") {
     # low power also means low performance
-    # TODO: make building work whenever substituter is down
-    # nix.distributedBuilds = true;
-    # nix.extraOptions = ''
-    #   builders-use-substitutes = true
-    # '';
+    nix.distributedBuilds = true;
+    nix.extraOptions = ''
+      builders-use-substitutes = true
+    '';
 
     navi.profile.graphical = true;
     navi.components.gaming.enable = true;
