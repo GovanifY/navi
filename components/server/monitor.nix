@@ -29,11 +29,11 @@ in
         Username to connect to the monitoring interface
       '';
     };
-    password = mkOption {
+    password_file = mkOption {
       type = types.str;
       default = "";
       description = ''
-        Password to connect to the monitoring interface
+        File containing the password  to connect to the monitoring interface
       '';
     };
     email = mkOption {
@@ -73,7 +73,7 @@ in
       auth.anonymous.enable = false;
       analytics.reporting.enable = false;
       security.adminUser = cfg.username;
-      security.adminPassword = cfg.password;
+      security.adminPasswordFile = cfg.password_file;
 
       provision = {
         enable = true;

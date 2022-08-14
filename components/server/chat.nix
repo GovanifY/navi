@@ -20,12 +20,14 @@ in
         The domain that will be used to connect to the server.
       '';
     };
-    secret = mkOption {
+    secret_file = mkOption {
       type = types.str;
       default = "";
       description = ''
         The registration secret used to register an account on the messaging
-        server. Can be created by using the command `pwgen -s 64 1`.
+        server. 
+        Need to be in the format SYNAPSE_REGISTRATION_SECRET=secret.
+        Can be created by using the command `pwgen -s 64 1`.
       '';
     };
   };
@@ -73,7 +75,7 @@ in
       enable = true;
       server_name = cfg.domain;
       enable_metrics = config.navi.components.monitor.enable;
-      registration_shared_secret = cfg.secret;
+      registration_shared_secret = " {{ SYNAPSE_REGISTRATION_SECRET }}";
       listeners = [
         {
           port = 8008;
@@ -90,6 +92,8 @@ in
         }
       ];
     };
+
+    systemd.services.matrix-synapse.serviceConfig.EnvironmentFile = cfg.secret_file;
 
     # default postgresql password set by the service
     services.postgresql = {
