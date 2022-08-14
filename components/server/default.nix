@@ -6,5 +6,6 @@
     ./mail.nix
     ./monitor.nix
     ./monitor-rules.nix
+    ./manga.nix
   ];
 }
