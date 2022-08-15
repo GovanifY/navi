@@ -132,6 +132,9 @@ with lib;
     services.nscd.enable = false;
     system.nssModules = mkForce [ ];
 
+    # flakes are amazing and I don't see why we shouldn't enable them by default
+    nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
     #security.polkit.enable = false;
 
     navi.components = {
