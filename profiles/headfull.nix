@@ -68,6 +68,7 @@ with lib;
       owner = "0";
       group = "0";
       mode = "0400";
+      symlink = false;
     };
 
     age.secrets.ssh-navi = {
@@ -75,12 +76,14 @@ with lib;
       owner = "0";
       group = "0";
       mode = "0400";
+      symlink = false;
     };
 
     age.secrets.ssh-navi-2 = {
       path = "/home/${config.navi.username}/.ssh/id_ed25519";
       owner = config.navi.username;
       mode = "0400";
+      symlink = false;
     };
 
 
