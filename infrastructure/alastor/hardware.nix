@@ -1,5 +1,12 @@
 { config, lib, pkgs, ... }:
 with lib;
+let
+  monitor-raid = writeShellScript "raid-warn" ''
+    sudo -i -u govanify bash << EOF
+    printf "To: gauvain@govanify.com\nFrom: gauvain@govanify.com\nSubject: RAID FAILING!!!!!\n\nHi,\n\nEvent $2 detected on device $3" | msmtp -a govanify gauvain@govanify.com
+    EOF
+  '';
+in
 {
   config = mkIf (config.navi.device == "alastor") {
     boot.loader = {
@@ -115,5 +122,16 @@ with lib;
 
     boot.supportedFilesystems = [ "ntfs" ];
     hardware.enableRedistributableFirmware = lib.mkDefault true;
+
+
+    # we want to know when we fail
+    systemd.services.mdmonitor = {
+      wantedBy = [ "multi-user.target" ];
+      enable = true;
+    };
+
+    environment.etc."mdadm.conf".text = ''
+      PROGRAM ${monitor-raid}
+    '';
   };
 }
