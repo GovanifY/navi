@@ -22,6 +22,7 @@ in
       configText = ''
         pieces.hash.on_completion.set = no
         system.umask.set = 0007
+        system.file.allocate = 1
       '';
     };
     systemd.services."flood" = {
