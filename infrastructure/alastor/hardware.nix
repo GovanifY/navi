@@ -43,6 +43,11 @@ in
           keyFile = "/keyfile_matrix.bin";
           allowDiscards = true;
         };
+        axolotl = {
+          device = "/dev/disk/by-uuid/f8719a12-5597-43a5-8913-a265d1ec84d5";
+          preLVM = true;
+          keyFile = "/keyfile_axolotl.bin";
+        };
       };
 
     fileSystems."/" =
@@ -58,15 +63,9 @@ in
       };
 
     fileSystems."/mnt/axolotl" = {
-      device = "/dev/disk/by-uuid/70d71b12-df28-49ed-9712-fdeb0569e1ac";
+      device = "/dev/disk/by-uuid/d549fbec-d80c-41bb-b124-2a3e20812583";
       fsType = "btrfs";
       options = [ "compress=zstd" ];
-      encrypted = {
-        enable = true;
-        label = "axolotl";
-        blkDev = "/dev/disk/by-uuid/f8719a12-5597-43a5-8913-a265d1ec84d5";
-        keyFile = "/keyfile_axolotl.bin";
-      };
     };
 
 
