@@ -57,20 +57,10 @@ in
         fsType = "vfat";
       };
 
-    #    fileSystems."/mnt/lain" = {
-    #      device = "/dev/disk/by-uuid/7324ad41-bd38-4516-ae7c-5570ff3da8a0";
-    #      fsType = "btrfs";
-    #      encrypted = {
-    #        enable = true;
-    #        label = "lain";
-    #        blkDev = "/dev/disk/by-uuid/11902459-0de9-44a0-99c6-1841ea7bc96d";
-    #        keyFile = "/keyfile_lain.bin";
-    #      };
-    #    };
-
     fileSystems."/mnt/axolotl" = {
       device = "/dev/disk/by-uuid/70d71b12-df28-49ed-9712-fdeb0569e1ac";
-      fsType = "ext4";
+      fsType = "btrfs";
+      options = [ "compress=zstd" ];
       encrypted = {
         enable = true;
         label = "axolotl";
