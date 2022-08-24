@@ -77,6 +77,10 @@ with lib;
       bintools
       sshfs
       (pkgs.callPackage <agenix/pkgs/agenix.nix> { })
+      lsof
+      btrfs-progs
+      btrfs-snap
+      btrfs-heatmap
     ];
 
     # manpages are love
