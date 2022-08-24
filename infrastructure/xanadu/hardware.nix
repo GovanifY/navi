@@ -53,7 +53,8 @@ with lib;
 
     fileSystems."/mnt/meduse" = {
       device = "/dev/disk/by-uuid/918de1f9-c23d-4512-9e1d-0f0106073932";
-      fsType = "ext4";
+      fsType = "btrfs";
+      options = [ "compress=zstd" ];
       encrypted = {
         enable = true;
         label = "meduse";
