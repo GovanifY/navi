@@ -3,7 +3,7 @@ with lib;
 let
   monitor-raid = pkgs.writeShellScript "raid-warn" ''
     sudo -i -u govanify bash << EOF
-    printf "To: gauvain@govanify.com\nFrom: gauvain@govanify.com\nSubject: RAID FAILING!!!!!\n\nHi,\n\nEvent $2 detected on device $3" | msmtp -a govanify gauvain@govanify.com
+    printf "To: gauvain@govanify.com\nFrom: gauvain@govanify.com\nSubject: RAID FAILING!!!!!\n\nHi,\n\nDevice $2 is failing somehow, go check the logs" | msmtp -a govanify gauvain@govanify.com
     EOF
   '';
 in
