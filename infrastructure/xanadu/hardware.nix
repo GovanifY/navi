@@ -3,6 +3,7 @@ with lib;
 {
   config = mkIf (config.navi.device == "xanadu") {
     boot.loader = {
+      timeout = 0;
       systemd-boot = {
         enable = true;
         configurationLimit = 5;
