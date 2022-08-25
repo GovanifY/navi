@@ -40,14 +40,11 @@ in
   config = mkIf cfg.enable {
     services = {
       smartd = {
-        notifications = {
-          mail = {
-            enable = true;
-            mailer = mkIf cfg.user email-as-user;
-            recipient = cfg.email;
-            sender = cfg.email;
-          };
-          test = true;
+        notifications.mail = {
+          enable = true;
+          mailer = mkIf cfg.user email-as-user;
+          recipient = cfg.email;
+          sender = cfg.email;
         };
         enable = true;
       };
