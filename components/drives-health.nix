@@ -5,7 +5,7 @@ let
   # we filter through the accounts attrSet, only retrieve the primary account
   # and convert it to a string
   email-as-user = pkgs.writeShellScript "email-as-user" (''
-    ${pkgs.sudo}/bin/sudo /run/wrappers/bin/su ${config.navi.username} -c "msmtp -a'' +
+    ${pkgs.sudo}/bin/sudo ${pkgs.shadow.su}/bin/su ${config.navi.username} -c "msmtp -a'' +
   (concatStringsSep "" (mapAttrsToList
     (name: account:
       optionalString (account.primary) " ${name} ")
