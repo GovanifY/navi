@@ -3,23 +3,18 @@ with lib;
 {
   config = mkIf (config.navi.device == "xanadu") {
     boot.loader = {
-      grub = {
+      systemd-boot = {
         enable = true;
-        version = 2;
-        enableCryptodisk = true;
-        device = "nodev";
-        efiSupport = true;
+        configurationLimit = 5;
       };
 
       efi = {
         canTouchEfiVariables = true;
         efiSysMountPoint = "/boot/efi";
       };
-
     };
 
     boot.initrd.secrets = {
-      "/keyfile_matrix.bin" = "/etc/secrets/initrd/keyfile_matrix.bin";
       "/keyfile_meduse.bin" = "/etc/secrets/initrd/keyfile_meduse.bin";
     };
 
@@ -34,7 +29,6 @@ with lib;
         matrix = {
           device = "/dev/disk/by-uuid/3fc8b7d4-47e0-4e2d-b6b8-ffce64c79a8d";
           preLVM = true;
-          keyFile = "/keyfile_matrix.bin";
           allowDiscards = true;
         };
       };
