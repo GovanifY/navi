@@ -2,17 +2,9 @@
 with lib;
 {
   config = mkIf (config.navi.device == "xanadu") {
-    boot.loader = {
-      timeout = 0;
-      systemd-boot = {
-        enable = true;
-        configurationLimit = 5;
-      };
-
-      efi = {
-        canTouchEfiVariables = true;
-        efiSysMountPoint = "/boot/efi";
-      };
+    boot.loader.efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/boot/efi";
     };
 
     boot.initrd.secrets = {
@@ -32,6 +24,13 @@ with lib;
           preLVM = true;
           allowDiscards = true;
         };
+        meduse = {
+          device = "/dev/disk/by-uuid/e26ef933-86dd-44df-870f-90379d497308";
+          keyFile = "/keyfile_meduse.bin";
+          preLVM = true;
+          allowDiscards = true;
+        };
+
       };
 
     fileSystems."/boot/efi" =
@@ -50,12 +49,6 @@ with lib;
       device = "/dev/disk/by-uuid/918de1f9-c23d-4512-9e1d-0f0106073932";
       fsType = "btrfs";
       options = [ "compress=zstd" ];
-      encrypted = {
-        enable = true;
-        label = "meduse";
-        blkDev = "/dev/disk/by-uuid/e26ef933-86dd-44df-870f-90379d497308";
-        keyFile = "/keyfile_meduse.bin";
-      };
     };
 
     nix.settings.max-jobs = lib.mkDefault 12;
