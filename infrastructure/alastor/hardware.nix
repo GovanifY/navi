@@ -13,23 +13,13 @@ in
 {
   config = mkIf (config.navi.device == "alastor") {
     boot.loader = {
-      grub = {
-        enable = true;
-        version = 2;
-        enableCryptodisk = true;
-        device = "nodev";
-        efiSupport = true;
-      };
-
       efi = {
         canTouchEfiVariables = true;
         efiSysMountPoint = "/boot/efi";
       };
-
     };
 
     boot.initrd.secrets = {
-      "/keyfile_matrix.bin" = "/etc/secrets/initrd/keyfile_matrix.bin";
       "/keyfile_axolotl.bin" = "/etc/secrets/initrd/keyfile_axolotl.bin";
     };
 
@@ -43,7 +33,6 @@ in
         matrix = {
           device = "/dev/disk/by-uuid/9634d799-6103-44c2-aa91-9adecf165f91";
           preLVM = true;
-          keyFile = "/keyfile_matrix.bin";
           allowDiscards = true;
         };
         axolotl = {
