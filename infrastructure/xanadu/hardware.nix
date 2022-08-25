@@ -42,7 +42,7 @@ with lib;
     fileSystems."/" =
       {
         device = "/dev/disk/by-uuid/5fd80bdb-928f-4848-befc-b21ebdee107b";
-        fsType = "ext4";
+        fsType = "btrfs";
       };
 
     fileSystems."/mnt/meduse" = {
