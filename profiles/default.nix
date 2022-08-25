@@ -149,6 +149,7 @@ with lib;
       macspoofer.enable = true;
       hardening.enable = true;
       editor.enable = true;
+      drives-health.enable = true;
     };
 
     # sane defaults for any modern virtualization setup

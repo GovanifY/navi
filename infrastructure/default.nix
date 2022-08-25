@@ -29,5 +29,8 @@ with lib;
         mandatoryFeatures = [ ];
       }
     ];
+
+    navi.components.drives-health.btrfs = true;
+
   };
 }

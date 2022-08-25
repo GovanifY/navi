@@ -159,6 +159,5 @@ with lib;
       enable = true;
       client.enable = true;
     };
-
   };
 }

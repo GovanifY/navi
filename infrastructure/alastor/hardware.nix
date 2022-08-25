@@ -6,9 +6,6 @@ let
     printf "To: gauvain@govanify.com\nFrom: gauvain@govanify.com\nSubject: RAID FAILING!!!!!\n\nHi,\n\nDevice $2 is failing somehow, go check the logs" | msmtp -a govanify gauvain@govanify.com
     EOF
   '';
-  email-as-user = pkgs.writeShellScript "email-as-user" ''
-    sudo su govanify -c "msmtp -a govanify $*"
-  '';
 in
 {
   config = mkIf (config.navi.device == "alastor") {
@@ -26,7 +23,6 @@ in
     boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" ];
     # virtualization and iGVT-g
     boot.initrd.kernelModules = [ "dm-snapshot" ];
-    boot.extraModulePackages = [ ];
 
     boot.initrd.luks.devices =
       {
@@ -80,42 +76,27 @@ in
 
     # the microphone is mapped as mono on FL only, so let's map FL to both FL
     # and FR
-    services = {
-      pipewire.media-session.config.media-session = {
-        "context.modules" = [
-          {
-            "name" = "libpipewire-module-loopback";
-            "args" = {
-              "capture.props" = {
-                "audio.position" = "[FL,FL]";
-                "node.target" =
-                  "alsa_input.usb-Focusrite_Scarlett_2i2_USB-00.analog-stereo";
-              };
-              "playback.props" = {
-                "media.class" = "Audio/Source";
-                "node.name" = "mono-microphone";
-                "node.description" = "Scarlett 2i2 Left";
-                "audio.position" = "[mono]";
-              };
+    services.pipewire.media-session.config.media-session = {
+      "context.modules" = [
+        {
+          "name" = "libpipewire-module-loopback";
+          "args" = {
+            "capture.props" = {
+              "audio.position" = "[FL,FL]";
+              "node.target" =
+                "alsa_input.usb-Focusrite_Scarlett_2i2_USB-00.analog-stereo";
             };
-          }
-        ];
-      };
-
-      # always good to monitor drives
-      smartd = {
-        notifications.mail = {
-          enable = true;
-          mailer = email-as-user;
-          recipient = "gauvain@govanify.com";
-          sender = "gauvain@govanify.com";
-        };
-        enable = true;
-      };
+            "playback.props" = {
+              "media.class" = "Audio/Source";
+              "node.name" = "mono-microphone";
+              "node.description" = "Scarlett 2i2 Left";
+              "audio.position" = "[mono]";
+            };
+          };
+        }
+      ];
     };
 
-
-    boot.supportedFilesystems = [ "ntfs" ];
     hardware.enableRedistributableFirmware = lib.mkDefault true;
 
 

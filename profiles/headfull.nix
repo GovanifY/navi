@@ -122,6 +122,7 @@ with lib;
       music.enable = true;
       chat.enable = true;
       sandboxing.enable = true;
+      drives-health.user = true;
       # the experience is pretty meh and i barely write in japanese myself, plus
       # this adds a dependency on dbus, so i'll let it sit like this up until
       # i absolutely need it

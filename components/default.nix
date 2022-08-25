@@ -11,6 +11,7 @@ with lib;
     ./sandboxing.nix
     ./hardening.nix
     ./torrent.nix
+    ./drives-health.nix
     ./headfull
     ./server
   ];
