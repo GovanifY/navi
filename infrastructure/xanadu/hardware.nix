@@ -7,11 +7,6 @@ with lib;
       efiSysMountPoint = "/boot/efi";
     };
 
-    boot.initrd.secrets = {
-      "/keyfile_meduse.bin" = "/etc/secrets/initrd/keyfile_meduse.bin";
-    };
-
-
     boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" ];
     boot.initrd.kernelModules = [ "dm-snapshot" ];
     boot.kernelModules = [ "i915" "kvm-intel" ];
@@ -26,7 +21,6 @@ with lib;
         };
         meduse = {
           device = "/dev/disk/by-uuid/e26ef933-86dd-44df-870f-90379d497308";
-          keyFile = "/keyfile_meduse.bin";
           preLVM = true;
           allowDiscards = true;
         };
@@ -43,13 +37,8 @@ with lib;
       {
         device = "/dev/disk/by-uuid/5fd80bdb-928f-4848-befc-b21ebdee107b";
         fsType = "btrfs";
+        options = [ "compress=zstd" ];
       };
-
-    fileSystems."/mnt/meduse" = {
-      device = "/dev/disk/by-uuid/918de1f9-c23d-4512-9e1d-0f0106073932";
-      fsType = "btrfs";
-      options = [ "compress=zstd" ];
-    };
 
     nix.settings.max-jobs = lib.mkDefault 12;
     powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
