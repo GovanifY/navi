@@ -5,7 +5,7 @@ let
   # we filter through the accounts attrSet, only retrieve the primary account
   # and convert it to a string
   email-as-user = pkgs.writeShellScript "email-as-user" (''
-    sudo su ${config.navi.username} -c "msmtp -a'' +
+    ${pkgs.sudo}/bin/sudo /run/wrappers/bin/su ${config.navi.username} -c "msmtp -a'' +
   (concatStringsSep "" (mapAttrsToList
     (name: account:
       optionalString (account.primary) " ${name} ")
@@ -40,11 +40,14 @@ in
   config = mkIf cfg.enable {
     services = {
       smartd = {
-        notifications.mail = {
-          enable = true;
-          mailer = mkIf cfg.user email-as-user;
-          recipient = cfg.email;
-          sender = cfg.email;
+        notifications = {
+          mail = {
+            enable = true;
+            mailer = mkIf cfg.user email-as-user;
+            recipient = cfg.email;
+            sender = cfg.email;
+          };
+          test = true;
         };
         enable = true;
       };
