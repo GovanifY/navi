@@ -110,10 +110,10 @@ in
           in
           nameValuePair "btrfs-scrub-${fs'}" {
             after = mkIf ((replaceChars scrub_fs after_fs fs) != "")
-              ("btrfs-scrub-" + (utils.escapeSystemdPath (replaceChars scrub_fs
-                after_fs
-                fs)) + ".service";
-              };
-            in listToAttrs (map scrubService scrub_fs);
+              ("btrfs-scrub-" + (utils.escapeSystemdPath (replaceChars scrub_fs after_fs fs)) + ".service");
+          };
+      in
+      listToAttrs (map scrubService scrub_fs);
 
-            }
+  };
+}
