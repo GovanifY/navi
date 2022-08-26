@@ -1,11 +1,7 @@
 { config, lib, pkgs, ... }:
 with lib;
 let
-  monitor-raid = pkgs.writeShellScript "raid-warn" ''
-    sudo -i -u govanify bash << EOF
-    printf "To: gauvain@govanify.com\nFrom: gauvain@govanify.com\nSubject: RAID FAILING!!!!!\n\nHi,\n\nDevice $2 is failing somehow, go check the logs" | msmtp -a govanify gauvain@govanify.com
-    EOF
-  '';
+  scrub_fs = [ "/dev/sda" "/dev/sdb" "/dev/sdc" "/dev/sdd" "/dev/sde" "/dev/sdf" ];
 in
 {
   config = mkIf (config.navi.device == "alastor") {
@@ -99,16 +95,25 @@ in
 
     hardware.enableRedistributableFirmware = lib.mkDefault true;
 
+    services.btrfs.autoScrub.fileSystems = scrub_fs;
 
-    # we want to know when we fail
-    systemd.services.mdmonitor = {
-      wantedBy = [ "multi-user.target" ];
-      enable = true;
-    };
+    # that one's a doozy, so to explain: For each fs in our scrub list, we
+    # define after to another substituted list in the let at the header which
+    # basically does a - 1 to the entire list. This is done in order to make the
+    # fs scrub sequential. why? see: https://lore.kernel.org/linux-btrfs/20200627030614.GW10769@hungrycats.org/
+    systemd.services =
+      let
+        scrubService = fs:
+          let
+            fs' = utils.escapeSystemdPath fs;
+            after_fs = [ "" ] ++ (init scrub_fs);
+          in
+          nameValuePair "btrfs-scrub-${fs'}" {
+            after = mkIf ((replaceChars scrub_fs after_fs fs) != "")
+              ("btrfs-scrub-" + (utils.escapeSystemdPath (replaceChars scrub_fs
+                after_fs
+                fs)) + ".service";
+              };
+            in listToAttrs (map scrubService scrub_fs);
 
-    environment.etc."mdadm.conf".text = ''
-      PROGRAM ${monitor-raid}
-    '';
-  };
-
-}
+            }
