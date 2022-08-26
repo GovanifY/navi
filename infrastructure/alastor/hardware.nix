@@ -12,10 +12,6 @@ in
       };
     };
 
-    boot.initrd.secrets = {
-      "/keyfile_axolotl.bin" = "/etc/secrets/initrd/keyfile_axolotl.bin";
-    };
-
     boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" ];
     # virtualization and iGVT-g
     boot.initrd.kernelModules = [ "dm-snapshot" ];
