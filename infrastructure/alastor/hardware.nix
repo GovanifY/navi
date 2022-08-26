@@ -53,7 +53,7 @@ in
     fileSystems."/mnt/axolotl" = {
       device = "/dev/disk/by-uuid/d549fbec-d80c-41bb-b124-2a3e20812583";
       fsType = "btrfs";
-      options = [ "compress=zstd" ];
+      options = [ "compress=zstd" "space_cache=v2" ];
     };
 
 
