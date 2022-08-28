@@ -1,7 +1,7 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 with lib;
 let
-  scrub_fs = [ "/dev/sda" "/dev/sdb" "/dev/sdc" "/dev/sdd" "/dev/sde" "/dev/sdf" ];
+  axolotl_fs = [ "/dev/sda" "/dev/sdb" "/dev/sdc" "/dev/sdd" "/dev/sde" "/dev/sdf" ];
 in
 {
   config = mkIf (config.navi.device == "alastor") {
@@ -16,19 +16,24 @@ in
     # virtualization and iGVT-g
     boot.initrd.kernelModules = [ "dm-snapshot" ];
 
-    boot.initrd.luks.devices =
+    # auto-generating entries for all of axolotl fs's.
+    boot.initrd.luks.devices = mkMerge [
+      (listToAttrs (imap1
+        (i: fs:
+          (nameValuePair "axolotl-${builtins.toString i}" {
+            device = fs;
+            preLVM = true;
+          }))
+        axolotl_fs))
+
       {
         matrix = {
           device = "/dev/disk/by-uuid/9634d799-6103-44c2-aa91-9adecf165f91";
           preLVM = true;
           allowDiscards = true;
         };
-        axolotl = {
-          device = "/dev/disk/by-uuid/f8719a12-5597-43a5-8913-a265d1ec84d5";
-          preLVM = true;
-          keyFile = "/keyfile_axolotl.bin";
-        };
-      };
+      }
+    ];
 
     fileSystems."/" =
       {
@@ -43,7 +48,7 @@ in
       };
 
     fileSystems."/mnt/axolotl" = {
-      device = "/dev/disk/by-uuid/d549fbec-d80c-41bb-b124-2a3e20812583";
+      device = "/dev/disk/by-uuid/edcb10f1-339e-42b1-ba69-35f2720884b7";
       fsType = "btrfs";
       options = [ "compress=zstd" "space_cache=v2" ];
     };
@@ -91,7 +96,7 @@ in
 
     hardware.enableRedistributableFirmware = lib.mkDefault true;
 
-    services.btrfs.autoScrub.fileSystems = scrub_fs;
+    services.btrfs.autoScrub.fileSystems = axolotl_fs;
 
     # that one's a doozy, so to explain: For each fs in our scrub list, we
     # define after to another substituted list in the let at the header which
@@ -102,14 +107,19 @@ in
         scrubService = fs:
           let
             fs' = utils.escapeSystemdPath fs;
-            after_fs = [ "" ] ++ (init scrub_fs);
+            after_fs = [ "" ] ++ (init axolotl_fs);
           in
           nameValuePair "btrfs-scrub-${fs'}" {
-            after = mkIf ((replaceChars scrub_fs after_fs fs) != "")
-              ("btrfs-scrub-" + (utils.escapeSystemdPath (replaceChars scrub_fs after_fs fs)) + ".service");
+            after = mkIf ((replaceChars axolotl_fs after_fs fs) != "")
+              [
+                ("btrfs-scrub-" + (utils.escapeSystemdPath (replaceChars
+                  axolotl_fs
+                  after_fs
+                  fs)) + ".service")
+              ];
           };
       in
-      listToAttrs (map scrubService scrub_fs);
+      listToAttrs (map scrubService axolotl_fs);
 
   };
 }
