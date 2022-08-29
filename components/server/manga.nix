@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 with lib;
 let
-  cfg = config.navi.components.chat-server;
+  cfg = config.navi.components.manga;
 in
 {
   options.navi.components.manga = {

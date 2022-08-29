@@ -44,8 +44,6 @@ with lib;
         enable = true;
         dataDir = "/mnt/axolotl/torrent";
       };
-      fahrenheit.enable = true;
-      anima.enable = true;
       wm = {
         azerty = true;
         extraConf = ''
