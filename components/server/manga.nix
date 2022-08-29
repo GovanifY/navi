@@ -13,6 +13,14 @@ in
         The domain that will be used to connect to the server.
       '';
     };
+    directory = mkOption {
+      type = types.str;
+      default = "/var/lib/komga";
+      description = ''
+        The state directory used by the server.
+      '';
+    };
+
   };
 
   config = mkIf cfg.enable {
@@ -32,6 +40,7 @@ in
     services.komga = {
       enable = true;
       port = 7111;
+      stateDir = cfg.directory;
     };
   };
 }
