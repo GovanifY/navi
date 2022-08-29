@@ -16,20 +16,22 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.nginx.virtualHosts = {
-      ${cfg.domain} = {
-        enableACME = true;
-        forceSSL = true;
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:7111";
+    services.nginx = {
+      virtualHosts = {
+        ${cfg.domain} = {
+          enableACME = true;
+          forceSSL = true;
+          locations."/" = {
+            proxyPass = "http://127.0.0.1:7111";
+          };
         };
       };
+      enable = true;
     };
 
     services.komga = {
       enable = true;
       port = 7111;
-      openFirewall = true;
     };
   };
 }

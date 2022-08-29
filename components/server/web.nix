@@ -3,7 +3,7 @@ with lib;
 let
   cfg = config.navi.components.web-server;
 
-  git_paths_bringup = concatStrings (
+  git_paths_bringup = mkIf (cfg.domains != null) (concatStrings (
     mapAttrsToList
       (name: attr: optionalString (attr.git.user != null) ''
         if [[ ! -d "/home/${attr.git.user}/${name}.git/" ]]
@@ -20,9 +20,9 @@ let
             chmod a+r /var/www/${name}
         fi
       '')
-      cfg.domains);
+      cfg.domains));
 
-  virtualhosts = mapAttrs'
+  virtualhosts = mkIf (cfg.domains != null) (mapAttrs'
     (name: attr: (lib.nameValuePair
       "${name}"
       {
@@ -35,9 +35,9 @@ let
         locations = if (attr.return != null) then { "/".return = attr.return; } else { };
         default = attr.default;
       }))
-    cfg.domains;
+    cfg.domains);
 
-  git_users = mapAttrs'
+  git_users = mkIf (cfg.domains != null) (mapAttrs'
     (name: attr: (if (attr.git.user != null) then
       (lib.nameValuePair
         "${attr.git.user}"
@@ -48,7 +48,7 @@ let
           # in a weird fashion trying to create a blank user! Probably a better
           # way to do this but nix syntax is _so_ obtuse sometimes
         }) else lib.nameValuePair "${config.navi.username}" { }))
-    cfg.domains;
+    cfg.domains);
 
 in
 {
@@ -62,7 +62,7 @@ in
       '';
     };
     domains = mkOption {
-      type = types.attrsOf (types.submodule ({ url, ... }: {
+      type = types.nullOr (types.attrsOf (types.submodule ({ url, ... }: {
         options = {
           url = mkOption {
             type = types.str;
@@ -115,14 +115,15 @@ in
             };
           };
         };
-      }));
+      })));
+      default = null;
     };
   };
 
   config = mkIf cfg.enable {
     networking.firewall.allowedTCPPorts = [ 80 443 ];
     security.acme.acceptTerms = true;
-    security.acme.email = cfg.email;
+    security.acme.defaults.email = cfg.email;
     services.nginx = {
       enable = true;
       statusPage = config.navi.components.monitor.enable;
