@@ -46,6 +46,7 @@ with lib;
       # multimedia
       mpv
       vlc
+      kodi
       imv
       libreoffice
 

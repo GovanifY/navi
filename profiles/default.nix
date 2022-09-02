@@ -81,6 +81,9 @@ with lib;
       btrfs-progs
       btrfs-snap
       btrfs-heatmap
+      compsize
+      iotop
+      lsof
     ];
 
     # manpages are love
