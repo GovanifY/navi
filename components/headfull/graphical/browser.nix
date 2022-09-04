@@ -185,9 +185,6 @@ in
             lockPref("browser.newtabpage.activity-stream.showSponsoredTopSites", false);
 
 
-            // disable unwanted features
-            lockPref("media.peerconnection.enabled", false);
-
             // OCSP does more harm than good); TLS certificate removal is pretty
             // much useless, nobody will keep onlin a website that has been
             // compromised. It's only helpful if a CA has been compromised but by
@@ -222,9 +219,11 @@ in
     xdg.portal.enable = false;
 
     environment.variables.BROWSER = "firefox";
-    environment.systemPackages = mkIf (!sandboxing.enable) [ pkgs.firefox ];
-    navi.components.sandboxing.programs = mkIf sandboxing.enable {
-      firefox = "${lib.getBin pkgs.firefox}/bin/firefox";
-    };
+    #environment.systemPackages = mkIf (!sandboxing.enable) [ pkgs.firefox ];
+    environment.systemPackages = [ pkgs.firefox ];
+    # TODO: fix IME support with firejail
+    #navi.components.sandboxing.programs = mkIf sandboxing.enable {
+    #  firefox = "${lib.getBin pkgs.firefox}/bin/firefox";
+    #};
   };
 }

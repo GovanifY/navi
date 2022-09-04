@@ -4,19 +4,19 @@ let
   cfg = config.navi.components.sandboxing;
 in
 {
+  imports = [
+    (mkAliasOptionModule [ "navi" "components" "sandboxing" "programs" ] [
+      "programs"
+      "firejail"
+      "wrappedBinaries"
+    ])
+  ];
   options.navi.components.sandboxing = {
     enable = mkEnableOption "Enable navi's sandboxing features";
-    programs = mkOption {
-      type = types.attrsOf types.path;
-      description = ''
-        The binary path of programs to sandbox.
-      '';
-    };
   };
   config = mkIf cfg.enable {
     programs.firejail = {
       enable = true;
-      wrappedBinaries = cfg.programs;
     };
   };
 }
