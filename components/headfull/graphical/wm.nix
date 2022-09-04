@@ -215,6 +215,7 @@ let
 
     bar {
         position top
+        tray_output none
 
         status_command while ${status-sh}; do sleep 1; done
 
@@ -419,7 +420,6 @@ in
       home.file.".config/electron-flags.conf".text = ''
         --enable-features=UseOzonePlatform
         --ozone-platform=wayland
-        --gtk-version=4
       '';
     };
 
