@@ -22,6 +22,7 @@ with lib;
       #splash.enable = true;
       wm.enable = true;
       chat.graphical = true;
+      ime.enable = true;
     };
   };
 }

@@ -33,14 +33,10 @@ in
     };
 
     i18n.inputMethod = {
-      enabled = "ibus";
-      ibus.engines = with pkgs.ibus-engines; [ mozc ];
-    };
-
-    environment.variables = {
-      GTK_IM_MODULE = "ibus";
-      XMODIFIERS = "@im=ibus";
-      QT_IM_MODULE = "ibus";
+      enabled = "fcitx5";
+      fcitx5.addons = with pkgs; [
+        fcitx5-mozc
+      ];
     };
   };
 }

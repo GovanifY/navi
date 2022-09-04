@@ -239,6 +239,8 @@ let
     exec pactl info > /dev/null
     '' + optionalString config.navi.components.splash.enable ''
     exec plymouth-quit > /dev/null 2>&1"
+  '' + optionalString config.navi.components.ime.enable ''
+    exec --no-startup-id fcitx5 -d
   '' + cfg.extraConf;
 in
 {
@@ -417,6 +419,7 @@ in
       home.file.".config/electron-flags.conf".text = ''
         --enable-features=UseOzonePlatform
         --ozone-platform=wayland
+        --gtk-version=4
       '';
     };
 
