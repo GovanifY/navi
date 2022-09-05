@@ -151,6 +151,10 @@ with lib;
       lean
       elan
 
+      lame
+      flac
+      mktorrent
+      virtiofsd
     ];
 
     # give you the rights to inspect traffic as this is a single user box/not a
