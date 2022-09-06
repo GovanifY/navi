@@ -184,14 +184,6 @@ in
             lockPref("browser.messaging-system.whatsNewPanel.enabled", false);
             lockPref("browser.newtabpage.activity-stream.showSponsoredTopSites", false);
 
-
-            // OCSP does more harm than good); TLS certificate removal is pretty
-            // much useless, nobody will keep onlin a website that has been
-            // compromised. It's only helpful if a CA has been compromised but by
-            // then everyone will have flashing warnings so they'll probably have
-            // it updated before it even begins to become an issue.
-            lockPref("security.OCSP.enabled", 0);
-
             // https only!
             lockPref("dom.security.https_only_mode", true);
 
