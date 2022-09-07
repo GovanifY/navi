@@ -7,10 +7,6 @@ with lib;
       efiSysMountPoint = "/boot/efi";
     };
 
-    boot.initrd.secrets = {
-      "/keyfile_matrix.bin" = "/etc/secrets/initrd/keyfile_matrix.bin";
-    };
-
     boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "sd_mod" "usb_storage" ];
     boot.initrd.kernelModules = [ "dm-snapshot" ];
     boot.kernelModules = [ "kvm-intel" "qmi_wwan" "qcserial" ];
@@ -21,7 +17,6 @@ with lib;
         matrix = {
           device = "/dev/disk/by-uuid/82d01ed4-de98-46c2-9288-de5c0c834b77";
           preLVM = true;
-          keyFile = "/keyfile_matrix.bin";
           allowDiscards = true;
         };
       };
