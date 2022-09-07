@@ -10,7 +10,8 @@ with lib;
     boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "sd_mod" "usb_storage" ];
     boot.initrd.kernelModules = [ "dm-snapshot" ];
     boot.kernelModules = [ "kvm-intel" "qmi_wwan" "qcserial" ];
-    boot.extraModulePackages = [ ];
+    # battery recalibration on thinkpad
+    boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
 
     boot.initrd.luks.devices =
       {
@@ -72,8 +73,6 @@ with lib;
     # smart card
     services.pcscd.enable = true;
     services.fwupd.enable = true;
-
-    services.tlp.enable = lib.mkDefault true;
 
 
     # temporary until the partition is converted

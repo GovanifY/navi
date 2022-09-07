@@ -10,7 +10,8 @@ with lib;
     boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" ];
     boot.initrd.kernelModules = [ "dm-snapshot" ];
     boot.kernelModules = [ "i915" "kvm-intel" ];
-    boot.extraModulePackages = [ ];
+    # battery recalibration on thinkpad
+    boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
 
     boot.initrd.luks.devices =
       {
@@ -72,7 +73,5 @@ with lib;
     # and let's enable our fingerprint sensor too
     services.fprintd.enable = true;
     security.pam.services.swaylock.fprintAuth = true;
-
-    services.tlp.enable = lib.mkDefault true;
   };
 }
