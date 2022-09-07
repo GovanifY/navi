@@ -66,10 +66,10 @@ with lib;
 
 
     # and let's enable our fingerprint sensor too
-    #services.fprintd.enable = true;
-    #services.fprintd.tod.enable = true;
-    #services.fprintd.tod.driver = pkgs.libfprint-2-tod1-vfs0090;
-    #security.pam.services.swaylock.fprintAuth = true;
+    services.fprintd.enable = true;
+    services.fprintd.tod.enable = true;
+    services.fprintd.tod.driver = pkgs.libfprint-2-tod1-vfs0090;
+    security.pam.services.swaylock.fprintAuth = true;
     # smart card
     services.pcscd.enable = true;
     services.fwupd.enable = true;
