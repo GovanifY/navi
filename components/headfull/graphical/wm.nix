@@ -374,7 +374,7 @@ in
       # segfault/sigtrap when using some of its features
       environment.XDG_DATA_DIRS = config.environment.variables.XDG_DATA_DIRS +
         ":${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}"
-        + ":${pkgs.gnome3.adwaita-icon-theme}/share/" + ":${pkgs.breeze-icons}/share/";
+        + ":${pkgs.gnome.adwaita-icon-theme}/share/" + ":${pkgs.breeze-icons}/share/";
       serviceConfig = {
         Type = "simple";
         ExecStart = ''
