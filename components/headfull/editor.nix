@@ -223,7 +223,7 @@ in
     };
     sessions = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
       description = ''
         Adds some automatic session saving and resuming functionality.
       '';
