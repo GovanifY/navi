@@ -134,7 +134,6 @@ in
               };
               SearchBar = "unified";
               PictureInPicture.Enabled = false;
-              PasswordManagerEnabled = false;
               NoDefaultBookmarks = false;
               DontCheckDefaultBrowser = true;
               DisableSetDesktopBackground = true;
@@ -187,6 +186,13 @@ in
             // https only!
             lockPref("dom.security.https_only_mode", true);
 
+            // disable JIT and sensitive web technologies
+            lockPref("javascript.options.baselinejit", false);
+            lockPref("javascript.options.ion", false);
+            lockPref("javascript.options.wasm", false);
+            lockPref("javascript.options.asmjs", false);
+            lockPref("webgl.disabled", true);
+
             // themeing
             lockPref("devtools.theme", "dark");
             lockPref("extensions.activeThemeID", "firefox-compact-dark@mozilla.org");
@@ -205,7 +211,7 @@ in
       127.0.0.1 normandy.cdn.mozilla.net
       127.0.0.1 shavar.services.mozilla.com
       127.0.0.1 location.services.mozilla.com
-
+      127.0.0.1 incoming.telemetry.mozilla.org
     '';
     # firefox no segfaulty
     xdg.portal.enable = false;
