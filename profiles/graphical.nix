@@ -5,10 +5,6 @@ with lib;
 
     navi.profile.headfull = true;
 
-    # scudo breaks everything on a graphical setup, eg firefox can't even
-    # launch, so this is out of the question.
-    navi.components.hardening.scudo = false;
-
     # use networkmanager by default on graphical setups; makes life easier
     networking.networkmanager.enable = true;
 

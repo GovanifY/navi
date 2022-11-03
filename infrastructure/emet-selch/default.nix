@@ -85,6 +85,14 @@ with lib;
     # Network (Hetzner uses static IP assignments, and we don't use DHCP here)
     networking.useDHCP = true;
     networking.interfaces."enp0s31f6".useDHCP = true;
+    networking.enableIPv6 = true;
+    networking.interfaces."enp0s31f6".useDHCP = true;
+    networking.interfaces."enp0s31f6".ipv6.addresses = [
+      {
+        address = "2a01:4f9:2b:22c1::1";
+        prefixLength = 64;
+      }
+    ];
 
     navi.profile.name = "server";
   };

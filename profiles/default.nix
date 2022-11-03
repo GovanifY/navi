@@ -151,9 +151,16 @@ with lib;
       shell.enable = true;
       multiplexer.enable = true;
       macspoofer.enable = true;
-      hardening.enable = true;
+      # not only does scudo break essentially every major graphical program in
+      # linux it even breaks php and a few other things so I'm forced to disable
+      # it...
+      hardening = {
+        enable = true;
+        scudo = false;
+      };
       editor.enable = true;
       drives-health.enable = true;
+
     };
 
     # sane defaults for any modern virtualization setup

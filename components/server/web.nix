@@ -33,11 +33,18 @@ let
             (if attr.root == null then
               "/var/www/${name}" else attr.root) else null;
         locations =
-          if (attr.return != null) then {
+          (if (attr.return != null) then {
             "/".return =
               attr.return;
             "/.git/".return = "404";
-          } else { "/.git/".return = "404"; };
+          } else { "/.git/".return = "404"; }) //
+          (if (attr.php) then {
+            "~ \.php$".extraConfig = ''
+              fastcgi_pass  unix:${config.services.phpfpm.pools.mypool.socket};
+              fastcgi_index index.php;
+            '';
+            "/".index = "index.php";
+          } else { });
         default = attr.default;
       }))
     cfg.domains);
@@ -66,6 +73,13 @@ in
         Default contact email that the web server will use.
       '';
     };
+    php = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to enable the php services.
+      '';
+    };
     domains = mkOption {
       type = types.nullOr (types.attrsOf (types.submodule ({ url, ... }: {
         options = {
@@ -84,6 +98,11 @@ in
             type = types.bool;
             default = false;
             description = "Whether or not to build a static website.";
+          };
+          php = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Whether or not to enable PHP for this website.";
           };
           tls = mkOption {
             type = types.bool;
@@ -137,7 +156,19 @@ in
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
     };
-
+    services.phpfpm.pools.mypool = mkIf cfg.php {
+      user = "nobody";
+      group = "nogroup";
+      settings = {
+        pm = "dynamic";
+        "listen.owner" = config.services.nginx.user;
+        "pm.max_children" = 5;
+        "pm.start_servers" = 2;
+        "pm.min_spare_servers" = 1;
+        "pm.max_spare_servers" = 3;
+        "pm.max_requests" = 500;
+      };
+    };
     services.nginx.virtualHosts = virtualhosts;
     users.users = git_users;
     # automatically setups the git repositories and /var/www perms, with
