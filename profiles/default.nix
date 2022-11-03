@@ -146,7 +146,7 @@ with lib;
     #security.polkit.enable = false;
 
     navi.components = {
-      bootloader.enable = true;
+      bootloader.enable = mkIf (config.navi.profile.name != "server") true;
       xdg.enable = true;
       shell.enable = true;
       multiplexer.enable = true;

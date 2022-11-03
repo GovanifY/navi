@@ -1,6 +1,10 @@
 { config, lib, pkgs, ... }:
 with lib;
 {
+  imports = [
+    ./hardware.nix
+  ];
+
   config = mkIf (config.navi.device == "emet-selch") {
     networking = {
       hostName = "emet-selch";
@@ -77,6 +81,31 @@ with lib;
     time.timeZone = "Europe/Paris";
 
     users.users.${config.navi.username}.initialHashedPassword = fileContents ./../../secrets/emet-selch/assets/shadow/main;
+
+    # Network (Hetzner uses static IP assignments, and we don't use DHCP here)
+    networking.useDHCP = false;
+    networking.interfaces."enp0s31f6".ipv4.addresses = [
+      {
+        address = "95.216.240.149";
+        # FIXME: The prefix length is commonly, but not always, 24.
+        # You should check what the prefix length is for your server
+        # by inspecting the netmask in the "IPs" tab of the Hetzner UI.
+        # For example, a netmask of 255.255.255.0 means prefix length 24
+        # (24 leading 1s), and 255.255.255.192 means prefix length 26
+        # (26 leading 1s).
+        prefixLength = 24;
+      }
+    ];
+    networking.interfaces."enp0s31f6".ipv6.addresses = [
+      {
+        address = "2a01:4f9:2b:22c1::1";
+        prefixLength = 64;
+      }
+    ];
+    networking.defaultGateway = "95.216.240.129";
+    networking.defaultGateway6 = { address = "fe80::1"; interface = "enp0s31f6"; };
+    networking.nameservers = [ "8.8.8.8" ];
+
 
     navi.profile.name = "server";
   };

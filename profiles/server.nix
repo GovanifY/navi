@@ -5,7 +5,8 @@ with lib;
     boot.initrd.network.enable = true;
     boot.initrd.network.ssh = {
       enable = true;
-      authorizedKeys = config.user.users.${config.navi.username}.openssh.authorizedKeys.keys;
+      authorizedKeys = [ (builtins.readFile ./../secrets/common/assets/ssh/navi.pub) ];
+      hostKeys = [ "/etc/secrets/initrd/ssh_host_ed25519_key" ];
     };
   };
 }
