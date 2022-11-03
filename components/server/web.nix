@@ -32,7 +32,12 @@ let
           if (attr.static || (attr.git.user != null)) then
             (if attr.root == null then
               "/var/www/${name}" else attr.root) else null;
-        locations = if (attr.return != null) then { "/".return = attr.return; } else { };
+        locations =
+          if (attr.return != null) then {
+            "/".return =
+              attr.return;
+            "/.git/".return = "404";
+          } else { "/.git/".return = "404"; };
         default = attr.default;
       }))
     cfg.domains);

@@ -35,12 +35,7 @@ with lib;
     services.openssh.ports = [ 22 32000 ];
 
 
-    # headfull main user is essentially an admin, reflect that by giving it the
-    # wheel group
-    users.users.${config.navi.username} = {
-      extraGroups = [ "wheel" ];
-      hashedPassword = fileContents ./../secrets/headfull/assets/shadow/main;
-    };
+    users.users.${config.navi.username}.hashedPassword = fileContents ./../secrets/headfull/assets/shadow/main;
     users.users.root.hashedPassword = fileContents ./../secrets/headfull/assets/shadow/root;
 
     # cups by default

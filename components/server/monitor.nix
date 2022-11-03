@@ -59,51 +59,33 @@ in
 
     services.grafana = {
       enable = true;
-      domain = cfg.domain;
-      port = 2342;
-      addr = "127.0.0.1";
+      settings = {
+        server.domain = cfg.domain;
+        server.http_port = 2342;
+        server.http_addr = "127.0.0.1";
 
-      database.type = "postgres";
-      database.host = "/run/postgresql";
-      database.user = "grafana";
+        database.type = "postgres";
+        database.host = "/run/postgresql";
+        database.user = "grafana";
 
-      smtp.enable = false;
-      users.allowSignUp = false;
-      users.allowOrgCreate = false;
-      auth.anonymous.enable = false;
-      analytics.reporting.enable = false;
-      security.adminUser = cfg.username;
-      security.adminPasswordFile = cfg.password_file;
-
-      provision = {
-        enable = true;
-        dashboards = [
-          ({
-            name = "General";
-            type = "file";
-            disableDeletion = true;
-            options.path = ./../../assets/dashboards;
-          })
-        ];
-        datasources = [
-          {
-            access = "proxy";
-            name = "prometheus";
-            type = "prometheus";
-            url = "http://localhost:9090";
-          }
-        ];
+        smtp.enable = false;
+        users.allowSignUp = false;
+        users.allowOrgCreate = false;
+        "auth.anonymous".enabled = false;
+        analytics.reporting_enable = false;
+        security.admin_user = cfg.username;
+        security.admin_password = "$__file{${cfg.password_file}}";
       };
     };
 
     systemd.services.grafana.after = [ "postgresql.service" ];
     services.postgresql = {
       enable = true;
-      ensureDatabases = [ config.services.grafana.database.name ];
+      ensureDatabases = [ config.services.grafana.settings.database.name ];
       ensureUsers = [
         {
-          name = config.services.grafana.database.user;
-          ensurePermissions = { "DATABASE ${config.services.grafana.database.name}" = "ALL PRIVILEGES"; };
+          name = config.services.grafana.settings.database.user;
+          ensurePermissions = { "DATABASE ${config.services.grafana.settings.database.name}" = "ALL PRIVILEGES"; };
         }
       ];
     };

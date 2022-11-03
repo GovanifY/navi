@@ -100,6 +100,7 @@ with lib;
     users.users.${config.navi.username} = {
       isNormalUser = true;
       openssh.authorizedKeys.keyFiles = [ ./../secrets/common/assets/ssh/navi.pub ];
+      extraGroups = [ "wheel" ];
     };
 
     # automatic updates & cleanup

@@ -2,6 +2,16 @@
 with lib;
 let
   cfg = config.navi.components.chat-server;
+  clientConfig = {
+    "m.homeserver".base_url = "https://${cfg.access_domain}";
+    "m.identity_server" = { };
+  };
+  serverConfig."m.server" = "${config.services.matrix-synapse.settings.server_name}:443";
+  mkWellKnown = data: ''
+    add_header Content-Type application/json;
+    add_header Access-Control-Allow-Origin *;
+    return 200 '${builtins.toJSON data}';
+  '';
 in
 {
   options.navi.components.chat-server = {
@@ -20,16 +30,6 @@ in
         The domain that will be used to connect to the server.
       '';
     };
-    secret_file = mkOption {
-      type = types.str;
-      default = "";
-      description = ''
-        The registration secret used to register an account on the messaging
-        server. 
-        Need to be in the format SYNAPSE_REGISTRATION_SECRET=secret.
-        Can be created by using the command `pwgen -s 64 1`.
-      '';
-    };
   };
 
   config = mkIf cfg.enable {
@@ -37,63 +37,41 @@ in
       "${cfg.domain}" = {
         forceSSL = true;
         enableACME = true;
-        locations."= /.well-known/matrix/server".extraConfig =
-          let
-            # use 443 instead of the default 8448 port to unite
-            # the client-server and server-server port for simplicity
-            server = { "m.server" = "${cfg.access_domain}:443"; };
-          in
-          ''
-            add_header Content-Type application/json;
-            return 200 '${builtins.toJSON server}';
-          '';
-        locations."= /.well-known/matrix/client".extraConfig =
-          let
-            client = {
-              "m.homeserver" = { "base_url" = "https://${cfg.access_domain}"; };
-            };
-          in
-          ''
-            add_header Content-Type application/json;
-            return 200 '${builtins.toJSON client}';
-          '';
+        locations."= /.well-known/matrix/server".extraConfig = mkWellKnown serverConfig;
+        locations."= /.well-known/matrix/client".extraConfig = mkWellKnown clientConfig;
       };
       "${cfg.access_domain}" = {
         enableACME = true;
         forceSSL = true;
-
-        locations."/".return = "418";
-
-        locations."/_matrix" = {
-          proxyPass = "http://[::1]:8008";
-        };
+        locations."/".extraConfig = '' 
+          return 404;
+        '';
+        locations."/_matrix".proxyPass = "http://[::1]:8008";
+        locations."/_synapse/client".proxyPass = "http://[::1]:8008";
       };
     };
 
     # TODO: look through config and add mx-puppet-discord & telegram
     services.matrix-synapse = {
       enable = true;
-      server_name = cfg.domain;
-      enable_metrics = config.navi.components.monitor.enable;
-      registration_shared_secret = " {{ SYNAPSE_REGISTRATION_SECRET }}";
-      listeners = [
+      settings.enable_metrics = config.navi.components.monitor.enable;
+      settings.server_name = cfg.domain;
+      settings.listeners = [
         {
           port = 8008;
-          bind_address = "::1";
+          bind_addresses = [ "::1" ];
           type = "http";
           tls = false;
           x_forwarded = true;
           resources = [
             {
-              names = [ "client" "federation" ] ++ optionals config.navi.components.monitor.enable [ "client" ];
-              compress = false;
+              names = [ "client" "federation" ];
+              compress = true;
             }
           ];
         }
       ];
     };
-
-    systemd.services.matrix-synapse.serviceConfig.EnvironmentFile = cfg.secret_file;
 
     # default postgresql password set by the service
     services.postgresql = {
