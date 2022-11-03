@@ -86,13 +86,13 @@ with lib;
     networking.useDHCP = true;
     networking.interfaces."enp0s31f6".useDHCP = true;
     networking.enableIPv6 = true;
-    networking.interfaces."enp0s31f6".useDHCP = true;
     networking.interfaces."enp0s31f6".ipv6.addresses = [
       {
         address = "2a01:4f9:2b:22c1::1";
         prefixLength = 64;
       }
     ];
+    networking.defaultGateway6 = { address = "fe80::1"; interface = "enp0s31f6"; };
 
     navi.profile.name = "server";
   };
