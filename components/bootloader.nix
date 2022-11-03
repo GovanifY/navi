@@ -23,7 +23,7 @@ in
     # unified bzImage signed with our keys. With a well provisioned TPM this
     # should essentially solve the entire boot tampering issue.
     boot.loader = {
-      timeout = 0;
+      timeout = mkIf (config.navi.profile.name != "server") 0;
       systemd-boot = {
         enable = true;
         configurationLimit = 5;
@@ -31,7 +31,7 @@ in
     };
 
 
-    boot.initrd.systemd.enable = true;
+    boot.initrd.systemd.enable = mkIf (config.navi.profile.name != "server") true;
     boot.consoleLogLevel = mkIf (!cfg.verbose) 0;
     boot.kernelParams = mkIf (!cfg.verbose) [ "quiet" ];
     boot.plymouth.enable = mkIf (!cfg.verbose) true;
