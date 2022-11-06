@@ -140,7 +140,7 @@ in
           job_name = "synapse";
           metrics_path = "/_synapse/metrics";
           static_configs = [{
-            targets = [ "127.0.0.1:8448" ];
+            targets = [ "127.0.0.1:8008" ];
           }];
         }] ++ optionals
         config.navi.components.web-server.enable
