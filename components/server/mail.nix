@@ -2,7 +2,6 @@
 with lib;
 let
   cfg = config.navi.components.mail-server;
-  cert = config.security.acme.certs."${cfg.root_domain}".directory;
 in
 {
   imports = [
@@ -39,9 +38,7 @@ in
       enable = true;
       fqdn = cfg.root_domain;
       domains = cfg.domains;
-      certificateScheme = 1;
-      certificateFile = "${cert}/fullchain.pem";
-      keyFile = "${cert}/key.pem";
+      certificateScheme = 3;
       dkimSelector = config.navi.device;
       dkimKeyBits = 2048;
     };

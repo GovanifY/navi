@@ -68,7 +68,6 @@ in
         database.host = "/run/postgresql";
         database.user = "grafana";
 
-        smtp.enable = false;
         users.allowSignUp = false;
         users.allowOrgCreate = false;
         "auth.anonymous".enabled = false;
@@ -141,7 +140,7 @@ in
           job_name = "synapse";
           metrics_path = "/_synapse/metrics";
           static_configs = [{
-            targets = [ "127.0.0.1:8008" ];
+            targets = [ "127.0.0.1:8448" ];
           }];
         }] ++ optionals
         config.navi.components.web-server.enable

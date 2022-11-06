@@ -6,7 +6,7 @@ let
     "m.homeserver".base_url = "https://${cfg.access_domain}";
     "m.identity_server" = { };
   };
-  serverConfig."m.server" = "${config.services.matrix-synapse.settings.server_name}:443";
+  serverConfig."m.server" = "${cfg.access_domain}:443";
   mkWellKnown = data: ''
     add_header Content-Type application/json;
     add_header Access-Control-Allow-Origin *;
@@ -70,6 +70,7 @@ in
             }
           ];
         }
+
       ];
     };
 

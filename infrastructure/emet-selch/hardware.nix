@@ -18,7 +18,7 @@ with lib;
     ];
     boot.initrd.availableKernelModules = [ "ahci" "nvme" "e1000e" ];
     boot.initrd.kernelModules = [ "e1000e" ];
-    boot.kernelModules = [ "kvm-intel" ];
+    boot.kernelModules = [ "kvm-intel" "br_netfilter" ];
     boot.extraModulePackages = [ ];
 
     fileSystems."/" =
