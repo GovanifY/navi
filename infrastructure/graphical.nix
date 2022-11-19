@@ -171,6 +171,7 @@ with lib;
         "video"
         "cdrom"
         "rtorrent"
+        "dialout"
       ];
     };
 
