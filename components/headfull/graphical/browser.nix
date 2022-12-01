@@ -197,7 +197,7 @@ in
             lockPref("devtools.theme", "dark");
             lockPref("extensions.activeThemeID", "firefox-compact-dark@mozilla.org");
           '';
-            forceWayland = true;
+            #forceWayland = true;
           };
         }
       )
