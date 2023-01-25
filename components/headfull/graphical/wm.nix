@@ -282,6 +282,7 @@ in
   config = mkIf cfg.enable {
     programs.sway = {
       enable = true;
+      wrapperFeatures.gtk = true;
       extraPackages = with pkgs; [
         # lockscreen
         swaylock
@@ -370,11 +371,6 @@ in
       # we explicitly unset PATH here, as we want it to be set by
       # systemctl --user import-environment in startsway
       environment.PATH = lib.mkForce null;
-      # we need the gsettings schema otherwise gtk have the nice idea to simply
-      # segfault/sigtrap when using some of its features
-      environment.XDG_DATA_DIRS = config.environment.variables.XDG_DATA_DIRS +
-        ":${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}"
-        + ":${pkgs.gnome.adwaita-icon-theme}/share/" + ":${pkgs.breeze-icons}/share/";
       serviceConfig = {
         Type = "simple";
         ExecStart = ''
