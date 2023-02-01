@@ -383,7 +383,8 @@ in
     };
 
     environment.shellInit = ''
-      if [[ -z $DISPLAY ]] && [[ "$(whoami)" == "${config.navi.username}" ]]; then
+      if [[ -z $DISPLAY ]] && [[ "$(whoami)" == "${config.navi.username}" ]] && \
+      [[ "$(tty)" == "/dev/tty1" ]]; then
         if ! systemctl is-active --quiet swaywm; then
           xrdb -load /etc/X11/Xresources &> /dev/null
           systemctl --user import-environment
