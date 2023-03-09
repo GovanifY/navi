@@ -84,6 +84,10 @@ with lib;
       compsize
       iotop
       lsof
+      exiftool
+      dig
+      git-lfs
+      nmap
     ];
 
     # manpages are love
@@ -92,7 +96,7 @@ with lib;
     # always allow remote ssh through keys only
     services.openssh = {
       enable = true;
-      passwordAuthentication = false;
+      settings.passwordAuthentication = false;
       gatewayPorts = "yes";
     };
 
@@ -158,9 +162,11 @@ with lib;
         enable = true;
         scudo = false;
       };
-      editor.enable = true;
+      editor = {
+        ide_features = false;
+        enable = true;
+      };
       drives-health.enable = true;
-
     };
 
     # sane defaults for any modern virtualization setup

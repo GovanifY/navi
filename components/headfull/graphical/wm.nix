@@ -312,7 +312,7 @@ in
     services.getty.autologinUser = mkIf cfg.autologin config.navi.username;
 
     # QT theme engine
-    qt5.platformTheme = "qt5ct";
+    qt.platformTheme = "qt5ct";
 
     environment.variables = {
       # fix sway java bug

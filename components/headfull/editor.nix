@@ -49,6 +49,7 @@ let
         vim-snippets
         coc-nvim
         coc-python
+        coc-ltex
       ] ++ optionals cfg.sessions [ vim-misc workspace ];
       extraConfig = ''
         " This should be enabled by default
@@ -140,69 +141,69 @@ let
         let g:session_default_name = getcwd()
         let g:session_default_overwrite = 1
       '' + optionalString cfg.ide_features ''
-        " auto completion config
-        set hidden
-        set nobackup
-        set nowritebackup
-        set updatetime=300
-        set shortmess+=c
+        function! CheckBackspace() abort
+          let col = col('.') - 1
+          return !col || getline('.')[col - 1]  =~# '\s'
+        endfunction
+
         inoremap <silent><expr> <TAB>
-             #\ pumvisible() ? coc#_select_confirm() :
-             #\ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump','''])\<CR>" :
-             #\ <SID>check_back_space() ? "\<TAB>" :
-             #\ coc#refresh()
+              \ coc#pum#visible() ? coc#pum#next(1) :
+              \ CheckBackspace() ? "\<Tab>" :
+              \ coc#refresh()
+        inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
-        function! s:check_back_space() abort
-         #let col = col('.') - 1
-         #return !col || getline('.')[col - 1]  =~# '\s'
-        endfunction
-
-        let g:coc_snippet_next = '<tab>'
-        function! s:check_back_space() abort
-         #let col = col('.') - 1
-         #return !col || getline('.')[col - 1]  =~# '\s'
-        endfunction
-        inoremap <silent><expr> <c-space> coc#refresh()
-
-        " Make <CR> auto-select the first completion item and notify coc.nvim to
-        " format on enter, <cr> could be remapped by other vim plugin
-        inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                                     #\: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-        set statusline^=%{coc#status()}%{get(b:,'coc_current_function',''')}
-
-        let g:coc_user_config = {
-        \'preferences' : { "useQuickfixForLocations": 'true' },
-        \'languageserver': {
-        \     'bash': {
-        \       "command": "${pkgs.nodePackages.bash-language-server}/bin/bash-language-server",
-        \       "args": ["start"],
-        \       "filetypes": ["sh"],
-        \       "rootPatterns": [".vim/", ".git/", ".hg/"],
-        \       "ignoredRootPaths": ["~"],
-        \     },
-        \     "nix": {
-        \        "command": "${pkgs.rnix-lsp}/bin/rnix-lsp",
-        \        "filetypes": ["nix"]
-        \     },
-        \     "clangd": {
-        \        "command": "${pkgs.llvmPackages.libclang.out}/bin/clangd",
-        \        "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".git/"],
-        \        "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp", "h"]
-        \     },
-        \     "rust": {
-        \       "command": "${pkgs.rust-analyzer}/bin/rust-analyzer",
-        \       "filetypes": ["rust", "rs"],
-        \       "rootPatterns": ["Cargo.toml"]
-        \     },
-        \     "haskell": {
-        \       "command": "${pkgs.haskellPackages.haskell-language-server.out}/bin/haskell-language-server-wrapper",
-        \       "args": ["--lsp"],
-        \       "rootPatterns": ["*.cabal", "stack.yaml", "cabal.project", "package.yaml", "hie.yaml"],
-        \       "filetypes": ["haskell", "lhaskell", "hs"]
-        \     }
-        \  }
-        \}
+        " Make <CR> to accept selected completion item or notify coc.nvim to format
+        " <C-g>u breaks current undo, please make your own choice
+        inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                                      \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+        set statusline^=%{coc#status()}%{get(b:,'coc_current_function',\''')}
       '';
+
+      coc = {
+        enable = true;
+        settings = {
+          preferences.useQuickfixForLocations = true;
+          ltex.ltex-ls.path = "${pkgs.ltex-ls}";
+          ltex.java.path = "${pkgs.jre_headless}";
+          ltex.dictionary = {
+            "en-US" = [ ":~/.config/nvim/spell/dictionary.txt" ];
+            "fr" = [ ":~/.config/nvim/spell/dictionary.txt" ];
+          };
+          languageserver = {
+            nix = {
+              command = "${pkgs.rnix-lsp}/bin/rnix-lsp";
+              filetypes = [ "nix" ];
+            };
+            ltex = {
+              command = "${pkgs.ltex-ls}/bin/ltex-ls";
+              filetypes = [ "markdown" "text" "latex" ];
+            };
+            clangd = {
+              command = "${pkgs.llvmPackages.libclang.out}/bin/clangd";
+              rootPatterns = [ "compile_flags.txt" "compile_commands.json" ".git/" ];
+              filetypes = [ "c" "cc" "cpp" "c++" "objc" "objcpp" "h" ];
+            };
+            rust = {
+              command = "${pkgs.rust-analyzer}/bin/rust-analyzer";
+              rootPatterns = [ "Cargo.toml" ];
+              filetypes = [ "rust" "rs" ];
+            };
+            haskell = {
+              command = "${pkgs.haskellPackages.haskell-language-server.out}/bin/haskell-language-server-wrapper";
+              args = [ "--lsp" ];
+              rootPatterns = [
+                "*.cabal"
+                "stack.yaml"
+                "cabal.project"
+                "package.yaml"
+                "hie.yaml"
+              ];
+              filetypes = [ "haskell" "lhaskell" "hs" ];
+            };
+          };
+        };
+      };
+
     };
   };
 
@@ -217,7 +218,7 @@ in
         Adds some IDE-like features to the text editor.
         Please note that some language server are very fragile (eg C/C++)
         or straight up don't work. I personally recommand against adding
-        IDE features to the text editor, as this has hurt my productivity, 
+        IDE features to the text editor, as this has hurt my productivity,
         but you choose your setup!
       '';
     };
@@ -239,6 +240,6 @@ in
       neovim
       fzf
       ctags
-    ] ++ optionals cfg.ide_features [ nodejs ];
+    ] ++ optionals cfg.ide_features [ nodejs ltex-ls ];
   };
 }
