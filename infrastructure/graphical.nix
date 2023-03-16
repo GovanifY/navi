@@ -37,49 +37,9 @@ with lib;
           sway-unwrapped = super.sway-unwrapped.overrideAttrs (
             oldAttrs: rec {
               patches = (super.patches or [ ]) ++ [ ./../overlays/input-method-v2-sway.patch ];
-
-              buildInputs = with pkgs; [
-                wayland
-                libxkbcommon
-                pcre2
-                json_c
-                libevdev
-                pango
-                cairo
-                libinput
-                libcap
-                pam
-                gdk-pixbuf
-                librsvg
-                wayland-protocols
-                libdrm
-                wlroots
-                xorg.libxcb
-                xorg.xcbutilwm
-                dbus
-              ];
-              src = super.fetchFromGitHub {
-                owner = "swaywm";
-                repo = "sway";
-                rev = "cf413b9c0b688689a3d4e29d873a749889ecc971";
-                sha256 = "sha256-th8eV835XDcEd7IxE703sXM7E39JD0NmxjRoBdrBnc8=";
-              };
             }
           );
 
-          wlroots = super.wlroots.overrideAttrs (
-            oldAttrs: rec {
-              version = "0.16.0";
-
-              src = super.fetchFromGitLab {
-                domain = "gitlab.freedesktop.org";
-                owner = "wlroots";
-                repo = "wlroots";
-                rev = "2e14bed9f790c29146b0eee70eab7d8c704876e9";
-                sha256 = "sha256-FlxBo7wgvLryC+OcvIBiKyk7i0O1/WyVs5UZdU6iXfE=";
-              };
-            }
-          );
         }
       )
     ];
