@@ -96,8 +96,10 @@ with lib;
     # always allow remote ssh through keys only
     services.openssh = {
       enable = true;
-      settings.passwordAuthentication = false;
-      gatewayPorts = "yes";
+      settings = {
+        passwordAuthentication = false;
+        GatewayPorts = "yes";
+      };
     };
 
     # define our main users

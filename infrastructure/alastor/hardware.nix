@@ -110,9 +110,9 @@ in
             after_fs = [ "" ] ++ (init axolotl_fs);
           in
           nameValuePair "btrfs-scrub-${fs'}" {
-            after = mkIf ((replaceChars axolotl_fs after_fs fs) != "")
+            after = mkIf ((replaceStrings axolotl_fs after_fs fs) != "")
               [
-                ("btrfs-scrub-" + (utils.escapeSystemdPath (replaceChars
+                ("btrfs-scrub-" + (utils.escapeSystemdPath (replaceStrings
                   axolotl_fs
                   after_fs
                   fs)) + ".service")
