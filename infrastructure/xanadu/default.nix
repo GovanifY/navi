@@ -9,61 +9,27 @@ with lib;
   config = mkIf (config.navi.device == "xanadu") {
     networking.hostName = "xanadu"; # Define your hostname.
     users.motd = ''
-                                  -:::::::`                                              
-                                  hmmmmmmm:                                              
-                                  dmmmmmmm/                                              
-                                 `mmmmmmmm+                                              
-                                 .mmmmmmmmo                                              
-                                 :mmmmmmmmy                                              
-                                 /mmmmmmmmh                                              
-                                 ommmmmmmmd                                              
-                                 smmmmmmmmm                                              
-                                 hmmmmmmmmm`                                             
-                                 dmmmmmmmmm-                                             
-                            `.-:+mmmmmmmmmms/:-.                                         
-                       `-/oyhddmmmmmmmmmmmmmmmddhs+:.                                    
-                    `:shdmmmmmmmmmmmmmmmmmmmmmmmmmmddy+-                                 
-                 `:sdmmmmmmmmmmmdhysssssssyhdmmmmmmmmmmdh+.                              
-               `/hdmmmmmmmmhs+:.```       ```.:+shmmmmmmmmds-                            
-             `/hmmmmmmmdy+.`      `..----.``     `./ydmmmmmmds-                          
-            -ymmmmmmmh+.`   `-:oyhhdddddddhhyo/-`    .+hmmmmmmd+`                        
-           /dmmmmmmh/`   `-ohdm---------------mdhs:`   `/hmmmmmmy.                       
-          ommmmmmdo.   `/hdmmmm-|||||||||||||-mmmmmho.   `odmmmmmd-                      
-         ommmmmmd:    /hmmmmmmh-|||||||||||||-hmmmmmmdo`   :dmmmmmd-                     
-        +mmmmmmd-   .smmmmmmy:`-|||||||||||||-`:ydmmmmmh-   -hmmmmmd.                    
-       -dmmmmmd-   .hmmmmmh:`  -|||||||||||||-   :hmmmmmd/   -dmmmmmy                    
-       ymmmmmm+   `hmmmmms`    -|||||||||||||-    `smmmmmd-   /mmmmmm:                   
-      -mmmmmmh`   ommmmmy`     -|||||   |||||-     `ymmmmmh`   hmmmmmy                   
-      +mmmmmmo   .dmmmmm-      -||||mmmmm||||-      .dmmmmm/   +mmmmmd`                  
-      smmmmmm:   /mmmmmh       -|||mmmmmmmm||-       hmmmmms   :mmmmmm-                  
-      smmmmmm-   /mmmmmy       -|mmmmmmmmmmm|-       ymmmmms   -mmmmmm-                  
-      ommmmmm:   :mmmmmd`       ymmmmmmmmmmmd.       dmmmmmo   :mmmmmm.                  
-      /mmmmmmo   `dmmmmm+       `odmmmmmmmdy.       /mmmmmm:   ommmmmd                   
-      .dmmmmmd`   ommmmmd:        ./oyyys/-        -dmmmmmh   `dmmmmms                   
-       smmmmmmo   `ymmmmmd/`                     `/dmmmmmd-   ommmmmd-                   
-       .dmmmmmm/   .ymmmmmmy:`                 `-ymmmmmmd:   /dmmmmmo                    
-        :dmmmmmd/   `sdmmmmmmy+-`           `-+ydmmmmmmy-   :dmmmmmy`                    
-         /dmmmmmd+`   :ymmmmmmmdhyo/:::::/oshdmmmmmmmh+`  `+dmmmmmh.                     
-          /dmmmmmmy-   `:ydmmmmmmmmmmmmmmmmmmmmmmmdh+.   -ymmmmmmy.                      
-           -hmmmmmmds-    -+yddmmmmmmmmmmmmmmmmdho-`   -sdmmmmmdo`                       
-            `odmmmmmmdy/`    .-/oyhhdddddhhys+:.    `:ydmmmmmmh:                         
-              -sdmmmmmmmds/.`      `.....``     `./sdmmmmmmmh+`                          
-                -hmmmmmmmmmdhs+/-.`````````.-/+shdmmmmmmmmd+`                            
-                /dmmmmmmmmmmmmmmmmdhhhhhhhddmmmmmmmmmmmmmmms`                            
-              `ommmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmy.                           
-             `ymmmmmmmmmmmmyyhddmmmmmmmmmmmmmdhhydmmmmmmmmmmmh-                          
-            -hmmmmmmmmmmmdo`  `ymmmmmmmmmmmmm.`  :dmmmmmmmmmmmd/                         
-           :dmmmmmmmmmmmd/     smmmmmmmmmmmmm     -hmmmmmmmmmmmmo`                       
-           -ohdmmmmmmmmh-      smmmmmmmmmmmmm      `ymmmmmmmmmdho.                       
-              -+hdmmmmy.       smmmmmmmmmmmmm        odmmmmdho-`                         
-                 .+yds`        smmmmmmmmmmmmm         /ddy+-                             
-                    .          smmmmmmmmmmmmm          -.                                
-                               smmmmmmmmmmmmm                                            
-                               smmmmmmmmmmmmm                                            
-                               smmmmmmmmmmmmm                                            
-                               smmmmmmmmmmmmm                                            
-                               /ooooooooooooo                                            
-                              Welcome to Xanadu
+            [49m   [38;5;52m▄[38;5;168;48;5;52m▄▄[38;5;52;49m▄▄[38;5;168;48;5;52m▄▄▄[38;5;52;49m▄    [0m
+              [48;5;52m [38;5;218;48;5;168m▄[48;5;218m [38;5;168m▄▄[38;5;52;48;5;168m▄▄[38;5;168;48;5;218m▄ [38;5;218;48;5;168m▄[38;5;168;48;5;52m▄[38;5;52;49m▄  [0m
+             [48;5;52m [38;5;218;48;5;168m▄[48;5;218m [38;5;52m▄[38;5;181;48;5;52m▄▄[38;5;252;48;5;181m▄▄[38;5;181;48;5;52m▄▄[38;5;52;48;5;218m▄ [38;5;218;48;5;168m▄[48;5;52m [49m [0m
+            [48;5;52m [38;5;131;48;5;168m▄[38;5;168;48;5;218m▄[48;5;52m [48;5;181m [38;5;15;48;5;52m▄[38;5;0m▄[48;5;252m  [48;5;52m▄[38;5;15m▄[48;5;181m [48;5;52m [38;5;168;48;5;218m▄[38;5;131;48;5;168m▄[48;5;52m [0m
+            [38;5;0;48;5;52m▄[38;5;52;48;5;131m▄ [38;5;131;48;5;52m▄[38;5;52;48;5;181m▄[38;5;181;48;5;15m▄[38;5;252;48;5;0m▄[48;5;252m  [48;5;0m▄[38;5;181;48;5;15m▄[38;5;52;48;5;181m▄[38;5;131;48;5;52m▄[48;5;131m [48;5;52m [49m [0m
+              [38;5;0;48;5;52m▄▄[49m [48;5;52m▄[38;5;52;48;5;252m▄  [48;5;252m▄[38;5;0;48;5;52m▄[49m [48;5;52m▄▄[49m  [0m
+               [38;5;52m▄[38;5;237;48;5;52m▄▄[48;5;237m [48;5;52m▄▄[48;5;237m [48;5;52m▄▄[38;5;52;49m▄   [0m
+               [48;5;52m [48;5;237m  [38;5;217m▄  [38;5;237;48;5;217m▄[48;5;237m  [48;5;52m [49m   [0m
+               [38;5;0;48;5;52m▄[38;5;252;48;5;237m▄[48;5;81m▄[38;5;217m▄▄▄▄▄▄▄▄[38;5;252m▄[49m▄[0m
+               [38;5;52m▄[38;5;237;48;5;252m▄[38;5;217m▄[48;5;15m▄▄▄▄▄▄▄▄[48;5;252m▄[38;5;0m▄[0m
+               [48;5;52m [48;5;237m [38;5;237;48;5;81m▄▄▄▄▄▄▄[38;5;52m▄[38;5;0m▄▄[49m [0m
+               [48;5;52m [48;5;252m  [38;5;52m▄[38;5;0;48;5;52m▄▄[38;5;52;48;5;237m▄[38;5;252m▄▄[48;5;52m [49m   [0m
+               [38;5;0;48;5;52m▄[38;5;52;48;5;252m▄[38;5;1m▄[48;5;52m [49m  [48;5;52m [48;5;252m▄[38;5;52m▄[38;5;0;48;5;52m▄[49m   [0m
+               [38;5;0;48;5;217m▄[48;5;52m▄[38;5;52;48;5;1m▄[38;5;0;48;5;52m▄[49m  [48;5;52m▄[38;5;52;48;5;1m▄[38;5;0;48;5;52m▄[48;5;217m▄[49m   [0m
+
+            Welcome to xanadu!
+          "In Xanadu did Kubla Khan
+       A stately pleasure-dome decree:
+      Where Alph, the sacred river, ran
+      Through caverns measureless to man
+          Down to a sunless sea."
     '';
 
 
