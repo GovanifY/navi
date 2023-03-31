@@ -71,29 +71,6 @@ in
     nix.settings.max-jobs = lib.mkDefault 16;
     powerManagement.cpuFreqGovernor = lib.mkDefault "performance";
 
-    # the microphone is mapped as mono on FL only, so let's map FL to both FL
-    # and FR
-    services.pipewire.media-session.config.media-session = {
-      "context.modules" = [
-        {
-          "name" = "libpipewire-module-loopback";
-          "args" = {
-            "capture.props" = {
-              "audio.position" = "[FL,FL]";
-              "node.target" =
-                "alsa_input.usb-Focusrite_Scarlett_2i2_USB-00.analog-stereo";
-            };
-            "playback.props" = {
-              "media.class" = "Audio/Source";
-              "node.name" = "mono-microphone";
-              "node.description" = "Scarlett 2i2 Left";
-              "audio.position" = "[mono]";
-            };
-          };
-        }
-      ];
-    };
-
     hardware.enableRedistributableFirmware = lib.mkDefault true;
 
     services.btrfs.autoScrub.fileSystems = axolotl_fs;
