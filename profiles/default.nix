@@ -149,6 +149,9 @@ with lib;
     # flakes are amazing and I don't see why we shouldn't enable them by default
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+    # install terminfos for ssh
+    environment.enableAllTerminfo = true;
+
     #security.polkit.enable = false;
 
     navi.components = {
