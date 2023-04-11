@@ -40,6 +40,8 @@ with lib;
     navi.components = {
       virtualization.enable = true;
       bluetooth.enable = true;
+      # trusted server on static ranges
+      macspoofer.enable = mkForce false;
       torrent = {
         enable = true;
         dataDir = "/mnt/axolotl/torrent";

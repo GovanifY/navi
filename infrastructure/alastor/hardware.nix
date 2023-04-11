@@ -64,7 +64,8 @@ in
     networking.useDHCP = false;
     networking.interfaces.eno1.useDHCP = true;
     networking.interfaces.eno2.useDHCP = true;
-    networking.interfaces.wlp1s0.useDHCP = true;
+    # let's disable wi-fi, we already have ethernet failover
+    networking.interfaces.wlp1s0.useDHCP = false;
 
     console.keyMap = "fr";
 
