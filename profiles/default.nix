@@ -102,6 +102,8 @@ with lib;
       };
     };
     programs.mosh.enable = true;
+    environment.etc."motd".text = config.users.motd;
+
 
 
     # define our main users
