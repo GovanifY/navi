@@ -101,6 +101,8 @@ with lib;
         GatewayPorts = "yes";
       };
     };
+    programs.mosh.enable = true;
+
 
     # define our main users
     users.users.${config.navi.username} = {
