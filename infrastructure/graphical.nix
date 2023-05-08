@@ -33,12 +33,13 @@ with lib;
             withJava = true;
           };
 
+          # TODO: backport patch and/or see whenever correct IME support dropped
           # backports IME v2 patch on sway
-          sway-unwrapped = super.sway-unwrapped.overrideAttrs (
-            oldAttrs: rec {
-              patches = (super.patches or [ ]) ++ [ ./../overlays/input-method-v2-sway.patch ];
-            }
-          );
+          # sway-unwrapped = super.sway-unwrapped.overrideAttrs (
+          #  oldAttrs: rec {
+          #    patches = (super.patches or [ ]) ++ [ ./../overlays/input-method-v2-sway.patch ];
+          #  }
+          # );
 
         }
       )

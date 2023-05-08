@@ -133,7 +133,7 @@ with lib;
       automatic = true;
       options = "--delete-older-than 14d";
     };
-    boot.cleanTmpDir = true;
+    boot.tmp.cleanOnBoot = true;
 
     # it is an unwanted feature to wait for the network on headful devices 
     # while headless will not use NetworkManager, period, thus let's always
