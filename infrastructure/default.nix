@@ -32,5 +32,11 @@ with lib;
 
     navi.components.drives-health.btrfs = true;
 
+    # XXX: eventually fix that
+    nixpkgs.config.permittedInsecurePackages = [
+      "nodejs-16.20.0"
+    ];
+
+
   };
 }
