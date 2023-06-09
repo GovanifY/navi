@@ -158,6 +158,14 @@ with lib;
 
     #security.polkit.enable = false;
 
+    # XXX: eventually fix that
+    nixpkgs.config.permittedInsecurePackages = [
+      "nodejs-16.20.0"
+      "nodejs-14.21.3"
+    ];
+
+
+
     navi.components = {
       bootloader.enable = mkIf (config.navi.profile.name != "server") true;
       xdg.enable = true;
