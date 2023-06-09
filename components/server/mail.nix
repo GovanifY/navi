@@ -38,7 +38,7 @@ in
       enable = true;
       fqdn = cfg.root_domain;
       domains = cfg.domains;
-      certificateScheme = 3;
+      certificateScheme = "acme-nginx";
       dkimSelector = config.navi.device;
       dkimKeyBits = 2048;
     };
