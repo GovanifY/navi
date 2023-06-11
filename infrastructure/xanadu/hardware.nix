@@ -39,7 +39,6 @@ with lib;
     powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
     # High-DPI console
     console.keyMap = "fr";
-    hardware.video.hidpi.enable = lib.mkDefault true;
     hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
     hardware.enableRedistributableFirmware = true;
     hardware.enableAllFirmware = true;
