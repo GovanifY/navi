@@ -20,12 +20,6 @@ with lib;
           preLVM = true;
           allowDiscards = true;
         };
-        meduse = {
-          device = "/dev/disk/by-uuid/e26ef933-86dd-44df-870f-90379d497308";
-          preLVM = true;
-          allowDiscards = true;
-        };
-
       };
 
     fileSystems."/boot/efi" =
