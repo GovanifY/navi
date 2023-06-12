@@ -4,8 +4,13 @@
 with lib;
 let
   cfg = config.navi.components.bootloader;
+  sources = import ../nix/sources.nix;
+  lanzaboote = import sources.lanzaboote;
 in
 {
+
+  imports = [ lanzaboote.nixosModules.lanzaboote ];
+
   options.navi.components.bootloader = {
     enable = mkEnableOption "Enable navi's bootloader";
     verbose = mkOption {
@@ -18,20 +23,20 @@ in
   };
 
   config = mkIf cfg.enable {
+    boot.bootspec.enable = true;
+    environment.systemPackages = [
+      # For debugging and troubleshooting Secure Boot.
+      pkgs.sbctl
+    ];
 
-    # TODO: whenever we work on adding SB to upstream switch to it and add an
-    # unified bzImage signed with our keys. With a well provisioned TPM this
-    # should essentially solve the entire boot tampering issue.
-    boot.loader = {
-      timeout = mkIf (config.navi.profile.name != "server") 0;
-      systemd-boot = {
-        enable = true;
-        configurationLimit = 5;
-      };
+    boot.loader.systemd-boot.enable = lib.mkForce false;
+
+    boot.lanzaboote = {
+      enable = true;
+      pkiBundle = "/etc/secureboot";
     };
 
-
-    boot.initrd.systemd.enable = mkIf (config.navi.profile.name != "server") true;
+    # TODO: add this back whenever lanzaboote gets those options
     boot.consoleLogLevel = mkIf (!cfg.verbose) 0;
     boot.kernelParams = mkIf (!cfg.verbose) [ "quiet" ];
     boot.plymouth.enable = mkIf (!cfg.verbose) true;
