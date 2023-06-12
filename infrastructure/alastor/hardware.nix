@@ -1,7 +1,14 @@
 { config, lib, pkgs, utils, ... }:
 with lib;
 let
-  axolotl_fs = [ "/dev/sda" "/dev/sdb" "/dev/sdc" "/dev/sdd" "/dev/sde" "/dev/sdf" ];
+  axolotl_fs = [
+    "/dev/disk/by-uuid/d87b44b8-e4e1-4d6c-b060-467f19c01860"
+    "/dev/disk/by-uuid/75afa2f9-78e0-425e-ab9f-8d9d5fdcea50"
+    "/dev/disk/by-uuid/d7b5cb43-6273-4c19-8d4a-2ae5eb619986"
+    "/dev/disk/by-uuid/9d36d538-6f87-4c6a-a2fe-8433a185c82c"
+    "/dev/disk/by-uuid/15feffe4-49d1-42f6-ab8b-7c98864a06f2"
+    "/dev/disk/by-uuid/02905b15-4fac-4404-a633-2c080963bbb2"
+  ];
 in
 {
   config = mkIf (config.navi.device == "alastor") {
@@ -15,6 +22,7 @@ in
     boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" ];
     # virtualization and iGVT-g
     boot.initrd.kernelModules = [ "dm-snapshot" ];
+    boot.supportedFilesystems = [ "ntfs" ];
 
     # auto-generating entries for all of axolotl fs's.
     boot.initrd.luks.devices = mkMerge [
@@ -32,13 +40,19 @@ in
           preLVM = true;
           allowDiscards = true;
         };
+        matrix-2 = {
+          device = "/dev/disk/by-uuid/7f94153f-e1b2-46b0-aac9-9cf159e98551";
+          preLVM = true;
+          allowDiscards = true;
+        };
       }
     ];
 
     fileSystems."/" =
       {
         device = "/dev/disk/by-uuid/dea15455-b492-4b9c-9c5f-de8ea5dc7a6b";
-        fsType = "ext4";
+        fsType = "btrfs";
+        options = [ "compress=zstd" ];
       };
 
     fileSystems."/boot/efi" =
@@ -65,7 +79,7 @@ in
     networking.interfaces.eno1.useDHCP = true;
     networking.interfaces.eno2.useDHCP = true;
     # let's disable wi-fi, we already have ethernet failover
-    networking.interfaces.wlp1s0.useDHCP = false;
+    #networking.interfaces.wlp1s0.useDHCP = false;
 
     console.keyMap = "fr";
 
@@ -74,7 +88,7 @@ in
 
     hardware.enableRedistributableFirmware = lib.mkDefault true;
 
-    services.btrfs.autoScrub.fileSystems = axolotl_fs;
+    services.btrfs.autoScrub.fileSystems = axolotl_fs ++ [ "/" ];
 
     # that one's a doozy, so to explain: For each fs in our scrub list, we
     # define after to another substituted list in the let at the header which

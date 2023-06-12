@@ -49,18 +49,18 @@ with lib;
       wm = {
         azerty = true;
         extraConf = ''
-          output DP-3 scale 2.0
-          output DP-3 pos 1920 0 res 3840x2160
-          output HDMI-A-1 pos 0 0 res 1920x1080
+          output DP-6 scale 2.0
+          output DP-6 pos 1920 0 res 3840x2160
+          output HDMI-A-4 pos 0 0 res 1920x1080
           input "5426:515:Razer_Razer_BlackWidow_Chroma" {
               xkb_layout "fr"
           }
           input "6127:24801:TrackPoint_Keyboard_II_Keyboard" {
               xkb_layout "fr"
           }
-          workspace 1 output DP-3
-          workspace 2 output HDMI-A-1
-          workspace 3 output DP-3
+          workspace 1 output DP-6
+          workspace 2 output HDMI-A-4
+          workspace 3 output DP-6
         '';
       };
     };
