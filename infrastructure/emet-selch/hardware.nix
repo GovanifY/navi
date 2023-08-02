@@ -3,7 +3,6 @@ with lib;
 {
   config = mkIf (config.navi.device == "emet-selch") {
     boot.loader.grub.enable = true;
-    boot.loader.grub.version = 2;
     boot.loader.grub.mirroredBoots = [
       {
         devices = [ "/dev/disk/by-id/nvme-eui.000000000000001000080d03003b6f9b" ];
