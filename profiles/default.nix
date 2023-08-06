@@ -160,7 +160,7 @@ with lib;
 
     # XXX: eventually fix that
     nixpkgs.config.permittedInsecurePackages = [
-      "nodejs-16.20.0"
+      "nodejs-16.20.1"
       "nodejs-14.21.3"
       "openssl-1.1.1u"
     ];
