@@ -159,11 +159,11 @@ with lib;
     #security.polkit.enable = false;
 
     # XXX: eventually fix that
-    nixpkgs.config.permittedInsecurePackages = [
-      "nodejs-16.20.1"
-      "nodejs-14.21.3"
-      "openssl-1.1.1v"
-    ];
+    #nixpkgs.config.permittedInsecurePackages = [
+    #  "nodejs-16.20.1"
+    #  "nodejs-14.21.3"
+    #  "openssl-1.1.1v"
+    #];
 
 
 

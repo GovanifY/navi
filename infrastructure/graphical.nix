@@ -33,14 +33,6 @@ with lib;
             withJava = true;
           };
 
-          # TODO: backport patch and/or see whenever correct IME support dropped
-          # backports IME v2 patch on sway
-          # sway-unwrapped = super.sway-unwrapped.overrideAttrs (
-          #  oldAttrs: rec {
-          #    patches = (super.patches or [ ]) ++ [ ./../overlays/input-method-v2-sway.patch ];
-          #  }
-          # );
-
         }
       )
     ];
@@ -49,6 +41,8 @@ with lib;
     environment.systemPackages = with pkgs; [
       waypipe
       mupdf
+    ] ++ builtins.filter lib.isDerivation (builtins.attrValues plasma5Packages.kdeGear)
+    ++ [
 
       # legacy windows
       wineWowPackages.waylandFull
@@ -56,7 +50,6 @@ with lib;
       # multimedia
       mpv
       vlc
-      kodi
       imv
       libreoffice
 
@@ -79,6 +72,7 @@ with lib;
       limesuite
       ghidra-bin
       freecad
+      pulseview
 
       # recording/streaming
       (wrapOBS {

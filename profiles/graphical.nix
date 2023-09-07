@@ -16,9 +16,31 @@ with lib;
       # splash with this much time to wait just doesn't make sense, so let's
       # disable it until our boot time stops being so blazingly fast :)
       #splash.enable = true;
-      wm.enable = true;
+      # experimenting with alternate wm
+      #wm.enable = true;
+      wm.enable = false;
       chat.graphical = true;
       ime.enable = true;
     };
+
+    services.xserver = {
+      enable = true;
+      displayManager = {
+        sddm.enable = true;
+        #autoLogin = {
+        #  enable = true;
+        #  user = "${config.navi.username}";
+        #};
+      };
+      desktopManager.plasma5.enable = true;
+      displayManager.defaultSession = "plasmawayland";
+    };
+    programs.dconf.enable = true;
+    environment.sessionVariables = {
+      NIX_PROFILES = "${pkgs.lib.concatStringsSep " " (pkgs.lib.reverseList config.environment.profiles)}";
+    };
+    programs.kdeconnect.enable = true;
+    programs.partition-manager.enable = true;
+
   };
 }

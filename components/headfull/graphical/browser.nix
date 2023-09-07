@@ -213,9 +213,6 @@ in
       127.0.0.1 location.services.mozilla.com
       127.0.0.1 incoming.telemetry.mozilla.org
     '';
-    # firefox no segfaulty
-    xdg.portal.enable = false;
-
     environment.variables.BROWSER = "firefox";
     #environment.systemPackages = mkIf (!sandboxing.enable) [ pkgs.firefox ];
     environment.systemPackages = [ pkgs.firefox ];

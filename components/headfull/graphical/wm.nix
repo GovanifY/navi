@@ -419,5 +419,9 @@ in
       '';
     };
 
+    # firefox no segfaulty
+    xdg.portal.enable = false;
+
+
   };
 }

@@ -8,7 +8,7 @@ let
         # XXX: this used to work on just linux_hardened but it kept defaulting
         # to an older kernel version, I need to check this whenever I have more
         # free time!
-        linux_6_1_hardened.override {
+        linux_6_4_hardened.override {
           features.ia32Emulation = true;
         }
       )

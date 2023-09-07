@@ -34,6 +34,7 @@ in
     boot.lanzaboote = {
       enable = true;
       pkiBundle = "/etc/secureboot";
+      configurationLimit = 2;
     };
 
     # TODO: add this back whenever lanzaboote gets those options

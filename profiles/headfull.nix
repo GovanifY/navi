@@ -25,6 +25,11 @@ with lib;
       gnumake
       ghc
       gdb
+      usbutils
+      glxinfo
+      clinfo
+      vulkan-tools
+      wayland-utils
       # sound utils
       pulseaudio
       pavucontrol

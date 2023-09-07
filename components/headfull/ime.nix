@@ -8,7 +8,7 @@ in
     enable = mkEnableOption "Enable IME support in navi";
   };
   config = mkIf cfg.enable {
-    fonts.fonts = with pkgs; [
+    fonts.packages = with pkgs; [
       carlito
       dejavu_fonts
       ipafont
