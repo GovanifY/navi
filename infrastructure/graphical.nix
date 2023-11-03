@@ -156,6 +156,7 @@ with lib;
     '';
     hardware.xpadneo.enable = true;
     services.xserver.wacom.enable = true;
+    services.flatpak.enable = true;
 
     # enable external drive auto-mount
     fileSystems."/mnt/drive0" = {
