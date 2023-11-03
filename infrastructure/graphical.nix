@@ -73,6 +73,7 @@ with lib;
       ghidra-bin
       freecad
       pulseview
+      okteta
 
       # recording/streaming
       (wrapOBS {
