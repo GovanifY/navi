@@ -12,6 +12,7 @@ with lib;
     ./hardening.nix
     ./torrent.nix
     ./drives-health.nix
+    ./remote-unlock.nix
     ./headfull
     ./server
   ];

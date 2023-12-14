@@ -38,6 +38,7 @@ with lib;
     time.timeZone = "Europe/Paris";
 
     navi.components = {
+      remote-unlock.enable = true;
       virtualization.enable = true;
       bluetooth.enable = true;
       # trusted server on static ranges
