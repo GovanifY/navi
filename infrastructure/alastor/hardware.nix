@@ -21,7 +21,7 @@ in
 
     boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" ];
     # virtualization and iGVT-g
-    boot.initrd.kernelModules = [ "dm-snapshot" ];
+    boot.initrd.kernelModules = [ "dm-snapshot" "igb" ];
     boot.supportedFilesystems = [ "ntfs" ];
 
     # auto-generating entries for all of axolotl fs's.
