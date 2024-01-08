@@ -5,7 +5,6 @@ let
   clientConfig = {
     "m.homeserver".base_url = "https://${cfg.access_domain}";
     "org.matrix.msc3575.proxy".url = "https://sliding.${cfg.access_domain}";
-    "m.identity_server" = { };
   };
   serverConfig."m.server" = "${cfg.access_domain}:443";
   mkWellKnown = data: ''
