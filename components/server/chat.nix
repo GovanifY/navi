@@ -4,6 +4,7 @@ let
   cfg = config.navi.components.chat-server;
   clientConfig = {
     "m.homeserver".base_url = "https://${cfg.access_domain}";
+    "org.matrix.msc3575.proxy".url = "https://${cfg.access_domain}";
     "m.identity_server" = { };
   };
   serverConfig."m.server" = "${cfg.access_domain}:443";
