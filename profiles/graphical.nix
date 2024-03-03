@@ -32,8 +32,8 @@ with lib;
         #  user = "${config.navi.username}";
         #};
       };
-      desktopManager.plasma5.enable = true;
-      displayManager.defaultSession = "plasmawayland";
+      desktopManager.plasma6.enable = true;
+      displayManager.defaultSession = "plasma";
     };
     programs.dconf.enable = true;
     environment.sessionVariables = {
