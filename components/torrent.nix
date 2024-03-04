@@ -19,6 +19,7 @@ in
       enable = true;
       openFirewall = true;
       dataDir = cfg.dataDir;
+      port = 5000;
       configText = ''
         pieces.hash.on_completion.set = no
         system.umask.set = 0007
