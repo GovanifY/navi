@@ -88,6 +88,11 @@ in
 
     hardware.enableRedistributableFirmware = lib.mkDefault true;
 
+    hardware.openrazer.enable = true;
+    environment.systemPackages = with pkgs; [
+      openrazer-daemon
+      polychromatic
+    ];
     services.btrfs.autoScrub.fileSystems = axolotl_fs ++ [ "/" ];
 
     # that one's a doozy, so to explain: For each fs in our scrub list, we
