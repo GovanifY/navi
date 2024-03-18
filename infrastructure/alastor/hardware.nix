@@ -88,7 +88,10 @@ in
 
     hardware.enableRedistributableFirmware = lib.mkDefault true;
 
-    hardware.openrazer.enable = true;
+    hardware.openrazer = {
+      users = [ config.navi.username ];
+      enable = true;
+    };
     environment.systemPackages = with pkgs; [
       openrazer-daemon
       polychromatic
