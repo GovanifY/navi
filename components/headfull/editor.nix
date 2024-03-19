@@ -171,7 +171,7 @@ let
           };
           languageserver = {
             nix = {
-              command = "${pkgs.rnix-lsp}/bin/rnix-lsp";
+              command = "${pkgs.nil}/bin/nil";
               filetypes = [ "nix" ];
             };
             ltex = {
