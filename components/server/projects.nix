@@ -66,6 +66,13 @@ in
       };
     };
 
+    # gitlab is slow to start... make suwe retry enough times until it's
+    # actually started so that the runner doesn't error out
+    systemd.services.gitlab-runner.serviceConfig = {
+      Restart = "always";
+      RestartSec = 60;
+    };
+
     services.gitlab = {
       enable = true;
       host = cfg.domain;
