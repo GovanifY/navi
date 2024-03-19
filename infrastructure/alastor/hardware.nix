@@ -96,6 +96,10 @@ in
       openrazer-daemon
       polychromatic
     ];
+    hardware.opengl.extraPackages = with pkgs; [
+      rocmPackages.clr.icd
+    ];
+
     services.btrfs.autoScrub.fileSystems = axolotl_fs ++ [ "/" ];
 
     # that one's a doozy, so to explain: For each fs in our scrub list, we
