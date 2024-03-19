@@ -84,7 +84,7 @@ in
       ensureUsers = [
         {
           name = config.services.grafana.settings.database.user;
-          ensurePermissions = { "DATABASE ${config.services.grafana.settings.database.name}" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }
       ];
     };
