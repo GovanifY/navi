@@ -45,6 +45,12 @@ in
           preLVM = true;
           allowDiscards = true;
         };
+        violet = {
+          device = "/dev/disk/by-uuid/ebaae418-f59b-4210-a983-64718540c703";
+          preLVM = true;
+          allowDiscards = true;
+        };
+
       }
     ];
 
@@ -66,6 +72,13 @@ in
       fsType = "btrfs";
       options = [ "compress=zstd" "space_cache=v2" ];
     };
+
+    fileSystems."/mnt/violet" = {
+      device = "/dev/disk/by-uuid/dc1e7938-684d-437e-9f45-6a52dae4accf";
+      fsType = "btrfs";
+      options = [ "compress=zstd" ];
+    };
+
 
 
     swapDevices =
@@ -112,7 +125,7 @@ in
     };
     environment.sessionVariables = { LIBVA_DRIVER_NAME = "radeonsi"; };
 
-    services.btrfs.autoScrub.fileSystems = axolotl_fs ++ [ "/" ];
+    services.btrfs.autoScrub.fileSystems = axolotl_fs ++ [ "/" "/mnt/violet" ];
 
     # that one's a doozy, so to explain: For each fs in our scrub list, we
     # define after to another substituted list in the let at the header which
