@@ -18,7 +18,8 @@ in
   config = mkIf cfg.enable {
     hardware.bluetooth.enable = true;
     hardware.bluetooth.package = pkgs.bluez;
-    services.blueman.enable = true;
+    # TODO: disable only when kde is enabled
+    #services.blueman.enable = true;
 
     hardware.bluetooth.settings = { General = { Enable = "Source,Sink,Media,Socket"; }; };
 
