@@ -24,6 +24,7 @@ in
         pieces.hash.on_completion.set = no
         system.umask.set = 0007
         system.file.allocate = 1
+        schedule2 = watch_start, 10, 10, ((load.start, (cat, (cfg.watch), "start/*.torrent")))
       '';
     };
     systemd.services."flood" = {
