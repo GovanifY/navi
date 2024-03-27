@@ -110,6 +110,7 @@ with lib;
       lame
       flac
       mktorrent
+      handbrake
       virtiofsd
     ];
 
