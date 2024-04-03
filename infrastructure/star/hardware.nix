@@ -2,80 +2,65 @@
 with lib;
 {
   config = mkIf (config.navi.device == "star") {
+
+    nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
+    boot.loader.systemd-boot.enable = true;
+
     boot.loader.efi = {
-      canTouchEfiVariables = true;
       efiSysMountPoint = "/boot/efi";
     };
 
-    boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "sd_mod" "usb_storage" ];
-    boot.initrd.kernelModules = [ "dm-snapshot" ];
-    boot.kernelModules = [ "kvm-intel" "qmi_wwan" "qcserial" ];
-    # battery recalibration on thinkpad
-    boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
+
+    boot.initrd.availableKernelModules = [ "usb_storage" "sdhci_pci" ];
+    boot.initrd.kernelModules = [ ];
+    boot.kernelModules = [ ];
+    boot.extraModulePackages = [ ];
 
     boot.initrd.luks.devices =
       {
         matrix = {
-          device = "/dev/disk/by-uuid/82d01ed4-de98-46c2-9288-de5c0c834b77";
+          device = "/dev/disk/by-uuid/ecf9cef6-4347-441e-aed3-5c5bf17f56c7";
           preLVM = true;
           allowDiscards = true;
         };
       };
 
+
+    swapDevices = [ ];
     fileSystems."/boot/efi" =
       {
-        device = "/dev/disk/by-uuid/9DFC-F9C9";
+        device = "/dev/disk/by-uuid/72A7-0912";
         fsType = "vfat";
       };
 
     fileSystems."/" =
       {
-        device = "/dev/disk/by-uuid/52f81abc-91ca-480b-bd57-4e7e9090607b";
-        fsType = "ext4";
+        device = "/dev/disk/by-uuid/f190a36e-c2e6-402d-a696-e48292defd41";
+        fsType = "btrfs";
+        options = [ "compress=zstd" ];
       };
 
-    swapDevices =
-      [{ device = "/dev/disk/by-uuid/7963fcc3-7b6c-467a-9268-28f16aeb9d11"; }];
-
-
-    nix.settings.max-jobs = lib.mkDefault 8;
+    nix.settings.max-jobs = lib.mkDefault 16;
     powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
-    hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-    hardware.enableRedistributableFirmware = true;
-    hardware.enableAllFirmware = true;
-    # enable trackpoint & buttons
-    boot.kernelParams = [ "psmouse.synaptics_intertouch=1" ];
+    # High-DPI console
+    console.keyMap = "fr";
 
     networking.useDHCP = false;
-    networking.interfaces.wlp3s0.useDHCP = true;
-    networking.interfaces.enp0s31f6.useDHCP = lib.mkDefault true;
+    networking.interfaces.wlan0.useDHCP = lib.mkDefault true;
+    navi.components = {
 
-    # nouveau is just not good enough for any usage whatsoever.
-    # if you wish to not use the proprietary drivers, might as well disable the
-    # gpu entirely.
-    nixpkgs.config.allowUnfree = true;
-    services.xserver.videoDrivers = [ "nvidia" ];
-    hardware.nvidia.nvidiaPersistenced = true;
-    # we make sure CUDA is globally available in that case
-    environment.systemPackages = with pkgs; [
-      cudatoolkit
-      libqmi
-    ];
-    environment.variables.CUDA_PATH = "${pkgs.cudatoolkit}";
-    environment.variables.LD_LIBRARY_PATH = mkForce "${pkgs.cudatoolkit}/lib:/run/opengl-driver/lib";
+      gaming.enable = lib.mkForce false;
+      # TODO: fix for x86
+      bootloader.enable = lib.mkForce false;
+    };
 
+    hardware.asahi = {
+      withRust = true;
+      useExperimentalGPUDriver = true;
+      experimentalGPUInstallMode = "replace";
+      peripheralFirmwareDirectory = /etc/asahi-firmware;
+    };
+    boot.m1n1CustomLogo = ./boot.png;
 
-    # and let's enable our fingerprint sensor too
-    services.fprintd.enable = true;
-    services.fprintd.tod.enable = true;
-    services.fprintd.tod.driver = pkgs.libfprint-2-tod1-vfs0090;
-    security.pam.services.swaylock.fprintAuth = true;
-    # smart card
-    services.pcscd.enable = true;
-    services.fwupd.enable = true;
-
-
-    # temporary until the partition is converted
-    navi.components.drives-health.btrfs = mkForce false;
   };
 }

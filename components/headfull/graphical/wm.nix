@@ -307,6 +307,13 @@ in
       breeze-gtk
       breeze-qt5
       breeze-icons
+      (wrapOBS {
+        plugins = with obs-studio-plugins; [
+          wlrobs
+        ];
+      })
+
+
     ];
 
     services.getty.autologinUser = mkIf cfg.autologin config.navi.username;

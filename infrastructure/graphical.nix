@@ -23,19 +23,20 @@ with lib;
       VST3_PATH = "$HOME/.vst3:$HOME/.nix-profile/lib/vst3:/run/current-system/sw/lib/vst3:/run/current-system/sw/lib";
     };
 
-    nixpkgs.overlays = [
-      (
-        self: super: {
-          # enable blu-ray decoding libraries
-          libbluray = super.libbluray.override {
-            withAACS = true;
-            withBDplus = true;
-            withJava = true;
-          };
-
-        }
-      )
-    ];
+    # TODO: currently broken in nixpkgs
+    #nixpkgs.overlays = [
+    #  (
+    #    self: super: {
+    #      # enable blu-ray decoding libraries
+    #      libbluray = super.libbluray.override {
+    #        withAACS = true;
+    #        withBDplus = true;
+    #        withJava = true;
+    #      };
+    #
+    #    }
+    #  )
+    #];
 
 
     environment.systemPackages = with pkgs; [
@@ -43,9 +44,6 @@ with lib;
       mupdf
     ] ++ builtins.filter lib.isDerivation (builtins.attrValues plasma5Packages.kdeGear)
     ++ [
-
-      # legacy windows
-      wineWowPackages.waylandFull
 
       # multimedia
       mpv
@@ -62,27 +60,34 @@ with lib;
       ardour
       calf
       zynaddsubfx
-      yabridge
-      yabridgectl
 
       # stem
       kicad
       wireshark
       pandoc
       limesuite
-      ghidra-bin
+      ghidra
       freecad
       pulseview
       okteta
 
       # recording/streaming
-      (wrapOBS {
-        plugins = with obs-studio-plugins; [
-          wlrobs
-        ];
-      })
+      obs-studio
 
       jdk
+
+      # math
+      coq
+      lean
+      elan
+
+      lame
+      flac
+      mktorrent
+      handbrake
+      virtiofsd
+    ] ++ optionals (pkgs.system != "aarch64-linux") [
+
       android-studio
       (
         pkgs.writeTextFile {
@@ -102,16 +107,10 @@ with lib;
         }
       )
 
-      # math
-      coq
-      lean
-      elan
 
-      lame
-      flac
-      mktorrent
-      handbrake
-      virtiofsd
+      wineWowPackages.waylandFull
+      yabridge
+      yabridgectl
     ];
 
     # give you the rights to inspect traffic as this is a single user box/not a

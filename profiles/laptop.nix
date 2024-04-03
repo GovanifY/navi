@@ -11,7 +11,7 @@ with lib;
     navi.profile.graphical = true;
     navi.components.gaming.enable = true;
 
-    services.tlp.enable = true;
+    services.tlp.enable = mkIf config.navi.components.wm.enable true;
 
     # check weekly for updates on laptop instead of the usual daily, a few hours
     # after other devices updates so that they had the time to build the new

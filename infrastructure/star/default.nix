@@ -4,6 +4,7 @@ with lib;
 
   imports = [
     ./hardware.nix
+    <apple-silicon-support/apple-silicon-support>
   ];
 
   config = mkIf (config.navi.device == "star") {
@@ -47,32 +48,14 @@ with lib;
     '';
 
 
-    time.timeZone = "Europe/Paris";
 
-    #modules.tor.transparentProxy = {
-    #  enable = true; 
-    #  outputNic = "wlp1s0"; 
-    #  inputNic = "wlp1s0"; 
-    #  };
+    time.timeZone = "Europe/Paris";
 
 
     navi.components = {
       bluetooth.enable = true;
-      virtualization.enable = true;
       wm = {
         battery = true;
-        azerty = true;
-        extraConf = ''
-          input "2:10:TPPS/2_IBM_TrackPoint" {
-            pointer_accel 0.7
-          }
-          input "1739:0:Synaptics_TM3288-003" {
-            tap enabled
-          }
-          input "1:1:AT_Translated_Set_2_keyboard" {
-            xkb_layout "fr"
-          }
-        '';
       };
     };
 

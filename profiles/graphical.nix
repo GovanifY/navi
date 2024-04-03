@@ -23,17 +23,18 @@ with lib;
       ime.enable = true;
     };
 
-    services.xserver = {
-      enable = true;
-      displayManager = {
-        sddm.enable = true;
-        #autoLogin = {
-        #  enable = true;
-        #  user = "${config.navi.username}";
-        #};
-      };
+    services = {
       desktopManager.plasma6.enable = true;
-      displayManager.defaultSession = "plasma";
+      xserver = {
+        enable = true;
+        displayManager = {
+          sddm.enable = true;
+          #autoLogin = {
+          #  enable = true;
+          #  user = "${config.navi.username}";
+          #};
+        };
+      };
     };
     programs.dconf.enable = true;
     environment.sessionVariables = {
