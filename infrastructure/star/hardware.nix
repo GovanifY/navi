@@ -61,6 +61,7 @@ with lib;
       experimentalGPUInstallMode = "replace";
       peripheralFirmwareDirectory = /etc/asahi-firmware;
     };
+    sound.enable = true;
     boot.m1n1CustomLogo = ./boot.png;
 
   };
