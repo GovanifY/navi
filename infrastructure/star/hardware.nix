@@ -55,6 +55,7 @@ with lib;
     };
 
     hardware.asahi = {
+      enable = true;
       withRust = true;
       useExperimentalGPUDriver = true;
       experimentalGPUInstallMode = "replace";

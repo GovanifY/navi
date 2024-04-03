@@ -48,7 +48,7 @@ in
 
   config = mkIf cfg.enable {
     # Use the hardened kernel but keep IA32 emulation.
-    boot.kernelPackages = mkIf cfg.legacy (lib.mkDefault kernelPackages);
+    boot.kernelPackages = mkIf cfg.legacy kernelPackages;
     boot.kernelPatches = mkIf cfg.legacy [
       {
         name = "keep-ia32";

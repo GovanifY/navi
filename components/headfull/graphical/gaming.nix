@@ -20,7 +20,6 @@ in
       legacy = true;
     };
     hardware.opengl.driSupport32Bit = true;
-    hardware.pulseaudio.support32Bit = true;
 
     nixpkgs.config.allowUnfree = true;
 

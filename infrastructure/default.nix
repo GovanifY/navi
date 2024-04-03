@@ -31,6 +31,9 @@ with lib;
     ];
 
     navi.components.drives-health.btrfs = true;
+    hardware.asahi = {
+      enable = lib.mkDefault false;
+    };
 
   };
 }

@@ -31,7 +31,6 @@ with lib;
       vulkan-tools
       wayland-utils
       # sound utils
-      pulseaudio
       pavucontrol
       qjackctl
     ];
@@ -48,6 +47,7 @@ with lib;
 
     # Enable sound.
     security.rtkit.enable = true;
+    hardware.pulseaudio.enable = lib.mkForce false;
     services.pipewire = {
       enable = true;
       alsa.enable = true;
