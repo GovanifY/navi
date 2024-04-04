@@ -28,11 +28,14 @@ with lib;
       xserver = {
         enable = true;
         displayManager = {
-          sddm.enable = true;
-          #autoLogin = {
-          #  enable = true;
-          #  user = "${config.navi.username}";
-          #};
+          sddm = {
+            enable = true;
+            wayland.enable = true;
+          };
+          autoLogin = {
+            enable = true;
+            user = "${config.navi.username}";
+          };
         };
       };
     };
