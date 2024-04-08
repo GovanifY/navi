@@ -17,9 +17,9 @@ with lib;
       The name of the device you target 
     '';
   };
-  config = mkIf (config.navi.profile.headfull) {
+  config = {
     # setup the trusted build servers here
-    nix.buildMachines = [
+    nix.buildMachines = mkIf (config.navi.profile.headfull) [
       {
         hostName = "alastor-build";
         system = "x86_64-linux";
