@@ -39,7 +39,10 @@ with lib;
 
     navi.components = {
       remote-unlock.enable = true;
-      virtualization.enable = true;
+      virtualization = {
+        enable = true;
+        gvt = true;
+      };
       bluetooth.enable = true;
       # trusted server on static ranges
       macspoofer.enable = mkForce false;
