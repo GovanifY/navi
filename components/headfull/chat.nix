@@ -15,8 +15,10 @@ let
           weechat-autosort
           weechat-matrix
           weechat-go
+          weechat-otr
           highmon
           buffer_autoset
+          colorize_nicks
         ];
       };
   };
@@ -38,5 +40,6 @@ in
     ] ++ optionals cfg.graphical [
       element-desktop-wayland
     ];
+    services.weechat.binary = "${weechat}/bin/weechat";
   };
 }
