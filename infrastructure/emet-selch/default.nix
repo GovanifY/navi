@@ -83,8 +83,8 @@ with lib;
     users.users.${config.navi.username}.initialHashedPassword = fileContents ./../../secrets/emet-selch/assets/shadow/main;
 
     # Network (Hetzner uses static IP assignments, and we don't use DHCP here)
-    networking.useDHCP = true;
-    networking.interfaces."enp0s31f6".useDHCP = true;
+    networking.useDHCP = false;
+    networking.interfaces."enp0s31f6".useDHCP = false;
     networking.enableIPv6 = true;
     networking.interfaces."enp0s31f6".ipv6.addresses = [
       {
