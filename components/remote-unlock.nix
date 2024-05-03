@@ -10,6 +10,7 @@ in
 
   config = mkIf cfg.enable {
     boot.initrd.network.enable = true;
+    boot.initrd.network.udhcpc.enable = true;
     boot.initrd.network.ssh = {
       enable = true;
       port = 222;
