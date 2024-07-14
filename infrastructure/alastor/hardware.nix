@@ -126,6 +126,7 @@ in
     environment.sessionVariables = { LIBVA_DRIVER_NAME = "radeonsi"; };
 
     services.btrfs.autoScrub.fileSystems = axolotl_fs ++ [ "/" "/mnt/violet" ];
+    services.logind.extraConfig = "RuntimeDirectorySize=20G";
 
     # that one's a doozy, so to explain: For each fs in our scrub list, we
     # define after to another substituted list in the let at the header which
