@@ -58,15 +58,18 @@ with lib;
     environment.systemPackages = with pkgs; [
       waypipe
       mupdf
+      wl-clipboard
 
       # kde
       kdePackages.discover
+      kdePackages.full
       labplot
       kdePackages.kate
       kdePackages.kdeconnect-kde
       kdePackages.filelight
       kdePackages.kiten
       kdePackages.akregator
+      kdePackages.kcalc
 
       nix-alien-pkgs.nix-alien
       # multimedia
@@ -82,6 +85,7 @@ with lib;
 
       # music (DAW + plugins)
       ardour
+      reaper
       calf
       zynaddsubfx
 
@@ -141,7 +145,7 @@ with lib;
       )
 
 
-      wineWowPackages.waylandFull
+      wineWowPackages.unstableFull
       yabridge
       yabridgectl
     ];
