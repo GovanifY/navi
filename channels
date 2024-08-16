@@ -1,0 +1,5 @@
+sudo nix-channel --add https://nixos.org/channels/nixos-unstable nixos
+sudo nix-channel --add https://github.com/ryantm/agenix/archive/main.tar.gz agenix
+sudo nix-channel --add https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/archive/master/nixos-mailserver-master.tar.gz nixos-mailserver
+sudo nix-channel --add https://github.com/nix-community/home-manager/archive/refs/heads/master.tar.gz home-manager
+sudo nix-channel --add https://github.com/tpwrules/nixos-apple-silicon/archive/refs/heads/main.tar.gz apple-silicon-support

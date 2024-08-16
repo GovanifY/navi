@@ -7,16 +7,14 @@ with lib;
       efiSysMountPoint = "/boot/efi";
     };
 
-    boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" ];
+    boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "thunderbolt" "usb_storage" "usbhid" "sd_mod" ];
     boot.initrd.kernelModules = [ "dm-snapshot" ];
-    boot.kernelModules = [ "i915" "kvm-intel" ];
-    # battery recalibration on thinkpad
-    boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
+    boot.kernelModules = [ "kvm-amd" ];
 
     boot.initrd.luks.devices =
       {
         matrix = {
-          device = "/dev/disk/by-uuid/3fc8b7d4-47e0-4e2d-b6b8-ffce64c79a8d";
+          device = "/dev/disk/by-uuid/d7375ace-0431-44b6-aa0c-4776dcbaad45";
           preLVM = true;
           allowDiscards = true;
         };
@@ -24,47 +22,33 @@ with lib;
 
     fileSystems."/boot/efi" =
       {
-        device = "/dev/disk/by-uuid/7ACD-64F6";
+        device = "/dev/disk/by-uuid/7889-B614";
         fsType = "vfat";
       };
 
     fileSystems."/" =
       {
-        device = "/dev/disk/by-uuid/5fd80bdb-928f-4848-befc-b21ebdee107b";
+        device = "/dev/disk/by-uuid/9a2bbc3f-9d13-49b4-ae7a-46192b6db986";
         fsType = "btrfs";
         options = [ "compress=zstd" ];
       };
 
-    nix.settings.max-jobs = lib.mkDefault 12;
+    swapDevices =
+      [{ device = "/dev/disk/by-uuid/69ffddc5-4d7d-4c32-8a92-ace756dd4ace"; }];
+
+
+    nix.settings.max-jobs = lib.mkDefault 16;
     powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
     # High-DPI console
     console.keyMap = "fr";
-    hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
     hardware.enableRedistributableFirmware = true;
     hardware.enableAllFirmware = true;
 
-    networking.useDHCP = false;
-    networking.interfaces.wlp3s0.useDHCP = true;
-    networking.interfaces.enp1s0.useDHCP = lib.mkDefault true;
-
-
-    # we enable opengl intel drivers to get hw accel
-    nixpkgs.config.packageOverrides = pkgs: {
-      vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-    };
-    hardware.opengl = {
-      enable = true;
-      extraPackages = with pkgs; [
-        vaapiIntel
-        vaapiVdpau
-        libvdpau-va-gl
-        intel-media-driver
-      ];
-    };
+    networking.useDHCP = lib.mkDefault true;
 
 
     # and let's enable our fingerprint sensor too
     services.fprintd.enable = true;
-    security.pam.services.swaylock.fprintAuth = true;
+    #security.pam.services.swaylock.fprintAuth = true;
   };
 }

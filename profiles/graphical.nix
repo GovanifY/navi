@@ -25,17 +25,14 @@ with lib;
 
     services = {
       desktopManager.plasma6.enable = true;
-      xserver = {
-        enable = true;
-        displayManager = {
-          sddm = {
-            enable = true;
-            wayland.enable = true;
-          };
-          autoLogin = {
-            enable = true;
-            user = "${config.navi.username}";
-          };
+      displayManager = {
+        sddm = {
+          enable = true;
+          wayland.enable = true;
+        };
+        autoLogin = {
+          enable = true;
+          user = "${config.navi.username}";
         };
       };
     };

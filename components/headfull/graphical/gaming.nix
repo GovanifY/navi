@@ -19,7 +19,7 @@ in
     navi.components.hardening = {
       legacy = true;
     };
-    hardware.opengl.driSupport32Bit = true;
+    hardware.graphics.enable32Bit = true;
 
     nixpkgs.config.allowUnfree = true;
 

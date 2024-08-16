@@ -48,15 +48,6 @@ with lib;
       wm = {
         battery = true;
         azerty = true;
-        extraConf = ''
-          output eDP-1 scale 2.0
-          input "2:10:TPPS/2_IBM_TrackPoint" {
-            pointer_accel 0.5
-          }
-          input "1:1:AT_Translated_Set_2_keyboard" {
-            xkb_layout "fr"
-          }
-        '';
       };
     };
 

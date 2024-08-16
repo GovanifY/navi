@@ -1,4 +1,11 @@
 { config, lib, pkgs, ... }:
+let
+  nix-alien-pkgs = import
+    (
+      builtins.fetchTarball "https://github.com/thiagokokada/nix-alien/tarball/master"
+    )
+    { };
+in
 with lib;
 {
   config = mkIf config.navi.profile.graphical {
@@ -23,28 +30,45 @@ with lib;
       VST3_PATH = "$HOME/.vst3:$HOME/.nix-profile/lib/vst3:/run/current-system/sw/lib/vst3:/run/current-system/sw/lib";
     };
 
-    # TODO: currently broken in nixpkgs
-    #nixpkgs.overlays = [
-    #  (
-    #    self: super: {
-    #      # enable blu-ray decoding libraries
-    #      libbluray = super.libbluray.override {
-    #        withAACS = true;
-    #        withBDplus = true;
-    #        withJava = true;
-    #      };
-    #
-    #    }
-    #  )
-    #];
+    nixpkgs.overlays = [
+      (
+        self: super: {
+          # enable blu-ray decoding libraries
+          ghidra = (super.ghidra.overrideAttrs (oldAttrs: {
+            postFixup = ''
+              ${oldAttrs.postFixup}
+              sed -r -i -e \
+                's/VMARGS_LINUX=-Dsun.java2d.uiScale=1/VMARGS_LINUX=-Dsun.java2d.uiScale=2/g' \
+                $out/lib/ghidra/support/launch.properties
+            '';
+          }));
+
+          # TODO: currently broken in nixpkgs
+          #      libbluray = super.libbluray.override {
+          #        withAACS = true;
+          #        withBDplus = true;
+          #        withJava = true;
+          #      };
+          #
+        }
+      )
+    ];
 
 
     environment.systemPackages = with pkgs; [
       waypipe
       mupdf
-    ] ++ builtins.filter lib.isDerivation (builtins.attrValues plasma5Packages.kdeGear)
-    ++ [
 
+      # kde
+      kdePackages.discover
+      labplot
+      kdePackages.kate
+      kdePackages.kdeconnect-kde
+      kdePackages.filelight
+      kdePackages.kiten
+      kdePackages.akregator
+
+      nix-alien-pkgs.nix-alien
       # multimedia
       mpv
       vlc
@@ -70,6 +94,10 @@ with lib;
       freecad
       pulseview
       okteta
+      zotero
+
+      # is it really useful...?
+      obsidian
 
       # recording/streaming
       obs-studio
@@ -80,6 +108,11 @@ with lib;
       coq
       lean
       elan
+
+      # chat
+      discord
+      signal-desktop
+      telegram-desktop
 
       lame
       flac
