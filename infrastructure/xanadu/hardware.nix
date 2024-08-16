@@ -49,6 +49,8 @@ with lib;
 
     # and let's enable our fingerprint sensor too
     services.fprintd.enable = true;
+
+    services.fwupd.enable = true;
     #security.pam.services.swaylock.fprintAuth = true;
   };
 }
