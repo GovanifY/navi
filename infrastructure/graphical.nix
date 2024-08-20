@@ -70,6 +70,7 @@ with lib;
       kdePackages.kiten
       kdePackages.akregator
       kdePackages.kcalc
+      kdePackages.isoimagewriter
 
       nix-alien-pkgs.nix-alien
       # multimedia
