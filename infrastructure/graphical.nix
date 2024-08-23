@@ -88,6 +88,10 @@ with lib;
       ardour
       reaper
       calf
+      sfizz
+      # my love
+      surge-XT
+      infamousPlugins
       zynaddsubfx
 
       # stem
