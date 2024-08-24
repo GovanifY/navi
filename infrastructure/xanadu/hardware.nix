@@ -10,6 +10,7 @@ with lib;
     boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "thunderbolt" "usb_storage" "usbhid" "sd_mod" ];
     boot.initrd.kernelModules = [ "dm-snapshot" ];
     boot.kernelModules = [ "kvm-amd" ];
+    boot.supportedFilesystems = [ "ntfs" ];
 
     boot.initrd.luks.devices =
       {

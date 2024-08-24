@@ -48,6 +48,7 @@ in
     environment.systemPackages = with pkgs; [
       virt-manager
       virt-viewer
+      virtiofsd
     ];
 
     virtualisation.libvirtd = {
