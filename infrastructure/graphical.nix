@@ -59,6 +59,8 @@ with lib;
       waypipe
       mupdf
       wl-clipboard
+      dislocker
+      ntfs3g
 
       # kde
       kdePackages.discover
