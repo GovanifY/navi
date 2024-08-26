@@ -8,12 +8,13 @@ let
     configure = { availablePlugins, ... }:
       {
         plugins = with availablePlugins; [
-          (python.withPackages (_: [ pkgs.weechatScripts.weechat-matrix ]))
+          #(python.withPackages (_: [ pkgs.weechatScripts.weechat-matrix ]))
           perl
         ];
         scripts = with pkgs.weechatScripts; [
           weechat-autosort
-          weechat-matrix
+          # libolm is insecure now
+          #weechat-matrix
           weechat-go
           highmon
           buffer_autoset

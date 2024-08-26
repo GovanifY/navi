@@ -27,7 +27,8 @@ with lib;
       # we need to set this up, otherwise ardour won't be able to find our
       # plugins!
       LV2_PATH = "$HOME/.lv2:$HOME/.nix-profile/lib/lv2:/run/current-system/sw/lib/lv2";
-      VST3_PATH = "$HOME/.vst3:$HOME/.nix-profile/lib/vst3:/run/current-system/sw/lib/vst3:/run/current-system/sw/lib";
+      VST3_PATH = "$HOME/.vst3:$HOME/.nix-profile/lib/vst3:/run/current-system/sw/lib/vst3";
+      VST_PATH = "$HOME/.vst:$HOME/.nix-profile/lib/vst:/run/current-system/sw/lib/vst";
     };
 
     nixpkgs.overlays = [
@@ -84,17 +85,25 @@ with lib;
       # art
       blender
       krita
+      aseprite
       kdenlive
 
       # music (DAW + plugins)
       ardour
       reaper
+      milkytracker
       calf
       sfizz
       # my love
       surge-XT
       infamousPlugins
       zynaddsubfx
+      vcv-rack
+      vital
+      x42-plugins
+      tunefish
+      distrho
+      mda_lv2
 
       # stem
       kicad
