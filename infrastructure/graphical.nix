@@ -62,6 +62,7 @@ with lib;
       wl-clipboard
       dislocker
       ntfs3g
+      unrar
 
       # kde
       kdePackages.discover
