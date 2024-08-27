@@ -32,7 +32,7 @@ in
       enable = true;
       services = {
         nix = with lib;{
-          registrationConfigFile = cfg.runner_secrets;
+          authenticationTokenConfigFile = cfg.runner_secrets;
           dockerImage = "alpine";
           dockerVolumes = [
             "/nix/store:/nix/store:ro"
