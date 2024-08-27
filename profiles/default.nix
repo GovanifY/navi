@@ -81,7 +81,7 @@ with lib;
       btrfs-progs
       btrfs-snap
       btrfs-heatmap
-      compsize
+      #compsize
       iotop
       lsof
       exiftool
@@ -103,6 +103,11 @@ with lib;
     };
     programs.mosh.enable = true;
     environment.etc."motd".text = config.users.motd;
+
+    # temporary admission for server side bridges
+    nixpkgs.config.permittedInsecurePackages = [
+      "olm-3.2.16"
+    ];
 
 
 
