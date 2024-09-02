@@ -178,7 +178,6 @@ in
 
 
     environment.systemPackages = mkIf cfg.build-beautify [
-      (pkgs.writeShellScriptBin "nix-build" "${pkgs.expect}/bin/unbuffer ${pkgs.nix}/bin/nix-build \"$@\" 2>&1 | exec ${pkgs.nix-output-monitor}/bin/nom")
       (pkgs.writeShellScriptBin "nixos-rebuild" "${pkgs.expect}/bin/unbuffer ${pkgs.nixos-rebuild}/bin/nixos-rebuild \"$@\" 2>&1 | exec ${pkgs.nix-output-monitor}/bin/nom")
       # command
     ];

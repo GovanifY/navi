@@ -40,24 +40,24 @@ in
     };
   };
 
-  # TODO: i am almost sure this import is lazy evaluated if the module isn't enabled
-  # but i should probably double check... -- govanify
+  # TODO: this is _not_ lazy evaluated and conflicts with musnix.... what to do
   imports = [
     <nixpkgs/nixos/modules/profiles/hardened.nix>
   ];
 
   config = mkIf cfg.enable {
     # Use the hardened kernel but keep IA32 emulation.
-    boot.kernelPackages = mkIf cfg.legacy kernelPackages;
-    boot.kernelPatches = mkIf cfg.legacy [
-      {
-        name = "keep-ia32";
-        patch = null;
-        extraConfig = ''
-          IA32_EMULATION y
-        '';
-      }
-    ];
+    # TODO: only needed if hardened kernel is used
+    #boot.kernelPackages = mkIf cfg.legacy kernelPackages;
+    #boot.kernelPatches = mkIf cfg.legacy [
+    #  {
+    #    name = "keep-ia32";
+    #    patch = null;
+    #    extraConfig = ''
+    #      IA32_EMULATION y
+    #    '';
+    #  }
+    #];
 
     environment.memoryAllocator.provider = if cfg.scudo then "scudo" else "libc";
     security.lockKernelModules = cfg.modules;

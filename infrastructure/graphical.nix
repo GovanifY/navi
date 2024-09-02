@@ -8,6 +8,9 @@ let
 in
 with lib;
 {
+  imports = [
+    <musnix>
+  ];
   config = mkIf config.navi.profile.graphical {
     # needed to export obs as a virtual camera
     boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
@@ -55,6 +58,12 @@ with lib;
       )
     ];
 
+    musnix = {
+      enable = true;
+      rtcqs.enable = true;
+      kernel.realtime = true;
+      das_watchdog.enable = true;
+    };
 
     environment.systemPackages = with pkgs; [
       waypipe
@@ -92,6 +101,7 @@ with lib;
       # music (DAW + plugins)
       ardour
       reaper
+      bitwig-studio
       milkytracker
       calf
       sfizz
@@ -99,7 +109,8 @@ with lib;
       surge-XT
       infamousPlugins
       zynaddsubfx
-      vcv-rack
+      cardinal
+      carla
       vital
       x42-plugins
       tunefish
@@ -128,7 +139,8 @@ with lib;
       # math
       coq
       lean
-      elan
+      # XXX: broken
+      #elan
 
       # chat
       discord
