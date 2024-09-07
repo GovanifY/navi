@@ -84,6 +84,12 @@ with lib;
       kdePackages.akregator
       kdePackages.kcalc
       kdePackages.isoimagewriter
+      kdePackages.kdevelop
+      kdePackages.krdc
+      kdePackages.k3b
+      kdePackages.skanlite
+      kdePackages.kmail
+      audacity
 
       nix-alien-pkgs.nix-alien
       # multimedia
