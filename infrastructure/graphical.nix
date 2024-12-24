@@ -26,12 +26,6 @@ with lib;
       # $ ./result/bin/run-sachet-vm
       # $ ssh govanify@localhost -p 2221
       QEMU_NET_OPTS = "hostfwd=tcp::2221-:22";
-
-      # we need to set this up, otherwise ardour won't be able to find our
-      # plugins!
-      LV2_PATH = "$HOME/.lv2:$HOME/.nix-profile/lib/lv2:/run/current-system/sw/lib/lv2";
-      VST3_PATH = "$HOME/.vst3:$HOME/.nix-profile/lib/vst3:/run/current-system/sw/lib/vst3";
-      VST_PATH = "$HOME/.vst:$HOME/.nix-profile/lib/vst:/run/current-system/sw/lib/vst";
     };
 
     nixpkgs.overlays = [
@@ -120,7 +114,7 @@ with lib;
       vital
       x42-plugins
       tunefish
-      distrho
+      distrho-ports
       mda_lv2
 
       # stem
