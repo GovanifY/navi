@@ -83,6 +83,7 @@ with lib;
       kdePackages.k3b
       kdePackages.skanlite
       kdePackages.kmail
+      kdePackages.ffmpegthumbs
       audacity
 
       nix-alien-pkgs.nix-alien
@@ -113,7 +114,7 @@ with lib;
       carla
       vital
       x42-plugins
-      tunefish
+      #tunefish
       distrho-ports
       mda_lv2
 
