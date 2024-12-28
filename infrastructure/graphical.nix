@@ -82,7 +82,17 @@ with lib;
       kdePackages.krdc
       kdePackages.k3b
       kdePackages.skanlite
+      kdePackages.skanpage
       kdePackages.kmail
+      kdePackages.neochat
+      amarok
+      kdePackages.knights
+      stockfish
+      kdePackages.kolourpaint
+      kdePackages.kwave
+      kdePackages.ktorrent
+      kbibtex
+      kdePackages.kcachegrind
       kdePackages.ffmpegthumbs
       audacity
 
