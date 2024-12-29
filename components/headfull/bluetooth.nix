@@ -21,7 +21,12 @@ in
     # TODO: disable only when kde is enabled
     #services.blueman.enable = true;
 
-    hardware.bluetooth.settings = { General = { Enable = "Source,Sink,Media,Socket"; }; };
+    hardware.bluetooth.settings = {
+      General = {
+        Enable = "Source,Sink,Media,Socket";
+        Experimental = true;
+      };
+    };
 
     # we don't really need mpris afaict
     #systemd.user.services.mpris-proxy = mkIf cfg.audio {
