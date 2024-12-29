@@ -58,6 +58,8 @@ with lib;
       kernel.realtime = true;
       das_watchdog.enable = true;
     };
+    # hide vendor logo
+    boot.kernelParams = [ "bgrt_disable" ];
 
     environment.systemPackages = with pkgs; [
       waypipe
@@ -108,6 +110,7 @@ with lib;
       krita
       aseprite
       kdenlive
+      godot_4
 
       # music (DAW + plugins)
       ardour
