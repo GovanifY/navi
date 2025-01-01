@@ -91,6 +91,18 @@ with lib;
       kdePackages.k3b
       kdePackages.skanlite
       kdePackages.skanpage
+      kdePackages.marble
+      kdePackages.dragon
+      kdePackages.kompare
+      kdePackages.kgpg
+      kdePackages.kleopatra
+      kdePackages.kdebugsettings
+      kdePackages.ksystemlog
+      kdePackages.konversation
+      kaidan
+      kdePackages.kontact
+      kdePackages.cantor
+      kdePackages.kruler
       digikam
       kdePackages.kmail
       kdePackages.kmail-account-wizard
