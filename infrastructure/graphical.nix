@@ -91,6 +91,7 @@ with lib;
       kdePackages.k3b
       kdePackages.skanlite
       kdePackages.skanpage
+      digikam
       kdePackages.kmail
       kdePackages.kmail-account-wizard
       kdePackages.neochat
