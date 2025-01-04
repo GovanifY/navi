@@ -11,7 +11,7 @@ with lib;
     # let's disable navi stuff on firefox until i have the time to mess around
     # with it
     environment.variables.BROWSER = "firefox";
-    environment.systemPackages = [ pkgs.firefox ];
+    programs.firefox.enable = true;
     navi.components = {
       bootloader.verbose = false;
       vte.enable = true;
@@ -30,6 +30,8 @@ with lib;
 
     services = {
       desktopManager.plasma6.enable = true;
+
+      #xserver.displayManager.gdm.enable = true;
       displayManager = {
         sddm = {
           enable = true;

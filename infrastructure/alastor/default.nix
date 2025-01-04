@@ -69,6 +69,7 @@ with lib;
       };
     };
 
+    navi.wallpaper = ./wallpaper.png;
 
     navi.profile.name = "desktop";
 

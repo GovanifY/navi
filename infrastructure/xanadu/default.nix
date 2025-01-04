@@ -51,6 +51,8 @@ with lib;
       };
     };
 
+    navi.wallpaper = ./wallpaper.png;
+
     home-manager.users.govanify = {
       home.file."Pictures/wallpaper.png".source = ./wallpaper.png;
     };

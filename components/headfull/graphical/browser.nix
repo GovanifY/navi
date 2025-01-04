@@ -215,7 +215,7 @@ in
     '';
     environment.variables.BROWSER = "firefox";
     #environment.systemPackages = mkIf (!sandboxing.enable) [ pkgs.firefox ];
-    environment.systemPackages = [ pkgs.firefox ];
+    programs.firefox.enable = true;
     # TODO: fix IME support with firejail
     #navi.components.sandboxing.programs = mkIf sandboxing.enable {
     #  firefox = "${lib.getBin pkgs.firefox}/bin/firefox";

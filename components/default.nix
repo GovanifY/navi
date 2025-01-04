@@ -32,5 +32,12 @@ with lib;
         The name of the infrastructure to use for branding
       '';
     };
+    wallpaper = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = ''
+        The wallpaper used by the computer
+      '';
+    };
   };
 }

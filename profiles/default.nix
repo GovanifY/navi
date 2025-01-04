@@ -47,6 +47,7 @@ with lib;
   config = mkIf (config.navi.profile.name != "") {
 
     system.stateVersion = "22.05";
+    home-manager.backupFileExtension = "backup";
     home-manager.users."${config.navi.username}".home.stateVersion = "22.05";
 
     home-manager.users.root = {
@@ -160,6 +161,11 @@ with lib;
 
     # install terminfos for ssh
     environment.enableAllTerminfo = true;
+
+    # custom name for our distro :)
+    #system.nixos.distroName = config.navi.branding;
+    #system.nixos.distroId = config.navi.branding;
+    #system.nixos.label = "";
 
     #security.polkit.enable = false;
 

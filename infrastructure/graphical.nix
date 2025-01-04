@@ -67,6 +67,9 @@ with lib;
         sha256 = "19ij7sn6xax9i7df97i3jmv0nrsl9cvr9p6j9vnq4r4n5n81zq8i";
       };
 
+    # TEST GNOME
+    services.xserver.desktopManager.gnome.enable = true;
+
     environment.systemPackages = with pkgs; [
       waypipe
       mupdf
@@ -75,6 +78,10 @@ with lib;
       ntfs3g
       unrar
 
+
+      #gnome
+      gnome-browser-connector
+      gnome-tweaks
       # kde
       kdePackages.discover
       kdePackages.full
@@ -116,6 +123,12 @@ with lib;
       kbibtex
       kdePackages.kcachegrind
       kdePackages.ffmpegthumbs
+
+      # add default login wallpaper
+      (pkgs.writeTextDir "share/sddm/themes/breeze/theme.conf.user" ''
+        [General]
+        background=${config.navi.wallpaper}
+      '')
       audacity
 
       nix-alien-pkgs.nix-alien
