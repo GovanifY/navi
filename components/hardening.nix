@@ -2,17 +2,6 @@
 with lib;
 let
   cfg = config.navi.components.hardening;
-  kernelPackages = with pkgs;
-    recurseIntoAttrs (
-      linuxPackagesFor (
-        # XXX: this used to work on just linux_hardened but it kept defaulting
-        # to an older kernel version, I need to check this whenever I have more
-        # free time!
-        linux_6_6_hardened.override {
-          features.ia32Emulation = true;
-        }
-      )
-    );
 in
 {
   options.navi.components.hardening = {
@@ -40,24 +29,31 @@ in
     };
   };
 
-  # TODO: this is _not_ lazy evaluated and conflicts with musnix.... what to do
   imports = [
     <nixpkgs/nixos/modules/profiles/hardened.nix>
   ];
 
   config = mkIf cfg.enable {
-    # Use the hardened kernel but keep IA32 emulation.
-    # TODO: only needed if hardened kernel is used
-    #boot.kernelPackages = mkIf cfg.legacy kernelPackages;
-    #boot.kernelPatches = mkIf cfg.legacy [
-    #  {
-    #    name = "keep-ia32";
-    #    patch = null;
-    #    extraConfig = ''
-    #      IA32_EMULATION y
-    #    '';
-    #  }
-    #];
+
+    # enable lockdown :)
+    boot.kernelPatches = [
+      {
+        name = "enable-lockdown";
+        patch = null;
+        extraConfig = ''
+          SECURITY_LOCKDOWN_LSM y
+          MODULE_SIG y
+        '';
+      }
+      (mkIf cfg.legacy {
+        name = "keep-ia32";
+        patch = null;
+        extraConfig = ''
+          IA32_EMULATION y
+        '';
+      })
+    ];
+    boot.kernelParams = [ "lockdown=confidentiality" ];
 
     environment.memoryAllocator.provider = if cfg.scudo then "scudo" else "libc";
     security.lockKernelModules = cfg.modules;

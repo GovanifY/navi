@@ -12,49 +12,57 @@ with lib;
     ];
 
 
-  options.navi.profile = {
-    name = mkOption {
-      type = types.str;
-      default = "";
-      description = ''
-        The profile target you want to use, refer to the files in profiles/ to
-        see the list of valid profiles
-      '';
+  options = {
+    navi.profile = {
+      name = mkOption {
+        type = types.str;
+        default = "";
+        description = ''
+          The profile target you want to use, refer to the files in profiles/ to
+          see the list of valid profiles
+        '';
+      };
+      graphical = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether the targetted profile is graphical or not
+        '';
+      };
+      headfull = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether the targetted profile is headfull or not
+        '';
+      };
+      server = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether the targetted profile is graphical or not
+        '';
+      };
     };
-    graphical = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether the targetted profile is graphical or not
-      '';
-    };
-    headfull = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether the targetted profile is headfull or not
-      '';
-    };
-    server = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether the targetted profile is graphical or not
-      '';
-    };
+    system.nixos.codeName = lib.mkOption { readOnly = false; };
   };
 
   config = mkIf (config.navi.profile.name != "") {
 
     system.stateVersion = "22.05";
     home-manager.backupFileExtension = "backup";
-    home-manager.users."${config.navi.username}".home.stateVersion = "22.05";
+    home-manager.users."${config.navi.username}" = {
+      home.stateVersion = "22.05";
+      home.file.".local/share/icons/${config.navi.branding}.png".source = ./../infrastructure/navi.png;
+    };
 
     home-manager.users.root = {
       home.stateVersion = "22.05";
       home.file.".config/gnupg/pubring.kbx".source = ./../secrets/common/assets/gpg/updates/pubring.kbx;
       home.file.".config/gnupg/trustdb.gpg".source = ./../secrets/common/assets/gpg/updates/trustdb.gpg;
     };
+
+
 
 
     # basic set of tools & ssh
@@ -163,9 +171,11 @@ with lib;
     environment.enableAllTerminfo = true;
 
     # custom name for our distro :)
-    #system.nixos.distroName = config.navi.branding;
-    #system.nixos.distroId = config.navi.branding;
-    #system.nixos.label = "";
+    system.nixos.distroName = config.navi.branding;
+    system.nixos.distroId = config.navi.branding;
+    system.nixos.label = "";
+    system.nixos.codeName = "";
+    system.nixos.extraOSReleaseArgs = { LOGO = config.navi.branding; };
 
     #security.polkit.enable = false;
 

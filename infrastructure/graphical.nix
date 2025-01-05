@@ -12,13 +12,6 @@ with lib;
     <musnix>
   ];
   config = mkIf config.navi.profile.graphical {
-    # needed to export obs as a virtual camera
-    boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
-    boot.kernelModules = [ "v4l2loopback" ];
-    boot.extraModprobeConfig = ''
-      options v4l2loopback exclusive_caps=1 card_label=virt
-    '';
-
     environment.variables = {
       # useful for nixos-rebuild build-vm, passthrough ssh to port 2221 locally.
       # example:
@@ -58,6 +51,19 @@ with lib;
       kernel.realtime = true;
       das_watchdog.enable = true;
     };
+
+    # realtime is better for live music :)
+    # TODO: enable when present on hardened longterm
+    #boot.kernelPatches = [
+    #  {
+    #    name = "enable-realtime";
+    #    patch = null;
+    #    extraConfig = ''
+    #      PREEMPT_RT y
+    #    '';
+    #  }
+    #];
+
     # pretty boot
     boot.kernelParams = [ "bgrt_disable" ];
     boot.initrd.systemd.enable = true;
@@ -129,6 +135,7 @@ with lib;
         [General]
         background=${config.navi.wallpaper}
       '')
+
       audacity
 
       nix-alien-pkgs.nix-alien
@@ -268,7 +275,11 @@ with lib;
       # Valve HID devices over bluetooth hidraw
       KERNEL=="hidraw*", KERNELS=="*28DE:*", MODE="0666"
     '';
-    hardware.xpadneo.enable = true;
+
+    # out of tree module; moreso, works on wired and i don't use bluetooth when
+    # on my computers.
+    #hardware.xpadneo.enable = true;
+
     services.xserver.wacom.enable = true;
     services.flatpak.enable = true;
 
