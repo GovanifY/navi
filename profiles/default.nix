@@ -53,7 +53,8 @@ with lib;
     home-manager.backupFileExtension = "backup";
     home-manager.users."${config.navi.username}" = {
       home.stateVersion = "22.05";
-      home.file.".local/share/icons/${config.navi.branding}.png".source = ./../infrastructure/navi.png;
+      home.file.".local/share/icons/${config.navi.branding}.png".source =
+        ./../infrastructure/assets/navi.png;
     };
 
     home-manager.users.root = {
@@ -173,9 +174,14 @@ with lib;
     # custom name for our distro :)
     system.nixos.distroName = config.navi.branding;
     system.nixos.distroId = config.navi.branding;
+    system.nixos.vendorId = config.navi.branding;
     system.nixos.label = "";
     system.nixos.codeName = "";
-    system.nixos.extraOSReleaseArgs = { LOGO = config.navi.branding; };
+    system.nixos.extraOSReleaseArgs = {
+      LOGO = config.navi.branding;
+      VERSION = config.system.nixos.release;
+      PRETTY_NAME = "${config.navi.branding} ${config.system.nixos.release}";
+    };
 
     #security.polkit.enable = false;
 

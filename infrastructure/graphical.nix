@@ -67,11 +67,7 @@ with lib;
     # pretty boot
     boot.kernelParams = [ "bgrt_disable" ];
     boot.initrd.systemd.enable = true;
-    boot.plymouth.logo =
-      pkgs.fetchurl {
-        url = "https://govanify.com/img/star.png";
-        sha256 = "19ij7sn6xax9i7df97i3jmv0nrsl9cvr9p6j9vnq4r4n5n81zq8i";
-      };
+    boot.plymouth.logo = ./assets/navi-48.png;
 
     # TEST GNOME
     services.xserver.desktopManager.gnome.enable = true;
