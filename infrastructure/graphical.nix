@@ -84,6 +84,10 @@ with lib;
       #gnome
       gnome-browser-connector
       gnome-tweaks
+      fractal
+      gnome-themes-extra
+
+
       # kde
       kdePackages.discover
       kdePackages.full
@@ -193,6 +197,7 @@ with lib;
       #elan
 
       # chat
+      nheko
       discord
       signal-desktop
       telegram-desktop

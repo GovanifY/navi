@@ -28,19 +28,35 @@ with lib;
       ime.enable = true;
     };
 
+
+    # modify gdm logo by branding
+    nixpkgs.overlays = [
+      (
+        self: super: {
+          gdm = super.gdm.overrideAttrs (
+            oldAttrs: {
+              preInstall = oldAttrs.preInstall + ''
+                sed "s|logo='.*|logo='${../infrastructure/assets/navi.png}'|g" -i "$DESTDIR/$out/share/glib-2.0/schemas/org.gnome.login-screen.gschema.override"
+              '';
+            }
+          );
+        }
+      )
+    ];
+
     services = {
       desktopManager.plasma6.enable = true;
 
-      #xserver.displayManager.gdm.enable = true;
+      xserver.displayManager.gdm.enable = true;
       displayManager = {
-        sddm = {
-          enable = true;
-          wayland.enable = true;
-        };
-        autoLogin = {
-          enable = true;
-          user = "${config.navi.username}";
-        };
+        #  sddm = {
+        #    enable = true;
+        #    wayland.enable = true;
+        #  };
+        #  autoLogin = {
+        #    enable = true;
+        #    user = "${config.navi.username}";
+        #  };
       };
     };
     programs.dconf.enable = true;
