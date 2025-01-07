@@ -101,7 +101,7 @@ with lib;
       kdePackages.isoimagewriter
       kdePackages.kdevelop
       kdePackages.krdc
-      kdePackages.k3b
+      #kdePackages.k3b
       kdePackages.skanlite
       kdePackages.skanpage
       kdePackages.marble
@@ -164,7 +164,7 @@ with lib;
       infamousPlugins
       zynaddsubfx
       cardinal
-      carla
+      #carla
       vital
       x42-plugins
       #tunefish
