@@ -36,7 +36,7 @@ in
 
       {
         matrix = {
-          device = "/dev/disk/by-uuid/9634d799-6103-44c2-aa91-9adecf165f91";
+          device = "/dev/disk/by-uuid/8e851a92-5954-48fe-b531-1ae1fe1357b1";
           preLVM = true;
           allowDiscards = true;
         };
@@ -82,7 +82,7 @@ in
 
 
     swapDevices =
-      [{ device = "/dev/disk/by-uuid/b8be1d58-dd39-454a-9754-2f23df66cd38"; }];
+      [{ device = "/dev/disk/by-uuid/0e79aee6-4156-4c7b-83e7-cac114d6251f"; }];
 
 
     # The global useDHCP flag is deprecated, therefore explicitly set to false here.
