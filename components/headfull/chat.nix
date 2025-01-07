@@ -38,7 +38,7 @@ in
     environment.systemPackages = with pkgs; [
       weechat
     ] ++ optionals cfg.graphical [
-      element-desktop-wayland
+      element-desktop
     ];
     services.weechat.binary = "${weechat}/bin/weechat";
   };

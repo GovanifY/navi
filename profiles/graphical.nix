@@ -62,6 +62,7 @@ with lib;
     programs.dconf.enable = true;
     environment.sessionVariables = {
       NIX_PROFILES = "${pkgs.lib.concatStringsSep " " (pkgs.lib.reverseList config.environment.profiles)}";
+      NIXOS_OZONE_WL = "1";
     };
     programs.kdeconnect.enable = true;
     programs.partition-manager.enable = true;
