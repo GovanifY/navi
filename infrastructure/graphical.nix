@@ -71,13 +71,7 @@ with lib;
 
     # TEST GNOME
     services.xserver.desktopManager.gnome.enable = true;
-    services.xserver.desktopManager.gnome.extraGSettingsOverrides = ''
-      [org.gnome.desktop.session]
-      idle-delay=0
-
-      [org.gnome.settings-daemon.plugins.power]
-      sleep-inactive-ac-type='nothing'
-    '';
+    services.xserver.displayManager.gdm.autoSuspend = false;
 
     environment.systemPackages = with pkgs; [
       waypipe
