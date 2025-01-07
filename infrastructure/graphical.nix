@@ -71,6 +71,10 @@ with lib;
 
     # TEST GNOME
     services.xserver.desktopManager.gnome.enable = true;
+    services.xserver.desktopManager.gnome.extraGSettingsOverrides = ''
+      [org.gnome.desktop.session]
+      idle-delay=0
+    '';
 
     environment.systemPackages = with pkgs; [
       waypipe
