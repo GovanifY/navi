@@ -74,6 +74,9 @@ with lib;
     services.xserver.desktopManager.gnome.extraGSettingsOverrides = ''
       [org.gnome.desktop.session]
       idle-delay=0
+
+      [org.gnome.settings-daemon.plugins.power]
+      sleep-inactive-ac-type='nothing'
     '';
 
     environment.systemPackages = with pkgs; [
