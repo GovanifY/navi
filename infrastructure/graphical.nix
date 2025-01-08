@@ -86,7 +86,16 @@ with lib;
       gnome-browser-connector
       gnome-tweaks
       fractal
+      dino
       gnome-themes-extra
+      gnome-chess
+      gnome-builder
+      gnome-boxes
+      dconf-editor
+      cartridges
+      bottles
+      impression
+      komikku
 
 
       # kde
