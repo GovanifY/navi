@@ -1,11 +1,4 @@
 { config, lib, pkgs, ... }:
-let
-  nix-alien-pkgs = import
-    (
-      builtins.fetchTarball "https://github.com/thiagokokada/nix-alien/tarball/master"
-    )
-    { };
-in
 with lib;
 {
   imports = [
@@ -69,86 +62,15 @@ with lib;
     boot.initrd.systemd.enable = true;
     boot.plymouth.logo = ./assets/navi-48.png;
 
-    # TEST GNOME
-    services.xserver.desktopManager.gnome.enable = true;
-    services.xserver.displayManager.gdm.autoSuspend = false;
-
     environment.systemPackages = with pkgs; [
       waypipe
-      mupdf
       wl-clipboard
       dislocker
       ntfs3g
       unrar
 
-
-      #gnome
-      gnome-browser-connector
-      gnome-tweaks
-      fractal
-      dino
-      gnome-themes-extra
-      gnome-chess
-      gnome-builder
-      gnome-boxes
-      dconf-editor
-      cartridges
-      bottles
-      impression
-      komikku
-
-
-      # kde
-      kdePackages.discover
-      kdePackages.full
-      labplot
-      kdePackages.kate
-      kdePackages.kdeconnect-kde
-      kdePackages.filelight
-      kdePackages.kiten
-      kdePackages.akregator
-      kdePackages.kcalc
-      kdePackages.isoimagewriter
-      kdePackages.kdevelop
-      kdePackages.krdc
-      #kdePackages.k3b
-      kdePackages.skanlite
-      kdePackages.skanpage
-      kdePackages.marble
-      kdePackages.dragon
-      kdePackages.kompare
-      kdePackages.kgpg
-      kdePackages.kleopatra
-      kdePackages.kdebugsettings
-      kdePackages.ksystemlog
-      kdePackages.konversation
-      kaidan
-      kdePackages.kontact
-      kdePackages.cantor
-      kdePackages.kruler
-      digikam
-      kdePackages.kmail
-      kdePackages.kmail-account-wizard
-      kdePackages.neochat
-      amarok
-      kdePackages.knights
-      stockfish
-      kdePackages.kolourpaint
-      kdePackages.kwave
-      kdePackages.ktorrent
-      kbibtex
-      kdePackages.kcachegrind
-      kdePackages.ffmpegthumbs
-
-      # add default login wallpaper
-      (pkgs.writeTextDir "share/sddm/themes/breeze/theme.conf.user" ''
-        [General]
-        background=${config.navi.wallpaper}
-      '')
-
       audacity
 
-      nix-alien-pkgs.nix-alien
       # multimedia
       mpv
       vlc
@@ -207,7 +129,6 @@ with lib;
       #elan
 
       # chat
-      nheko
       discord
       signal-desktop
       telegram-desktop
@@ -261,8 +182,6 @@ with lib;
         "dialout"
       ];
     };
-
-    environment.shellAliases.dgpu = "__NV_PRIME_RENDER_OFFLOAD=1 __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0 __GLX_VENDOR_LIBRARY_NAME=nvidia __VK_LAYER_NV_optimus=NVIDIA_only ";
 
     # make my printer actually work
     services.printing.drivers = [ pkgs.hplip ];

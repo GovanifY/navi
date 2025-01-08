@@ -45,7 +45,7 @@ with lib;
     navi.components = {
       bluetooth.enable = true;
       virtualization.enable = true;
-      wm = {
+      wm.sway = {
         battery = true;
         azerty = true;
       };

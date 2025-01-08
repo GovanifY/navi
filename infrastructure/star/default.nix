@@ -54,7 +54,7 @@ with lib;
 
     navi.components = {
       bluetooth.enable = true;
-      wm = {
+      wm.sway = {
         battery = true;
       };
     };

@@ -21,68 +21,18 @@ with lib;
       # splash with this much time to wait just doesn't make sense, so let's
       # disable it until our boot time stops being so blazingly fast :)
       #splash.enable = true;
-      # experimenting with alternate wm
-      #wm.enable = true;
-      wm.enable = false;
+      wm.gnome.enable = true;
       chat.graphical = true;
       ime.enable = true;
     };
 
-
-    # modify gdm logo by branding
-    nixpkgs.overlays = [
-      (
-        self: super: {
-          gdm = super.gdm.overrideAttrs (
-            oldAttrs: {
-              preInstall = oldAttrs.preInstall + ''
-                sed "s|logo='.*|logo='${../infrastructure/assets/navi.png}'|g" -i "$DESTDIR/$out/share/glib-2.0/schemas/org.gnome.login-screen.gschema.override"
-              '';
-            }
-          );
-        }
-      )
-    ];
-
-    services = {
-      desktopManager.plasma6.enable = true;
-
-      xserver.displayManager.gdm.enable = true;
-      displayManager = {
-        #  sddm = {
-        #    enable = true;
-        #    wayland.enable = true;
-        #  };
-        #  autoLogin = {
-        #    enable = true;
-        #    user = "${config.navi.username}";
-        #  };
-      };
-    };
     programs.dconf.enable = true;
     environment.sessionVariables = {
       NIX_PROFILES = "${pkgs.lib.concatStringsSep " " (pkgs.lib.reverseList config.environment.profiles)}";
       NIXOS_OZONE_WL = "1";
     };
-    programs.kdeconnect.enable = true;
-    programs.partition-manager.enable = true;
 
-
-    # usbguard and polkit rules so that you cannot plug new usb when on login
-    # screen on gnome
-    security.polkit.extraConfig = ''
-      polkit.addRule(function(action, subject) {
-        if ((action.id == "org.usbguard.Policy1.listRules" ||
-             action.id == "org.usbguard.Policy1.appendRule" ||
-             action.id == "org.usbguard.Policy1.removeRule" ||
-             action.id == "org.usbguard.Devices1.applyDevicePolicy" ||
-             action.id == "org.usbguard.Devices1.listDevices" ||
-             action.id == "org.usbguard1.getParameter" ||
-             action.id == "org.usbguard1.setParameter") &&
-             subject.active == true && subject.local == true &&
-             subject.isInGroup("wheel")) { return polkit.Result.YES; }
-      });
-    '';
+    # allow by default, to be configured by the end user or DE
     services.usbguard = {
       enable = true;
       dbus.enable = true;

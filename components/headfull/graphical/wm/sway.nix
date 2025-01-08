@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  cfg = config.navi.components.wm;
+  cfg = config.navi.components.wm.sway;
 
   qt5ct-dark = ''
     [ColorScheme]
@@ -243,8 +243,8 @@ let
   '' + cfg.extraConf;
 in
 {
-  options.navi.components.wm = {
-    enable = mkEnableOption "Enable navi's window manager";
+  options.navi.components.wm.sway = {
+    enable = mkEnableOption "Enable navi's window manager (sway)";
     autologin = mkOption {
       type = types.bool;
       default = true;

@@ -50,7 +50,7 @@ with lib;
         enable = true;
         dataDir = "/mnt/axolotl/torrent";
       };
-      wm = {
+      wm.sway = {
         azerty = true;
         extraConf = ''
           output DP-6 scale 2.0
@@ -72,6 +72,9 @@ with lib;
     navi.wallpaper = ./wallpaper.png;
 
     navi.profile.name = "desktop";
+
+    # alastor is also a server !
+    services.xserver.displayManager.gdm.autoSuspend = false;
 
     #modules.tor.transparentProxy = {
     #enable = true; 
