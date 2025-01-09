@@ -25,6 +25,7 @@ in
 
 
     environment.systemPackages = with pkgs; with pkgs.gnomeExtensions; [
+      xdg-dbus-proxy
       gnome-browser-connector
       gnome-tweaks
       fractal
@@ -44,6 +45,11 @@ in
       compiz-windows-effect
       coverflow-alt-tab
       kimpanel
+    ];
+    environment.gnome.excludePackages = with pkgs; [
+      # https://github.com/NixOS/nixpkgs/issues/372459
+      # use the flatpak for now
+      geary
     ];
 
     services.xserver = {

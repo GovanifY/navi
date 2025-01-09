@@ -22,6 +22,8 @@ with lib;
       # disable it until our boot time stops being so blazingly fast :)
       #splash.enable = true;
       wm.gnome.enable = true;
+      #wm.kde.enable = true;
+      #wm.kde.sddm = false;
       chat.graphical = true;
       ime.enable = true;
     };

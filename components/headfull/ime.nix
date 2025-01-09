@@ -25,6 +25,9 @@ in
       fontconfig.useEmbeddedBitmaps = true;
     };
 
+    # ibus sortaaaaaa works? but never as well as fcitx, which is more themeable
+    # by default and doesn't have the weird input jump glitches it has on
+    # wayland currently.
     i18n.inputMethod = {
       enable = true;
       #type = if config.navi.components.wm.gnome.enable then "ibus" else "fcitx5";
@@ -35,5 +38,7 @@ in
         fcitx5-gtk
       ];
     };
+
+    #environment.variables.GTK_IM_MODULE = lib.mkForce "wayland";
   };
 }

@@ -6,6 +6,11 @@ in
 {
   options.navi.components.wm.kde = {
     enable = mkEnableOption "Enable navi's window manager (kde)";
+    sddm = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Enable KDE's login manager (sddm)";
+    };
   };
   config = mkIf cfg.enable {
 
@@ -63,7 +68,7 @@ in
 
     services = {
       desktopManager.plasma6.enable = true;
-      displayManager = {
+      displayManager = mkIf cfg.sddm {
         sddm = {
           enable = true;
           wayland.enable = true;
