@@ -159,6 +159,10 @@ with lib;
     environment.variables.NIX_AUTO_RUN = "1";
     programs.command-not-found.enable = true;
 
+    # enable debuginfod for coredump auto debug
+    services.nixseparatedebuginfod.enable = true;
+    environment.variables.DEBUGINFOD_URLS = "http://127.0.0.1:1949";
+
     # currently, nscd is not used for caching purposes on nixos, but merely to
     # make sure connections work fine on network namespaces related to systemd's
     # nss modules. 

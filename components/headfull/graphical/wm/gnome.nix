@@ -39,6 +39,8 @@ in
       bottles
       impression
       komikku
+      d-spy
+      stockfish
 
       # shell extensions
       blur-my-shell

@@ -15,8 +15,11 @@ in
   config = mkIf cfg.enable {
 
     environment.systemPackages = with pkgs; [
+
+      # /!\ actively breaks several packages like kdenlive and kaidan /!\
+      #kdePackages.full
+
       kdePackages.discover
-      kdePackages.full
       labplot
       kdePackages.kate
       kdePackages.kdeconnect-kde
