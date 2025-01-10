@@ -75,6 +75,7 @@ with lib;
       mpv
       vlc
       imv
+      ruffle
       libreoffice
 
       # art

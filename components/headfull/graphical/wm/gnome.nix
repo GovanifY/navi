@@ -6,6 +6,11 @@ in
 {
   options.navi.components.wm.gnome = {
     enable = mkEnableOption "Enable navi's window manager (gnome)";
+    qt-theme = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Enable gnome's qt theming to adwaita-dark";
+    };
   };
   config = mkIf cfg.enable {
     # modify gdm logo by branding
@@ -41,6 +46,7 @@ in
       komikku
       d-spy
       stockfish
+      sysprof
 
       # shell extensions
       blur-my-shell
@@ -58,6 +64,12 @@ in
       displayManager.gdm.enable = true;
       desktopManager.gnome.enable = true;
     };
+
+    qt.style = mkIf cfg.qt-theme "adwaita-dark";
+
+    # as MLS is dead, we default to beacondb for now.
+    services.geoclue2.geoProviderUrl = "https://api.beacondb.net/v1/geolocate";
+    services.geoclue2.enable = true;
 
     # usbguard and polkit rules so that you cannot plug new usb when on login
     # screen on gnome
