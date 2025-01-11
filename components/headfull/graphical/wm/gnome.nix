@@ -53,6 +53,7 @@ in
       compiz-windows-effect
       coverflow-alt-tab
       kimpanel
+      #user-themes
     ];
     environment.gnome.excludePackages = with pkgs; [
       # https://github.com/NixOS/nixpkgs/issues/372459
@@ -70,6 +71,18 @@ in
     # as MLS is dead, we default to beacondb for now.
     services.geoclue2.geoProviderUrl = "https://api.beacondb.net/v1/geolocate";
     services.geoclue2.enable = true;
+
+    # in order to allow efi installation in gnome boxes
+    systemd.tmpfiles.rules =
+      let
+        firmware =
+          pkgs.runCommandLocal "qemu-firmware" { } ''
+            mkdir $out
+            cp ${pkgs.qemu}/share/qemu/firmware/*.json $out
+            substituteInPlace $out/*.json --replace ${pkgs.qemu} /run/current-system/sw
+          '';
+      in
+      [ "L+ /var/lib/qemu/firmware - - - - ${firmware}" ];
 
     # usbguard and polkit rules so that you cannot plug new usb when on login
     # screen on gnome
