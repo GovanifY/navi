@@ -57,4 +57,8 @@
   isoImage.efiSplashImage = ./infrastructure/assets/navi.png;
   isoImage.splashImage = ./infrastructure/assets/navi.png;
   isoImage.grubTheme = null;
+  age.secrets = lib.mkForce { };
+
+  # if we want to bundle additional data i guess
+  #home-manager.users."${navi.username}".home.file."data.7z".source = ./data.7z;
 }

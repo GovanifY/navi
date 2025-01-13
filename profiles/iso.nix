@@ -58,8 +58,8 @@ with lib;
       drives-health.user = false;
       drives-health.btrfs = lib.mkForce false;
       wm.gnome.enable = true;
-      ime.enable = true;
     };
+    fonts.fontconfig.enable = lib.mkForce true;
 
     users.users.nixos.isSystemUser = lib.mkForce true;
     users.users.nixos.isNormalUser = lib.mkForce false;
@@ -70,12 +70,13 @@ with lib;
       extraGroups = [ "wheel" "networkmanager" "video" ];
       initialHashedPassword = "";
     };
+    services.displayManager.autoLogin.enable = true;
+    services.displayManager.autoLogin.user = config.navi.username;
     users.users.root.initialHashedPassword = "";
     security.sudo = {
       enable = mkDefault true;
       wheelNeedsPassword = mkImageMediaOverride false;
     };
-    services.getty.autologinUser = lib.mkForce config.navi.username;
 
     i18n.supportedLocales = [ "all" ];
   };
