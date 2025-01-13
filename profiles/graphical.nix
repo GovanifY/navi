@@ -40,5 +40,7 @@ with lib;
       dbus.enable = true;
       implicitPolicyTarget = "allow";
     };
+
+    i18n.supportedLocales = [ "all" ];
   };
 }

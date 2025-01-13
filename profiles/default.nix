@@ -8,6 +8,7 @@ with lib;
       ./graphical.nix
       ./headfull.nix
       ./server.nix
+      ./iso.nix
       <agenix/modules/age.nix>
     ];
 
@@ -41,6 +42,13 @@ with lib;
         default = false;
         description = ''
           Whether the targetted profile is graphical or not
+        '';
+      };
+      iso = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether the targetted profile is an ISO or not
         '';
       };
     };

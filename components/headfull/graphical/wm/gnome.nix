@@ -55,11 +55,6 @@ in
       kimpanel
       #user-themes
     ];
-    environment.gnome.excludePackages = with pkgs; [
-      # https://github.com/NixOS/nixpkgs/issues/372459
-      # use the flatpak for now
-      geary
-    ];
 
     services.xserver = {
       displayManager.gdm.enable = true;
@@ -99,5 +94,14 @@ in
              subject.isInGroup("wheel")) { return polkit.Result.YES; }
       });
     '';
+    services.xserver.desktopManager.gnome.extraGSettingsOverrides = ''
+      [org.gnome.desktop.background]
+      picture-uri='file://${./../../../../infrastructure/assets/wallpaper.png}'
+      picture-uri-dark='file://${./../../../../infrastructure/assets/wallpaper.png}'
+
+      [org.gnome.desktop.screensaver]
+      picture-uri='file://${./../../../../infrastructure/assets/wallpaper.png}'
+    '';
+
   };
 }
