@@ -81,6 +81,7 @@ with lib;
       # art
       blender
       krita
+      inkscape
       aseprite
       kdenlive
       godot_4
