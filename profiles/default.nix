@@ -106,6 +106,7 @@ with lib;
       dig
       git-lfs
       nmap
+      ripgrep
     ];
 
     # manpages are love
