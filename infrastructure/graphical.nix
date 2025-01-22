@@ -111,6 +111,9 @@ with lib;
       pandoc
       limesuite
       ghidra
+      edb
+      yasm
+      lldb
       freecad
       pulseview
       okteta
@@ -166,6 +169,15 @@ with lib;
       yabridge
       yabridgectl
     ];
+
+
+    # ghidra debugger needs those python modules to run!
+    environment.etc."gdb/gdbinit.d/ghidra-plugins.gdb".text = with pkgs.python3.pkgs; ''
+      python
+      import sys
+      [sys.path.append(p) for p in "${(makePythonPath [psutil protobuf])}".split(":")]
+      end
+    '';
 
     # give you the rights to inspect traffic as this is a single user box/not a
     # server, android funsies and realtime audio access for ardour and jack
