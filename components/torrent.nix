@@ -25,6 +25,10 @@ in
         system.umask.set = 0007
         system.file.allocate = 1
         schedule2 = watch_start, 10, 10, ((load.start, (cat, (cfg.watch), "start/*.torrent")))
+
+        # bad udp trackers can freeze rtorrent
+        schedule = disableudp, 0, 1, trackers.use_udp.set=no
+        trackers.use_udp.set = no
       '';
     };
     systemd.services."flood" = {
