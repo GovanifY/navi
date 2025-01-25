@@ -58,9 +58,8 @@ let
         set smartcase
         set expandtab
 
-        " Making the clipboard use the + register(aka common system clipboard)
-        " wayland requires neovim currently
-        set clipboard=unnamedplus
+        " when to use the system's keyboard
+        xnoremap Y "+y
 
         " Ignore common file types
         set wildignore=*.o
