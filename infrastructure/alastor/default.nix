@@ -48,7 +48,6 @@ with lib;
       macspoofer.enable = mkForce false;
       torrent = {
         enable = true;
-        dataDir = "/mnt/axolotl/torrent";
       };
       wm.sway = {
         azerty = true;

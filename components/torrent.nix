@@ -8,7 +8,7 @@ in
     enable = mkEnableOption "Enable navi's torrenting features";
     dataDir = mkOption {
       type = types.str;
-      default = "/mnt/axolotl/torrent";
+      default = "/var/lib/rtorrent";
       description = ''
         The path in which data will be stored at. 
       '';
