@@ -58,6 +58,7 @@ in
       kbibtex
       kdePackages.kcachegrind
       kdePackages.ffmpegthumbs
+      okteta
 
       # add default login wallpaper
       (pkgs.writeTextDir "share/sddm/themes/breeze/theme.conf.user" ''

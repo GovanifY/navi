@@ -116,7 +116,7 @@ with lib;
       lldb
       freecad
       pulseview
-      okteta
+      imhex
       zotero
 
       # is it really useful...?
