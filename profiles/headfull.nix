@@ -20,7 +20,7 @@ with lib;
       python3
       R
       clang
-      dotnet
+      dotnet-sdk
       meson
       ninja
       gnumake
