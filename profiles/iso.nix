@@ -33,6 +33,8 @@ with lib;
     # in case we need to bypass NAT filtering better to add a higher port range
     services.openssh.ports = [ 22 3200 ];
 
+    # allow spice integration with vms
+    services.spice-vdagentd.enable = true;
 
     # cups by default
     services.printing.enable = true;

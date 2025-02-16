@@ -109,9 +109,6 @@
       p7zip
     ];
 
-    # allow spice integration with vms
-    services.spice-vdagentd.enable = true;
-
     # manpages are love
     documentation.dev.enable = true;
 
