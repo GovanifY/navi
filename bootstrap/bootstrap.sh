@@ -1,5 +1,10 @@
 #!/bin/sh
 
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
 echo "Welcome to navi's bootstrapper!"
 cat icon.motd
 
@@ -106,21 +111,9 @@ case "$device" in
       partition="p"
     ;;
 esac
-read -p "Do you want this drive to be encrypted? [y/n]: " yn
-case $yn in
-    [Yy]* ) encrypted=true; break;;
-    [Nn]* ) encrypted=false; break;;
-    * ) echo "Please answer yes or no."; exit;;
-esac
-if [ "$encrypted" = true ] ; then
-    echo -n "Please enter the encryption password of this device: " 
-    read -s passphrase
-    printf "\n"
-fi
-echo -n "Please enter the bootloader password of this device: " 
-read -s boot_pass
+echo -n "Please enter the encryption password of this device: " 
+read -s passphrase
 printf "\n"
-read -p "Enter the name of the device: " device_name 
 read -p "Enter the main username of the device: " username
 read -p "Is your device a headfull device? [y/n]: " yn
 case $yn in
@@ -134,65 +127,24 @@ fi
 
 {
 
-if [ "$encrypted" = true ] ; then
-    if [ "$provision" = true ] ; then
-        sgdisk -o /dev/$device
-        sgdisk -n 1:: /dev/$device
-        device="/dev/${device}${partition}1"
-    fi
-
-    keyfile="$(mktemp)"
-    dd if=/dev/urandom of=$keyfile bs=1024 count=4
-    printf "YES\n$passphrase\n$passphrase\n" | cryptsetup luksFormat --type luks1 -c aes-xts-plain64 -s 256 -h sha512 $device
-    printf "$passphrase\n" | cryptsetup luksAddKey $device $keyfile 
+if [ "$provision" = true ] ; then
+    parted /dev/$device -- mklabel gpt
+    parted /dev/$device -- mkpart ESP fat32 1MiB 2G
+    parted /dev/$device -- set 1 boot on
+    parted /dev/$device -- mkpart primary 2G 100%
+    printf "YES\n$passphrase\n$passphrase\n" | cryptsetup luksFormat /dev/${device}${partition}2
     pvcreate /dev/mapper/matrix
     vgcreate matrix /dev/mapper/matrix
     lvcreate -L 8G -n swap matrix
     lvcreate -l '100%FREE' -n root matrix
-    mkfs.ext4 -L root /dev/matrix/root
+    mkfs.btrfs -L root /dev/matrix/root
+    mkfs.fat -F 32 -n boot /dev/${device}${partition}1
+    mkswap -L swap /dev/matrix/swap
     mount /dev/matrix/root /mnt
+    mkdir -p /mnt/boot/efi
+    mount /dev/${device}${partition}1 /mnt/boot/efi
     swapon /dev/matrix/swap
-    mkdir -p /mnt/etc/secrets/initrd
-    cp -rf $keyfile /mnt/etc/secrets/initrd/keyfile.bin
-else
-    if [ "$provision" = true ] ; then
-        sgdisk -o /dev/$device
-        sgdisk -n 1::8G /dev/$device
-        sgdisk -n 2:: /dev/$device
-        swapon /dev/${device}${partition}1
-        device="/dev/${device}${partition}2"
-    fi
-    mkfs.ext4 -L root $device
-    mount /dev/$device /mnt
 fi
-
-
-
-old_gpg_home=$GNUPGHOME
-export GNUPGHOME="$(mktemp -d)"
-script_key="$(mktemp)"
-
-mkdir /mnt/var/lib/bootloader
-cat >$script_key <<EOF
-%no-protection
-Key-Type: default
-Subkey-Type: default
-Name-Real: navi bootloader device key
-Name-Email: $device_name@navi
-Passphrase: '' 
-Expire-Date: 0
-EOF
-gpg --batch --generate-key $script_key
-gpg --batch --output /mnt/var/lib/bootloader/pub.gpg --export $device_name@navi 
-gpg --batch --output /mnt/var/lib/bootloader/priv.gpg --export-secret-key $device_name@navi 
-rm -rf $script_key
-rm -rf $GNUPGHOME
-export GNUPGHOME=$old_gpg_home
-
-tmp_password=$(mktemp)
-printf "$boot_pass\n$boot_pass\n" | grub-mkpasswd-pbkdf2 | tee $tmp_password
-grep "grub." $tmp_password | sed -r 's/.*grub\./grub\./' > /mnt/var/lib/bootloader/pass_hash
-rm -rf $tmp_password
 
 
 if [ "$headfull" = true ] ; then
