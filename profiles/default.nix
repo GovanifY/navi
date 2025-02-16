@@ -1,5 +1,4 @@
-{ config, pkgs, lib, ... }:
-with lib;
+{ config, pkgs, lib, ... }: with lib;
 {
   imports =
     [
@@ -67,8 +66,6 @@ with lib;
 
     home-manager.users.root = {
       home.stateVersion = "22.05";
-      home.file.".config/gnupg/pubring.kbx".source = ./../secrets/common/assets/gpg/updates/pubring.kbx;
-      home.file.".config/gnupg/trustdb.gpg".source = ./../secrets/common/assets/gpg/updates/trustdb.gpg;
     };
 
 
@@ -112,6 +109,9 @@ with lib;
       p7zip
     ];
 
+    # allow spice integration with vms
+    services.spice-vdagentd.enable = true;
+
     # manpages are love
     documentation.dev.enable = true;
 
@@ -141,20 +141,21 @@ with lib;
     };
 
     # automatic updates & cleanup
-    systemd.services.navi-update = {
-      description = "navi update";
-      serviceConfig.Type = "oneshot";
-      environment = config.nix.envVars // {
-        inherit (config.environment.sessionVariables) NIX_PATH;
-        HOME = "/root";
-      } // optionalAttrs config.navi.components.xdg.enable {
-        inherit (config.environment.variables) GNUPGHOME;
-      } // config.networking.proxy.envVars;
-      path = [ pkgs.gnupg pkgs.git ];
-      script = "cd /etc/nixos && git pull --verify-signatures origin master";
-    };
-    systemd.services.nixos-upgrade.requires = [ "navi-update.service" ];
-    systemd.services.nixos-upgrade.after = [ "navi-update.service" ];
+    # let's disable auto pull for now
+    #systemd.services.navi-update = {
+    #  description = "navi update";
+    #  serviceConfig.Type = "oneshot";
+    #  environment = config.nix.envVars // {
+    #    inherit (config.environment.sessionVariables) NIX_PATH;
+    #    HOME = "/root";
+    #  } // optionalAttrs config.navi.components.xdg.enable {
+    #    inherit (config.environment.variables) GNUPGHOME;
+    #  } // config.networking.proxy.envVars;
+    #  path = [ pkgs.gnupg pkgs.git ];
+    #  script = "cd /etc/nixos && git pull --verify-signatures origin master";
+    #};
+    #systemd.services.nixos-upgrade.requires = [ "navi-update.service" ];
+    #systemd.services.nixos-upgrade.after = [ "navi-update.service" ];
     system.autoUpgrade.enable = true;
     nix.gc = {
       automatic = true;
