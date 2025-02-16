@@ -1,4 +1,4 @@
-{ pkgs, modulesPath, lib, isoImage, ... }: {
+{ pkgs, modulesPath, lib, isoImage, config, ... }: {
 
   imports = [
     ./default.nix
@@ -60,5 +60,5 @@
   age.secrets = lib.mkForce { };
 
   # if we want to bundle additional data i guess
-  #home-manager.users."${navi.username}".home.file."data.7z".source = ./data.7z;
+  home-manager.users."${config.navi.username}".home.file."data.7z".source = ./secrets/headfull/assets/data.7z;
 }

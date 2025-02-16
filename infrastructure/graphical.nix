@@ -118,6 +118,7 @@ with lib;
       pulseview
       imhex
       zotero
+      vscode-fhs
 
       # is it really useful...?
       obsidian
