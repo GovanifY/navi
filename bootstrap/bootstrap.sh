@@ -147,7 +147,7 @@ fi
 if [ "$headfull" = true ] ; then
     old_gpg_home=$GNUPGHOME
     export GNUPGHOME="/mnt/home/$username/.config/gnupg"
-    mkdir /mnt/home/$username/.config/gnupg
+    mkdir -p /mnt/home/$username/.config/gnupg
     chmod 700 /mnt/home/$username/.config/gnupg
     mkdir -p /mnt/home/$username/.local/share/mail/ &> /dev/null
     mkdir -p /mnt/home/$username/.cache/mutt/ &> /dev/null
@@ -179,9 +179,10 @@ cp -rf configuration.sample.nix configuration.nix
 
 # in lieu of fully automating everything let's, for now, do an echo for when i
 # have the time to setup something better
-printf "\n\nDone! Make sure to setup nixpkgs and home-manager channels\n"
+printf "\n\n=============================================================\n\n"
+printf "\n\nDone! Make sure to setup the channels, TPM2, agenix\n"
 printf "and then configure your device correctly! Look at infrastructure/\n"
 printf "for examples. To help you, a hardware.nix file has been auto-generated\n"
-printf "but it will possibly require manual intervention. For example, luks\n"
+printf "but it will require manual intervention. For example, luks\n"
 printf "devices will need the path to their keyfile set\n"
 printf "(found in /etc/secrets/initrd)."
