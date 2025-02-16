@@ -133,7 +133,7 @@ if [ "$provision" = true ] ; then
     parted /dev/$device -- set 1 boot on
     parted /dev/$device -- mkpart primary 2G 100%
     printf "YES\n$passphrase\n$passphrase\n" | cryptsetup luksFormat /dev/${device}${partition}2
-    cryptsetup luksOpen /dev/${device}${partition}2 matrix
+    printf "$passphrase\n" | cryptsetup luksOpen /dev/${device}${partition}2 matrix
     pvcreate /dev/mapper/matrix
     vgcreate matrix /dev/mapper/matrix
     lvcreate -L 8G -n swap matrix
