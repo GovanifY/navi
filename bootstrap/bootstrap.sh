@@ -111,9 +111,6 @@ case "$device" in
       partition="p"
     ;;
 esac
-echo -n "Please enter the encryption password of this device: " 
-read -s passphrase
-printf "\n"
 read -p "Enter the main username of the device: " username
 read -p "Is your device a headfull device? [y/n]: " yn
 case $yn in
@@ -125,15 +122,14 @@ if [ "$headfull" = true ] ; then
     read -p "Please enter the url of your git password repository : " git_url
 fi
 
-{
 
 if [ "$provision" = true ] ; then
     parted /dev/$device -- mklabel gpt
     parted /dev/$device -- mkpart ESP fat32 1MiB 2G
     parted /dev/$device -- set 1 boot on
     parted /dev/$device -- mkpart primary 2G 100%
-    printf "YES\n$passphrase\n$passphrase\n" | cryptsetup luksFormat /dev/${device}${partition}2
-    printf "$passphrase\n" | cryptsetup luksOpen /dev/${device}${partition}2 matrix
+    cryptsetup luksFormat /dev/${device}${partition}2
+    cryptsetup luksOpen /dev/${device}${partition}2 matrix
     pvcreate /dev/mapper/matrix
     vgcreate matrix /dev/mapper/matrix
     lvcreate -L 8G -n swap matrix
@@ -180,7 +176,6 @@ git remote set-url origin --push git@projects.govanify.com:govanify/navi.git
 nixos-generate-config --root /mnt
 rm -rf configuration.nix
 cp -rf configuration.sample.nix configuration.nix
-} > /dev/null 2>&1
 
 # in lieu of fully automating everything let's, for now, do an echo for when i
 # have the time to setup something better
