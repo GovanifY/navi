@@ -150,10 +150,8 @@ fi
 if [ "$headfull" = true ] ; then
     old_gpg_home=$GNUPGHOME
     export GNUPGHOME="/mnt/home/$username/.config/gnupg"
-    find /mnt/home/$username/.config/gnupg -type f -exec chmod 600 {} \;
-    find /mnt/home/$username/.config/gnupg -type d -exec chmod 700 {} \;
-    gpg --import ../secrets/headfull/assets/gpg/key.gpg 
-    gpg --import-ownertrust ../secrets/headfull/assets/gpg/gpg-trust.txt 
+    mkdir /mnt/home/$username/.config/gnupg
+    chmod 700 /mnt/home/$username/.config/gnupg
     mkdir -p /mnt/home/$username/.local/share/mail/ &> /dev/null
     mkdir -p /mnt/home/$username/.cache/mutt/ &> /dev/null
     mkdir -p /mnt/home/$username/.local/share/wineprefixes/ &> /dev/null
