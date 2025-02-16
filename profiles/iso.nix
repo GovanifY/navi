@@ -27,6 +27,7 @@ with lib;
       # sound utils
       pavucontrol
       qjackctl
+      firefox
     ];
 
     # in case we need to bypass NAT filtering better to add a higher port range
