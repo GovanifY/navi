@@ -104,7 +104,7 @@ case $yn in
     [Nn]* ) provision=false; break;;
     * ) echo "Please answer yes or no."; exit;;
 esac
-read -p "Enter the drive or partition you want to use: " $device
+read -p "Enter the drive or partition you want to use: " device
 partition=""
 case "$device" in 
   *nvme*)
@@ -133,6 +133,7 @@ if [ "$provision" = true ] ; then
     parted /dev/$device -- set 1 boot on
     parted /dev/$device -- mkpart primary 2G 100%
     printf "YES\n$passphrase\n$passphrase\n" | cryptsetup luksFormat /dev/${device}${partition}2
+    cryptsetup luksOpen /dev/${device}${partition}2 matrix
     pvcreate /dev/mapper/matrix
     vgcreate matrix /dev/mapper/matrix
     lvcreate -L 8G -n swap matrix
