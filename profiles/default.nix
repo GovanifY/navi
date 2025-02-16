@@ -107,6 +107,9 @@ with lib;
       git-lfs
       nmap
       ripgrep
+      gptfdisk
+      parted
+      p7zip
     ];
 
     # manpages are love
