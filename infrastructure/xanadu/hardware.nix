@@ -144,6 +144,9 @@ with lib;
 
       SUBSYSTEMS=="usb", ATTRS{idVendor}=="32AC", ATTRS{idProduct}=="0018", TAG+="uaccess"
       SUBSYSTEMS=="usb", ATTRS{idVendor}=="32AC", ATTRS{idProduct}=="0014", TAG+="uaccess"
+
+      # power save broken on RZ616
+      ACTION=="add", SUBSYSTEM=="net", KERNEL=="wl*", RUN+="${pkgs.iw}/bin/iw dev wlp5s0 set power_save off"
     '';
   };
 }
