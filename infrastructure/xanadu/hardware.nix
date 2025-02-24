@@ -54,6 +54,28 @@ with lib;
     services.fwupd.enable = true;
     #security.pam.services.swaylock.fprintAuth = true;
 
+    # avoid audible audio pops on framework
+    services.pipewire.wireplumber.extraConfig = {
+      "51-disable-suspension"."monitor.alsa.rules" = [
+        {
+          matches = [
+            {
+              "node.name" = "~alsa_input.*";
+            }
+            {
+              "node.name" = "~alsa_output.*";
+            }
+
+          ];
+          actions = {
+            update-props = {
+              "session.suspend-timeout-seconds" = 0;
+            };
+          };
+        }
+      ];
+    };
+
     services.udev.extraRules = ''
       # Atmel DFU
       ### ATmega16U2
