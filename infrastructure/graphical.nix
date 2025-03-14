@@ -83,7 +83,7 @@ with lib;
       krita
       inkscape
       aseprite
-      kdenlive
+      kdePackages.kdenlive
       godot_4
 
       # music (DAW + plugins)

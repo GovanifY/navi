@@ -54,28 +54,6 @@ with lib;
     services.fwupd.enable = true;
     #security.pam.services.swaylock.fprintAuth = true;
 
-    # avoid audible audio pops on framework
-    services.pipewire.wireplumber.extraConfig = {
-      "51-disable-suspension"."monitor.alsa.rules" = [
-        {
-          matches = [
-            {
-              "node.name" = "~alsa_input.*";
-            }
-            {
-              "node.name" = "~alsa_output.*";
-            }
-
-          ];
-          actions = {
-            update-props = {
-              "session.suspend-timeout-seconds" = 0;
-            };
-          };
-        }
-      ];
-    };
-
     services.udev.extraRules = ''
       # Atmel DFU
       ### ATmega16U2
@@ -166,9 +144,6 @@ with lib;
 
       SUBSYSTEMS=="usb", ATTRS{idVendor}=="32AC", ATTRS{idProduct}=="0018", TAG+="uaccess"
       SUBSYSTEMS=="usb", ATTRS{idVendor}=="32AC", ATTRS{idProduct}=="0014", TAG+="uaccess"
-
-      # power save broken on RZ616
-      ACTION=="add", SUBSYSTEM=="net", KERNEL=="wl*", RUN+="${pkgs.iw}/bin/iw dev wlp5s0 set power_save off"
     '';
   };
 }
