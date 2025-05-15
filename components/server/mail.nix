@@ -36,6 +36,7 @@ in
   config = mkIf cfg.enable {
     mailserver = {
       enable = true;
+      enableManageSieve = true;
       fqdn = cfg.root_domain;
       domains = cfg.domains;
       certificateScheme = "acme-nginx";
