@@ -11,6 +11,11 @@ in
       default = true;
       description = "Enable gnome's qt theming to adwaita-dark";
     };
+    hidpi = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Enable hidpi on gdm login screen";
+    };
   };
   config = mkIf cfg.enable {
     # modify gdm logo by branding
@@ -61,6 +66,14 @@ in
       desktopManager.gnome.enable = true;
     };
 
+    programs.dconf.profiles.gdm.databases = mkIf cfg.hidpi [{
+      settings = {
+        "org/gnome/desktop/interface" = {
+          scaling-factor = lib.gvariant.mkUint32 2;
+        };
+      };
+    }];
+
     qt.style = mkIf cfg.qt-theme "adwaita-dark";
 
     # as MLS is dead, we default to beacondb for now.
@@ -103,5 +116,8 @@ in
       picture-uri='file://${./../../../../infrastructure/assets/wallpaper.png}'
     '';
 
+    services.gnome.tinysparql.enable = true;
+    services.gnome.localsearch.enable = true;
+    services.gnome.games.enable = true;
   };
 }

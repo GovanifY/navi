@@ -118,6 +118,7 @@
       settings = {
         PasswordAuthentication = false;
         GatewayPorts = "yes";
+        PrintLastLog = "no";
       };
     };
     programs.mosh.enable = true;
