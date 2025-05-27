@@ -2,8 +2,16 @@
 with lib;
 let
   cfg = config.navi.components.shell;
+  fish_greeting =
+    if (cfg.greeting != null) then ''
+      function fish_greeting
+        if test -n "$SSH_CONNECTION"
+          cat ${cfg.greeting}
+        end
+      end
+    '' else "set -U fish_greeting";
   fish_config = ''
-    set fish_greeting
+    ${fish_greeting}
     set -U fish_color_normal normal
     set -U fish_color_command a1b56c
     set -U fish_color_quote f7ca88
@@ -163,6 +171,14 @@ in
         metrics for the user.
       '';
     };
+    greeting = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = ''
+        Banner to display as a greeting on fish
+      '';
+    };
+
   };
   config = mkIf cfg.enable {
     users.defaultUserShell = pkgs.fish;

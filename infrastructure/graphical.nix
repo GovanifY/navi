@@ -1,5 +1,12 @@
 { config, lib, pkgs, ... }:
 with lib;
+let
+  nix-alien-pkgs = import
+    (
+      builtins.fetchTarball "https://github.com/thiagokokada/nix-alien/tarball/master"
+    )
+    { };
+in
 {
   imports = [
     <musnix>
@@ -144,6 +151,8 @@ with lib;
       mktorrent
       handbrake
       virtiofsd
+
+      nix-alien-pkgs.nix-alien
     ] ++ optionals (pkgs.system != "aarch64-linux") [
 
       android-studio
@@ -172,13 +181,13 @@ with lib;
     ];
 
 
+    programs.nix-ld.enable = true;
+
     # ghidra debugger needs those python modules to run!
-    environment.etc."gdb/gdbinit.d/ghidra-plugins.gdb".text = with pkgs.python3.pkgs; ''
-      python
-      import sys
-      [sys.path.append(p) for p in "${(makePythonPath [psutil protobuf])}".split(":")]
-      end
-    '';
+    programs.ghidra = {
+      enable = true;
+      gdb = true;
+    };
 
     # give you the rights to inspect traffic as this is a single user box/not a
     # server, android funsies and realtime audio access for ardour and jack

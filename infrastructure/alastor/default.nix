@@ -49,6 +49,7 @@ with lib;
       torrent = {
         enable = true;
       };
+      shell.greeting = ./banner;
       wm.sway = {
         azerty = true;
         extraConf = ''
