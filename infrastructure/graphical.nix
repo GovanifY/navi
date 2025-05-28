@@ -96,6 +96,7 @@ in
       # music (DAW + plugins)
       ardour
       reaper
+      (pkgs.callPackage ./../overlays/bitwig.nix { })
       bitwig-studio
       milkytracker
       calf
