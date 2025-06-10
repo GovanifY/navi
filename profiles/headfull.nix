@@ -20,6 +20,7 @@ with lib;
       python3
       R
       clang
+      clang-tools
       dotnet-sdk
       meson
       ninja
