@@ -29,8 +29,17 @@ in
         # bad udp trackers can freeze rtorrent
         schedule = disableudp, 0, 1, trackers.use_udp.set=no
         trackers.use_udp.set = no
+
+        method.redirect=load.throw,load.normal
+        method.redirect=load.start_throw,load.start
+        method.insert=d.down.sequential,value|const,0
+        method.insert=d.down.sequential.set,value|const,0
       '';
     };
+
+    # chown segfault...
+    systemd.services.rtorrent.serviceConfig.SystemCallFilter = lib.mkForce [ ];
+
     systemd.services."flood" = {
       enable = true;
       path = [ pkgs.mediainfo ];
