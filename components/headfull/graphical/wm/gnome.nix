@@ -61,7 +61,7 @@ in
       #user-themes
     ];
 
-    services.xserver = {
+    services = {
       displayManager.gdm.enable = true;
       desktopManager.gnome.enable = true;
     };
@@ -107,7 +107,7 @@ in
              subject.isInGroup("wheel")) { return polkit.Result.YES; }
       });
     '';
-    services.xserver.desktopManager.gnome.extraGSettingsOverrides = ''
+    services.desktopManager.gnome.extraGSettingsOverrides = ''
       [org.gnome.desktop.background]
       picture-uri='file://${./../../../../infrastructure/assets/wallpaper.png}'
       picture-uri-dark='file://${./../../../../infrastructure/assets/wallpaper.png}'
