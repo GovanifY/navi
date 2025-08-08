@@ -48,7 +48,7 @@ in
     musnix = {
       enable = true;
       rtcqs.enable = true;
-      kernel.realtime = true;
+      #kernel.realtime = true;
       das_watchdog.enable = true;
     };
 

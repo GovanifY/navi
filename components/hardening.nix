@@ -30,7 +30,7 @@ in
   };
 
   imports = [
-    <nixpkgs/nixos/modules/profiles/hardened.nix>
+    #<nixpkgs/nixos/modules/profiles/hardened.nix>
   ];
 
   config = mkIf cfg.enable {

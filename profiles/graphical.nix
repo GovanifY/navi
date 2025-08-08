@@ -27,6 +27,7 @@ with lib;
       chat.graphical = true;
       ime.enable = true;
     };
+    services.displayManager.defaultSession = "gnome";
 
     programs.dconf.enable = true;
     environment.sessionVariables = {

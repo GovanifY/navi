@@ -210,7 +210,7 @@
       # linux it even breaks php and a few other things so I'm forced to disable
       # it...
       hardening = {
-        enable = true;
+        enable = false;
         scudo = false;
       };
       editor = {

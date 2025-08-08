@@ -58,6 +58,7 @@ in
       compiz-windows-effect
       coverflow-alt-tab
       kimpanel
+      airpod-battery-monitor
       #user-themes
     ];
 
