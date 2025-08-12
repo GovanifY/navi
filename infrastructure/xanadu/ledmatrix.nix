@@ -6,7 +6,7 @@ with lib;
     systemd.timers."navi-ledmatrix" = {
       wantedBy = [ "timers.target" ];
       timerConfig = {
-        OnBootSec = "30s";
+        OnBootSec = "0s";
         OnUnitActiveSec = "30s";
         Unit = "navi-ledmatrix.service";
       };
