@@ -69,6 +69,9 @@ in
     boot.initrd.systemd.enable = true;
     boot.plymouth.logo = ./assets/navi-48.png;
 
+    # dev
+    virtualisation.docker.enable = true;
+
     environment.systemPackages = with pkgs; [
       waypipe
       wl-clipboard

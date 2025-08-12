@@ -4,6 +4,7 @@ with lib;
 
   imports = [
     ./hardware.nix
+    ./ledmatrix.nix
   ];
 
   config = mkIf (config.navi.device == "xanadu") {
