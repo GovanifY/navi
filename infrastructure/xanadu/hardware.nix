@@ -54,6 +54,12 @@ with lib;
     services.fwupd.enable = true;
     #security.pam.services.swaylock.fprintAuth = true;
 
+    environment.systemPackages = with pkgs; with pkgs.gnomeExtensions; [
+      framework-fan-control
+    ];
+
+    hardware.fw-fanctrl.enable = true;
+
     services.udev.extraRules = ''
       # Atmel DFU
       ### ATmega16U2

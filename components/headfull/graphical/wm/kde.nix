@@ -55,7 +55,6 @@ in
       kdePackages.kolourpaint
       kdePackages.kwave
       kdePackages.ktorrent
-      kbibtex
       kdePackages.kcachegrind
       kdePackages.ffmpegthumbs
       okteta
