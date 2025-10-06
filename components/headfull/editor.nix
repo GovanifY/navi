@@ -49,7 +49,7 @@ let
         vim-snippets
         coc-nvim
         coc-python
-        coc-ltex
+        #coc-ltex
       ] ++ optionals cfg.sessions [ vim-misc workspace ];
       extraConfig = ''
         " This should be enabled by default
@@ -162,21 +162,21 @@ let
         enable = true;
         settings = {
           preferences.useQuickfixForLocations = true;
-          ltex.ltex-ls.path = "${pkgs.ltex-ls}";
-          ltex.java.path = "${pkgs.jre_headless}";
-          ltex.dictionary = {
-            "en-US" = [ ":~/.config/nvim/spell/dictionary.txt" ];
-            "fr" = [ ":~/.config/nvim/spell/dictionary.txt" ];
-          };
+          #ltex.ltex-ls.path = "${pkgs.ltex-ls}";
+          #ltex.java.path = "${pkgs.jre_headless}";
+          #ltex.dictionary = {
+          #  "en-US" = [ ":~/.config/nvim/spell/dictionary.txt" ];
+          #  "fr" = [ ":~/.config/nvim/spell/dictionary.txt" ];
+          #};
           languageserver = {
             nix = {
               command = "${pkgs.nil}/bin/nil";
               filetypes = [ "nix" ];
             };
-            ltex = {
-              command = "${pkgs.ltex-ls}/bin/ltex-ls";
-              filetypes = [ "markdown" "text" "latex" ];
-            };
+            #ltex = {
+            #  command = "${pkgs.ltex-ls}/bin/ltex-ls";
+            #  filetypes = [ "markdown" "text" "latex" ];
+            #};
             clangd = {
               command = "${pkgs.llvmPackages.libclang.out}/bin/clangd";
               rootPatterns = [ "compile_flags.txt" "compile_commands.json" ".git/" ];
@@ -239,6 +239,6 @@ in
       neovim
       fzf
       ctags
-    ] ++ optionals cfg.ide_features [ nodejs ltex-ls ];
+    ] ++ optionals cfg.ide_features [ nodejs ]; #ltex-ls ];
   };
 }
