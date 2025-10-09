@@ -16,16 +16,17 @@ with lib;
     users.users.${config.navi.username}.initialHashedPassword = fileContents ./../../secrets/emet-selch/assets/shadow/main;
 
     # Network (Hetzner uses static IP assignments, and we don't use DHCP here)
-    networking.useDHCP = false;
-    networking.interfaces."enp0s31f6".useDHCP = false;
-    networking.enableIPv6 = true;
-    networking.interfaces."enp0s31f6".ipv6.addresses = [
-      {
-        address = "2a01:4f9:2b:22c1::1";
-        prefixLength = 64;
-      }
-    ];
-    networking.defaultGateway6 = { address = "fe80::1"; interface = "enp0s31f6"; };
+    systemd.network = {
+      enable = true;
+      networks."enp0s31f6".extraConfig = ''
+        [Match]
+        Name = enp0s31f6
+        [Network]
+        Address = 2a01:4f9:2b:22c1::1/64
+        Gateway = fe80::1
+      '';
+    };
+
     navi.components.shell.greeting = ./banner;
     navi.profile.name = "server";
   };
