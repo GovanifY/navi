@@ -171,7 +171,7 @@
     programs.command-not-found.enable = true;
 
     # enable debuginfod for coredump auto debug
-    services.nixseparatedebuginfod.enable = true;
+    services.nixseparatedebuginfod2.enable = true;
     environment.variables.DEBUGINFOD_URLS = "http://127.0.0.1:1949";
 
     # currently, nscd is not used for caching purposes on nixos, but merely to
