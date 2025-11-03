@@ -38,7 +38,7 @@ in
 
     environment.systemPackages = with pkgs; [
       ncmpcpp
-      mpc_cli
+      mpc
     ];
 
     home-manager.users.${config.navi.username}.home.file."${config.navi.components.xdg.config}/ncmpcpp/config".text =

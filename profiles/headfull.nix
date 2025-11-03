@@ -28,7 +28,7 @@ with lib;
       ghc
       gdb
       usbutils
-      glxinfo
+      mesa-demos
       clinfo
       vulkan-tools
       wayland-utils

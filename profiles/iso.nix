@@ -20,7 +20,7 @@ with lib;
       python3
       gdb
       usbutils
-      glxinfo
+      mesa-demos
       clinfo
       vulkan-tools
       wayland-utils

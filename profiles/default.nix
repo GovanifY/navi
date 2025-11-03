@@ -74,7 +74,7 @@
     # basic set of tools & ssh
     environment.systemPackages = with pkgs; [
       wget
-      gitAndTools.gitFull
+      gitFull
       gnupg
       git-crypt
       screen

@@ -16,7 +16,7 @@ in
         noto-fonts
         noto-fonts-cjk-sans
         cantarell-fonts
-        noto-fonts-emoji
+        noto-fonts-color-emoji
         source-code-pro
         source-sans-pro
         source-serif-pro
