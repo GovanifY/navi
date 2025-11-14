@@ -11,6 +11,8 @@ let
       end
     '' else "set -U fish_greeting";
   fish_config = ''
+    source /etc/fish/nixos-env-preinit.fish
+    source $HOME/.config/fish/functions/fish_prompt.fish
     ${fish_greeting}
     set -U fish_color_normal normal
     set -U fish_color_command a1b56c
