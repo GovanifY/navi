@@ -110,14 +110,11 @@ in
       polychromatic
     ];
 
-    nixpkgs.config.packageOverrides = pkgs: {
-      vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-    };
     hardware.graphics = {
       enable = true;
       extraPackages = with pkgs; [
-        vaapiIntel
-        vaapiVdpau
+        intel-vaapi-driver
+        libva-vdpau-driver
         libvdpau-va-gl
         intel-media-driver
         rocmPackages.clr.icd
@@ -126,7 +123,7 @@ in
     environment.sessionVariables = { LIBVA_DRIVER_NAME = "radeonsi"; };
 
     services.btrfs.autoScrub.fileSystems = axolotl_fs ++ [ "/" "/mnt/violet" ];
-    services.logind.extraConfig = "RuntimeDirectorySize=20G";
+    services.logind.settings.Login.RuntimeDirectorySize = "20G";
 
     # that one's a doozy, so to explain: For each fs in our scrub list, we
     # define after to another substituted list in the let at the header which
