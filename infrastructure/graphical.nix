@@ -208,6 +208,7 @@ in
         "cdrom"
         "rtorrent"
         "dialout"
+        "docker"
       ];
     };
 
