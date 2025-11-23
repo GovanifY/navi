@@ -29,7 +29,11 @@ with lib;
       ];
     };
 
-    navi.components.shell.greeting = ./banner;
+    navi.components = {
+      shell.greeting = ./banner;
+      hardening.enable = lib.mkForce true;
+    };
+
     navi.profile.name = "server";
   };
 }
