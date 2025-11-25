@@ -15,20 +15,10 @@ with lib;
 
     users.users.${config.navi.username}.initialHashedPassword = fileContents ./../../secrets/emet-selch/assets/shadow/main;
 
-    # Network (Hetzner uses static IP assignments, and we don't use DHCP here)
-    networking.useDHCP = false;
-    systemd.network.enable = true;
-    systemd.network.networks."30-wan" = {
-      matchConfig.Name = "enp0s31f6";
-      networkConfig.DHCP = "ipv4";
-      address = [
-        "2a01:4f9:2b:22c1::1/64"
-      ];
-      routes = [
-        { Gateway = "fe80::1"; }
-      ];
+    networking = {
+      useDHCP = false;
+      useNetworkd = true;
     };
-
     navi.components = {
       shell.greeting = ./banner;
       hardening.enable = lib.mkForce true;
