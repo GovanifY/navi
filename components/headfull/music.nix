@@ -14,20 +14,20 @@ in
       group = "users";
       dataDir = "/home/${config.navi.username}/${config.navi.components.xdg.data}/mpd";
       musicDirectory = "/home/${config.navi.username}/Music";
-      extraConfig = ''
-        auto_update "yes"
-        audio_output {  
-            type "pipewire"
-            name "PipeWire Sound Server"
-        }  
-
-        audio_output {
-            type                    "fifo"
-            name                    "my_fifo"
-            path                    "/tmp/mpd.fifo"
-            format                  "44100:16:2"
-        }
-      '';
+      #      extraConfig = ''
+      #        auto_update "yes"
+      #        audio_output {  
+      #            type "pipewire"
+      #            name "PipeWire Sound Server"
+      #        }  
+      #
+      #        audio_output {
+      #            type                    "fifo"
+      #            name                    "my_fifo"
+      #            path                    "/tmp/mpd.fifo"
+      #            format                  "44100:16:2"
+      #        }
+      #      '';
     };
 
     # https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/609

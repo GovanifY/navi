@@ -125,7 +125,7 @@ in
       edb
       yasm
       lldb
-      freecad
+      #freecad
       pulseview
       imhex
       zotero
@@ -196,7 +196,7 @@ in
     # give you the rights to inspect traffic as this is a single user box/not a
     # server, android funsies and realtime audio access for ardour and jack
     programs.wireshark.enable = true;
-    programs.adb.enable = true;
+    #programs.adb.enable = true;
     users.users.${config.navi.username} = {
       extraGroups = [
         "wireshark"

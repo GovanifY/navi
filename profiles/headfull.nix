@@ -6,7 +6,7 @@ with lib;
       # defaults
       file
       # misc utilities
-      cmus
+      #cmus
       asciinema
       ranger
       pass
