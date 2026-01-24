@@ -39,7 +39,7 @@ in
       enableManageSieve = true;
       fqdn = cfg.root_domain;
       domains = cfg.domains;
-      certificateScheme = "acme-nginx";
+      x509.useACMEHost = config.mailserver.fqdn;
       dkimSelector = config.navi.device;
       dkimKeyBits = 2048;
     };
