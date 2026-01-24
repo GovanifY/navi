@@ -13,7 +13,7 @@ in
       user = config.navi.username;
       group = "users";
       dataDir = "/home/${config.navi.username}/${config.navi.components.xdg.data}/mpd";
-      musicDirectory = "/home/${config.navi.username}/Music";
+      settings.music_directory = "/home/${config.navi.username}/Music";
       #      extraConfig = ''
       #        auto_update "yes"
       #        audio_output {  

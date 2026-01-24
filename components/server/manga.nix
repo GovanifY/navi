@@ -39,7 +39,7 @@ in
 
     services.komga = {
       enable = true;
-      port = 7111;
+      settings.server.port = 7111;
       stateDir = cfg.directory;
     };
   };

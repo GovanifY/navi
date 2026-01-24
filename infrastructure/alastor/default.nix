@@ -51,7 +51,7 @@ with lib;
     navi.profile.name = "desktop";
 
     # alastor is also a server !
-    services.xserver.displayManager.gdm.autoSuspend = false;
+    services.displayManager.gdm.autoSuspend = false;
 
     #modules.tor.transparentProxy = {
     #enable = true; 
