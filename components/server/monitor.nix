@@ -191,6 +191,7 @@ in
           global = {
             smtp_smarthost = "localhost:25";
             smtp_from = "alertmanager@${cfg.domain}";
+            smtp_require_tls = false;
           };
           route = {
             receiver = "email";
