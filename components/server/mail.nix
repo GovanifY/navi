@@ -36,6 +36,8 @@ in
   config = mkIf cfg.enable {
     mailserver = {
       enable = true;
+      enableSubmission = true;
+      enableSubmissionSsl = true;
       enableManageSieve = true;
       fqdn = cfg.root_domain;
       domains = cfg.domains;
