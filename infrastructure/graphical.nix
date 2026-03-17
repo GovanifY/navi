@@ -146,7 +146,8 @@ in
       #elan
 
       # chat
-      discord
+      # segfaults, use flatpak instead
+      #discord
       signal-desktop
       telegram-desktop
 
