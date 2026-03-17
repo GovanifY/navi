@@ -44,6 +44,7 @@ in
       gnome-chess
       gnome-builder
       gnome-boxes
+      geary
       dconf-editor
       cartridges
       bottles
