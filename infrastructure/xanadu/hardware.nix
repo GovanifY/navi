@@ -10,6 +10,8 @@ with lib;
     boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "thunderbolt" "usb_storage" "usbhid" "sd_mod" ];
     boot.initrd.kernelModules = [ "dm-snapshot" ];
     boot.kernelModules = [ "kvm-amd" ];
+    # fixes gpu artifacts
+    boot.kernelParams = [ "amdgpu.dcdebugmask=0x400" ];
     boot.supportedFilesystems = [ "ntfs" ];
 
     boot.initrd.luks.devices =
