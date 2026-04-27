@@ -20,25 +20,25 @@ let
     programs.neovim = {
       enable = true;
       withPython3 = true;
+      withRuby = true;
       viAlias = true;
       vimAlias = true;
       plugins = with pkgs.vimPlugins; [
         # aesthetics
         gruvbox
-        airline
+        vim-airline
         # productivity
         fzf-vim
         vim-visual-multi
         # dev
         tagbar
-        fugitive
+        vim-fugitive
         nerdtree
         nerdcommenter
         # dev - syntax
         vim-clang-format
         # dev - language specific
         rust-vim
-        meson
         Coqtail
         vim-fish
         vim-nix

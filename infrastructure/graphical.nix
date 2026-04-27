@@ -105,7 +105,7 @@ in
       calf
       sfizz
       # my love
-      surge-XT
+      surge-xt
       infamousPlugins
       zynaddsubfx
       cardinal
@@ -125,7 +125,7 @@ in
       edb
       yasm
       lldb
-      #freecad
+      freecad
       pulseview
       imhex
       zotero
@@ -180,7 +180,7 @@ in
       )
 
 
-      wineWowPackages.unstableFull
+      wineWow64Packages.unstableFull
       yabridge
       yabridgectl
     ];
@@ -246,6 +246,7 @@ in
     # enable external drive auto-mount
     fileSystems."/mnt/drive0" = {
       device = "/dev/sr0";
+      fsType = "iso9660";
       options = [ "ro" "user" "noauto" "unhide" ];
       noCheck = true;
     };
