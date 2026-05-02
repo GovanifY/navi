@@ -97,8 +97,8 @@ in
       PASSWORD_STORE_DIR = "$HOME/${cfg.config}/pass";
       ANDROID_SDK_HOME = "$XDG_CONFIG_HOME/android";
       ADB_VENDOR_KEY = "$XDG_CONFIG_HOME/android";
-      CCACHE_CONFIGPATH = "$XDG_CONFIG_HOME/ccache.config";
-      CCACHE_DIR = "$XDG_CACHE_HOME/ccache";
+      CCACHE_CONFIGPATH = "$HOME/${cfg.config}/ccache/ccache.conf";
+      CCACHE_DIR = "$HOME/${cfg.cache}/ccache";
       NPM_CONFIG_USERCONFIG = "$XDG_CONFIG_HOME/npm/npmrc";
       GDBHISTFILE = "$HOME/${cfg.data}/gdb_history";
       NUGET_PACKAGES = "$XDG_CACHE_HOME/NuGetPackages";

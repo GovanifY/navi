@@ -43,6 +43,7 @@ in
       gnome-themes-extra
       gnome-chess
       gnome-builder
+      flatpak-builder
       gnome-boxes
       geary
       dconf-editor
