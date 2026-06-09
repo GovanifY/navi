@@ -138,6 +138,12 @@ in
     services.btrfs.autoScrub.fileSystems = axolotl_fs ++ [ "/" "/mnt/violet" ];
     services.logind.settings.Login.RuntimeDirectorySize = "20G";
 
+    boot.lanzaboote = {
+      configurationLimit = lib.mkForce 1;
+    };
+
+
+
     # that one's a doozy, so to explain: For each fs in our scrub list, we
     # define after to another substituted list in the let at the header which
     # basically does a - 1 to the entire list. This is done in order to make the
