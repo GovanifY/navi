@@ -19,9 +19,19 @@ in
       };
     };
 
-    boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" "sg" ];
+    boot.initrd.availableKernelModules = [
+      "xhci_pci"
+      "ahci"
+      "nvme"
+      "usb_storage"
+      "usbhid"
+      "sd_mod"
+      "sg"
+      "amdgpu"
+    ];
     # virtualization and iGVT-g
-    boot.initrd.kernelModules = [ "dm-snapshot" "igb" ];
+    boot.initrd.kernelModules = [ "dm-snapshot" "igb" "amdgpu" ];
+    boot.kernelParams = [ "amdgpu.runpm=0" ];
     boot.supportedFilesystems = [ "ntfs" ];
 
     # auto-generating entries for all of axolotl fs's.
@@ -100,6 +110,9 @@ in
     powerManagement.cpuFreqGovernor = lib.mkDefault "performance";
 
     hardware.enableRedistributableFirmware = lib.mkDefault true;
+    hardware.enableAllFirmware = true;
+
+    hardware.firmware = [ pkgs.linux-firmware ];
 
     hardware.openrazer = {
       users = [ config.navi.username ];

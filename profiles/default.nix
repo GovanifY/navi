@@ -82,7 +82,6 @@
       rsync
       imagemagick
       man-pages
-      silver-searcher
       bat
       any-nix-shell
       killall
