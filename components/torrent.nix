@@ -45,39 +45,6 @@ in
     # chown segfault...
     systemd.services.rtorrent.serviceConfig.SystemCallFilter = lib.mkForce [ ];
 
-    # HOTFIX: 0.16.5 OOMs and 0.16.6 crashes at startup because of a socket issue, let's
-    # revert to 0.16.4 for now...
-    nixpkgs.overlays = [
-      (
-        self: super: {
-          libtorrent-rakshasa = super.libtorrent-rakshasa.overrideAttrs (old: {
-            version = "0.16.4";
-
-            src = self.fetchFromGitHub {
-              owner = "rakshasa";
-              repo = "libtorrent";
-              tag = "v0.16.4";
-              hash = "sha256-r+5rNaBXhHbDWFXbgEPriEmjWEjTyu2I5H7rl3PoF38=";
-            };
-          });
-
-          rtorrent = super.rtorrent.overrideAttrs (old: {
-            version = "0.16.4";
-
-            src = self.fetchFromGitHub {
-              owner = "rakshasa";
-              repo = "rtorrent";
-              tag = "v0.16.4";
-              hash = "sha256-ut1R73UfkpDk/Y5Fq8kSavxIB3Y2jbYEQ8J/559Ech0=";
-            };
-          });
-
-        }
-      )
-    ];
-
-
-
     systemd.services."flood" = {
       enable = true;
       path = [ pkgs.mediainfo ];
