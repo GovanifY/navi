@@ -1,0 +1,16 @@
+{
+  "version": "1",
+  "sources": {
+    "lanzaboote": {
+      "type": "GitHub",
+      "fetchType": "tarball",
+      "frozen": true,
+      "owner": "nix-community",
+      "repo": "lanzaboote",
+      "branch": "master",
+      "revision": "v1.1.0",
+      "url": "https://github.com/nix-community/lanzaboote/archive/v1.1.0.tar.gz",
+      "hash": "sha256-hqijVSEETttmo8Okql9/LG0Ua34hdciKW1a5zzlj8mU="
+    }
+  }
+}

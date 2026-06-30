@@ -4,8 +4,10 @@
 with lib;
 let
   cfg = config.navi.components.bootloader;
-  sources = import ../nix/sources.nix;
-  lanzaboote = import sources.lanzaboote;
+  sources = import ../lon.nix;
+  lanzaboote = import sources.lanzaboote {
+    inherit pkgs;
+  };
 in
 {
 
@@ -23,7 +25,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    boot.bootspec.enable = true;
     environment.systemPackages = [
       # For debugging and troubleshooting Secure Boot.
       pkgs.sbctl
