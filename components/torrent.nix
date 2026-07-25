@@ -24,16 +24,10 @@ in
         pieces.hash.on_completion.set = no
         system.umask.set = 0007
         system.file.allocate = 1
-        schedule2 = watch_start, 10, 10, ((load.start, (cat, (cfg.watch), "start/*.torrent")))
 
         # bad udp trackers can freeze rtorrent
         schedule = disableudp, 0, 1, trackers.use_udp.set=no
         trackers.use_udp.set = no
-
-        network.max_open_files.set = 600
-        network.max_open_sockets.set = 300
-        network.http.max_open.set = 32
-
 
         method.redirect=load.throw,load.normal
         method.redirect=load.start_throw,load.start
