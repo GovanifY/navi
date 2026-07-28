@@ -25,10 +25,6 @@ in
         system.umask.set = 0007
         system.file.allocate = 1
 
-        # bad udp trackers can freeze rtorrent
-        schedule = disableudp, 0, 1, trackers.use_udp.set=no
-        trackers.use_udp.set = no
-
         method.redirect=load.throw,load.normal
         method.redirect=load.start_throw,load.start
         method.insert=d.down.sequential,value|const,0
@@ -36,8 +32,39 @@ in
       '';
     };
 
-    # chown segfault...
-    systemd.services.rtorrent.serviceConfig.SystemCallFilter = lib.mkForce [ ];
+    systemd.services.rtorrent.serviceConfig = {
+      # chown segfault...
+      SystemCallFilter = lib.mkForce [ ];
+      LimitNOFILE = 500000;
+      RestartSec = "10s";
+    };
+
+    # memory leak in new releases...
+    nixpkgs.overlays = [
+      (
+        self: super: {
+          libtorrent-rakshasa = super.libtorrent-rakshasa.overrideAttrs {
+            version = "0.16.4";
+            src = self.fetchFromGitHub {
+              owner = "rakshasa";
+              repo = "libtorrent";
+              tag = "v0.16.4";
+              hash = "sha256-r+5rNaBXhHbDWFXbgEPriEmjWEjTyu2I5H7rl3PoF38=";
+            };
+          };
+
+          rtorrent = super.rtorrent.overrideAttrs {
+            version = "0.16.4";
+            src = self.fetchFromGitHub {
+              owner = "rakshasa";
+              repo = "rtorrent";
+              tag = "v0.16.4";
+              hash = "sha256-ut1R73UfkpDk/Y5Fq8kSavxIB3Y2jbYEQ8J/559Ech0=";
+            };
+          };
+        }
+      )
+    ];
 
     systemd.services."flood" = {
       enable = true;
