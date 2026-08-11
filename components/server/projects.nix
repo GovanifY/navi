@@ -2,6 +2,30 @@
 with lib;
 let
   cfg = config.navi.components.projects;
+  setupContainer = pkgs.writeShellScript "setup-container" ''
+    mkdir -p -m 0755 /nix/var/log/nix/drvs
+    mkdir -p -m 0755 /nix/var/nix/gcroots
+    mkdir -p -m 0755 /nix/var/nix/profiles
+    mkdir -p -m 0755 /nix/var/nix/temproots
+    mkdir -p -m 0755 /nix/var/nix/userpool
+    mkdir -p -m 1777 /nix/var/nix/gcroots/per-user
+    mkdir -p -m 1777 /nix/var/nix/profiles/per-user
+    mkdir -p -m 0755 /nix/var/nix/profiles/per-user/root
+    mkdir -p -m 0700 "$HOME/.nix-defexpr"
+    . ${pkgs.nix}/etc/profile.d/nix-daemon.sh
+    ${pkgs.nix}/bin/nix-channel --add https://nixos.org/channels/nixos-20.09 nixpkgs # 3
+    ${pkgs.nix}/bin/nix-channel --update nixpkgs
+    ${pkgs.nix}/bin/nix-env -i ${concatStringsSep " " (with pkgs; [ nix cacert git openssh ])}
+  '';
+  runnerPreStart = pkgs.writeShellScript "gitlab-runner-pre-start" ''
+    export CONFIG_FILE="$HOME/.gitlab-runner/config.toml"
+    install -m 0755 ${setupContainer} "$HOME/setup-container"
+    sed -i \
+      -e 's|^pre_build_script = .*|pre_build_script = "/runner/setup-container"|' \
+      -e '/^volumes = / { /setup-container/! s|]$|, "/var/lib/gitlab-runner/setup-container:/runner/setup-container:ro"]|; }' \
+      "$CONFIG_FILE"
+    ${pkgs.gitlab-runner}/bin/gitlab-runner verify --delete
+  '';
 in
 {
   options.navi.components.projects = {
@@ -38,23 +62,21 @@ in
             "/nix/store:/nix/store:ro"
             "/nix/var/nix/db:/nix/var/nix/db:ro"
             "/nix/var/nix/daemon-socket:/nix/var/nix/daemon-socket:ro"
+            "/var/lib/gitlab-runner/setup-container:/runner/setup-container:ro"
           ];
           dockerDisableCache = true;
-          preBuildScript = pkgs.writeScript "setup-container" ''
-            mkdir -p -m 0755 /nix/var/log/nix/drvs
-            mkdir -p -m 0755 /nix/var/nix/gcroots
-            mkdir -p -m 0755 /nix/var/nix/profiles
-            mkdir -p -m 0755 /nix/var/nix/temproots
-            mkdir -p -m 0755 /nix/var/nix/userpool
-            mkdir -p -m 1777 /nix/var/nix/gcroots/per-user
-            mkdir -p -m 1777 /nix/var/nix/profiles/per-user
-            mkdir -p -m 0755 /nix/var/nix/profiles/per-user/root
-            mkdir -p -m 0700 "$HOME/.nix-defexpr"
-            . ${pkgs.nix}/etc/profile.d/nix-daemon.sh
-            ${pkgs.nix}/bin/nix-channel --add https://nixos.org/channels/nixos-20.09 nixpkgs # 3
-            ${pkgs.nix}/bin/nix-channel --update nixpkgs
-            ${pkgs.nix}/bin/nix-env -i ${concatStringsSep " " (with pkgs; [ nix cacert git openssh ])}
+
+          preGetSourcesScript = ''
+            export PATH="${makeBinPath (with pkgs; [
+              git
+              openssh
+              coreutils
+            ])}:$PATH"
+
+            ${pkgs.openssh}/bin/ssh -V
           '';
+
+          preBuildScript = "/runner/setup-container";
           environmentVariables = {
             ENV = "/etc/profile";
             USER = "root";
@@ -71,7 +93,10 @@ in
     systemd.services.gitlab-runner.serviceConfig = {
       Restart = "always";
       RestartSec = 60;
+      ExecStartPre = mkForce runnerPreStart;
+      ExecReload = mkForce "";
     };
+    systemd.services.gitlab-runner.reloadIfChanged = mkForce false;
 
     services.gitlab = {
       enable = true;
