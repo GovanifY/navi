@@ -10,6 +10,7 @@ in
 {
   imports = [
     <musnix>
+    ./../overlays/binaryninja.nix
   ];
   config = mkIf config.navi.profile.graphical {
     environment.variables = {
