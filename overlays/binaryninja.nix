@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 let
   binaryninja = pkgs.buildFHSEnv {
@@ -45,7 +45,7 @@ let
     desktopName = "Binary Ninja";
     comment = "Reverse engineering platform";
     exec = "binaryninja %U";
-    icon = "binaryninja";
+    icon = "/home/${config.navi.username}/.local/opt/binaryninja/docs/img/logo.png";
     terminal = false;
     categories = [ "Development" "Utility" ];
     mimeTypes = [ "application/x-binaryninja" "x-scheme-handler/binaryninja" ];
