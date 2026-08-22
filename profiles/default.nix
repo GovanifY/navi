@@ -167,7 +167,10 @@
 
     # auto downloads softwares when trying to use them
     environment.variables.NIX_AUTO_RUN = "1";
-    programs.command-not-found.enable = true;
+    programs.command-not-found = {
+      enable = true;
+      dbPath = "/nix/var/nix/profiles/per-user/root/channels/nixos/programs.sqlite";
+    };
 
     # enable debuginfod for coredump auto debug
     services.nixseparatedebuginfod2.enable = true;
