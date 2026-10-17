@@ -63,6 +63,12 @@ with lib;
     hardware.fw-fanctrl.enable = true;
 
     services.udev.extraRules = ''
+      # required by nksd.
+      SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="17cc", ATTR{idProduct}=="2410", OWNER="${config.navi.username}", MODE="0660", TAG+="uaccess"
+      SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="17cc", ATTR{idProduct}=="2100", OWNER="${config.navi.username}", MODE="0660", TAG+="uaccess"
+      SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="17cc", ATTR{idProduct}=="2110", OWNER="${config.navi.username}", MODE="0660", TAG+="uaccess"
+      SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="17cc", ATTR{idProduct}=="2120", OWNER="${config.navi.username}", MODE="0660", TAG+="uaccess"
+
       # Atmel DFU
       ### ATmega16U2
       SUBSYSTEMS=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2fef", TAG+="uaccess"
