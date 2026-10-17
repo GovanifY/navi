@@ -73,7 +73,7 @@ in
 
     fileSystems."/boot/efi" =
       {
-        device = "/dev/disk/by-uuid/BF91-4E3A";
+        device = "/dev/disk/by-uuid/4E41-5649";
         fsType = "vfat";
       };
 
@@ -138,9 +138,6 @@ in
     services.btrfs.autoScrub.fileSystems = axolotl_fs ++ [ "/" "/mnt/violet" ];
     services.logind.settings.Login.RuntimeDirectorySize = "20G";
 
-    boot.lanzaboote = {
-      configurationLimit = lib.mkForce 1;
-    };
 
 
 
