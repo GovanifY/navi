@@ -40,10 +40,6 @@ with lib;
     # in case we need to bypass NAT filtering better to add a higher port range
     services.openssh.ports = [ 22 3200 ];
 
-
-    users.users.${config.navi.username}.hashedPassword = fileContents ./../secrets/headfull/assets/shadow/main;
-    users.users.root.hashedPassword = fileContents ./../secrets/headfull/assets/shadow/root;
-
     # cups by default
     services.printing.enable = true;
 

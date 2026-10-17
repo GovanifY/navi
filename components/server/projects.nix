@@ -50,6 +50,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    nix.settings.trusted-users = mkForce [ ];
+
     boot.kernel.sysctl."net.ipv4.ip_forward" = true;
     virtualisation.docker.enable = true;
     services.gitlab-runner = {

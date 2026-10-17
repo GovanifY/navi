@@ -117,11 +117,12 @@ in
     systemd.services."flood" = {
       enable = true;
       path = [ pkgs.mediainfo ];
-      serviceConfig = {
+      serviceConfig = config.navi.components.sandboxing.service // {
         User = "rtorrent";
         WorkingDirectory = cfg.dataDir;
         ExecStart = "${pkgs.flood}/bin/flood";
         Restart = "on-failure";
+        ReadWritePaths = [ cfg.dataDir "-/mnt" ];
       };
       environment = {
         NODE_ENV = "production";

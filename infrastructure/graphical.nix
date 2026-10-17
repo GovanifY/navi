@@ -1,12 +1,5 @@
 { config, lib, pkgs, ... }:
 with lib;
-let
-  nix-alien-pkgs = import
-    (
-      builtins.fetchTarball "https://github.com/thiagokokada/nix-alien/tarball/master"
-    )
-    { };
-in
 {
   imports = [
     <musnix>
@@ -152,8 +145,6 @@ in
       mktorrent
       handbrake
       virtiofsd
-
-      nix-alien-pkgs.nix-alien
     ] ++ optionals (pkgs.stdenv.hostPlatform.system != "aarch64-linux") [
 
       android-studio

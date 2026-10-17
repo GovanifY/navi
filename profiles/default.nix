@@ -116,6 +116,7 @@
       enable = true;
       settings = {
         PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
         GatewayPorts = "yes";
         PrintLastLog = "no";
       };
