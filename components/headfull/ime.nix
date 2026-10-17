@@ -20,7 +20,7 @@ in
         source-code-pro
         source-sans-pro
         source-serif-pro
-        ttf_bitstream_vera
+        ttf-bitstream-vera
       ];
       fontconfig.useEmbeddedBitmaps = true;
     };

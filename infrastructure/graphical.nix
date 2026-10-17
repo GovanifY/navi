@@ -100,8 +100,6 @@ in
       # music (DAW + plugins)
       ardour
       reaper
-      (pkgs.callPackage ./../overlays/bitwig.nix { })
-      bitwig-studio
       milkytracker
       calf
       sfizz
@@ -111,10 +109,7 @@ in
       zynaddsubfx
       cardinal
       #carla
-      vital
-      x42-plugins
       #tunefish
-      distrho-ports
       mda_lv2
 
       # stem
@@ -123,13 +118,13 @@ in
       pandoc
       limesuite
       ghidra
-      edb
       yasm
       lldb
       freecad
       pulseview
       imhex
-      zotero
+      # XXX: broken (upstream build fails patching its bundled firefox)
+      #zotero
       vscode-fhs
 
       # is it really useful...?
@@ -141,8 +136,8 @@ in
       jdk
 
       # math
-      coq
-      lean
+      rocqPackages.coq
+      lean4
       # XXX: broken
       #elan
 
@@ -159,7 +154,7 @@ in
       virtiofsd
 
       nix-alien-pkgs.nix-alien
-    ] ++ optionals (pkgs.system != "aarch64-linux") [
+    ] ++ optionals (pkgs.stdenv.hostPlatform.system != "aarch64-linux") [
 
       android-studio
       (
@@ -184,6 +179,14 @@ in
       wineWow64Packages.unstableFull
       yabridge
       yabridgectl
+
+      # x86 only
+      (pkgs.callPackage ./../overlays/bitwig.nix { })
+      bitwig-studio
+      vital
+      x42-plugins
+      distrho-ports
+      edb
     ];
 
 

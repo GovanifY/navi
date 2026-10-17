@@ -15,7 +15,7 @@ with lib;
       # navi
       pre-commit
       # stem
-      texlive.combined.scheme-medium
+      texliveMedium
       # dev
       python3
       gdb

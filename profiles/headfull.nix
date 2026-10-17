@@ -14,7 +14,7 @@ with lib;
       # navi
       pre-commit
       # stem
-      texlive.combined.scheme-medium
+      texliveMedium
       # dev
       cargo
       python3

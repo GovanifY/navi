@@ -48,8 +48,6 @@ in
       geary
       dconf-editor
       cartridges
-      bottles
-      impression
       komikku
       d-spy
       stockfish
@@ -62,6 +60,9 @@ in
       kimpanel
       bluetooth-battery-meter
       #user-themes
+    ] ++ optionals pkgs.stdenv.hostPlatform.isx86 [
+      bottles
+      impression
     ];
 
     services = {

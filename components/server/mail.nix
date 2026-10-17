@@ -11,7 +11,7 @@ in
       "components"
       "mail-server"
       "accounts"
-    ] [ "mailserver" "loginAccounts" ])
+    ] [ "mailserver" "accounts" ])
   ];
 
   options.navi.components.mail-server = rec {
@@ -42,8 +42,8 @@ in
       fqdn = cfg.root_domain;
       domains = cfg.domains;
       x509.useACMEHost = config.mailserver.fqdn;
-      dkimSelector = config.navi.device;
-      dkimKeyBits = 2048;
+      dkim.defaults.selector = config.navi.device;
+      dkim.defaults.keyLength = 2048;
     };
     navi.components.web-server = {
       enable = true;
