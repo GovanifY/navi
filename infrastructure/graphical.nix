@@ -211,25 +211,7 @@ with lib;
     # make my printer actually work
     services.printing.drivers = [ pkgs.hplip ];
 
-    # bluetooth controllers
-    services.udev.extraRules = ''
-      KERNEL=="uinput", MODE="0666"
-      KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="054c", ATTRS{idProduct}=="05c4", MODE="0666"
-      KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="0005:054C:05C4.*", MODE="0666"
-      KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="054c", ATTRS{idProduct}=="09cc", MODE="0666"
-      KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="0005:054C:09CC.*", MODE="0666"
-      # Valve USB devices
-      SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", MODE="0666"
-
-      # Steam Controller udev write access
-      KERNEL=="uinput", SUBSYSTEM=="misc", MODE="0660", GROUP="input", OPTIONS+="static_node=uinput"
-
-      # Valve HID devices over USB hidraw
-      KERNEL=="hidraw*", ATTRS{idVendor}=="28de", MODE="0666"
-
-      # Valve HID devices over bluetooth hidraw
-      KERNEL=="hidraw*", KERNELS=="*28DE:*", MODE="0666"
-    '';
+    hardware.steam-hardware.enable = true;
 
     # out of tree module; moreso, works on wired and i don't use bluetooth when
     # on my computers.

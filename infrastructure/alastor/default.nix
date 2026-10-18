@@ -14,8 +14,18 @@ with lib;
 
     time.timeZone = "Europe/Paris";
 
+    services.fail2ban = {
+      enable = true;
+      ignoreIP = [ "192.168.1.0/24" "2a01:e0a:ee2:77c0::/64" ];
+    };
+
     navi.components = {
       remote-unlock.enable = true;
+      hardening = {
+        sysctls = true;
+        # only root may use io_uring
+        ioUring = 1;
+      };
       virtualization = {
         enable = true;
         gvt = true;

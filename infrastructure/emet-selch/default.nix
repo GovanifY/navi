@@ -19,6 +19,11 @@ with lib;
       useDHCP = false;
       useNetworkd = true;
     };
+
+    services.resolved.settings.Resolve = {
+      LLMNR = "false";
+      MulticastDNS = "false";
+    };
     navi.components = {
       shell.greeting = ./banner;
       hardening.enable = lib.mkForce true;

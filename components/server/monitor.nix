@@ -94,6 +94,7 @@ in
     # emet-selch is down
     services.prometheus = {
       enable = true;
+      listenAddress = "127.0.0.1";
       globalConfig.scrape_interval = "15s";
       alertmanagers = [
         {
@@ -106,26 +107,32 @@ in
         node = {
           enable = true;
           enabledCollectors = [ "systemd" ];
+          listenAddress = "127.0.0.1";
           port = 9002;
         };
         nginx = mkIf config.navi.components.web-server.enable {
           enable = true;
+          listenAddress = "127.0.0.1";
           port = 9113;
         };
         tor = mkIf config.services.tor.enable {
           enable = true;
+          listenAddress = "127.0.0.1";
           port = 9130;
         };
         postgres = mkIf config.services.postgresql.enable {
           enable = true;
+          listenAddress = "127.0.0.1";
           port = 9187;
         };
         postfix = mkIf config.navi.components.mail-server.enable {
           enable = true;
+          listenAddress = "127.0.0.1";
           port = 9154;
         };
         dovecot = mkIf config.navi.components.mail-server.enable {
           enable = true;
+          listenAddress = "127.0.0.1";
           port = 9166;
         };
       };
@@ -147,7 +154,7 @@ in
         [{
           job_name = "nginx";
           static_configs = [{
-            targets = [ "127.0.0.1:9112" ];
+            targets = [ "127.0.0.1:9113" ];
           }];
         }] ++ optionals
         config.services.tor.enable
@@ -187,6 +194,8 @@ in
       alertmanager = {
         enable = true;
         listenAddress = "localhost";
+        # don't start one for every interface
+        extraFlags = [ "--cluster.listen-address=" ];
         configuration = {
           global = {
             smtp_smarthost = "localhost:25";

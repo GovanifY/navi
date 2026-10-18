@@ -3,9 +3,15 @@ with lib;
 let
   cfg = config.navi.components.web-server;
 
+  gitUsers = optionals (cfg.domains != null) (unique (filter (u: u != null)
+    (mapAttrsToList (name: attr: attr.git.user) cfg.domains)));
+  gitShell = "${pkgs.git}/bin/git-shell";
+
   git_paths_bringup = mkIf (cfg.domains != null) (concatStrings (
     mapAttrsToList
       (name: attr: optionalString (attr.git.user != null) ''
+        # git-shell would run anything put in there
+        rm -rf /home/${attr.git.user}/git-shell-commands
         if [[ ! -d "/home/${attr.git.user}/${name}.git/" ]]
         then
             ${pkgs.git}/bin/git init --bare /home/${attr.git.user}/${name}.git/
@@ -55,6 +61,8 @@ let
         "${attr.git.user}"
         {
           isNormalUser = true;
+          # push only
+          shell = gitShell;
           openssh.authorizedKeys.keyFiles = attr.git.keys;
           # we already have set the main username's data, as such nix won't fail
           # in a weird fashion trying to create a blank user! Probably a better
@@ -156,9 +164,15 @@ in
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
     };
+    # its own user, not nobody which other services may share
+    users.groups.php-web = mkIf cfg.php { };
+    # the master is root to start the workers as php-web
+    navi.components.sandboxing.units.phpfpm-mypool = mkIf cfg.php {
+      CapabilityBoundingSet = [ "CAP_SETUID" "CAP_SETGID" "CAP_CHOWN" "CAP_KILL" ];
+    };
     services.phpfpm.pools.mypool = mkIf cfg.php {
-      user = "nobody";
-      group = "nogroup";
+      user = "php-web";
+      group = "php-web";
       settings = {
         "pm" = "dynamic";
         "listen.owner" = config.services.nginx.user;
@@ -170,7 +184,25 @@ in
       };
     };
     services.nginx.virtualHosts = virtualhosts;
-    users.users = git_users;
+    users.users = mkMerge [
+      git_users
+      (mkIf cfg.php { php-web = { isSystemUser = true; group = "php-web"; }; })
+    ];
+    environment.shells = mkIf (gitUsers != [ ]) [ gitShell ];
+    # no forwarding to localhost services, no ~/.ssh/rc (run by /bin/sh
+    # whatever the login shell) and no keys added in the home directory
+    services.openssh.extraConfig = mkIf (gitUsers != [ ]) (mkAfter ''
+      Match User ${concatStringsSep "," gitUsers}
+        AllowTcpForwarding no
+        AllowStreamLocalForwarding no
+        AllowAgentForwarding no
+        X11Forwarding no
+        PermitTunnel no
+        PermitTTY no
+        PermitUserRC no
+        AuthorizedKeysFile /etc/ssh/authorized_keys.d/%u
+      Match all
+    '');
     # automatically setups the git repositories and /var/www perms, with
     # an automatic git fetch hook. Ready to push!
     systemd.services.make-git-paths = {

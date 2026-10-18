@@ -20,6 +20,20 @@ in
         Enables scudo to harden against memory corruption attacks
       '';
     };
+    sysctls = mkOption {
+      type = types.bool;
+      default = cfg.enable;
+      description = ''
+        Enables additional hardening sysctls in the kernel
+      '';
+    };
+    ioUring = mkOption {
+      type = types.enum [ 0 1 2 ];
+      default = 2;
+      description = ''
+        kernel.io_uring_disabled: 0 allowed, 1 only for root, 2 nobody
+      '';
+    };
     modules = mkOption {
       type = types.bool;
       default = true;
@@ -33,43 +47,60 @@ in
     #<nixpkgs/nixos/modules/profiles/hardened.nix>
   ];
 
-  config = mkIf cfg.enable {
+  config = mkMerge [
+    (mkIf cfg.sysctls {
+      boot.kernel.sysctl = {
+        "kernel.kexec_load_disabled" = 1;
+        "dev.tty.ldisc_autoload" = 0;
+        "net.core.bpf_jit_harden" = 2;
+        "kernel.dmesg_restrict" = 1;
+        "kernel.io_uring_disabled" = cfg.ioUring
+          "net.ipv4.conf.all.send_redirects" = 0;
+        "net.ipv4.conf.default.send_redirects" = 0;
+        "net.ipv4.conf.all.accept_redirects" = 0;
+        "net.ipv4.conf.default.accept_redirects" = 0;
+        "net.ipv6.conf.all.accept_redirects" = 0;
+        "net.ipv6.conf.default.accept_redirects" = 0;
+      };
+    })
+    (mkIf cfg.enable {
 
-    # enable lockdown :)
-    boot.kernelPatches = [
-      {
-        name = "enable-lockdown";
-        patch = null;
-        extraConfig = ''
-          SECURITY_LOCKDOWN_LSM y
-          MODULE_SIG y
-        '';
-      }
-      (mkIf cfg.legacy {
-        name = "keep-ia32";
-        patch = null;
-        extraConfig = ''
-          IA32_EMULATION y
-        '';
-      })
-    ];
-    boot.kernelParams = [ "lockdown=confidentiality" ];
+      # enable lockdown :)
+      boot.kernelPatches = [
+        {
+          name = "enable-lockdown";
+          patch = null;
+          extraConfig = ''
+            SECURITY_LOCKDOWN_LSM y
+            MODULE_SIG y
+          '';
+        }
+        (mkIf cfg.legacy {
+          name = "keep-ia32";
+          patch = null;
+          extraConfig = ''
+            IA32_EMULATION y
+          '';
+        })
+      ];
+      boot.kernelParams = [ "lockdown=confidentiality" ];
 
-    environment.memoryAllocator.provider = if cfg.scudo then "scudo" else "libc";
-    security.lockKernelModules = cfg.modules;
+      environment.memoryAllocator.provider = if cfg.scudo then "scudo" else "libc";
+      security.lockKernelModules = cfg.modules;
 
-    # it seems that linux nowadays won't allow you to disable the jit 
-    boot.kernel.sysctl."net.core.bpf_jit_enable" = true;
-    boot.kernel.sysctl."kernel.unprivileged_userns_clone" = 1;
+      # it seems that linux nowadays won't allow you to disable the jit 
+      boot.kernel.sysctl."net.core.bpf_jit_enable" = true;
+      boot.kernel.sysctl."kernel.unprivileged_userns_clone" = 1;
 
-    # architectural bugs will be present nevertheless
-    security.allowSimultaneousMultithreading = true;
+      # architectural bugs will be present nevertheless
+      security.allowSimultaneousMultithreading = true;
 
-    # user namespaces are required for sandboxing
-    security.allowUserNamespaces = true;
-    nix.settings.sandbox = true;
+      # user namespaces are required for sandboxing
+      security.allowUserNamespaces = true;
+      nix.settings.sandbox = true;
 
-    # ssh attacks & co are flooding my logs
-    services.fail2ban.enable = mkDefault true;
-  };
+      # ssh attacks & co are flooding my logs
+      services.fail2ban.enable = mkDefault true;
+    })
+  ];
 }

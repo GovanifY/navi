@@ -54,6 +54,16 @@ in
 
     boot.kernel.sysctl."net.ipv4.ip_forward" = true;
     virtualisation.docker.enable = true;
+    # root in a CI container (any project's pipeline) is not root on the host
+    virtualisation.docker.daemon.settings."userns-remap" = "dockremap";
+    users.users.dockremap = {
+      isSystemUser = true;
+      group = "dockremap";
+      # far from the ranges NixOS gives to normal users (from 100000)
+      subUidRanges = [{ startUid = 1000000000; count = 65536; }];
+      subGidRanges = [{ startGid = 1000000000; count = 65536; }];
+    };
+    users.groups.dockremap = { };
     services.gitlab-runner = {
       enable = true;
       services = {
@@ -99,6 +109,11 @@ in
       ExecReload = mkForce "";
     };
     systemd.services.gitlab-runner.reloadIfChanged = mkForce false;
+
+    # only writes to its state and its sockets
+    navi.components.sandboxing.units = genAttrs [ "gitlab" "gitaly" "gitlab-workhorse" "gitlab-sidekiq" ] (_: {
+      ReadWritePaths = [ config.services.gitlab.statePath "/run/gitlab" ];
+    });
 
     services.gitlab = {
       enable = true;

@@ -4,7 +4,6 @@ let
   cfg = config.navi.components.chat-server;
   clientConfig = {
     "m.homeserver".base_url = "https://${cfg.access_domain}";
-    "org.matrix.msc3575.proxy".url = "https://sliding.${cfg.access_domain}";
   };
   serverConfig."m.server" = "${cfg.access_domain}:443";
   mkWellKnown = data: ''
