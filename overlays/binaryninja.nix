@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   binaryninja = pkgs.buildFHSEnv {
@@ -52,5 +52,7 @@ let
   };
 in
 {
-  environment.systemPackages = [ binaryninja ];
+  config = lib.mkIf config.navi.profile.graphical {
+    environment.systemPackages = [ binaryninja ];
+  };
 }
