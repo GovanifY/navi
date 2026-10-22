@@ -54,8 +54,8 @@ in
         "dev.tty.ldisc_autoload" = 0;
         "net.core.bpf_jit_harden" = 2;
         "kernel.dmesg_restrict" = 1;
-        "kernel.io_uring_disabled" = cfg.ioUring
-          "net.ipv4.conf.all.send_redirects" = 0;
+        "kernel.io_uring_disabled" = cfg.ioUring;
+        "net.ipv4.conf.all.send_redirects" = 0;
         "net.ipv4.conf.default.send_redirects" = 0;
         "net.ipv4.conf.all.accept_redirects" = 0;
         "net.ipv4.conf.default.accept_redirects" = 0;
