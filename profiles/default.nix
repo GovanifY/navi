@@ -9,6 +9,7 @@
       ./server.nix
       ./iso.nix
       <agenix/modules/age.nix>
+      ./../overlays/security-pins.nix
     ];
 
 
