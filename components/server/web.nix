@@ -5,25 +5,25 @@ let
 
   gitUsers = optionals (cfg.domains != null) (unique (filter (u: u != null)
     (mapAttrsToList (name: attr: attr.git.user) cfg.domains)));
-  gitShell = "${pkgs.git}/bin/git-shell";
+  gitDomains = optionals (cfg.domains != null)
+    (filter (attr: attr.git.user != null) (attrValues cfg.domains));
+
+  webRoot = name: attr: if attr.root == null then "/var/www/${name}" else attr.root;
+
+  # deploy only: every key is forced into a write-only rsync of its web root
+  deployKeys = name: attr: map
+    (key: ''restrict,command="${pkgs.rrsync}/bin/rrsync -wo ${webRoot name attr}" ${key}'')
+    (concatMap (f: filter (l: l != "" && !hasPrefix "#" l) (splitString "\n" (readFile f)))
+      attr.git.keys);
 
   git_paths_bringup = mkIf (cfg.domains != null) (concatStrings (
     mapAttrsToList
       (name: attr: optionalString (attr.git.user != null) ''
-        # git-shell would run anything put in there
-        rm -rf /home/${attr.git.user}/git-shell-commands
-        if [[ ! -d "/home/${attr.git.user}/${name}.git/" ]]
+        if [[ ! -d "${webRoot name attr}" ]]
         then
-            ${pkgs.git}/bin/git init --bare /home/${attr.git.user}/${name}.git/
-            ${pkgs.git}/bin/git clone -l /home/${attr.git.user}/${name}.git/ /var/www/${name}
-            cat > /home/${attr.git.user}/${name}.git/hooks/post-receive <<EOF
-        #!/bin/sh
-        GIT_WORK_TREE=/var/www/${name} ${pkgs.git}/bin/git checkout -f
-        EOF
-            chmod +x /home/${attr.git.user}/${name}.git/hooks/post-receive
-            chown ${attr.git.user}:users -R /home/${attr.git.user}/${name}.git/
-            chown ${attr.git.user}:users -R /var/www/${name}
-            chmod a+r /var/www/${name}
+            mkdir -p ${webRoot name attr}
+            chown ${attr.git.user}:users ${webRoot name attr}
+            chmod 755 ${webRoot name attr}
         fi
       '')
       cfg.domains));
@@ -36,8 +36,7 @@ let
         enableACME = attr.tls;
         root =
           if (attr.static || (attr.git.user != null)) then
-            (if attr.root == null then
-              "/var/www/${name}" else attr.root) else null;
+            webRoot name attr else null;
         locations =
           (if (attr.return != null) then {
             "/".return =
@@ -61,9 +60,10 @@ let
         "${attr.git.user}"
         {
           isNormalUser = true;
-          # push only
-          shell = gitShell;
-          openssh.authorizedKeys.keyFiles = attr.git.keys;
+          # sshd runs even forced commands through the login shell, so it has
+          # to be a real one; the keys below are what restrict the user
+          shell = pkgs.bashInteractive;
+          openssh.authorizedKeys.keys = deployKeys name attr;
           # we already have set the main username's data, as such nix won't fail
           # in a weird fashion trying to create a blank user! Probably a better
           # way to do this but nix syntax is _so_ obtuse sometimes
@@ -133,17 +133,17 @@ in
               default = null;
               example = "govanify";
               description = ''
-                The username to use to manage the git website.
-                Setting this will toggle a git based versionning system for static websites.
-                If you toggle this option, you will be able to update your prod
-                website by pushing to the following git path:
-                user@example.com:~/domain.git
+                The username to use to deploy the website.
+                Setting this creates a deploy-only user for this domain: its
+                keys can only rsync into the web root, which is the target's
+                root directory, e.g.
+                rsync -a --delete public/ user@example.com:
               '';
             };
             keys = mkOption {
               type = types.nullOr (types.listOf types.path);
               default = null;
-              description = "The ssh public key allowed to manage remotely the website.";
+              description = "The ssh public keys allowed to deploy the website.";
             };
           };
         };
@@ -188,7 +188,11 @@ in
       git_users
       (mkIf cfg.php { php-web = { isSystemUser = true; group = "php-web"; }; })
     ];
-    environment.shells = mkIf (gitUsers != [ ]) [ gitShell ];
+    # one forced command per user, so a deploy user cannot span two web roots
+    assertions = [{
+      assertion = length gitUsers == length gitDomains;
+      message = "navi.components.web-server: each git.user must deploy a single domain";
+    }];
     # no forwarding to localhost services, no ~/.ssh/rc (run by /bin/sh
     # whatever the login shell) and no keys added in the home directory
     services.openssh.extraConfig = mkIf (gitUsers != [ ]) (mkAfter ''
@@ -203,8 +207,7 @@ in
         AuthorizedKeysFile /etc/ssh/authorized_keys.d/%u
       Match all
     '');
-    # automatically setups the git repositories and /var/www perms, with
-    # an automatic git fetch hook. Ready to push!
+    # creates the web roots owned by their deploy user. Ready to rsync!
     systemd.services.make-git-paths = {
       script = git_paths_bringup;
       wantedBy = [ "multi-user.target" ];
