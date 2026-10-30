@@ -40,24 +40,20 @@ in
         (i: fs:
           (nameValuePair "axolotl-${builtins.toString i}" {
             device = fs;
-            preLVM = true;
           }))
         axolotl_fs))
 
       {
         matrix = {
           device = "/dev/disk/by-uuid/8e851a92-5954-48fe-b531-1ae1fe1357b1";
-          preLVM = true;
           allowDiscards = true;
         };
         matrix-2 = {
           device = "/dev/disk/by-uuid/7f94153f-e1b2-46b0-aac9-9cf159e98551";
-          preLVM = true;
           allowDiscards = true;
         };
         violet = {
           device = "/dev/disk/by-uuid/ebaae418-f59b-4210-a983-64718540c703";
-          preLVM = true;
           allowDiscards = true;
         };
 

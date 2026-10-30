@@ -49,7 +49,6 @@ in
   config = mkIf cfg.enable {
     # stage 1 networking is generated from networking.interfaces by
     # systemd-networkd
-    boot.initrd.systemd.enable = true;
     boot.initrd.network.enable = true;
     boot.initrd.network.ssh = {
       enable = true;

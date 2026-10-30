@@ -60,7 +60,6 @@ with lib;
 
     # pretty boot
     boot.kernelParams = [ "bgrt_disable" ];
-    boot.initrd.systemd.enable = true;
     boot.plymouth.logo = ./assets/navi-48.png;
 
     # dev
