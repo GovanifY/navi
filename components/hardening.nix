@@ -85,6 +85,20 @@ in
       ];
       boot.kernelParams = [ "lockdown=confidentiality" ];
 
+      # module certs don't end up in the image by default, so if we just enable
+      # lockdown it would reject everything; fix that
+      system.systemBuilderCommands =
+        let
+          target = config.boot.kernelPackages.kernel.target;
+          image = config.boot.kernelPackages.rebuildImage {
+            inherit target;
+            inherit (config.system) modulesTree;
+          };
+        in
+        mkAfter ''
+          ln -sf -- ${image}/${target} $out/kernel
+        '';
+
       environment.memoryAllocator.provider = if cfg.scudo then "scudo" else "libc";
       security.lockKernelModules = cfg.modules;
 
